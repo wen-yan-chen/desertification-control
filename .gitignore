@@ -3,3 +3,17 @@
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# Python and local runtime
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.ipynb_checkpoints/
+# Local credentials and transient downloads
+.env
+.env.*
+!.env.example
+*.partial
+*.part
+/tmp/

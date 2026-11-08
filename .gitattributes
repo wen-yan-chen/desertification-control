@@ -1,0 +1,14 @@
+# Consistent text on all team computers.
+.gitattributes text eol=lf
+.gitignore text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+*.py text eol=lf
+*.ps1 text eol=lf
+*.bib text eol=lf
+# Preserve source-document bytes and manifest SHA256 values.
+*.pdf binary
+*.docx binary
+*.caj binary
+*.png binary
+*.html -text

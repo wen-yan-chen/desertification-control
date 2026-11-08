@@ -1,0 +1,3453 @@
+[
+  {
+    "id": "EN01",
+    "slug": "Root_zone_water_balance",
+    "doi": "10.1016/S0309-1708(01)00005-7",
+    "category": "water",
+    "checked_date": "2026-11-08",
+    "attempts": [],
+    "reading_status": "摘要及出版社元数据；无本地全文",
+    "title": "Plants in water-controlled ecosystems: active role in hydrologic processes and response to water stress: II. Probabilistic soil moisture dynamics",
+    "authors": [
+      {
+        "given": "F.",
+        "family": "Laio",
+        "sequence": "first",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "A.",
+        "family": "Porporato",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "L.",
+        "family": "Ridolfi",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "I.",
+        "family": "Rodriguez-Iturbe",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      }
+    ],
+    "year": 2001,
+    "url": "https://doi.org/10.1016/S0309-1708(01)00005-7",
+    "local_file": null,
+    "fulltext_status": "metadata_abstract_only_no_local_fulltext",
+    "metadata_note": "Crossref题名未含分篇副标题，已按出版社文章页补全。",
+    "use": "T1/T3 根区水量平衡",
+    "contribution": "点尺度随机降雨、状态依赖入渗与蒸散/渗漏的机制。可帮助给水分方程选物理含义。",
+    "applicability_limit": "随机降雨假设与季节性须本区检验；正文系数未核实。",
+    "source_locator": "出版社摘要；正文待获取",
+    "landing_or_online_fulltext_url": "https://www.sciencedirect.com/science/article/pii/S0309170801000057",
+    "metadata_evidence": {
+      "DOI": "10.1016/s0309-1708(01)00005-7",
+      "title": [
+        "Plants in water-controlled ecosystems: active role in hydrologic processes and response to water stress"
+      ],
+      "subtitle": [],
+      "author": [
+        {
+          "given": "F.",
+          "family": "Laio",
+          "sequence": "first",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "A.",
+          "family": "Porporato",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "L.",
+          "family": "Ridolfi",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "I.",
+          "family": "Rodriguez-Iturbe",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2001,
+            7
+          ]
+        ]
+      },
+      "published-print": {
+        "date-parts": [
+          [
+            2001,
+            7
+          ]
+        ]
+      },
+      "container-title": [
+        "Advances in Water Resources"
+      ],
+      "volume": "24",
+      "issue": "7",
+      "page": "707-723",
+      "type": "journal-article",
+      "URL": "https://doi.org/10.1016/s0309-1708(01)00005-7",
+      "link": [
+        {
+          "URL": "https://api.elsevier.com/content/article/PII:S0309170801000057?httpAccept=text/xml",
+          "content-type": "text/xml",
+          "content-version": "vor",
+          "intended-application": "text-mining"
+        },
+        {
+          "URL": "https://api.elsevier.com/content/article/PII:S0309170801000057?httpAccept=text/plain",
+          "content-type": "text/plain",
+          "content-version": "vor",
+          "intended-application": "text-mining"
+        }
+      ]
+    }
+  },
+  {
+    "id": "EN02",
+    "slug": "Fecan1999_Moisture_wind_threshold",
+    "doi": "10.1007/s00585-999-0149-7",
+    "category": "wind",
+    "checked_date": "2026-11-08",
+    "attempts": [
+      {
+        "url": "https://angeo.copernicus.org/articles/17/149/1999/angeo-17-149-1999.pdf",
+        "status": "success"
+      }
+    ],
+    "reading_status": "PDF全文及式14–15、图6–8",
+    "title": "Parametrization of the increase of the aeolian erosion threshold wind friction velocity due to soil moisture for arid and semi-arid areas",
+    "authors": [
+      {
+        "given": "F.",
+        "family": "Fécan",
+        "sequence": "first",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "B.",
+        "family": "Marticorena",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "G.",
+        "family": "Bergametti",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      }
+    ],
+    "year": 1999,
+    "url": "https://doi.org/10.1007/s00585-999-0149-7",
+    "download_url": "https://angeo.copernicus.org/articles/17/149/1999/angeo-17-149-1999.pdf",
+    "pages": 9,
+    "local_file": "Reference/05_英文补充与来源核验/EN02_Fecan1999_Moisture_wind_threshold.pdf",
+    "sha256": "f08d631bba18c8299b2dfed42a0ed28ab7e6b034f062cf08747415c5423573c1",
+    "fulltext_status": "local_pdf_key_sections_reviewed",
+    "use": "T1/T3 水分—起沙反馈",
+    "contribution": "给出湿/干起沙摩阻阈值比与黏粒—临界质量含水率的经验关系。",
+    "applicability_limit": "只修正表层湿度；不等于盐度、结皮、植被屏蔽或根区有效水分。",
+    "source_locator": "PDF6–9页；式14–15已看页面确认",
+    "metadata_evidence": {
+      "DOI": "10.1007/s00585-999-0149-7",
+      "title": [
+        "Parametrization of the increase of the aeolian erosion threshold wind friction velocity due to soil moisture for arid and semi-arid areas"
+      ],
+      "subtitle": [],
+      "author": [
+        {
+          "given": "F.",
+          "family": "Fécan",
+          "sequence": "first",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "B.",
+          "family": "Marticorena",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "G.",
+          "family": "Bergametti",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            1999,
+            1,
+            31
+          ]
+        ]
+      },
+      "published-online": {
+        "date-parts": [
+          [
+            1999,
+            1,
+            31
+          ]
+        ]
+      },
+      "container-title": [
+        "Annales Geophysicae"
+      ],
+      "volume": "17",
+      "issue": "1",
+      "page": "149-157",
+      "type": "journal-article",
+      "URL": "https://doi.org/10.1007/s00585-999-0149-7",
+      "link": [
+        {
+          "URL": "https://angeo.copernicus.org/articles/17/149/1999/angeo-17-149-1999.pdf",
+          "content-type": "unspecified",
+          "content-version": "vor",
+          "intended-application": "similarity-checking"
+        }
+      ]
+    }
+  },
+  {
+    "id": "EN03",
+    "slug": "ShaoLu2000_Dry_wind_threshold",
+    "doi": "10.1029/2000JD900304",
+    "category": "wind",
+    "checked_date": "2026-11-08",
+    "attempts": [
+      {
+        "url": "https://geomet.uni-koeln.de/fileadmin/Dokumente/Arbeitsgruppen/Meteorologie/Shao__Yaping/pdfs/Shao_Lu_2000_USTT.pdf",
+        "status": "unavailable",
+        "reason": "500 Server Error: Internal Server Error for url: https://geomet.uni-koeln.de/fileadmin/Dokumente/Arbeitsgruppen/Meteorologie/Shao__Yaping/pdfs/Shao_Lu_2000_USTT.pdf"
+      },
+      {
+        "url": "https://geomet.uni-koeln.de/fileadmin/Dokumente/Arbeitsgruppen/Meteorologie/Shao__Yaping/pdfs/Shao_Lu_2000_USTT.pdf",
+        "status": "unavailable",
+        "reason": "500 Server Error: Internal Server Error for url: https://geomet.uni-koeln.de/fileadmin/Dokumente/Arbeitsgruppen/Meteorologie/Shao__Yaping/pdfs/Shao_Lu_2000_USTT.pdf"
+      }
+    ],
+    "reading_status": "在线作者机构PDF方法与结论；本地下载失败",
+    "title": "A simple expression for wind erosion threshold friction velocity",
+    "authors": [
+      {
+        "given": "Yaping",
+        "family": "Shao",
+        "sequence": "first",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Hua",
+        "family": "Lu",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      }
+    ],
+    "year": 2000,
+    "url": "https://doi.org/10.1029/2000JD900304",
+    "local_file": null,
+    "fulltext_status": "online_pdf_reviewed_no_local_copy",
+    "use": "T1/T3 干土阈值",
+    "contribution": "干燥裸地粒径、重力、黏聚作用与起沙摩阻阈值的物理表达。",
+    "applicability_limit": "理想化干燥裸土；不是输沙通量或10m风阈值；系数不在本轮摘录。",
+    "source_locator": "在线PDF，期刊22437–22443页",
+    "landing_or_online_fulltext_url": "https://geomet.uni-koeln.de/fileadmin/Dokumente/Arbeitsgruppen/Meteorologie/Shao__Yaping/pdfs/Shao_Lu_2000_USTT.pdf",
+    "metadata_evidence": {
+      "DOI": "10.1029/2000jd900304",
+      "title": [
+        "A simple expression for wind erosion threshold friction velocity"
+      ],
+      "subtitle": [],
+      "author": [
+        {
+          "given": "Yaping",
+          "family": "Shao",
+          "sequence": "first",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Hua",
+          "family": "Lu",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2000,
+            9
+          ]
+        ]
+      },
+      "published-print": {
+        "date-parts": [
+          [
+            2000,
+            9,
+            16
+          ]
+        ]
+      },
+      "published-online": {
+        "date-parts": [
+          [
+            2000,
+            9
+          ]
+        ]
+      },
+      "container-title": [
+        "Journal of Geophysical Research: Atmospheres"
+      ],
+      "volume": "105",
+      "issue": "D17",
+      "page": "22437-22443",
+      "type": "journal-article",
+      "URL": "https://doi.org/10.1029/2000jd900304",
+      "link": [
+        {
+          "URL": "https://api.wiley.com/onlinelibrary/tdm/v1/articles/10.1029%2F2000JD900304",
+          "content-type": "unspecified",
+          "content-version": "vor",
+          "intended-application": "text-mining"
+        },
+        {
+          "URL": "https://agupubs.onlinelibrary.wiley.com/doi/pdf/10.1029/2000JD900304",
+          "content-type": "unspecified",
+          "content-version": "vor",
+          "intended-application": "similarity-checking"
+        }
+      ]
+    }
+  },
+  {
+    "id": "EN04",
+    "slug": "Groundwater_vegetation2018",
+    "doi": "10.3390/f9010034",
+    "category": "water",
+    "checked_date": "2026-11-08",
+    "attempts": [
+      {
+        "url": "https://mdpi-res.com/d_attachment/forests/forests-09-00034/article_deploy/forests-09-00034.pdf",
+        "status": "success"
+      }
+    ],
+    "reading_status": "PDF摘要、研究区/方法与结论",
+    "title": "Groundwater Depth and Soil Properties Are Associated with Variation in Vegetation of a Desert Riparian Ecosystem in an Arid Area of China",
+    "authors": [
+      {
+        "ORCID": "https://orcid.org/0000-0003-1185-9921",
+        "authenticated-orcid": false,
+        "given": "Xiaolong",
+        "family": "Zhang",
+        "sequence": "first",
+        "affiliation": [
+          {
+            "name": "Key Laboratory of Plant Resources, West China Subalpine Botanical Garden, Institute of Botany, Chinese Academy of Sciences, Xiangshan, Beijing 100093, China"
+          },
+          {
+            "name": "College of Resources and Environment, University of Chinese Academy of Sciences, Beijing 100049, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Tianyu",
+        "family": "Guan",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Key Laboratory of Plant Resources, West China Subalpine Botanical Garden, Institute of Botany, Chinese Academy of Sciences, Xiangshan, Beijing 100093, China"
+          },
+          {
+            "name": "College of Resources and Environment, University of Chinese Academy of Sciences, Beijing 100049, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Jihua",
+        "family": "Zhou",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Key Laboratory of Plant Resources, West China Subalpine Botanical Garden, Institute of Botany, Chinese Academy of Sciences, Xiangshan, Beijing 100093, China"
+          },
+          {
+            "name": "College of Resources and Environment, University of Chinese Academy of Sciences, Beijing 100049, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Wentao",
+        "family": "Cai",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Key Laboratory of Plant Resources, West China Subalpine Botanical Garden, Institute of Botany, Chinese Academy of Sciences, Xiangshan, Beijing 100093, China"
+          },
+          {
+            "name": "College of Resources and Environment, University of Chinese Academy of Sciences, Beijing 100049, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Nannan",
+        "family": "Gao",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Key Laboratory of Plant Resources, West China Subalpine Botanical Garden, Institute of Botany, Chinese Academy of Sciences, Xiangshan, Beijing 100093, China"
+          },
+          {
+            "name": "College of Resources and Environment, University of Chinese Academy of Sciences, Beijing 100049, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Hui",
+        "family": "Du",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Key Laboratory of Plant Resources, West China Subalpine Botanical Garden, Institute of Botany, Chinese Academy of Sciences, Xiangshan, Beijing 100093, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Lianhe",
+        "family": "Jiang",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Key Laboratory of Plant Resources, West China Subalpine Botanical Garden, Institute of Botany, Chinese Academy of Sciences, Xiangshan, Beijing 100093, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Liming",
+        "family": "Lai",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Key Laboratory of Plant Resources, West China Subalpine Botanical Garden, Institute of Botany, Chinese Academy of Sciences, Xiangshan, Beijing 100093, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Yuanrun",
+        "family": "Zheng",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Key Laboratory of Plant Resources, West China Subalpine Botanical Garden, Institute of Botany, Chinese Academy of Sciences, Xiangshan, Beijing 100093, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      }
+    ],
+    "year": 2018,
+    "url": "https://doi.org/10.3390/f9010034",
+    "pages": 18,
+    "local_file": "Reference/05_英文补充与来源核验/EN04_Groundwater_vegetation2018.pdf",
+    "sha256": "7adb2b147f03a2bd40bae237357fb1112aa8e51eb0a8c3ec700ac25cef152923",
+    "fulltext_status": "local_pdf_key_sections_reviewed",
+    "download_url": "https://mdpi-res.com/d_attachment/forests/forests-09-00034/article_deploy/forests-09-00034.pdf",
+    "use": "T1/T2 地下水生态约束",
+    "contribution": "黑河下游河岸植被、土壤与地下水深度的关联，支持讨论持续供水与生态边界。",
+    "applicability_limit": "地点是黑河下游，不是塔里木河；河岸群落与人工灌木带不同，不能套统一临界水深。",
+    "source_locator": "PDF3–4、14页",
+    "metadata_evidence": {
+      "DOI": "10.3390/f9010034",
+      "title": [
+        "Groundwater Depth and Soil Properties Are Associated with Variation in Vegetation of a Desert Riparian Ecosystem in an Arid Area of China"
+      ],
+      "subtitle": [],
+      "author": [
+        {
+          "ORCID": "https://orcid.org/0000-0003-1185-9921",
+          "authenticated-orcid": false,
+          "given": "Xiaolong",
+          "family": "Zhang",
+          "sequence": "first",
+          "affiliation": [
+            {
+              "name": "Key Laboratory of Plant Resources, West China Subalpine Botanical Garden, Institute of Botany, Chinese Academy of Sciences, Xiangshan, Beijing 100093, China"
+            },
+            {
+              "name": "College of Resources and Environment, University of Chinese Academy of Sciences, Beijing 100049, China"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Tianyu",
+          "family": "Guan",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "Key Laboratory of Plant Resources, West China Subalpine Botanical Garden, Institute of Botany, Chinese Academy of Sciences, Xiangshan, Beijing 100093, China"
+            },
+            {
+              "name": "College of Resources and Environment, University of Chinese Academy of Sciences, Beijing 100049, China"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Jihua",
+          "family": "Zhou",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "Key Laboratory of Plant Resources, West China Subalpine Botanical Garden, Institute of Botany, Chinese Academy of Sciences, Xiangshan, Beijing 100093, China"
+            },
+            {
+              "name": "College of Resources and Environment, University of Chinese Academy of Sciences, Beijing 100049, China"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Wentao",
+          "family": "Cai",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "Key Laboratory of Plant Resources, West China Subalpine Botanical Garden, Institute of Botany, Chinese Academy of Sciences, Xiangshan, Beijing 100093, China"
+            },
+            {
+              "name": "College of Resources and Environment, University of Chinese Academy of Sciences, Beijing 100049, China"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Nannan",
+          "family": "Gao",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "Key Laboratory of Plant Resources, West China Subalpine Botanical Garden, Institute of Botany, Chinese Academy of Sciences, Xiangshan, Beijing 100093, China"
+            },
+            {
+              "name": "College of Resources and Environment, University of Chinese Academy of Sciences, Beijing 100049, China"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Hui",
+          "family": "Du",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "Key Laboratory of Plant Resources, West China Subalpine Botanical Garden, Institute of Botany, Chinese Academy of Sciences, Xiangshan, Beijing 100093, China"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Lianhe",
+          "family": "Jiang",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "Key Laboratory of Plant Resources, West China Subalpine Botanical Garden, Institute of Botany, Chinese Academy of Sciences, Xiangshan, Beijing 100093, China"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Liming",
+          "family": "Lai",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "Key Laboratory of Plant Resources, West China Subalpine Botanical Garden, Institute of Botany, Chinese Academy of Sciences, Xiangshan, Beijing 100093, China"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Yuanrun",
+          "family": "Zheng",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "Key Laboratory of Plant Resources, West China Subalpine Botanical Garden, Institute of Botany, Chinese Academy of Sciences, Xiangshan, Beijing 100093, China"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2018,
+            1,
+            15
+          ]
+        ]
+      },
+      "published-online": {
+        "date-parts": [
+          [
+            2018,
+            1,
+            15
+          ]
+        ]
+      },
+      "container-title": [
+        "Forests"
+      ],
+      "volume": "9",
+      "issue": "1",
+      "page": "34",
+      "type": "journal-article",
+      "URL": "https://doi.org/10.3390/f9010034",
+      "link": [
+        {
+          "URL": "https://www.mdpi.com/1999-4907/9/1/34/pdf",
+          "content-type": "unspecified",
+          "content-version": "vor",
+          "intended-application": "similarity-checking"
+        }
+      ]
+    }
+  },
+  {
+    "id": "EN05",
+    "slug": "PV_microclimate_Xinjiang2025",
+    "doi": "10.3390/en18123170",
+    "category": "economy",
+    "checked_date": "2026-11-08",
+    "attempts": [
+      {
+        "url": "https://mdpi-res.com/d_attachment/energies/energies-18-03170/article_deploy/energies-18-03170.pdf",
+        "status": "success"
+      }
+    ],
+    "reading_status": "PDF研究区、观测系统、方法与结论",
+    "title": "Study on the Impact of Large-Scale Photovoltaic Systems on Key Surface Parameters in Desert Area Regions of Xinjiang, China",
+    "authors": [
+      {
+        "given": "Junxia",
+        "family": "Jiang",
+        "sequence": "first",
+        "affiliation": [
+          {
+            "name": "School of New Energy and Power Engineering, Lanzhou Jiaotong University, Lanzhou 730070, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Huan",
+        "family": "Du",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "School of New Energy and Power Engineering, Lanzhou Jiaotong University, Lanzhou 730070, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Huihui",
+        "family": "Yin",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "School of New Energy and Power Engineering, Lanzhou Jiaotong University, Lanzhou 730070, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Hongbo",
+        "family": "Su",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "School of New Energy and Power Engineering, Lanzhou Jiaotong University, Lanzhou 730070, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      }
+    ],
+    "year": 2025,
+    "url": "https://doi.org/10.3390/en18123170",
+    "download_url": "https://mdpi-res.com/d_attachment/energies/energies-18-03170/article_deploy/energies-18-03170.pdf",
+    "pages": 17,
+    "local_file": "Reference/05_英文补充与来源核验/EN05_PV_microclimate_Xinjiang2025.pdf",
+    "sha256": "72645d28f0beac48fc21350f801fad68ad54a5801562131dd5eac70afd7aacd8",
+    "fulltext_status": "local_pdf_key_sections_reviewed",
+    "use": "T1/T2 光伏环境反馈",
+    "contribution": "2025年发表的五家渠2021年站内/外观测，涉及地表反照率、粗糙度和土壤热过程。",
+    "applicability_limit": "没有通用增湿/生长倍率；原始观测须向作者申请，未随PDF公开取得。",
+    "source_locator": "PDF2–4、14–15页",
+    "metadata_evidence": {
+      "DOI": "10.3390/en18123170",
+      "title": [
+        "Study on the Impact of Large-Scale Photovoltaic Systems on Key Surface Parameters in Desert Area Regions of Xinjiang, China"
+      ],
+      "subtitle": [],
+      "author": [
+        {
+          "given": "Junxia",
+          "family": "Jiang",
+          "sequence": "first",
+          "affiliation": [
+            {
+              "name": "School of New Energy and Power Engineering, Lanzhou Jiaotong University, Lanzhou 730070, China"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Huan",
+          "family": "Du",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "School of New Energy and Power Engineering, Lanzhou Jiaotong University, Lanzhou 730070, China"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Huihui",
+          "family": "Yin",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "School of New Energy and Power Engineering, Lanzhou Jiaotong University, Lanzhou 730070, China"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Hongbo",
+          "family": "Su",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "School of New Energy and Power Engineering, Lanzhou Jiaotong University, Lanzhou 730070, China"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2025,
+            6,
+            17
+          ]
+        ]
+      },
+      "published-online": {
+        "date-parts": [
+          [
+            2025,
+            6,
+            17
+          ]
+        ]
+      },
+      "container-title": [
+        "Energies"
+      ],
+      "volume": "18",
+      "issue": "12",
+      "page": "3170",
+      "type": "journal-article",
+      "URL": "https://doi.org/10.3390/en18123170",
+      "link": [
+        {
+          "URL": "https://www.mdpi.com/1996-1073/18/12/3170/pdf",
+          "content-type": "unspecified",
+          "content-version": "vor",
+          "intended-application": "similarity-checking"
+        }
+      ]
+    }
+  },
+  {
+    "id": "EN06",
+    "slug": "PV_degradation_review2013",
+    "doi": "10.1002/pip.1182",
+    "category": "economy",
+    "checked_date": "2026-11-08",
+    "attempts": [
+      {
+        "url": "https://docs.nlr.gov/docs/fy12osti/51664.pdf",
+        "status": "success"
+      }
+    ],
+    "reading_status": "NREL作者稿摘要及衰减率分布",
+    "title": "Photovoltaic Degradation Rates—an Analytical Review",
+    "authors": [
+      {
+        "given": "D. C.",
+        "family": "Jordan",
+        "sequence": "first",
+        "affiliation": [
+          {
+            "name": "National Renewable Energy Laboratory (NREL)  1617 Cole Blvd. Golden CO 80401 USA"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "S. R.",
+        "family": "Kurtz",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "National Renewable Energy Laboratory (NREL)  1617 Cole Blvd. Golden CO 80401 USA"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      }
+    ],
+    "year": 2013,
+    "url": "https://doi.org/10.1002/pip.1182",
+    "download_url": "https://docs.nlr.gov/docs/fy12osti/51664.pdf",
+    "pages": 32,
+    "local_file": "Reference/05_英文补充与来源核验/EN06_PV_degradation_review2013.pdf",
+    "sha256": "cfb0d46e926397e01fcf80f94d33b9508018f075c1fe0d1fa4f3910210fa27e4",
+    "fulltext_status": "local_pdf_key_sections_reviewed",
+    "version_note": "本地NREL/JA-5200-51664作者稿June 2012；期刊卷期2013年21(1):12–29；在线发表2011年。引用年份使用卷期年。",
+    "use": "T2 长期发电衰减",
+    "contribution": "约2000个历史衰减率支持对年限内发电衰减做参考与敏感性。",
+    "applicability_limit": "本地是2012年作者稿；期刊卷期2013年，在线发表2011年；不可把历史中位数写成本区固定真值。",
+    "source_locator": "PDF3、7–8页",
+    "metadata_evidence": {
+      "DOI": "10.1002/pip.1182",
+      "title": [
+        "Photovoltaic Degradation Rates—an Analytical Review"
+      ],
+      "subtitle": [],
+      "author": [
+        {
+          "given": "D. C.",
+          "family": "Jordan",
+          "sequence": "first",
+          "affiliation": [
+            {
+              "name": "National Renewable Energy Laboratory (NREL)  1617 Cole Blvd. Golden CO 80401 USA"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "S. R.",
+          "family": "Kurtz",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "National Renewable Energy Laboratory (NREL)  1617 Cole Blvd. Golden CO 80401 USA"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2011,
+            10,
+            13
+          ]
+        ]
+      },
+      "published-print": {
+        "date-parts": [
+          [
+            2013,
+            1
+          ]
+        ]
+      },
+      "published-online": {
+        "date-parts": [
+          [
+            2011,
+            10,
+            13
+          ]
+        ]
+      },
+      "container-title": [
+        "Progress in Photovoltaics: Research and Applications"
+      ],
+      "volume": "21",
+      "issue": "1",
+      "page": "12-29",
+      "type": "journal-article",
+      "URL": "https://doi.org/10.1002/pip.1182",
+      "link": [
+        {
+          "URL": "https://api.wiley.com/onlinelibrary/tdm/v1/articles/10.1002%2Fpip.1182",
+          "content-type": "unspecified",
+          "content-version": "vor",
+          "intended-application": "text-mining"
+        },
+        {
+          "URL": "https://onlinelibrary.wiley.com/doi/pdf/10.1002/pip.1182",
+          "content-type": "unspecified",
+          "content-version": "vor",
+          "intended-application": "similarity-checking"
+        }
+      ]
+    }
+  },
+  {
+    "id": "EN07",
+    "slug": "SPEI_drought2010",
+    "doi": "10.1175/2009JCLI2909.1",
+    "category": "risk",
+    "checked_date": "2026-11-08",
+    "attempts": [
+      {
+        "url": "https://crces.org/wp-content/uploads/2018/09/Vicente_Serrano_etal_2010.pdf",
+        "status": "unavailable",
+        "reason": "HTTPSConnectionPool(host='crces.org', port=443): Max retries exceeded with url: /wp-content/uploads/2018/09/Vicente_Serrano_etal_2010.pdf (Caused by SSLError(SSLCertVerificationError(1, \"[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'crces.org'. (_ssl.c:1032)\")))"
+      }
+    ],
+    "reading_status": "Crossref/出版社摘要与元数据；无本地全文",
+    "title": "A Multiscalar Drought Index Sensitive to Global Warming: The Standardized Precipitation Evapotranspiration Index",
+    "authors": [
+      {
+        "given": "Sergio M.",
+        "family": "Vicente-Serrano",
+        "sequence": "first",
+        "affiliation": [
+          {
+            "name": "Instituto Pirenaico de Ecología, Zaragoza, Spain"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Santiago",
+        "family": "Beguería",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Estación Experimental de Aula Dei, Zaragoza, Spain"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Juan I.",
+        "family": "López-Moreno",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Instituto Pirenaico de Ecología, Zaragoza, Spain"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      }
+    ],
+    "year": 2010,
+    "url": "https://doi.org/10.1175/2009JCLI2909.1",
+    "local_file": null,
+    "fulltext_status": "metadata_abstract_only_no_local_fulltext",
+    "use": "T3 干旱指标",
+    "contribution": "SPEI将降水—潜在蒸散水分收支按多个时间尺度累积并标准化，可作为干旱描述候选。",
+    "applicability_limit": "指数不是有效土壤水、植被死亡概率或现成事件强度；极干旱区适用性与PET方法需验证。",
+    "source_locator": "期刊23(7):1696–1718；正文待获取",
+    "landing_or_online_fulltext_url": "https://journals.ametsoc.org/abstract/journals/clim/23/7/2009jcli2909.1.xml",
+    "metadata_evidence": {
+      "DOI": "10.1175/2009jcli2909.1",
+      "title": [
+        "A Multiscalar Drought Index Sensitive to Global Warming: The Standardized Precipitation Evapotranspiration Index"
+      ],
+      "subtitle": [],
+      "author": [
+        {
+          "given": "Sergio M.",
+          "family": "Vicente-Serrano",
+          "sequence": "first",
+          "affiliation": [
+            {
+              "name": "Instituto Pirenaico de Ecología, Zaragoza, Spain"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Santiago",
+          "family": "Beguería",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "Estación Experimental de Aula Dei, Zaragoza, Spain"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Juan I.",
+          "family": "López-Moreno",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "Instituto Pirenaico de Ecología, Zaragoza, Spain"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2010,
+            4,
+            1
+          ]
+        ]
+      },
+      "published-print": {
+        "date-parts": [
+          [
+            2010,
+            4,
+            1
+          ]
+        ]
+      },
+      "published-online": {
+        "date-parts": [
+          [
+            2010,
+            4,
+            1
+          ]
+        ]
+      },
+      "container-title": [
+        "Journal of Climate"
+      ],
+      "volume": "23",
+      "issue": "7",
+      "page": "1696-1718",
+      "type": "journal-article",
+      "URL": "https://doi.org/10.1175/2009jcli2909.1",
+      "link": [
+        {
+          "URL": "http://journals.ametsoc.org/jcli/article-pdf/23/7/1696/3973510/2009jcli2909_1.pdf",
+          "content-type": "application/pdf",
+          "content-version": "vor",
+          "intended-application": "syndication"
+        },
+        {
+          "URL": "http://journals.ametsoc.org/jcli/article-pdf/23/7/1696/3973510/2009jcli2909_1.pdf",
+          "content-type": "unspecified",
+          "content-version": "vor",
+          "intended-application": "similarity-checking"
+        }
+      ]
+    }
+  },
+  {
+    "id": "EN08",
+    "slug": "NEX_GDDP_CMIP6_2022",
+    "doi": "10.1038/s41597-022-01393-4",
+    "category": "data",
+    "checked_date": "2026-11-08",
+    "attempts": [
+      {
+        "url": "https://www.nature.com/articles/s41597-022-01393-4.pdf",
+        "status": "success"
+      }
+    ],
+    "reading_status": "PDF方法、变量/验证与限制",
+    "title": "NASA Global Daily Downscaled Projections, CMIP6",
+    "authors": [
+      {
+        "ORCID": "https://orcid.org/0000-0002-3961-1971",
+        "authenticated-orcid": false,
+        "given": "Bridget",
+        "family": "Thrasher",
+        "sequence": "first",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Weile",
+        "family": "Wang",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Andrew",
+        "family": "Michaelis",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Forrest",
+        "family": "Melton",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Tsengdar",
+        "family": "Lee",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "ORCID": "https://orcid.org/0000-0002-0883-1517",
+        "authenticated-orcid": false,
+        "given": "Ramakrishna",
+        "family": "Nemani",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      }
+    ],
+    "year": 2022,
+    "url": "https://doi.org/10.1038/s41597-022-01393-4",
+    "download_url": "https://www.nature.com/articles/s41597-022-01393-4.pdf",
+    "pages": 6,
+    "local_file": "Reference/05_英文补充与来源核验/EN08_NEX_GDDP_CMIP6_2022.pdf",
+    "sha256": "2b6fa3e7a30464b52c24973fa175edabf45e6f5289bfff2e84a3c909cf936437",
+    "fulltext_status": "local_pdf_key_sections_reviewed",
+    "use": "T3 长期气候数据方法",
+    "contribution": "CMIP6统计降尺度与偏差订正数据论文，提供未来气候驱动的可引用方法依据。",
+    "applicability_limit": "2022论文描述早期产品；实际下载v2时同时引用EN13，不能视为工程区精确预报。",
+    "source_locator": "PDF1–6页",
+    "metadata_evidence": {
+      "DOI": "10.1038/s41597-022-01393-4",
+      "title": [
+        "NASA Global Daily Downscaled Projections, CMIP6"
+      ],
+      "subtitle": [],
+      "author": [
+        {
+          "ORCID": "https://orcid.org/0000-0002-3961-1971",
+          "authenticated-orcid": false,
+          "given": "Bridget",
+          "family": "Thrasher",
+          "sequence": "first",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Weile",
+          "family": "Wang",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Andrew",
+          "family": "Michaelis",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Forrest",
+          "family": "Melton",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Tsengdar",
+          "family": "Lee",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "ORCID": "https://orcid.org/0000-0002-0883-1517",
+          "authenticated-orcid": false,
+          "given": "Ramakrishna",
+          "family": "Nemani",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2022,
+            6,
+            2
+          ]
+        ]
+      },
+      "published-online": {
+        "date-parts": [
+          [
+            2022,
+            6,
+            2
+          ]
+        ]
+      },
+      "container-title": [
+        "Scientific Data"
+      ],
+      "volume": "9",
+      "issue": "1",
+      "article-number": "262",
+      "type": "journal-article",
+      "URL": "https://doi.org/10.1038/s41597-022-01393-4",
+      "link": [
+        {
+          "URL": "https://www.nature.com/articles/s41597-022-01393-4.pdf",
+          "content-type": "application/pdf",
+          "content-version": "vor",
+          "intended-application": "text-mining"
+        },
+        {
+          "URL": "https://www.nature.com/articles/s41597-022-01393-4",
+          "content-type": "text/html",
+          "content-version": "vor",
+          "intended-application": "text-mining"
+        },
+        {
+          "URL": "https://www.nature.com/articles/s41597-022-01393-4.pdf",
+          "content-type": "application/pdf",
+          "content-version": "vor",
+          "intended-application": "similarity-checking"
+        }
+      ]
+    }
+  },
+  {
+    "id": "EN09",
+    "slug": "SoilGrids2_2021",
+    "doi": "10.5194/soil-7-217-2021",
+    "category": "data",
+    "checked_date": "2026-11-08",
+    "attempts": [
+      {
+        "url": "https://soil.copernicus.org/articles/7/217/2021/soil-7-217-2021.pdf",
+        "status": "success"
+      }
+    ],
+    "reading_status": "PDF方法、表1、深度与分位定义",
+    "title": "SoilGrids 2.0: producing soil information for the globe with quantified spatial uncertainty",
+    "authors": [
+      {
+        "ORCID": "https://orcid.org/0000-0003-1892-0764",
+        "authenticated-orcid": false,
+        "given": "Laura",
+        "family": "Poggio",
+        "sequence": "first",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          },
+          {
+            "role": "corresponding-author",
+            "vocabulary": "crossref"
+          }
+        ]
+      },
+      {
+        "ORCID": "https://orcid.org/0000-0002-5851-2071",
+        "authenticated-orcid": false,
+        "given": "Luis M.",
+        "family": "de Sousa",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "ORCID": "https://orcid.org/0000-0003-2367-3067",
+        "authenticated-orcid": false,
+        "given": "Niels H.",
+        "family": "Batjes",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "ORCID": "https://orcid.org/0000-0003-0959-9358",
+        "authenticated-orcid": false,
+        "given": "Gerard B. M.",
+        "family": "Heuvelink",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Bas",
+        "family": "Kempen",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "ORCID": "https://orcid.org/0000-0002-2324-3000",
+        "authenticated-orcid": false,
+        "given": "Eloi",
+        "family": "Ribeiro",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "ORCID": "https://orcid.org/0000-0003-4558-1286",
+        "authenticated-orcid": false,
+        "given": "David",
+        "family": "Rossiter",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      }
+    ],
+    "year": 2021,
+    "url": "https://doi.org/10.5194/soil-7-217-2021",
+    "download_url": "https://soil.copernicus.org/articles/7/217/2021/soil-7-217-2021.pdf",
+    "pages": 24,
+    "local_file": "Reference/05_英文补充与来源核验/EN09_SoilGrids2_2021.pdf",
+    "sha256": "7ef552e8a3d88ffd4979fc13460f11cbc19ae44d5576cd898a42ae4f8796cbf5",
+    "fulltext_status": "local_pdf_key_sections_reviewed",
+    "use": "T1 土壤参数与不确定性",
+    "contribution": "SoilGrids2.0土壤质地/容重等、250m栅格与空间不确定性，帮助构造参数先验。",
+    "applicability_limit": "不是田间持水量和导水率的直接测量；表1物理单位与图层存储单位不同。",
+    "source_locator": "PDF3–6页，表1",
+    "metadata_evidence": {
+      "DOI": "10.5194/soil-7-217-2021",
+      "title": [
+        "SoilGrids 2.0: producing soil information for the globe with quantified spatial uncertainty"
+      ],
+      "subtitle": [],
+      "author": [
+        {
+          "ORCID": "https://orcid.org/0000-0003-1892-0764",
+          "authenticated-orcid": false,
+          "given": "Laura",
+          "family": "Poggio",
+          "sequence": "first",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            },
+            {
+              "role": "corresponding-author",
+              "vocabulary": "crossref"
+            }
+          ]
+        },
+        {
+          "ORCID": "https://orcid.org/0000-0002-5851-2071",
+          "authenticated-orcid": false,
+          "given": "Luis M.",
+          "family": "de Sousa",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "ORCID": "https://orcid.org/0000-0003-2367-3067",
+          "authenticated-orcid": false,
+          "given": "Niels H.",
+          "family": "Batjes",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "ORCID": "https://orcid.org/0000-0003-0959-9358",
+          "authenticated-orcid": false,
+          "given": "Gerard B. M.",
+          "family": "Heuvelink",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Bas",
+          "family": "Kempen",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "ORCID": "https://orcid.org/0000-0002-2324-3000",
+          "authenticated-orcid": false,
+          "given": "Eloi",
+          "family": "Ribeiro",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "ORCID": "https://orcid.org/0000-0003-4558-1286",
+          "authenticated-orcid": false,
+          "given": "David",
+          "family": "Rossiter",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2021,
+            6,
+            14
+          ]
+        ]
+      },
+      "published-online": {
+        "date-parts": [
+          [
+            2021,
+            6,
+            14
+          ]
+        ]
+      },
+      "container-title": [
+        "SOIL"
+      ],
+      "volume": "7",
+      "issue": "1",
+      "page": "217-240",
+      "type": "journal-article",
+      "URL": "https://doi.org/10.5194/soil-7-217-2021",
+      "link": [
+        {
+          "URL": "https://soil.copernicus.org/articles/7/217/2021/soil-7-217-2021.pdf",
+          "content-type": "unspecified",
+          "content-version": "vor",
+          "intended-application": "similarity-checking"
+        }
+      ]
+    }
+  },
+  {
+    "id": "EN10",
+    "slug": "ERA5_Land_method2021",
+    "doi": "10.5194/essd-13-4349-2021",
+    "category": "data",
+    "checked_date": "2026-11-08",
+    "attempts": [
+      {
+        "url": "https://essd.copernicus.org/articles/13/4349/2021/essd-13-4349-2021.pdf",
+        "status": "success"
+      }
+    ],
+    "reading_status": "PDF方法、水分评估、变量表与限制",
+    "title": "ERA5-Land: a state-of-the-art global reanalysis dataset for land applications",
+    "authors": [
+      {
+        "ORCID": "https://orcid.org/0000-0002-5997-290X",
+        "authenticated-orcid": false,
+        "given": "Joaquín",
+        "family": "Muñoz-Sabater",
+        "sequence": "first",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          },
+          {
+            "role": "corresponding-author",
+            "vocabulary": "crossref"
+          }
+        ]
+      },
+      {
+        "ORCID": "https://orcid.org/0000-0002-0643-2643",
+        "authenticated-orcid": false,
+        "given": "Emanuel",
+        "family": "Dutra",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Anna",
+        "family": "Agustí-Panareda",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "ORCID": "https://orcid.org/0000-0003-1095-2702",
+        "authenticated-orcid": false,
+        "given": "Clément",
+        "family": "Albergel",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "ORCID": "https://orcid.org/0000-0002-6564-1699",
+        "authenticated-orcid": false,
+        "given": "Gabriele",
+        "family": "Arduini",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "ORCID": "https://orcid.org/0000-0002-1745-3634",
+        "authenticated-orcid": false,
+        "given": "Gianpaolo",
+        "family": "Balsamo",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "ORCID": "https://orcid.org/0000-0001-8646-8701",
+        "authenticated-orcid": false,
+        "given": "Souhail",
+        "family": "Boussetta",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "ORCID": "https://orcid.org/0000-0003-4393-931X",
+        "authenticated-orcid": false,
+        "given": "Margarita",
+        "family": "Choulga",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "ORCID": "https://orcid.org/0000-0002-0992-3667",
+        "authenticated-orcid": false,
+        "given": "Shaun",
+        "family": "Harrigan",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "ORCID": "https://orcid.org/0000-0001-5330-7071",
+        "authenticated-orcid": false,
+        "given": "Hans",
+        "family": "Hersbach",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "ORCID": "https://orcid.org/0000-0002-7368-7953",
+        "authenticated-orcid": false,
+        "given": "Brecht",
+        "family": "Martens",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "ORCID": "https://orcid.org/0000-0001-6186-5751",
+        "authenticated-orcid": false,
+        "given": "Diego G.",
+        "family": "Miralles",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "ORCID": "https://orcid.org/0000-0002-1169-3098",
+        "authenticated-orcid": false,
+        "given": "María",
+        "family": "Piles",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "ORCID": "https://orcid.org/0000-0003-3796-149X",
+        "authenticated-orcid": false,
+        "given": "Nemesio J.",
+        "family": "Rodríguez-Fernández",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "ORCID": "https://orcid.org/0000-0002-7998-0130",
+        "authenticated-orcid": false,
+        "given": "Ervin",
+        "family": "Zsoter",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "ORCID": "https://orcid.org/0000-0002-1874-5380",
+        "authenticated-orcid": false,
+        "given": "Carlo",
+        "family": "Buontempo",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Jean-Noël",
+        "family": "Thépaut",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      }
+    ],
+    "year": 2021,
+    "url": "https://doi.org/10.5194/essd-13-4349-2021",
+    "download_url": "https://essd.copernicus.org/articles/13/4349/2021/essd-13-4349-2021.pdf",
+    "pages": 35,
+    "local_file": "Reference/05_英文补充与来源核验/EN10_ERA5_Land_method2021.pdf",
+    "sha256": "1f4b1dd27a2b52e587c2605f221de01a1159da8c898cd313edd3cf61f9be7e1f",
+    "fulltext_status": "local_pdf_key_sections_reviewed",
+    "use": "T1/T3 历史气象与土壤水",
+    "contribution": "补足原ERA5-Land网页只有入口的不足：说明再分析方法、分层水分与评估。",
+    "applicability_limit": "全球再分析不解析狭窄灌溉带；PET在极干旱条件下需谨慎，不能直接当灌溉定额。",
+    "source_locator": "PDF3–8、28页表A2",
+    "metadata_evidence": {
+      "DOI": "10.5194/essd-13-4349-2021",
+      "title": [
+        "ERA5-Land: a state-of-the-art global reanalysis dataset for land applications"
+      ],
+      "subtitle": [],
+      "author": [
+        {
+          "ORCID": "https://orcid.org/0000-0002-5997-290X",
+          "authenticated-orcid": false,
+          "given": "Joaquín",
+          "family": "Muñoz-Sabater",
+          "sequence": "first",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            },
+            {
+              "role": "corresponding-author",
+              "vocabulary": "crossref"
+            }
+          ]
+        },
+        {
+          "ORCID": "https://orcid.org/0000-0002-0643-2643",
+          "authenticated-orcid": false,
+          "given": "Emanuel",
+          "family": "Dutra",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Anna",
+          "family": "Agustí-Panareda",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "ORCID": "https://orcid.org/0000-0003-1095-2702",
+          "authenticated-orcid": false,
+          "given": "Clément",
+          "family": "Albergel",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "ORCID": "https://orcid.org/0000-0002-6564-1699",
+          "authenticated-orcid": false,
+          "given": "Gabriele",
+          "family": "Arduini",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "ORCID": "https://orcid.org/0000-0002-1745-3634",
+          "authenticated-orcid": false,
+          "given": "Gianpaolo",
+          "family": "Balsamo",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "ORCID": "https://orcid.org/0000-0001-8646-8701",
+          "authenticated-orcid": false,
+          "given": "Souhail",
+          "family": "Boussetta",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "ORCID": "https://orcid.org/0000-0003-4393-931X",
+          "authenticated-orcid": false,
+          "given": "Margarita",
+          "family": "Choulga",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "ORCID": "https://orcid.org/0000-0002-0992-3667",
+          "authenticated-orcid": false,
+          "given": "Shaun",
+          "family": "Harrigan",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "ORCID": "https://orcid.org/0000-0001-5330-7071",
+          "authenticated-orcid": false,
+          "given": "Hans",
+          "family": "Hersbach",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "ORCID": "https://orcid.org/0000-0002-7368-7953",
+          "authenticated-orcid": false,
+          "given": "Brecht",
+          "family": "Martens",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "ORCID": "https://orcid.org/0000-0001-6186-5751",
+          "authenticated-orcid": false,
+          "given": "Diego G.",
+          "family": "Miralles",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "ORCID": "https://orcid.org/0000-0002-1169-3098",
+          "authenticated-orcid": false,
+          "given": "María",
+          "family": "Piles",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "ORCID": "https://orcid.org/0000-0003-3796-149X",
+          "authenticated-orcid": false,
+          "given": "Nemesio J.",
+          "family": "Rodríguez-Fernández",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "ORCID": "https://orcid.org/0000-0002-7998-0130",
+          "authenticated-orcid": false,
+          "given": "Ervin",
+          "family": "Zsoter",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "ORCID": "https://orcid.org/0000-0002-1874-5380",
+          "authenticated-orcid": false,
+          "given": "Carlo",
+          "family": "Buontempo",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Jean-Noël",
+          "family": "Thépaut",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2021,
+            9,
+            7
+          ]
+        ]
+      },
+      "published-online": {
+        "date-parts": [
+          [
+            2021,
+            9,
+            7
+          ]
+        ]
+      },
+      "container-title": [
+        "Earth System Science Data"
+      ],
+      "volume": "13",
+      "issue": "9",
+      "page": "4349-4383",
+      "type": "journal-article",
+      "URL": "https://doi.org/10.5194/essd-13-4349-2021",
+      "link": [
+        {
+          "URL": "https://essd.copernicus.org/articles/13/4349/2021/essd-13-4349-2021.pdf",
+          "content-type": "unspecified",
+          "content-version": "vor",
+          "intended-application": "similarity-checking"
+        }
+      ]
+    }
+  },
+  {
+    "id": "EN11",
+    "slug": "NREL_PV_OM_2018",
+    "doi": "10.2172/1489002",
+    "category": "economy",
+    "checked_date": "2026-11-08",
+    "attempts": [
+      {
+        "url": "https://docs.nlr.gov/docs/fy19osti/73822.pdf",
+        "status": "success"
+      }
+    ],
+    "reading_status": "PDF运维结构、现金流/NPV/准备金与附录D",
+    "title": "Best Practices for Operation and Maintenance of Photovoltaic and Energy Storage Systems; 3rd Edition",
+    "authors": [
+      {
+        "given": "H. A.",
+        "family": "Walker",
+        "sequence": "first",
+        "affiliation": [
+          {
+            "name": "National Renewable Energy Lab. (NREL), Golden, CO (United States)"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      }
+    ],
+    "year": 2018,
+    "url": "https://doi.org/10.2172/1489002",
+    "download_url": "https://docs.nlr.gov/docs/fy19osti/73822.pdf",
+    "pages": 153,
+    "local_file": "Reference/05_英文补充与来源核验/EN11_NREL_PV_OM_2018.pdf",
+    "sha256": "3f8bc58083308fb013ddbc4f260f555862e79d8b215a599d111d9862b6414040",
+    "fulltext_status": "local_pdf_key_sections_reviewed",
+    "use": "T2 运维、人力、现金流",
+    "contribution": "用工种、工时、维护频次、备件及失效分布组织可复算O&M成本，支持劳动投入约束。",
+    "applicability_limit": "美国工资不可直接迁移；无储能方案时不引入储能费用；维护人员与全包合同价不可重复相加。",
+    "source_locator": "PDF106–108、134页；其他章节按需查阅",
+    "metadata_evidence": {
+      "DOI": "10.2172/1489002",
+      "title": [
+        "Best Practices for Operation and Maintenance of Photovoltaic and Energy Storage Systems; 3rd Edition"
+      ],
+      "subtitle": [],
+      "author": [
+        {
+          "given": "H. A.",
+          "family": "Walker",
+          "sequence": "first",
+          "affiliation": [
+            {
+              "name": "National Renewable Energy Lab. (NREL), Golden, CO (United States)"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2018,
+            12,
+            21
+          ]
+        ]
+      },
+      "published-online": {
+        "date-parts": [
+          [
+            2018,
+            12,
+            21
+          ]
+        ]
+      },
+      "container-title": [],
+      "type": "report",
+      "URL": "https://doi.org/10.2172/1489002"
+    }
+  },
+  {
+    "id": "EN12",
+    "slug": "IRENA_Costs2025_published2026",
+    "doi": null,
+    "category": "economy",
+    "checked_date": "2026-11-08",
+    "attempts": [
+      {
+        "url": "https://www.irena.org/-/media/Files/IRENA/Agency/Publication/2026/Jul/IRENA_TEC_RPGC_in_2025_2026.pdf",
+        "status": "success"
+      }
+    ],
+    "reading_status": "报告引用页、光伏章节与O&M图表",
+    "title": "Renewable power generation costs in 2025",
+    "authors": [
+      {
+        "literal": "International Renewable Energy Agency"
+      }
+    ],
+    "year": 2026,
+    "url": "https://www.irena.org/Publications/2026/Jul/Renewable-Power-Generation-Costs-in-2025",
+    "download_url": "https://www.irena.org/-/media/Files/IRENA/Agency/Publication/2026/Jul/IRENA_TEC_RPGC_in_2025_2026.pdf",
+    "pages": 172,
+    "local_file": "Reference/05_英文补充与来源核验/EN12_IRENA_Costs2025_published2026.pdf",
+    "sha256": "38c8c70b848187c89d64b8817f0ebe831a9587c00257c1cc93195f22833a0eab",
+    "fulltext_status": "local_pdf_key_sections_reviewed",
+    "use": "T2 成本量级与币值口径",
+    "contribution": "2026年出版、统计2025年成本；可作光伏建设、运维与LCOE的外部行业对照。",
+    "applicability_limit": "全球数据库、国家样本和调查样本的加权口径不同；本地治沙综合成本、电价仍须另找。",
+    "source_locator": "PDF2、58–73页，特别69页§3.5",
+    "isbn": "978-92-9260-749-4",
+    "metadata_evidence": {}
+  },
+  {
+    "id": "EN13",
+    "slug": "NEX_GDDP_CMIP6_v2_TechNote2025",
+    "doi": null,
+    "category": "data",
+    "checked_date": "2026-11-08",
+    "attempts": [
+      {
+        "url": "https://www.nccs.nasa.gov/sites/default/files/NEX-GDDP-CMIP6-v2-Tech_Note.pdf",
+        "status": "unavailable",
+        "reason": "404 Client Error: Not Found for url: https://www.nccs.nasa.gov/sites/default/files/NEX-GDDP-CMIP6-v2-Tech_Note.pdf"
+      },
+      {
+        "url": "https://www.nccs.nasa.gov/wp-content/uploads/2025/06/NEX-GDDP-CMIP6-v2-Tech_Note.pdf",
+        "status": "success"
+      }
+    ],
+    "reading_status": "技术说明变量、更新记录、建议用途与限制",
+    "title": "NEX-GDDP-CMIP6 (version 2) Technical Note",
+    "authors": [
+      {
+        "literal": "NASA Earth Exchange"
+      }
+    ],
+    "year": 2025,
+    "url": "https://www.nccs.nasa.gov/wp-content/uploads/2025/06/NEX-GDDP-CMIP6-v2-Tech_Note.pdf",
+    "download_url": "https://www.nccs.nasa.gov/wp-content/uploads/2025/06/NEX-GDDP-CMIP6-v2-Tech_Note.pdf",
+    "pages": 41,
+    "local_file": "Reference/05_英文补充与来源核验/EN13_NEX_GDDP_CMIP6_v2_TechNote2025.pdf",
+    "sha256": "5fbb928bb6b6731b48adbf898c0fd40531fdcd12d189fd0f2e1acc91d6f40bc1",
+    "fulltext_status": "local_pdf_key_sections_reviewed",
+    "version_note": "v2.0技术说明，首页Latest update May 31, 2025；不是初检索缓存中旧的March版本。",
+    "use": "T3 气候数据v2版本与单位",
+    "contribution": "v2.0，更新2025-05-31；补充气候变量单位、版本修正、适用范围及文件日历问题。",
+    "applicability_limit": "不能混接v1/v2；日均风不能复原阵风；研究情景不是某年灾害确定预测。",
+    "source_locator": "PDF1、3–4、9、32–33、37页",
+    "dataset_doi": "10.7917/OFSG3345",
+    "version": "2.0",
+    "document_updated": "2025-05-31",
+    "metadata_evidence": {}
+  },
+  {
+    "id": "EN14",
+    "slug": "Sand_burial_seedling2019",
+    "doi": "10.1111/1440-1703.1269",
+    "category": "risk",
+    "checked_date": "2026-11-08",
+    "attempts": [],
+    "reading_status": "出版社元数据/摘要线索；无本地全文",
+    "title": "Effects of sand burial disturbance on establishment of three desert shrub species in the margin of oasis in northwestern China",
+    "authors": [
+      {
+        "given": "Guohua",
+        "family": "Wang",
+        "sequence": "first",
+        "affiliation": [
+          {
+            "name": "College of Geography Science Shanxi Normal University  Linfen China"
+          },
+          {
+            "name": "Linze inland river basin research station, key laboratory of eco‐hydrology and river basin science Chinese academy of sciences  Lanzhou China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Kailiang",
+        "family": "Yu",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Department of Environmental Sciences University of Virginia  Charlottesville Virginia"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Qianqian",
+        "family": "Gou",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "College of Geography Science Shanxi Normal University  Linfen China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      }
+    ],
+    "year": 2019,
+    "url": "https://doi.org/10.1111/1440-1703.1269",
+    "local_file": null,
+    "fulltext_status": "metadata_abstract_only_no_local_fulltext",
+    "use": "T1/T3 沙埋与幼苗建立",
+    "contribution": "绿洲边缘三种荒漠灌木的沙埋—幼苗建立实验，是后续获取参数的具体线索。",
+    "applicability_limit": "未核实正文处理表与响应曲线；幼苗出苗/存活不等于成熟林带损伤，暂不摘抄系数。",
+    "source_locator": "期刊34(1):127–135；正文待获取",
+    "landing_or_online_fulltext_url": "https://esj-journals.onlinelibrary.wiley.com/doi/abs/10.1111/1440-1703.1269",
+    "metadata_evidence": {
+      "DOI": "10.1111/1440-1703.1269",
+      "title": [
+        "Effects of sand burial disturbance on establishment of three desert shrub species in the margin of oasis in northwestern China"
+      ],
+      "subtitle": [],
+      "author": [
+        {
+          "given": "Guohua",
+          "family": "Wang",
+          "sequence": "first",
+          "affiliation": [
+            {
+              "name": "College of Geography Science Shanxi Normal University  Linfen China"
+            },
+            {
+              "name": "Linze inland river basin research station, key laboratory of eco‐hydrology and river basin science Chinese academy of sciences  Lanzhou China"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Kailiang",
+          "family": "Yu",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "Department of Environmental Sciences University of Virginia  Charlottesville Virginia"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Qianqian",
+          "family": "Gou",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "College of Geography Science Shanxi Normal University  Linfen China"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2019,
+            1
+          ]
+        ]
+      },
+      "published-print": {
+        "date-parts": [
+          [
+            2019,
+            1
+          ]
+        ]
+      },
+      "published-online": {
+        "date-parts": [
+          [
+            2019,
+            1,
+            30
+          ]
+        ]
+      },
+      "container-title": [
+        "Ecological Research"
+      ],
+      "volume": "34",
+      "issue": "1",
+      "page": "127-135",
+      "type": "journal-article",
+      "URL": "https://doi.org/10.1111/1440-1703.1269",
+      "link": [
+        {
+          "URL": "https://api.wiley.com/onlinelibrary/tdm/v1/articles/10.1111%2F1440-1703.1269",
+          "content-type": "application/pdf",
+          "content-version": "vor",
+          "intended-application": "text-mining"
+        },
+        {
+          "URL": "https://onlinelibrary.wiley.com/doi/pdf/10.1111/1440-1703.1269",
+          "content-type": "application/pdf",
+          "content-version": "vor",
+          "intended-application": "text-mining"
+        },
+        {
+          "URL": "https://onlinelibrary.wiley.com/doi/full-xml/10.1111/1440-1703.1269",
+          "content-type": "application/xml",
+          "content-version": "vor",
+          "intended-application": "text-mining"
+        },
+        {
+          "URL": "https://esj-journals.onlinelibrary.wiley.com/doi/pdf/10.1111/1440-1703.1269",
+          "content-type": "unspecified",
+          "content-version": "vor",
+          "intended-application": "similarity-checking"
+        }
+      ]
+    }
+  },
+  {
+    "id": "EN15",
+    "slug": "Sandstorm_Haloxylon_damage2022",
+    "doi": "10.1007/s40626-022-00242-4",
+    "category": "risk",
+    "checked_date": "2026-11-08",
+    "attempts": [
+      {
+        "url": "https://d-nb.info/1263085423/34",
+        "status": "success"
+      }
+    ],
+    "reading_status": "PDF摘要、实验设计与主要响应图",
+    "title": "Sandstorms cause shrinkage of Haloxylon ammodendron shrubs and limit their self-renewal",
+    "authors": [
+      {
+        "ORCID": "https://orcid.org/0000-0002-1849-7292",
+        "authenticated-orcid": false,
+        "given": "Sheng-bo",
+        "family": "Shi",
+        "sequence": "first",
+        "affiliation": [],
+        "role": [
+          {
+            "role": "author",
+            "vocabulary": "crossref"
+          }
+        ]
+      },
+      {
+        "given": "Dang-wei",
+        "family": "Zhou",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "role": "author",
+            "vocabulary": "crossref"
+          }
+        ]
+      },
+      {
+        "given": "Fang-lin",
+        "family": "Wang",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "role": "author",
+            "vocabulary": "crossref"
+          }
+        ]
+      },
+      {
+        "given": "Rui",
+        "family": "Shi",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "role": "author",
+            "vocabulary": "crossref"
+          }
+        ]
+      },
+      {
+        "given": "Tao",
+        "family": "Sun",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "role": "author",
+            "vocabulary": "crossref"
+          }
+        ]
+      },
+      {
+        "given": "Tian-cai",
+        "family": "Li",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "role": "author",
+            "vocabulary": "crossref"
+          }
+        ]
+      },
+      {
+        "given": "Jia-lin",
+        "family": "Ma",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "role": "author",
+            "vocabulary": "crossref"
+          }
+        ]
+      },
+      {
+        "given": "Xiang",
+        "family": "Wan",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "role": "author",
+            "vocabulary": "crossref"
+          }
+        ]
+      },
+      {
+        "given": "Jian-ping",
+        "family": "Ma",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "role": "author",
+            "vocabulary": "crossref"
+          }
+        ]
+      },
+      {
+        "given": "Jing-nian",
+        "family": "Tang",
+        "sequence": "additional",
+        "affiliation": [],
+        "role": [
+          {
+            "role": "author",
+            "vocabulary": "crossref"
+          }
+        ]
+      }
+    ],
+    "year": 2022,
+    "url": "https://doi.org/10.1007/s40626-022-00242-4",
+    "download_url": "https://d-nb.info/1263085423/34",
+    "pages": 18,
+    "local_file": "Reference/05_英文补充与来源核验/EN15_Sandstorm_Haloxylon_damage2022.pdf",
+    "sha256": "fc39e0ef13e37d6113010eb71ab9c025b500a9810cb4eb744e89ff40a8e9e706",
+    "fulltext_status": "local_pdf_key_sections_reviewed",
+    "use": "T3 风沙损伤与恢复",
+    "contribution": "梭梭幼苗在带沙/不带沙风下的生理损伤，支持强度与持续时间联合描述暴露。",
+    "applicability_limit": "民勤种源风洞试验；生理响应不是成年植被覆盖损失率，也不是普适灾害阈值。",
+    "source_locator": "PDF1、3–4、6–10页",
+    "metadata_evidence": {
+      "DOI": "10.1007/s40626-022-00242-4",
+      "title": [
+        "Sandstorms cause shrinkage of Haloxylon ammodendron shrubs and limit their self-renewal"
+      ],
+      "subtitle": [],
+      "author": [
+        {
+          "ORCID": "https://orcid.org/0000-0002-1849-7292",
+          "authenticated-orcid": false,
+          "given": "Sheng-bo",
+          "family": "Shi",
+          "sequence": "first",
+          "affiliation": [],
+          "role": [
+            {
+              "role": "author",
+              "vocabulary": "crossref"
+            }
+          ]
+        },
+        {
+          "given": "Dang-wei",
+          "family": "Zhou",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "role": "author",
+              "vocabulary": "crossref"
+            }
+          ]
+        },
+        {
+          "given": "Fang-lin",
+          "family": "Wang",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "role": "author",
+              "vocabulary": "crossref"
+            }
+          ]
+        },
+        {
+          "given": "Rui",
+          "family": "Shi",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "role": "author",
+              "vocabulary": "crossref"
+            }
+          ]
+        },
+        {
+          "given": "Tao",
+          "family": "Sun",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "role": "author",
+              "vocabulary": "crossref"
+            }
+          ]
+        },
+        {
+          "given": "Tian-cai",
+          "family": "Li",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "role": "author",
+              "vocabulary": "crossref"
+            }
+          ]
+        },
+        {
+          "given": "Jia-lin",
+          "family": "Ma",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "role": "author",
+              "vocabulary": "crossref"
+            }
+          ]
+        },
+        {
+          "given": "Xiang",
+          "family": "Wan",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "role": "author",
+              "vocabulary": "crossref"
+            }
+          ]
+        },
+        {
+          "given": "Jian-ping",
+          "family": "Ma",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "role": "author",
+              "vocabulary": "crossref"
+            }
+          ]
+        },
+        {
+          "given": "Jing-nian",
+          "family": "Tang",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "role": "author",
+              "vocabulary": "crossref"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2022,
+            4,
+            7
+          ]
+        ]
+      },
+      "published-print": {
+        "date-parts": [
+          [
+            2022,
+            6
+          ]
+        ]
+      },
+      "published-online": {
+        "date-parts": [
+          [
+            2022,
+            4,
+            7
+          ]
+        ]
+      },
+      "container-title": [
+        "Theoretical and Experimental Plant Physiology"
+      ],
+      "volume": "34",
+      "issue": "2",
+      "page": "197-214",
+      "type": "journal-article",
+      "URL": "https://doi.org/10.1007/s40626-022-00242-4",
+      "link": [
+        {
+          "URL": "https://link.springer.com/content/pdf/10.1007/s40626-022-00242-4.pdf",
+          "content-type": "application/pdf",
+          "content-version": "vor",
+          "intended-application": "text-mining"
+        },
+        {
+          "URL": "https://link.springer.com/article/10.1007/s40626-022-00242-4/fulltext.html",
+          "content-type": "text/html",
+          "content-version": "vor",
+          "intended-application": "text-mining"
+        },
+        {
+          "URL": "https://link.springer.com/content/pdf/10.1007/s40626-022-00242-4.pdf",
+          "content-type": "application/pdf",
+          "content-version": "vor",
+          "intended-application": "similarity-checking"
+        }
+      ]
+    }
+  },
+  {
+    "id": "EN16",
+    "slug": "Straw_checkerboard2018",
+    "doi": "10.3390/ijerph15102184",
+    "category": "wind",
+    "checked_date": "2026-11-08",
+    "attempts": [
+      {
+        "url": "https://mdpi-res.com/d_attachment/ijerph/ijerph-15-02184/article_deploy/ijerph-15-02184.pdf",
+        "status": "success"
+      }
+    ],
+    "reading_status": "PDF试验设计、风速/侵蚀沉积指标与结果",
+    "title": "Effect of Straw Checkerboards on Wind Proofing, Sand Fixation, and Ecological Restoration in Shifting Sandy Land",
+    "authors": [
+      {
+        "given": "Shuai",
+        "family": "Zhang",
+        "sequence": "first",
+        "affiliation": [
+          {
+            "name": "Yanchi Research Station, School of Soil and Water Conservation, Beijing Forestry University, Beijing 100083, China"
+          },
+          {
+            "name": "Key Laboratory of State Forestry Administration on Soil and Water Conservation, Beijing Forestry University, Beijing 100083, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Guo-dong",
+        "family": "Ding",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Yanchi Research Station, School of Soil and Water Conservation, Beijing Forestry University, Beijing 100083, China"
+          },
+          {
+            "name": "Key Laboratory of State Forestry Administration on Soil and Water Conservation, Beijing Forestry University, Beijing 100083, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "ORCID": "https://orcid.org/0000-0001-6641-4167",
+        "authenticated-orcid": false,
+        "given": "Ming-han",
+        "family": "Yu",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Yanchi Research Station, School of Soil and Water Conservation, Beijing Forestry University, Beijing 100083, China"
+          },
+          {
+            "name": "Key Laboratory of State Forestry Administration on Soil and Water Conservation, Beijing Forestry University, Beijing 100083, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Guang-lei",
+        "family": "Gao",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Yanchi Research Station, School of Soil and Water Conservation, Beijing Forestry University, Beijing 100083, China"
+          },
+          {
+            "name": "Key Laboratory of State Forestry Administration on Soil and Water Conservation, Beijing Forestry University, Beijing 100083, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Yuan-yuan",
+        "family": "Zhao",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Yanchi Research Station, School of Soil and Water Conservation, Beijing Forestry University, Beijing 100083, China"
+          },
+          {
+            "name": "Key Laboratory of State Forestry Administration on Soil and Water Conservation, Beijing Forestry University, Beijing 100083, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Guo-hong",
+        "family": "Wu",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Yanchi Research Station, School of Soil and Water Conservation, Beijing Forestry University, Beijing 100083, China"
+          },
+          {
+            "name": "Key Laboratory of State Forestry Administration on Soil and Water Conservation, Beijing Forestry University, Beijing 100083, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Long",
+        "family": "Wang",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Yanchi Research Station, School of Soil and Water Conservation, Beijing Forestry University, Beijing 100083, China"
+          },
+          {
+            "name": "Key Laboratory of State Forestry Administration on Soil and Water Conservation, Beijing Forestry University, Beijing 100083, China"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      }
+    ],
+    "year": 2018,
+    "url": "https://doi.org/10.3390/ijerph15102184",
+    "download_url": "https://mdpi-res.com/d_attachment/ijerph/ijerph-15-02184/article_deploy/ijerph-15-02184.pdf",
+    "pages": 17,
+    "local_file": "Reference/05_英文补充与来源核验/EN16_Straw_checkerboard2018.pdf",
+    "sha256": "3a1d30b9f2490937ae1898ccb7b3db7bd785371e3ed369e510f816d46870e8ee",
+    "fulltext_status": "local_pdf_key_sections_reviewed",
+    "use": "T1/T2 工程固沙措施",
+    "contribution": "草方格1/2/3m实地与1:10风洞对照，补足工程措施如何改变防风固沙的依据。",
+    "applicability_limit": "宁夏盐池条件，最佳尺寸与系数需迁移检验；不含本研究区工程报价。",
+    "source_locator": "PDF3–5、6–13页",
+    "metadata_evidence": {
+      "DOI": "10.3390/ijerph15102184",
+      "title": [
+        "Effect of Straw Checkerboards on Wind Proofing, Sand Fixation, and Ecological Restoration in Shifting Sandy Land"
+      ],
+      "subtitle": [],
+      "author": [
+        {
+          "given": "Shuai",
+          "family": "Zhang",
+          "sequence": "first",
+          "affiliation": [
+            {
+              "name": "Yanchi Research Station, School of Soil and Water Conservation, Beijing Forestry University, Beijing 100083, China"
+            },
+            {
+              "name": "Key Laboratory of State Forestry Administration on Soil and Water Conservation, Beijing Forestry University, Beijing 100083, China"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Guo-dong",
+          "family": "Ding",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "Yanchi Research Station, School of Soil and Water Conservation, Beijing Forestry University, Beijing 100083, China"
+            },
+            {
+              "name": "Key Laboratory of State Forestry Administration on Soil and Water Conservation, Beijing Forestry University, Beijing 100083, China"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "ORCID": "https://orcid.org/0000-0001-6641-4167",
+          "authenticated-orcid": false,
+          "given": "Ming-han",
+          "family": "Yu",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "Yanchi Research Station, School of Soil and Water Conservation, Beijing Forestry University, Beijing 100083, China"
+            },
+            {
+              "name": "Key Laboratory of State Forestry Administration on Soil and Water Conservation, Beijing Forestry University, Beijing 100083, China"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Guang-lei",
+          "family": "Gao",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "Yanchi Research Station, School of Soil and Water Conservation, Beijing Forestry University, Beijing 100083, China"
+            },
+            {
+              "name": "Key Laboratory of State Forestry Administration on Soil and Water Conservation, Beijing Forestry University, Beijing 100083, China"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Yuan-yuan",
+          "family": "Zhao",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "Yanchi Research Station, School of Soil and Water Conservation, Beijing Forestry University, Beijing 100083, China"
+            },
+            {
+              "name": "Key Laboratory of State Forestry Administration on Soil and Water Conservation, Beijing Forestry University, Beijing 100083, China"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Guo-hong",
+          "family": "Wu",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "Yanchi Research Station, School of Soil and Water Conservation, Beijing Forestry University, Beijing 100083, China"
+            },
+            {
+              "name": "Key Laboratory of State Forestry Administration on Soil and Water Conservation, Beijing Forestry University, Beijing 100083, China"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Long",
+          "family": "Wang",
+          "sequence": "additional",
+          "affiliation": [
+            {
+              "name": "Yanchi Research Station, School of Soil and Water Conservation, Beijing Forestry University, Beijing 100083, China"
+            },
+            {
+              "name": "Key Laboratory of State Forestry Administration on Soil and Water Conservation, Beijing Forestry University, Beijing 100083, China"
+            }
+          ],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "published": {
+        "date-parts": [
+          [
+            2018,
+            10,
+            6
+          ]
+        ]
+      },
+      "published-online": {
+        "date-parts": [
+          [
+            2018,
+            10,
+            6
+          ]
+        ]
+      },
+      "container-title": [
+        "International Journal of Environmental Research and Public Health"
+      ],
+      "volume": "15",
+      "issue": "10",
+      "page": "2184",
+      "type": "journal-article",
+      "URL": "https://doi.org/10.3390/ijerph15102184",
+      "link": [
+        {
+          "URL": "https://www.mdpi.com/1660-4601/15/10/2184/pdf",
+          "content-type": "unspecified",
+          "content-version": "vor",
+          "intended-application": "similarity-checking"
+        }
+      ]
+    }
+  }
+]
