@@ -20,3 +20,7 @@ venv/
 
 # Local document reader state (all directories)
 .markmira/
+
+# API 原始响应缓存（可由脚本重新下载，不入库）
+Data/cache/
+Docs/reports/src/
