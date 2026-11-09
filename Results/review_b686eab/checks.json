@@ -1,0 +1,122 @@
+{
+  "reviewed_commit": "b686eab",
+  "formal_model_ready": false,
+  "input_sha256": {
+    "Code/modeling_v2.py": "7ebabe744f9e5edc983452e84c629c7781d8b135c8d6f1e3e34e1053883526c8",
+    "Data/processed/panel_v2.csv": "caf1f9bb7669dc8eac3ba4f6508d83b55c7b9d615224c2495aa9963a5b55c066",
+    "Results/model_fit_by_station.csv": "dcdc0cf575ea00f736a22e4ebdac610ca1fc93337cdba9c705717c9452d1915c",
+    "Results/model_v2.json": "241a083ce010f0cd0fbd21685647aa144a7b90ab6e2db8a24d1edb75d3457be9",
+    "Data/raw/modis_ndvi_qa_sample.csv": "607d626388383435332dba3f4e3db786b857e47efd8241e03d9769ce1a2efb74",
+    "Data/raw/nasa_power_verified/power_monthly.csv": "8b0abb5fa14e88211138266c72c9767cc2f657f58e6f24fdfe78b38382fa0c81",
+    "Data/raw/nasa_power_verified/manifest_v2.json": "21f574ea54ca5089d0e8dd0f6417f8327b1d29a1485e7c99ba33dcb8e7907a15"
+  },
+  "panel_rows": 960,
+  "missing_fvc": 19,
+  "test_missing_fvc": 19,
+  "r2_median_csv": 0.435,
+  "r2_median_json": 0.435,
+  "worse_than_persistence_from_published_table": [
+    "MF",
+    "YL"
+  ],
+  "new_power_responses_present": 0,
+  "old_ndvi_cache_present": false,
+  "source_hash": "7ebabe744f9e5edc983452e84c629c7781d8b135c8d6f1e3e34e1053883526c8",
+  "planned_building_cost_sum": 32000.0,
+  "budget_violating_years": [
+    2026,
+    2027,
+    2028,
+    2029,
+    2030,
+    2031,
+    2032,
+    2033
+  ],
+  "water_counterexamples": {
+    "0.5": {
+      "I_mm": 40.0,
+      "water_m3": 200000.0,
+      "limit_if_Wmax_is_10k_m3": 10000.0
+    },
+    "1.0": {
+      "I_mm": 10.0,
+      "water_m3": 100000.0,
+      "limit_if_Wmax_is_10k_m3": 10000.0
+    },
+    "2.0": {
+      "I_mm": 2.5,
+      "water_m3": 50000.0,
+      "limit_if_Wmax_is_10k_m3": 10000.0
+    }
+  },
+  "recovery_probe": {
+    "note": "100 simulations using rounded published parameters; counts diagnose implementation, not replacement scientific results",
+    "function_recov_n": 100,
+    "actual_returns_to_its_own_threshold": 11,
+    "right_censored": 89,
+    "function_median": 284.5
+  },
+  "no_shock_failure_probability": 0.0,
+  "wind_change_max_difference": 0.0,
+  "plotted_terminal_year": 2051.0,
+  "qa_months_with_changed_max": 5,
+  "radiation_probe": {
+    "url": "https://power.larc.nasa.gov/api/temporal/monthly/point?parameters=WS10M%2CT2M%2CT2M_MAX%2CT2M_MIN%2CPRECTOTCORR%2CALLSKY_SFC_SW_DWN%2CGWETROOT&community=AG&longitude=83.65&latitude=38.97&start=2015&end=2024&format=JSON",
+    "checked_on": "2026-11-09",
+    "sha256": "1d1bd70f7f4466e3eaa7ca471801c2be4494ab39709c1bde8700ac15939fb4a0",
+    "returned_unit": "MJ/m^2/day",
+    "matching_TZ_months": 120,
+    "pipeline_multiplier": 3.6,
+    "original_response_hash_matches": false
+  },
+  "zero_new_area_years_with_unbilled_maintenance": [
+    2034,
+    2035,
+    2036,
+    2037,
+    2038,
+    2039,
+    2040
+  ],
+  "maintenance_per_zero_new_year_wan_yuan": [
+    1920.0,
+    1920.0,
+    1920.0,
+    1920.0,
+    1920.0,
+    1920.0,
+    1920.0
+  ],
+  "land_capacity_probe": {
+    "A_pot": 1.0,
+    "path": [
+      {
+        "year": 2026,
+        "a_khm2": 2.0,
+        "cum_khm2": 1.0,
+        "V_eq": 42.9,
+        "I_mm": 60.0
+      },
+      {
+        "year": 2027,
+        "a_khm2": 2.0,
+        "cum_khm2": 1.0,
+        "V_eq": 42.9,
+        "I_mm": 60.0
+      }
+    ],
+    "note": "Synthetic edge case to test feasibility; not a project result"
+  },
+  "python_hash_seed_probe": {
+    "11": 524,
+    "23": 459,
+    "37": 701
+  },
+  "runtime": {
+    "python": "3.12.14",
+    "numpy": "2.3.5",
+    "pandas": "3.0.1"
+  },
+  "tracked_input_files_unchanged": 373
+}
