@@ -78,9 +78,65 @@ Keyword 1; Keyword 2; Keyword 3; Keyword 4
 
 \section{Introduction}
 \subsection{Problem background}
-\placeholder{Introduce the background and motivation of the current problem.}
-\subsection{Problem statement}
-\placeholder{Restate the modeling tasks and the required outputs.}
+The Taklamankan desert covers more then 337,600 square kilometers, which is the largest desert in China. And in this rural area, Chinese government have set up one of the biggest "Green Sand Protective Belt", with total length about 3,046 kilometers.
+However, sand control is not a static policy, but a \textbf{cohesive and dynamic} system with a list of parameter, including the distribution of water, funding, labor and temporary diaster.
+This requires us to develop a well-rounded and long-term method to quantify the condition of sand protective belt.
+
+
+The main factors affecting the protective belt are summarized in
+\textbf{Table~\ref{tab:protection-factors}.}
+\begin{table}[htbp]
+  \centering
+  \caption{Key factors and quantities in protective-belt management.}
+  \label{tab:protection-factors}
+  \begingroup\small
+  \renewcommand{\arraystretch}{1.18}
+  \begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.17\linewidth}
+    >{\raggedright\arraybackslash}p{0.37\linewidth}
+    >{\raggedright\arraybackslash}X@{}}
+    \toprule
+    \textbf{Factor} & \textbf{Representative quantities} & \textbf{Role in belt protection} \\
+    \midrule
+    Water supply & Ecological replenishment volume (m\textsuperscript{3}/year); irrigation timing
+      & Sustains soil moisture and vegetation growth under water constraints. \\
+    Funding & Total budget (CNY); investment shares in construction, O\&M, and supporting facilities
+      & Determines the scale of new treatment and the resources available for continued operation. \\
+    Labor & Annual labor input (person-days/year); seasonal allocation
+      & Supports construction, irrigation, maintenance, and post-disaster repair. \\
+    Disaster shocks & Event frequency (events/year), duration (days), and severity
+      & Causes vegetation loss and changes soil moisture and protective performance. \\
+    \bottomrule
+  \end{tabularx}
+  \endgroup
+\end{table}
+
+\subsection{Problem restatement}
+We aim to design a protective belt that remains ecologically effective and
+financially sustainable. For a representative section along the Taklamakan Desert
+margin, our objectives are to:
+\begin{enumerate}
+  \item \textbf{Establish a coupled dynamic model.}
+  Use relevant data to describe \textbf{vegetation coverage},
+  \textbf{effective soil moisture}, and their \textbf{interactions with wind and sand}.
+
+  \item \textbf{Optimize construction and resource allocation.}
+  Balance ecological benefits against economic costs under a given budget and
+  planning horizon (recommended: 10--20 years). Optimize the
+  \textbf{annual newly treated area}, \textbf{water replenishment volume and timing},
+  \textbf{investment shares} for construction, O\&M, and revenue-generating facilities
+  such as photovoltaics, and \textbf{labor input}. Test \textbf{investment sensitivity}
+  and propose an \textbf{actionable process criterion}.
+
+  \item \textbf{Assess resilience and long-term benefits.}
+  Incorporate \textbf{stochastic disasters} (sandstorms, droughts, wind erosion,
+  and sand burial) and \textbf{climate-driven changes} in wind and moisture conditions.
+  Evaluate \textbf{resistance and recovery} and project
+  \textbf{long-term ecological and economic benefits}.
+
+  \item \textbf{Provide practical recommendations.}
+  Summarize feasibility, implementation priorities, fiscal burdens, and expected
+  benefits in a one-page brief for authorities and the public.
+\end{enumerate}
 \subsection{Our work}
 \placeholder{Describe the overall framework and the links among the models.}
 % \begin{figure}[H]\centering

@@ -1,0 +1,6 @@
+# Dependencies used across all three figure collections
+numpy
+matplotlib
+pandas
+scipy
+seaborn

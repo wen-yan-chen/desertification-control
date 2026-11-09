@@ -1,0 +1,549 @@
+[
+  {
+    "title": "建模流程图",
+    "category": "01_流程与空间布局",
+    "source": "batch1",
+    "name": "Fig01_workflow",
+    "function": "fig_workflow",
+    "script": "Scripts/demo_figures.py",
+    "use": "总体技术路线",
+    "files": {
+      "png": "Images/01_流程与空间布局/batch1_Fig01_workflow.png"
+    },
+    "sha256": {
+      "png": "d28749aa6acd3a7ff4aaabb2a8ea28572013db6262f0fb4beaa963a1248bb325"
+    }
+  },
+  {
+    "title": "区域布局示意图",
+    "category": "01_流程与空间布局",
+    "source": "batch1",
+    "name": "Fig03_schematic_map",
+    "function": "fig_map",
+    "script": "Scripts/demo_figures.py",
+    "use": "区段与节点关系；非真实地图",
+    "files": {
+      "png": "Images/01_流程与空间布局/batch1_Fig03_schematic_map.png"
+    },
+    "sha256": {
+      "png": "8451f0def03accdc3d103f5e2609743052f668ade055115ce5b909800f782f41"
+    }
+  },
+  {
+    "title": "网络图",
+    "category": "01_流程与空间布局",
+    "source": "batch2",
+    "name": "B5_network",
+    "function": "fig_network",
+    "script": "Scripts/demo_figures2.py",
+    "use": "节点联系与群组",
+    "files": {
+      "png": "Images/01_流程与空间布局/batch2_B5_network.png"
+    },
+    "sha256": {
+      "png": "1d6cded038f2f4a1d1867c0119899fe28073899c0561df8bfd6aed85027978b5"
+    }
+  },
+  {
+    "title": "分栏流程图",
+    "category": "01_流程与空间布局",
+    "source": "template",
+    "name": "flowchart",
+    "function": "fig_flowchart",
+    "script": "Scripts/mcm_figures.py",
+    "use": "Our work 技术路线",
+    "files": {
+      "png": "Images/01_流程与空间布局/template_flowchart.png",
+      "pdf": "Images/01_流程与空间布局/template_flowchart.pdf"
+    },
+    "sha256": {
+      "png": "36bc5ed8a862ec1fb3606fbe6d49b87ea6e2032ced666774ef7c1928f16f0470",
+      "pdf": "a41f7bd0199e73eef82d28fa53164f3076cbbf240a4e9da968f2b5c958a11f9c"
+    }
+  },
+  {
+    "title": "探索分析面板",
+    "category": "02_数据探索与分布",
+    "source": "batch1",
+    "name": "Fig02_eda_dashboard",
+    "function": "fig_eda",
+    "script": "Scripts/demo_figures.py",
+    "use": "时间变化、构成与指标概览",
+    "files": {
+      "png": "Images/02_数据探索与分布/batch1_Fig02_eda_dashboard.png"
+    },
+    "sha256": {
+      "png": "2a2c379de77258048c88a28a4e047b0b2af5eed10fb433bbb2eb1d026cb2eda0"
+    }
+  },
+  {
+    "title": "相关性热力图",
+    "category": "02_数据探索与分布",
+    "source": "batch1",
+    "name": "Fig04_corr_heatmap",
+    "function": "fig_heatmap",
+    "script": "Scripts/demo_figures.py",
+    "use": "变量关系探索",
+    "files": {
+      "png": "Images/02_数据探索与分布/batch1_Fig04_corr_heatmap.png"
+    },
+    "sha256": {
+      "png": "4cd03fa035eb7c91487311afc61fef1d955e35b6b5224630b001b95665c9d001"
+    }
+  },
+  {
+    "title": "小提琴图",
+    "category": "02_数据探索与分布",
+    "source": "batch1",
+    "name": "Fig09_violin",
+    "function": "fig_violin",
+    "script": "Scripts/demo_figures.py",
+    "use": "约束裕量或指标分布",
+    "files": {
+      "png": "Images/02_数据探索与分布/batch1_Fig09_violin.png"
+    },
+    "sha256": {
+      "png": "9a10e15bafbbd2542718f71ede35fbcba8b487ea59bbcb885f7a3cf7992dacf1"
+    }
+  },
+  {
+    "title": "山峦图",
+    "category": "02_数据探索与分布",
+    "source": "batch2",
+    "name": "B2_ridge",
+    "function": "fig_ridge",
+    "script": "Scripts/demo_figures2.py",
+    "use": "多组分布对比",
+    "files": {
+      "png": "Images/02_数据探索与分布/batch2_B2_ridge.png"
+    },
+    "sha256": {
+      "png": "48b129035e430b460293e4c5ef0fcd973dbb935d661e7aeb596abe3a45c62e1a"
+    }
+  },
+  {
+    "title": "雨云图",
+    "category": "02_数据探索与分布",
+    "source": "batch2",
+    "name": "B4_raincloud",
+    "function": "fig_raincloud",
+    "script": "Scripts/demo_figures2.py",
+    "use": "分布、箱线与样本点",
+    "files": {
+      "png": "Images/02_数据探索与分布/batch2_B4_raincloud.png"
+    },
+    "sha256": {
+      "png": "ed0a831c09cddf770385ce725962ddee9c09902b03ef2242d7ee0fdd6ab41cd6"
+    }
+  },
+  {
+    "title": "六边形密度与边际分布",
+    "category": "02_数据探索与分布",
+    "source": "batch2",
+    "name": "B8_hexbin_joint",
+    "function": "fig_hexbin",
+    "script": "Scripts/demo_figures2.py",
+    "use": "大量二维样本",
+    "files": {
+      "png": "Images/02_数据探索与分布/batch2_B8_hexbin_joint.png"
+    },
+    "sha256": {
+      "png": "426a194f051fb9efb789b368b2af3ebb82eb3916fe450c52271146749ca768bc"
+    }
+  },
+  {
+    "title": "聚类热力图",
+    "category": "02_数据探索与分布",
+    "source": "batch2",
+    "name": "B12_clustermap",
+    "function": "fig_clustermap",
+    "script": "Scripts/demo_figures2.py",
+    "use": "指标与样本聚类",
+    "files": {
+      "png": "Images/02_数据探索与分布/batch2_B12_clustermap.png"
+    },
+    "sha256": {
+      "png": "193203ec82d170acf32e9937d7277d8eedcbd48b1be2b8a86d6697d7d29055f7"
+    }
+  },
+  {
+    "title": "拟合与残差图",
+    "category": "02_数据探索与分布",
+    "source": "template",
+    "name": "fit",
+    "function": "fig_fit",
+    "script": "Scripts/mcm_figures.py",
+    "use": "参数拟合诊断",
+    "files": {
+      "png": "Images/02_数据探索与分布/template_fit.png",
+      "pdf": "Images/02_数据探索与分布/template_fit.pdf"
+    },
+    "sha256": {
+      "png": "ec3678a010af59e8880a78aa74bf9dc5040a8931198a0a9298f093741ecf2840",
+      "pdf": "ae27fde8d39a26680471a0cd0017dfea09b66ec11e30c5d4f35ff6d0387a0d7b"
+    }
+  },
+  {
+    "title": "三维 Pareto 图",
+    "category": "03_优化与算法",
+    "source": "batch1",
+    "name": "Fig05_pareto_3d",
+    "function": "fig_pareto_3d",
+    "script": "Scripts/demo_figures.py",
+    "use": "多目标权衡",
+    "files": {
+      "png": "Images/03_优化与算法/batch1_Fig05_pareto_3d.png"
+    },
+    "sha256": {
+      "png": "ef4b57283643e5088962fa0cc512cf72b74255499e7afd2bf35d618d12cff436"
+    }
+  },
+  {
+    "title": "平行坐标图",
+    "category": "03_优化与算法",
+    "source": "batch1",
+    "name": "Fig06_parallel_coords",
+    "function": "fig_parallel",
+    "script": "Scripts/demo_figures.py",
+    "use": "多指标候选方案比较",
+    "files": {
+      "png": "Images/03_优化与算法/batch1_Fig06_parallel_coords.png"
+    },
+    "sha256": {
+      "png": "6524c6a353ce8e021d9c8690e42a21f1c619f786409b3b41878f935350b6ead9"
+    }
+  },
+  {
+    "title": "相平面图",
+    "category": "03_优化与算法",
+    "source": "batch2",
+    "name": "B10_phase_plane",
+    "function": "fig_phase",
+    "script": "Scripts/demo_figures2.py",
+    "use": "状态轨迹、向量场与零增长线",
+    "files": {
+      "png": "Images/03_优化与算法/batch2_B10_phase_plane.png"
+    },
+    "sha256": {
+      "png": "786df8a6de40bf5fd859a1927f08d81c0458d0914cd2cc067de180ba062d1879"
+    }
+  },
+  {
+    "title": "二维 Pareto 图",
+    "category": "03_优化与算法",
+    "source": "template",
+    "name": "pareto_2d",
+    "function": "fig_pareto_2d",
+    "script": "Scripts/mcm_figures.py",
+    "use": "双目标与推荐方案",
+    "files": {
+      "png": "Images/03_优化与算法/template_pareto_2d.png",
+      "pdf": "Images/03_优化与算法/template_pareto_2d.pdf"
+    },
+    "sha256": {
+      "png": "99e86b2ce2f109b76b8c2f266b7869ce9d049014de052ee99714e6ff263b2a83",
+      "pdf": "864d6d72a16f40bae4261753b4f143798f21bf8013a94180a93b3623cbf8b451"
+    }
+  },
+  {
+    "title": "三维 Pareto 图",
+    "category": "03_优化与算法",
+    "source": "template",
+    "name": "pareto_3d",
+    "function": "fig_pareto_3d",
+    "script": "Scripts/mcm_figures.py",
+    "use": "三目标曲面与选点",
+    "files": {
+      "png": "Images/03_优化与算法/template_pareto_3d.png",
+      "pdf": "Images/03_优化与算法/template_pareto_3d.pdf"
+    },
+    "sha256": {
+      "png": "c0eaa5c5acb751f3292b8af12f5556c8db1448ddb62677abfa743ebbaf2c4984",
+      "pdf": "3b1437ffe670697b9efe29e1df5d98dea088b08681cd03bc3cab392c503eacef"
+    }
+  },
+  {
+    "title": "收敛曲线",
+    "category": "03_优化与算法",
+    "source": "template",
+    "name": "convergence",
+    "function": "fig_convergence",
+    "script": "Scripts/mcm_figures.py",
+    "use": "算法表现与波动",
+    "files": {
+      "png": "Images/03_优化与算法/template_convergence.png",
+      "pdf": "Images/03_优化与算法/template_convergence.pdf"
+    },
+    "sha256": {
+      "png": "a4816204bc7b48d074395e2c14dcf98b751ff2a0d7429d0d5d32c2ba31515a99",
+      "pdf": "2a0911fd00d60a5562cc7ed2fad56ca5b904c2d81996d05fcfaa212fa72ab1a0"
+    }
+  },
+  {
+    "title": "龙卷风图",
+    "category": "04_敏感性与不确定性",
+    "source": "batch1",
+    "name": "Fig07_tornado",
+    "function": "fig_tornado",
+    "script": "Scripts/demo_figures.py",
+    "use": "单因素敏感性排序",
+    "files": {
+      "png": "Images/04_敏感性与不确定性/batch1_Fig07_tornado.png"
+    },
+    "sha256": {
+      "png": "f33a29c927b3c41967ab82ae3f7eca4a094f9f31d0ca3461a4a6800ed1cfabb9"
+    }
+  },
+  {
+    "title": "分布与不确定性扇形带",
+    "category": "04_敏感性与不确定性",
+    "source": "batch1",
+    "name": "Fig08_uncertainty",
+    "function": "fig_uncertainty",
+    "script": "Scripts/demo_figures.py",
+    "use": "区间与分布展示",
+    "files": {
+      "png": "Images/04_敏感性与不确定性/batch1_Fig08_uncertainty.png"
+    },
+    "sha256": {
+      "png": "1f700122ffa765526291252558db423229557d4137fef6d2cc7987de9062f3f8"
+    }
+  },
+  {
+    "title": "投资响应曲线",
+    "category": "04_敏感性与不确定性",
+    "source": "batch1",
+    "name": "Fig10_response_curves",
+    "function": "fig_response",
+    "script": "Scripts/demo_figures.py",
+    "use": "边际效应与饱和",
+    "files": {
+      "png": "Images/04_敏感性与不确定性/batch1_Fig10_response_curves.png"
+    },
+    "sha256": {
+      "png": "fa32e75c9cac94d9667cf2114a7c4d18b851d8cd614924d59ed52d34e6e9999e"
+    }
+  },
+  {
+    "title": "策略响应与容量线",
+    "category": "04_敏感性与不确定性",
+    "source": "template",
+    "name": "policy_curve",
+    "function": "fig_policy_curve",
+    "script": "Scripts/mcm_figures.py",
+    "use": "实际响应与约束比较",
+    "files": {
+      "png": "Images/04_敏感性与不确定性/template_policy_curve.png",
+      "pdf": "Images/04_敏感性与不确定性/template_policy_curve.pdf"
+    },
+    "sha256": {
+      "png": "13ad52847c136b296f16f6385dee6c4a9c291f878ee4b502d57023a58bfd648f",
+      "pdf": "9eccee475d5ed56a3d7d03730c16186d9d53c99f72af0fa7c1e7692a3f0c437d"
+    }
+  },
+  {
+    "title": "多面板敏感性曲线",
+    "category": "04_敏感性与不确定性",
+    "source": "template",
+    "name": "sensitivity_lines",
+    "function": "fig_sensitivity_lines",
+    "script": "Scripts/mcm_figures.py",
+    "use": "多个目标的单因素变化",
+    "files": {
+      "png": "Images/04_敏感性与不确定性/template_sensitivity_lines.png",
+      "pdf": "Images/04_敏感性与不确定性/template_sensitivity_lines.pdf"
+    },
+    "sha256": {
+      "png": "dbd9cb14d26f5a41e822ae67bbc9976112c6ab1ef04b6637a9235382598203f9",
+      "pdf": "de80e34e94065cca9b7f972a67b48152c9441546c7277432e24118a7e00345d5"
+    }
+  },
+  {
+    "title": "龙卷风图",
+    "category": "04_敏感性与不确定性",
+    "source": "template",
+    "name": "tornado",
+    "function": "fig_tornado",
+    "script": "Scripts/mcm_figures.py",
+    "use": "参数影响排序",
+    "files": {
+      "png": "Images/04_敏感性与不确定性/template_tornado.png",
+      "pdf": "Images/04_敏感性与不确定性/template_tornado.pdf"
+    },
+    "sha256": {
+      "png": "348ebc307b7772967494ecb54c9daf3e6e94d4536be255b2b01e7faf7900c621",
+      "pdf": "866bfa3a02bd728c0638ac12c234d1f65fa86b5a446dbcf76888c9b7ee5b48f2"
+    }
+  },
+  {
+    "title": "双参数敏感性热图",
+    "category": "04_敏感性与不确定性",
+    "source": "template",
+    "name": "sensitivity_heat",
+    "function": "fig_sensitivity_heat",
+    "script": "Scripts/mcm_figures.py",
+    "use": "交互效应",
+    "files": {
+      "png": "Images/04_敏感性与不确定性/template_sensitivity_heat.png",
+      "pdf": "Images/04_敏感性与不确定性/template_sensitivity_heat.pdf"
+    },
+    "sha256": {
+      "png": "be62662defcc1721ba51ab66c2d9d2008e14bfe0f9a72050f79d91b14808cbff",
+      "pdf": "d4c632d2920a3041258daae21e5e9f79339b855bf53f331b53db5e6e075b4bd7"
+    }
+  },
+  {
+    "title": "雷达图",
+    "category": "05_构成与方案比较",
+    "source": "batch1",
+    "name": "Fig11_radar",
+    "function": "fig_radar",
+    "script": "Scripts/demo_figures.py",
+    "use": "多维方案表现",
+    "files": {
+      "png": "Images/05_构成与方案比较/batch1_Fig11_radar.png"
+    },
+    "sha256": {
+      "png": "da2ab42ce2992b3472d730222ae22f5767a048a53cb3c59ba6ca723d21c0d4ac"
+    }
+  },
+  {
+    "title": "情景堆叠柱图",
+    "category": "05_构成与方案比较",
+    "source": "batch1",
+    "name": "Fig12_scenario_bars",
+    "function": "fig_scenario",
+    "script": "Scripts/demo_figures.py",
+    "use": "投资结构与情景比较",
+    "files": {
+      "png": "Images/05_构成与方案比较/batch1_Fig12_scenario_bars.png"
+    },
+    "sha256": {
+      "png": "9a80dbbb5dcc68fc7dc45efcb5c6f8df658eb63ae0d89e51dc40b85cf7adcf2c"
+    }
+  },
+  {
+    "title": "桑基／流向图",
+    "category": "05_构成与方案比较",
+    "source": "batch2",
+    "name": "B1_alluvial",
+    "function": "fig_alluvial",
+    "script": "Scripts/demo_figures2.py",
+    "use": "资金来源与去向",
+    "files": {
+      "png": "Images/05_构成与方案比较/batch2_B1_alluvial.png"
+    },
+    "sha256": {
+      "png": "14f20eb329e0e99847b302e6c07e4cbc7c03868c2f0e8cb04ca429d100c85687"
+    }
+  },
+  {
+    "title": "排名变化图",
+    "category": "05_构成与方案比较",
+    "source": "batch2",
+    "name": "B3_bump",
+    "function": "fig_bump",
+    "script": "Scripts/demo_figures2.py",
+    "use": "方案排名随时间变化",
+    "files": {
+      "png": "Images/05_构成与方案比较/batch2_B3_bump.png"
+    },
+    "sha256": {
+      "png": "73140507e2fb549c801e03d6b50acddca4f64f2fa21c7cef043a225e2cf4ca9b"
+    }
+  },
+  {
+    "title": "瀑布图",
+    "category": "05_构成与方案比较",
+    "source": "batch2",
+    "name": "B6_waterfall",
+    "function": "fig_waterfall",
+    "script": "Scripts/demo_figures2.py",
+    "use": "收益或预算增减分解",
+    "files": {
+      "png": "Images/05_构成与方案比较/batch2_B6_waterfall.png"
+    },
+    "sha256": {
+      "png": "aa64ef94ecafb8f1897c008709d8fbadcaa1eecb388f5825f9d4f2a2ece0a8e5"
+    }
+  },
+  {
+    "title": "流图",
+    "category": "05_构成与方案比较",
+    "source": "batch2",
+    "name": "B7_streamgraph",
+    "function": "fig_streamgraph",
+    "script": "Scripts/demo_figures2.py",
+    "use": "各分量的时间变化",
+    "files": {
+      "png": "Images/05_构成与方案比较/batch2_B7_streamgraph.png"
+    },
+    "sha256": {
+      "png": "d1959f77dd4d78bf2b6baded9e5a8c3e9094ec9e75a2d99747a79109719d2cc7"
+    }
+  },
+  {
+    "title": "旭日图",
+    "category": "05_构成与方案比较",
+    "source": "batch2",
+    "name": "B9_sunburst",
+    "function": "fig_sunburst",
+    "script": "Scripts/demo_figures2.py",
+    "use": "层级构成",
+    "files": {
+      "png": "Images/05_构成与方案比较/batch2_B9_sunburst.png"
+    },
+    "sha256": {
+      "png": "7768d1c6e40efacd3e0f9a9f6577a61f7b9077ad53cbda8a45698899e1b64e27"
+    }
+  },
+  {
+    "title": "哑铃图",
+    "category": "05_构成与方案比较",
+    "source": "batch2",
+    "name": "B11_dumbbell",
+    "function": "fig_dumbbell",
+    "script": "Scripts/demo_figures2.py",
+    "use": "干预前后对比",
+    "files": {
+      "png": "Images/05_构成与方案比较/batch2_B11_dumbbell.png"
+    },
+    "sha256": {
+      "png": "8adf44f08831ca487e42c4f0acad3cb9f6275066a7d45e4b9fb7743a10e9a413"
+    }
+  },
+  {
+    "title": "年度柱状图",
+    "category": "05_构成与方案比较",
+    "source": "template",
+    "name": "bar_trend",
+    "function": "fig_bar_trend",
+    "script": "Scripts/mcm_figures.py",
+    "use": "年度规模与缺失值",
+    "files": {
+      "png": "Images/05_构成与方案比较/template_bar_trend.png",
+      "pdf": "Images/05_构成与方案比较/template_bar_trend.pdf"
+    },
+    "sha256": {
+      "png": "cfe9181100fde637f05d282355e6e7682aff088f3662b1d3612153c9eea7ce2b",
+      "pdf": "d1281468608acb97fed29c562b295a338810425b0cb89863c1e805de79a2c55b"
+    }
+  },
+  {
+    "title": "环形图与排序条图",
+    "category": "05_构成与方案比较",
+    "source": "template",
+    "name": "composition",
+    "function": "fig_composition",
+    "script": "Scripts/mcm_figures.py",
+    "use": "投资或成本构成",
+    "files": {
+      "png": "Images/05_构成与方案比较/template_composition.png",
+      "pdf": "Images/05_构成与方案比较/template_composition.pdf"
+    },
+    "sha256": {
+      "png": "0aa3faff6ecee1616a3237cd72bb4193098f759a411655725a6f96270cbd01c3",
+      "pdf": "560fa8ebc17dcc9db5537f159eed54e7bcc286db97e01670103001d9b0cdb4ac"
+    }
+  }
+]

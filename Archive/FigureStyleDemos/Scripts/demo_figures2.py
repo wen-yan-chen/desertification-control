@@ -7,6 +7,7 @@ All static, printable and reproducible with matplotlib/seaborn/numpy/scipy only.
 Run:  python demo_figures2.py
 """
 from pathlib import Path
+from figure_paths import output_path
 import numpy as np
 import pandas as pd
 import matplotlib
@@ -35,8 +36,7 @@ plt.rcParams.update({
     "axes.spines.top": False, "axes.spines.right": False,
     "figure.dpi": 100, "savefig.dpi": 300, "axes.unicode_minus": False,
 })
-OUT = Path(__file__).resolve().parent / "png"
-OUT.mkdir(parents=True, exist_ok=True)
+OUT = Path(__file__).resolve().parent.parent / "Images"
 
 SEQ_BLUE = LinearSegmentedColormap.from_list("seq_blue", ["#EAF1F7", "#9FBFD8", BLUE])
 DIVERGING = LinearSegmentedColormap.from_list("div", [GOLD, "#FFFFFF", BLUE])
@@ -46,7 +46,7 @@ def save(fig, name, title):
     fig.suptitle(title, y=0.99, fontweight="bold")
     fig.text(0.015, 0.012, NOTE, fontsize=8, color="#555555")
     fig.tight_layout(rect=(0, 0.05, 1, 0.95))
-    fig.savefig(OUT / f"{name}.png", bbox_inches="tight")
+    fig.savefig(output_path("batch2", name, "png"), bbox_inches="tight")
     plt.close(fig)
 
 
@@ -336,7 +336,7 @@ def fig_clustermap():
                        method="ward", linewidths=0.4, linecolor="white")
     g.fig.suptitle("Clustered heatmap with hierarchical dendrograms", y=1.02, fontweight="bold", fontsize=14)
     g.fig.text(0.02, 0.01, NOTE, fontsize=8, color="#555555")
-    g.savefig(OUT / "B12_clustermap.png", dpi=300, bbox_inches="tight")
+    g.savefig(output_path("batch2", "B12_clustermap", "png"), dpi=300, bbox_inches="tight")
     plt.close(g.fig)
 
 

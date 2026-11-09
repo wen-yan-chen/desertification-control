@@ -3,9 +3,10 @@
 Generates 12 representative paper figures to demonstrate chart vocabulary,
 style and palette. No real data is used; every figure carries an honest note.
 Run:  python demo_figures.py
-Outputs PNG (300 dpi) into ./png alongside this script.
+Outputs PNG (300 dpi) into ../Images/, classified by chart purpose.
 """
 from pathlib import Path
+from figure_paths import output_path
 import numpy as np
 import pandas as pd
 import matplotlib
@@ -32,15 +33,14 @@ plt.rcParams.update({
     "figure.dpi": 100, "savefig.dpi": 300, "svg.fonttype": "path",
     "axes.unicode_minus": False,
 })
-OUT = Path(__file__).resolve().parent / "png"
-OUT.mkdir(parents=True, exist_ok=True)
+OUT = Path(__file__).resolve().parent.parent / "Images"
 
 
 def save(fig, name, title):
     fig.suptitle(title, y=0.99, fontweight="bold")
     fig.text(0.015, 0.012, NOTE, fontsize=8, color="#555555")
     fig.tight_layout(rect=(0, 0.05, 1, 0.95))
-    fig.savefig(OUT / f"{name}.png", bbox_inches="tight")
+    fig.savefig(output_path("batch1", name, "png"), bbox_inches="tight")
     plt.close(fig)
 
 
