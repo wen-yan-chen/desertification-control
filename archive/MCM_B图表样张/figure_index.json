@@ -1,0 +1,226 @@
+[
+  {
+    "id": "01",
+    "name": "workflow",
+    "title": "总工作流程图",
+    "purpose": "概览数据、模型、验证与交付的关系",
+    "png": "PNG/01_workflow.png",
+    "svg": "SVG/01_workflow.svg"
+  },
+  {
+    "id": "02",
+    "name": "feedback_loop",
+    "title": "带正负方向的反馈环",
+    "purpose": "解释政策、资金与状态之间的机制",
+    "png": "PNG/02_feedback_loop.png",
+    "svg": "SVG/02_feedback_loop.svg"
+  },
+  {
+    "id": "03",
+    "name": "data_dashboard",
+    "title": "数据探索三联图",
+    "purpose": "同时呈现趋势、问题构成和季节集中度",
+    "png": "PNG/03_data_dashboard.png",
+    "svg": "SVG/03_data_dashboard.svg"
+  },
+  {
+    "id": "04",
+    "name": "outcome_dumbbell",
+    "title": "基准与方案哑铃图",
+    "purpose": "比较多个指标的提升幅度",
+    "png": "PNG/04_outcome_dumbbell.png",
+    "svg": "SVG/04_outcome_dumbbell.svg"
+  },
+  {
+    "id": "05",
+    "name": "pareto_2d",
+    "title": "二维 Pareto 点云与推荐点",
+    "purpose": "显示目标冲突、非支配边界和折中选择",
+    "png": "PNG/05_pareto_2d.png",
+    "svg": "SVG/05_pareto_2d.svg"
+  },
+  {
+    "id": "06",
+    "name": "pareto_3d_surface",
+    "title": "三维解析 Pareto 曲面",
+    "purpose": "展示三项相互权衡的独立目标",
+    "png": "PNG/06_pareto_3d_surface.png",
+    "svg": "SVG/06_pareto_3d_surface.svg"
+  },
+  {
+    "id": "07",
+    "name": "parallel_coordinates",
+    "title": "多目标平行坐标图",
+    "purpose": "展示方案在五个指标上的优势和代价",
+    "png": "PNG/07_parallel_coordinates.png",
+    "svg": "SVG/07_parallel_coordinates.svg"
+  },
+  {
+    "id": "08",
+    "name": "feasible_contours",
+    "title": "可行域与等值面",
+    "purpose": "区分目标表现、硬约束边界和网格最优点",
+    "png": "PNG/08_feasible_contours.png",
+    "svg": "SVG/08_feasible_contours.svg"
+  },
+  {
+    "id": "09",
+    "name": "diminishing_returns",
+    "title": "响应曲线与边际收益双联图",
+    "purpose": "解释投入的边际递减与渠道差异",
+    "png": "PNG/09_diminishing_returns.png",
+    "svg": "SVG/09_diminishing_returns.svg"
+  },
+  {
+    "id": "10",
+    "name": "budget_sankey",
+    "title": "守恒资金桑基图",
+    "purpose": "展示资金从多个来源流向多个用途",
+    "png": "PNG/10_budget_sankey.png",
+    "svg": "SVG/10_budget_sankey.svg"
+  },
+  {
+    "id": "11",
+    "name": "budget_composition",
+    "title": "百分比堆叠预算图",
+    "purpose": "比较策略的预算结构并保留绝对规模",
+    "png": "PNG/11_budget_composition.png",
+    "svg": "SVG/11_budget_composition.svg"
+  },
+  {
+    "id": "12",
+    "name": "correlation_heatmap",
+    "title": "带数值的相关性热力图",
+    "purpose": "筛查变量间的正负关联",
+    "png": "PNG/12_correlation_heatmap.png",
+    "svg": "SVG/12_correlation_heatmap.svg"
+  },
+  {
+    "id": "13",
+    "name": "local_tornado",
+    "title": "双向局部敏感性龙卷风图",
+    "purpose": "保留增减参数的真实方向和影响大小",
+    "png": "PNG/13_local_tornado.png",
+    "svg": "SVG/13_local_tornado.svg"
+  },
+  {
+    "id": "14",
+    "name": "morris_screening",
+    "title": "Morris 全局筛选图",
+    "purpose": "区分影响强度和非线性或交互线索",
+    "png": "PNG/14_morris_screening.png",
+    "svg": "SVG/14_morris_screening.svg"
+  },
+  {
+    "id": "15",
+    "name": "distribution_intervals",
+    "title": "密度与分位区间双联图",
+    "purpose": "比较方案的分布、波动与尾部风险",
+    "png": "PNG/15_distribution_intervals.png",
+    "svg": "SVG/15_distribution_intervals.svg"
+  },
+  {
+    "id": "16",
+    "name": "uncertainty_fan",
+    "title": "动态分位数扇形图",
+    "purpose": "显示未来轨迹和逐时不确定性",
+    "png": "PNG/16_uncertainty_fan.png",
+    "svg": "SVG/16_uncertainty_fan.svg"
+  },
+  {
+    "id": "17",
+    "name": "minimax_regret",
+    "title": "最小最大后悔矩阵",
+    "purpose": "把各情景损失与方案最坏后悔并列",
+    "png": "PNG/17_minimax_regret.png",
+    "svg": "SVG/17_minimax_regret.svg"
+  },
+  {
+    "id": "18",
+    "name": "policy_regimes",
+    "title": "最优策略分区图",
+    "purpose": "呈现外部条件变化时的政策切换",
+    "png": "PNG/18_policy_regimes.png",
+    "svg": "SVG/18_policy_regimes.svg"
+  },
+  {
+    "id": "19",
+    "name": "spatial_network",
+    "title": "空间网络前后对照",
+    "purpose": "比较流量集中、分流和瓶颈",
+    "png": "PNG/19_spatial_network.png",
+    "svg": "SVG/19_spatial_network.svg"
+  },
+  {
+    "id": "20",
+    "name": "transfer_matrix",
+    "title": "守恒转移热力矩阵",
+    "purpose": "解释各节点流出、流入与总量守恒",
+    "png": "PNG/20_transfer_matrix.png",
+    "svg": "SVG/20_transfer_matrix.svg"
+  },
+  {
+    "id": "21",
+    "name": "profile_radar",
+    "title": "多维画像雷达图",
+    "purpose": "比较两种情境的指标结构",
+    "png": "PNG/21_profile_radar.png",
+    "svg": "SVG/21_profile_radar.svg"
+  },
+  {
+    "id": "22",
+    "name": "fit_and_residuals",
+    "title": "拟合与留出残差双联图",
+    "purpose": "显示样本外精度及误差结构",
+    "png": "PNG/22_fit_and_residuals.png",
+    "svg": "SVG/22_fit_and_residuals.svg"
+  },
+  {
+    "id": "23",
+    "name": "constraint_margins",
+    "title": "约束余量小提琴与箱线图",
+    "purpose": "定位绑定约束和违例尾部",
+    "png": "PNG/23_constraint_margins.png",
+    "svg": "SVG/23_constraint_margins.svg"
+  },
+  {
+    "id": "24",
+    "name": "solver_diagnostics",
+    "title": "求解收敛与多次运行诊断",
+    "purpose": "报告搜索过程及重复运行稳定性",
+    "png": "PNG/24_solver_diagnostics.png",
+    "svg": "SVG/24_solver_diagnostics.svg"
+  },
+  {
+    "id": "25",
+    "name": "palette_coastal",
+    "title": "Coastal / 青蓝鼠尾草",
+    "purpose": "同一组数据、尺度与版式下比较配色",
+    "png": "PNG/25_palette_coastal.png",
+    "svg": "SVG/25_palette_coastal.svg"
+  },
+  {
+    "id": "26",
+    "name": "palette_academic",
+    "title": "Academic / 学术蓝紫",
+    "purpose": "同一组数据、尺度与版式下比较配色",
+    "png": "PNG/26_palette_academic.png",
+    "svg": "SVG/26_palette_academic.svg"
+  },
+  {
+    "id": "27",
+    "name": "palette_terracotta",
+    "title": "Terracotta / 暖陶土",
+    "purpose": "同一组数据、尺度与版式下比较配色",
+    "png": "PNG/27_palette_terracotta.png",
+    "svg": "SVG/27_palette_terracotta.svg"
+  },
+  {
+    "id": "28",
+    "name": "palette_contrast",
+    "title": "High contrast / 高对比",
+    "purpose": "同一组数据、尺度与版式下比较配色",
+    "png": "PNG/28_palette_contrast.png",
+    "svg": "SVG/28_palette_contrast.svg"
+  }
+]

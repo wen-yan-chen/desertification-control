@@ -1,0 +1,43 @@
+{
+  "N01_shares_sum_to_one": true,
+  "N01_robust_improves_worst": true,
+  "N02_posteriors_normalized": true,
+  "N02_detection_monotonic": true,
+  "N03_hexbin_sample_count": 7000,
+  "N05_pattern_counts_partition_all_cases": true,
+  "N06_each_column_has_unique_ranks": true,
+  "N07_switches_within_both_availability_windows": true,
+  "N08_symmetric_matrix": true,
+  "N08_sector_widths_conserve_strength": true,
+  "N09_state_posteriors_normalized": true,
+  "N09_entropy_bounds": true,
+  "N10_integrated_states_nonnegative": true,
+  "N11_shapley_efficiency": true,
+  "N12_tail_mean_above_quantile": true,
+  "pdf_pages": 14,
+  "pdf_text_outside_page": [],
+  "synthetic_markers_on_all_figure_pages": true,
+  "figure_count": 12,
+  "render_seconds_by_figure": {
+    "N01": 0.519,
+    "N02": 0.734,
+    "N03": 0.495,
+    "N04": 0.4,
+    "N05": 0.436,
+    "N06": 0.341,
+    "N07": 0.329,
+    "N08": 0.357,
+    "N09": 0.421,
+    "N10": 0.699,
+    "N11": 0.399,
+    "N12": 0.531
+  },
+  "total_seconds": 8.17,
+  "seed": 202711071,
+  "png_svg_pairs_verified": 12,
+  "png_dimensions": [
+    3420,
+    2220
+  ],
+  "final_pdf_pages_visually_reviewed": 14
+}

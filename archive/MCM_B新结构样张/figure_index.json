@@ -1,0 +1,134 @@
+[
+  {
+    "id": "N01",
+    "title": "三元配比与鲁棒选择",
+    "question": "三类投入如何分配，稳健性要付出多少代价？",
+    "inputs": "Three shares summing to 1 + scenario utilities + explicit constraints",
+    "method": "单纯形三角网格、显式可行约束、逐点最坏情景比较",
+    "source": "T1 + own synthesis",
+    "difficulty": "中",
+    "png": "PNG/N01_allocation_simplex.png",
+    "svg": "SVG/N01_allocation_simplex.svg"
+  },
+  {
+    "id": "N02",
+    "title": "概率场、搜索路径与证据更新",
+    "question": "新搜索证据出现后，下一步去哪里？",
+    "inputs": "Spatial prior + sensor likelihood + search footprints",
+    "method": "贝叶斯负证据更新、归一化后验、累计发现概率；路线为可执行示意，未优化",
+    "source": "P1 + P2",
+    "difficulty": "中",
+    "png": "PNG/N02_probability_search.png",
+    "svg": "SVG/N02_probability_search.svg"
+  },
+  {
+    "id": "N03",
+    "title": "带边缘分布的联合不确定性图",
+    "question": "两个指标的联合达标范围在哪里？",
+    "inputs": "Paired Monte Carlo outputs + two operational thresholds",
+    "method": "六边形分箱、边缘密度和联合达标标记",
+    "source": "T5 + own synthesis",
+    "difficulty": "低",
+    "png": "PNG/N03_joint_uncertainty.png",
+    "svg": "SVG/N03_joint_uncertainty.svg"
+  },
+  {
+    "id": "N04",
+    "title": "分布山脊与超阈风险图",
+    "question": "风险在何时集中，尾部如何变化？",
+    "inputs": "Repeated output samples at each time slice + one threshold",
+    "method": "同一密度缩放的山脊图、样本中位数及超阈比例",
+    "source": "own synthesis + P3",
+    "difficulty": "低",
+    "png": "PNG/N04_distribution_ridges.png",
+    "svg": "SVG/N04_distribution_ridges.svg"
+  },
+  {
+    "id": "N05",
+    "title": "约束失效交集 UpSet 图",
+    "question": "预算超支和容量超限是否经常一起发生？",
+    "inputs": "One Boolean failure flag per constraint and per stress case",
+    "method": "互斥失效组合计数与重叠集合总数对齐",
+    "source": "T2",
+    "difficulty": "低",
+    "png": "PNG/N05_constraint_upset.png",
+    "svg": "SVG/N05_constraint_upset.svg"
+  },
+  {
+    "id": "N06",
+    "title": "偏好变化的排名编织图",
+    "question": "偏好改变后，推荐方案会不会换位？",
+    "inputs": "Policy-by-objective scores + sampled preference vectors",
+    "method": "加权评分与离散排名；连线仅连接已算权重设置",
+    "source": "own synthesis + P3",
+    "difficulty": "低",
+    "png": "PNG/N06_ranking_braid.png",
+    "svg": "SVG/N06_ranking_braid.svg"
+  },
+  {
+    "id": "N07",
+    "title": "适应路径地铁图",
+    "question": "条件恶化时，何时升级、从哪条路径切换？",
+    "inputs": "Action viability intervals + candidate switching thresholds",
+    "method": "可行区间与转换触发点同轴；示意路径不宣称优化最优",
+    "source": "own synthesis",
+    "difficulty": "中",
+    "png": "PNG/N07_adaptation_pathways.png",
+    "svg": "SVG/N07_adaptation_pathways.svg"
+  },
+  {
+    "id": "N08",
+    "title": "守恒弦图与主联系排序",
+    "question": "哪些群体之间联系最强，强度如何分布？",
+    "inputs": "Small symmetric nonnegative interaction matrix",
+    "method": "节点弧长与弦端宽度按矩阵强度分配；表达无向交换",
+    "source": "T3",
+    "difficulty": "中",
+    "png": "PNG/N08_interaction_chords.png",
+    "svg": "SVG/N08_interaction_chords.svg"
+  },
+  {
+    "id": "N09",
+    "title": "潜在状态色带与不确定性联动图",
+    "question": "系统是在换状态，还是观测本身波动？",
+    "inputs": "Ordered observations + state model + transition and observation probabilities",
+    "method": "三状态高斯观测 HMM 前向过滤；概率与熵来自同一后验",
+    "source": "P3 + own synthesis",
+    "difficulty": "中",
+    "png": "PNG/N09_state_probability_ribbon.png",
+    "svg": "SVG/N09_state_probability_ribbon.svg"
+  },
+  {
+    "id": "N10",
+    "title": "吸引域、零增长线与动态轨迹相图",
+    "question": "相同政策为何可能导向不同长期状态？",
+    "inputs": "Two-state differential equations + initial states + integration horizon",
+    "method": "竞争系统显式 ODE、数值吸引域、零增长线与轨迹；接近分界时需增加积分时长",
+    "source": "P4 + own synthesis",
+    "difficulty": "中",
+    "png": "PNG/N10_phase_portrait.png",
+    "svg": "SVG/N10_phase_portrait.svg"
+  },
+  {
+    "id": "N11",
+    "title": "精确归因瀑布与消融对照",
+    "question": "收益来自哪个措施，交互项有多重要？",
+    "inputs": "Model outputs for all 32 coalitions of five binary levers",
+    "method": "精确 Shapley 组合归因与逐项消融，解释该数学模型而非实证因果识别",
+    "source": "P3 + own synthesis",
+    "difficulty": "中",
+    "png": "PNG/N11_attribution_waterfall.png",
+    "svg": "SVG/N11_attribution_waterfall.svg"
+  },
+  {
+    "id": "N12",
+    "title": "雨云图、尾部风险与极端损失",
+    "question": "均值相近的方案，哪个更容易遭遇大损失？",
+    "inputs": "Repeated loss samples per policy + a tail probability level",
+    "method": "半小提琴、原始样本、经验生存曲线与经验 CVaR90",
+    "source": "T4 + own synthesis",
+    "difficulty": "低",
+    "png": "PNG/N12_raincloud_tail_risk.png",
+    "svg": "SVG/N12_raincloud_tail_risk.svg"
+  }
+]

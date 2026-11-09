@@ -1,0 +1,34 @@
+{
+  "accessed": "2026-11-07",
+  "official_awards": "https://www.contest.comap.com/undergraduate/contests/mcm/contests/2024/results/",
+  "papers": [
+    {
+      "id": "2407038",
+      "category": "2024 B",
+      "url": "https://reformship.github.io/pages/3competition/4mcm/MCM%20Outstanding/2024/B/2407038.pdf",
+      "sha256": "6c5bac9334cf68a54120fb678bdef2a9c58896764f5c8e930a3e53930a023140",
+      "pages": 25
+    },
+    {
+      "id": "2419984",
+      "category": "2024 B",
+      "url": "https://reformship.github.io/pages/3competition/4mcm/MCM%20Outstanding/2024/B/2419984.pdf",
+      "sha256": "e2eb564223cac4b73e80c448f407505a8547b77ac8906e9150599668740304e7",
+      "pages": 25
+    },
+    {
+      "id": "2401298",
+      "category": "2024 C",
+      "url": "https://raw.githubusercontent.com/Team-of-2401298-for-MCM2024/Dual-Temporal-Bayesian-Network/main/docs/paper/2401298.pdf",
+      "sha256": "1fecca82369d425dbf34e49e0e03ba8e15de5ebdfe04de146919ce71e908da2e",
+      "pages": 25
+    },
+    {
+      "id": "2400996",
+      "category": "2024 A",
+      "url": "https://reformship.github.io/pages/3competition/4mcm/MCM%20Outstanding/2024/A/2400996.pdf",
+      "sha256": "964e6d50435ee5c36b798952ebd5efe00abf5f4c39aabbb309ff9ff327f51b1f",
+      "pages": 24
+    }
+  ]
+}

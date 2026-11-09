@@ -1,0 +1,13 @@
+﻿id,title,question,inputs,method,source,difficulty,png,svg
+N01,三元配比与鲁棒选择,三类投入如何分配，稳健性要付出多少代价？,Three shares summing to 1 + scenario utilities + explicit constraints,单纯形三角网格、显式可行约束、逐点最坏情景比较,T1 + own synthesis,中,PNG/N01_allocation_simplex.png,SVG/N01_allocation_simplex.svg
+N02,概率场、搜索路径与证据更新,新搜索证据出现后，下一步去哪里？,Spatial prior + sensor likelihood + search footprints,贝叶斯负证据更新、归一化后验、累计发现概率；路线为可执行示意，未优化,P1 + P2,中,PNG/N02_probability_search.png,SVG/N02_probability_search.svg
+N03,带边缘分布的联合不确定性图,两个指标的联合达标范围在哪里？,Paired Monte Carlo outputs + two operational thresholds,六边形分箱、边缘密度和联合达标标记,T5 + own synthesis,低,PNG/N03_joint_uncertainty.png,SVG/N03_joint_uncertainty.svg
+N04,分布山脊与超阈风险图,风险在何时集中，尾部如何变化？,Repeated output samples at each time slice + one threshold,同一密度缩放的山脊图、样本中位数及超阈比例,own synthesis + P3,低,PNG/N04_distribution_ridges.png,SVG/N04_distribution_ridges.svg
+N05,约束失效交集 UpSet 图,预算超支和容量超限是否经常一起发生？,One Boolean failure flag per constraint and per stress case,互斥失效组合计数与重叠集合总数对齐,T2,低,PNG/N05_constraint_upset.png,SVG/N05_constraint_upset.svg
+N06,偏好变化的排名编织图,偏好改变后，推荐方案会不会换位？,Policy-by-objective scores + sampled preference vectors,加权评分与离散排名；连线仅连接已算权重设置,own synthesis + P3,低,PNG/N06_ranking_braid.png,SVG/N06_ranking_braid.svg
+N07,适应路径地铁图,条件恶化时，何时升级、从哪条路径切换？,Action viability intervals + candidate switching thresholds,可行区间与转换触发点同轴；示意路径不宣称优化最优,own synthesis,中,PNG/N07_adaptation_pathways.png,SVG/N07_adaptation_pathways.svg
+N08,守恒弦图与主联系排序,哪些群体之间联系最强，强度如何分布？,Small symmetric nonnegative interaction matrix,节点弧长与弦端宽度按矩阵强度分配；表达无向交换,T3,中,PNG/N08_interaction_chords.png,SVG/N08_interaction_chords.svg
+N09,潜在状态色带与不确定性联动图,系统是在换状态，还是观测本身波动？,Ordered observations + state model + transition and observation probabilities,三状态高斯观测 HMM 前向过滤；概率与熵来自同一后验,P3 + own synthesis,中,PNG/N09_state_probability_ribbon.png,SVG/N09_state_probability_ribbon.svg
+N10,吸引域、零增长线与动态轨迹相图,相同政策为何可能导向不同长期状态？,Two-state differential equations + initial states + integration horizon,竞争系统显式 ODE、数值吸引域、零增长线与轨迹；接近分界时需增加积分时长,P4 + own synthesis,中,PNG/N10_phase_portrait.png,SVG/N10_phase_portrait.svg
+N11,精确归因瀑布与消融对照,收益来自哪个措施，交互项有多重要？,Model outputs for all 32 coalitions of five binary levers,精确 Shapley 组合归因与逐项消融，解释该数学模型而非实证因果识别,P3 + own synthesis,中,PNG/N11_attribution_waterfall.png,SVG/N11_attribution_waterfall.svg
+N12,雨云图、尾部风险与极端损失,均值相近的方案，哪个更容易遭遇大损失？,Repeated loss samples per policy + a tail probability level,半小提琴、原始样本、经验生存曲线与经验 CVaR90,T4 + own synthesis,低,PNG/N12_raincloud_tail_risk.png,SVG/N12_raincloud_tail_risk.svg

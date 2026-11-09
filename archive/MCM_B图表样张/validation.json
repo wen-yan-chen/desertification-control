@@ -1,0 +1,20 @@
+{
+  "grid_choice_is_feasible": true,
+  "sankey_conservation": true,
+  "budget_shares_sum_to_one": true,
+  "morris_linear_factor_has_constant_effect": true,
+  "fan_quantiles_are_ordered": true,
+  "regret_has_a_zero_in_each_scenario": true,
+  "transfer_total_is_100": true,
+  "calibration_test_n": 25,
+  "pdf_pages": 29,
+  "figure_count": 28,
+  "seed": 20271107,
+  "all_png_svg_pairs_present": true,
+  "pdf_text_outside_page": [],
+  "pages_missing_synthetic_footer": [],
+  "png_dimensions_verified": [
+    2850,
+    1860
+  ]
+}

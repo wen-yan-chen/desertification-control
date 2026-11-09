@@ -1,0 +1,29 @@
+﻿id,name,title,purpose,png,svg
+01,workflow,总工作流程图,概览数据、模型、验证与交付的关系,PNG/01_workflow.png,SVG/01_workflow.svg
+02,feedback_loop,带正负方向的反馈环,解释政策、资金与状态之间的机制,PNG/02_feedback_loop.png,SVG/02_feedback_loop.svg
+03,data_dashboard,数据探索三联图,同时呈现趋势、问题构成和季节集中度,PNG/03_data_dashboard.png,SVG/03_data_dashboard.svg
+04,outcome_dumbbell,基准与方案哑铃图,比较多个指标的提升幅度,PNG/04_outcome_dumbbell.png,SVG/04_outcome_dumbbell.svg
+05,pareto_2d,二维 Pareto 点云与推荐点,显示目标冲突、非支配边界和折中选择,PNG/05_pareto_2d.png,SVG/05_pareto_2d.svg
+06,pareto_3d_surface,三维解析 Pareto 曲面,展示三项相互权衡的独立目标,PNG/06_pareto_3d_surface.png,SVG/06_pareto_3d_surface.svg
+07,parallel_coordinates,多目标平行坐标图,展示方案在五个指标上的优势和代价,PNG/07_parallel_coordinates.png,SVG/07_parallel_coordinates.svg
+08,feasible_contours,可行域与等值面,区分目标表现、硬约束边界和网格最优点,PNG/08_feasible_contours.png,SVG/08_feasible_contours.svg
+09,diminishing_returns,响应曲线与边际收益双联图,解释投入的边际递减与渠道差异,PNG/09_diminishing_returns.png,SVG/09_diminishing_returns.svg
+10,budget_sankey,守恒资金桑基图,展示资金从多个来源流向多个用途,PNG/10_budget_sankey.png,SVG/10_budget_sankey.svg
+11,budget_composition,百分比堆叠预算图,比较策略的预算结构并保留绝对规模,PNG/11_budget_composition.png,SVG/11_budget_composition.svg
+12,correlation_heatmap,带数值的相关性热力图,筛查变量间的正负关联,PNG/12_correlation_heatmap.png,SVG/12_correlation_heatmap.svg
+13,local_tornado,双向局部敏感性龙卷风图,保留增减参数的真实方向和影响大小,PNG/13_local_tornado.png,SVG/13_local_tornado.svg
+14,morris_screening,Morris 全局筛选图,区分影响强度和非线性或交互线索,PNG/14_morris_screening.png,SVG/14_morris_screening.svg
+15,distribution_intervals,密度与分位区间双联图,比较方案的分布、波动与尾部风险,PNG/15_distribution_intervals.png,SVG/15_distribution_intervals.svg
+16,uncertainty_fan,动态分位数扇形图,显示未来轨迹和逐时不确定性,PNG/16_uncertainty_fan.png,SVG/16_uncertainty_fan.svg
+17,minimax_regret,最小最大后悔矩阵,把各情景损失与方案最坏后悔并列,PNG/17_minimax_regret.png,SVG/17_minimax_regret.svg
+18,policy_regimes,最优策略分区图,呈现外部条件变化时的政策切换,PNG/18_policy_regimes.png,SVG/18_policy_regimes.svg
+19,spatial_network,空间网络前后对照,比较流量集中、分流和瓶颈,PNG/19_spatial_network.png,SVG/19_spatial_network.svg
+20,transfer_matrix,守恒转移热力矩阵,解释各节点流出、流入与总量守恒,PNG/20_transfer_matrix.png,SVG/20_transfer_matrix.svg
+21,profile_radar,多维画像雷达图,比较两种情境的指标结构,PNG/21_profile_radar.png,SVG/21_profile_radar.svg
+22,fit_and_residuals,拟合与留出残差双联图,显示样本外精度及误差结构,PNG/22_fit_and_residuals.png,SVG/22_fit_and_residuals.svg
+23,constraint_margins,约束余量小提琴与箱线图,定位绑定约束和违例尾部,PNG/23_constraint_margins.png,SVG/23_constraint_margins.svg
+24,solver_diagnostics,求解收敛与多次运行诊断,报告搜索过程及重复运行稳定性,PNG/24_solver_diagnostics.png,SVG/24_solver_diagnostics.svg
+25,palette_coastal,Coastal / 青蓝鼠尾草,同一组数据、尺度与版式下比较配色,PNG/25_palette_coastal.png,SVG/25_palette_coastal.svg
+26,palette_academic,Academic / 学术蓝紫,同一组数据、尺度与版式下比较配色,PNG/26_palette_academic.png,SVG/26_palette_academic.svg
+27,palette_terracotta,Terracotta / 暖陶土,同一组数据、尺度与版式下比较配色,PNG/27_palette_terracotta.png,SVG/27_palette_terracotta.svg
+28,palette_contrast,High contrast / 高对比,同一组数据、尺度与版式下比较配色,PNG/28_palette_contrast.png,SVG/28_palette_contrast.svg
