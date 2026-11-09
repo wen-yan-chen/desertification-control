@@ -21,6 +21,7 @@ PRE = r"""\documentclass[11pt,a4paper]{ctexart}
 \usepackage[margin=2.2cm]{geometry}
 \usepackage{amsmath,amssymb}
 \usepackage{booktabs,tabularx,array}
+\usepackage{graphicx}
 \usepackage{float}
 \usepackage{hyperref}
 \hypersetup{colorlinks=true,linkcolor=blue,urlcolor=blue}
@@ -299,6 +300,11 @@ m=g\,\overline{Wf(T)}\left(1-\frac{\bar V}{V_{cap}}\right)-k\bar E,\qquad
 
 \subsection*{2.3 检验}
 """ + t_fit + r"""
+\begin{figure}[H]\centering
+\includegraphics[width=0.95\textwidth]{figs/figM1.png}
+\caption*{图 1  @BEST@ 站的观测与一步递推（左）以及技能随预报步长的衰减（右）}
+\end{figure}
+
 \textbf{解读}：（i）训练与测试的一步技能接近，无明显过拟合；（ii）8 站 $k$ 全部落在下界 0，
 月尺度风蚀项不可识别；（iii）$h=12$ 的 RMSE 中位 @RM12@，大于持续性基线 @RMP12@，
 \textbf{自由推进一年以上没有技能}，故长期推演一律以情景为条件。
@@ -327,6 +333,11 @@ J_t(A)=\max_{a\in\{0,0.5,1,1.5,2\}}\left\{r(A,a)+\delta J_{t+1}(A+a)\right\},\qq
 基准情景（$c_b=2.0$、$p_{pv}=8$、$s=0.30$、$B=4000$、$T=15$、$\delta=0.94$）：
 最优 NPV $=@NPV@$ 万元，均匀扩张对照 $=@NPVU@$ 万元；最优路径首年新增 @A1@ 千 hm$^2$、
 末年累计 @CUM@ 千 hm$^2$；光伏占比盈亏点 $s^*\approx@BE@$。
+\begin{figure}[H]\centering
+\includegraphics[width=0.95\textwidth]{figs/figM3.png}
+\caption*{图 2  情景参数下的最优建设路径（左）与光伏占比敏感性（右）}
+\end{figure}
+
 \textbf{这些数字都是同一情景下的相对比较，不构成投资结论}。表 4 显示 NPV 对单价与光伏收益高度敏感，
 网格中存在大片“零新增”区域（NPV$=0$，即不做优于做）——上一版“优于对照 2.2 倍”的结论只在单点情景下成立。
 
@@ -349,6 +360,11 @@ V_{t^+}=V_t(1-U),\quad U\sim\mathcal{U}(0.20,0.55)\ \text{\src{情景}}
 不给“失效概率 84\%”这类单点数字。
 
 """ + t_g3 + r"""
+\begin{figure}[H]\centering
+\includegraphics[width=0.95\textwidth]{figs/figM4.png}
+\caption*{图 3  1000 次模拟的 2050 年覆盖度分布（左）与冲击—恢复轨迹带（右）}
+\end{figure}
+
 \section*{五、检验与稳健性}
 \begin{enumerate}
 \item 样本外一步预测：@NPOS@/8 站为正技能（表 2）。
@@ -377,7 +393,7 @@ V_{t^+}=V_t(1-U),\quad U\sim\mathcal{U}(0.20,0.55)\ \text{\src{情景}}
             CUM=t2["path"][-1]["cum_khm2"], BE=t2["break_even_pv_share"],
             LAM=t3["lambda_per_year"], E95=t3["E_p95"], FAIL=t3["fail_prob"],
             END=t3["end_median"], P05=t3["end_p05"], P95=t3["end_p95"],
-            REC=t3["recov_median_months"])
+            REC=t3["recov_median_months"], BEST=t2["station"])
     p = os.path.join(DOCS, "model.tex")
     open(p, "w", encoding="utf-8").write(txt)
     return p

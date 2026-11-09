@@ -2,6 +2,7 @@
 \usepackage[margin=2.2cm]{geometry}
 \usepackage{amsmath,amssymb}
 \usepackage{booktabs,tabularx,array}
+\usepackage{graphicx}
 \usepackage{float}
 \usepackage{hyperref}
 \hypersetup{colorlinks=true,linkcolor=blue,urlcolor=blue}
@@ -101,6 +102,11 @@ YL & 46.51 & 0.537 & 0.471 & 9.52 & 8.34 & 4.92 & 0.9257 & 0.04604 & 0.0\\
 \caption*{表 2  任务一逐站标定与检验}
 \end{table}
 
+\begin{figure}[H]\centering
+\includegraphics[width=0.95\textwidth]{figs/figM1.png}
+\caption*{图 1  ALE 站的观测与一步递推（左）以及技能随预报步长的衰减（右）}
+\end{figure}
+
 \textbf{解读}：（i）训练与测试的一步技能接近，无明显过拟合；（ii）8 站 $k$ 全部落在下界 0，
 月尺度风蚀项不可识别；（iii）$h=12$ 的 RMSE 中位 8.35，大于持续性基线 4.3，
 \textbf{自由推进一年以上没有技能}，故长期推演一律以情景为条件。
@@ -129,6 +135,11 @@ J_t(A)=\max_{a\in\{0,0.5,1,1.5,2\}}\left\{r(A,a)+\delta J_{t+1}(A+a)\right\},\qq
 基准情景（$c_b=2.0$、$p_{pv}=8$、$s=0.30$、$B=4000$、$T=15$、$\delta=0.94$）：
 最优 NPV $=7082.1$ 万元，均匀扩张对照 $=2237.4$ 万元；最优路径首年新增 2.0 千 hm$^2$、
 末年累计 16.0 千 hm$^2$；光伏占比盈亏点 $s^*\approx0.2$。
+\begin{figure}[H]\centering
+\includegraphics[width=0.95\textwidth]{figs/figM3.png}
+\caption*{图 2  情景参数下的最优建设路径（左）与光伏占比敏感性（右）}
+\end{figure}
+
 \textbf{这些数字都是同一情景下的相对比较，不构成投资结论}。表 4 显示 NPV 对单价与光伏收益高度敏感，
 网格中存在大片“零新增”区域（NPV$=0$，即不做优于做）——上一版“优于对照 2.2 倍”的结论只在单点情景下成立。
 
@@ -187,6 +198,11 @@ V_{t^+}=V_t(1-U),\quad U\sim\mathcal{U}(0.20,0.55)\ \text{\src{情景}}
 \end{tabularx}
 \caption*{表 5  任务三情景网格（冲击幅度无实测标定）}
 \end{table}
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.95\textwidth]{figs/figM4.png}
+\caption*{图 3  1000 次模拟的 2050 年覆盖度分布（左）与冲击—恢复轨迹带（右）}
+\end{figure}
 
 \section*{五、检验与稳健性}
 \begin{enumerate}
