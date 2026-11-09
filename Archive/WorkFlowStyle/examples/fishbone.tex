@@ -1,0 +1,24 @@
+% Reproduction of template 4 (fishbone / cause chain).
+% Build: pdflatex fishbone.tex
+\documentclass[tikz,border=4pt]{standalone}
+\usepackage{newtxtext}
+\usepackage{../mcmworkflow}
+\begin{document}
+\begin{tikzpicture}
+% One "bone" per stage: \x = joint x-position, \c = fill, \l = joint label.
+\foreach \x/\c/\l in {3.8/wfJointA/A, 7.9/wfJointB/B, 12.0/wfJointC/C} {
+  \draw[wf bone] (\x-1.9,1.9) -- (\x,0);
+  \draw[wf bone] (\x-1.9,-1.9) -- (\x,0);
+  \draw[wf rib] (\x-3.7,1.9)   -- (\x-1.9,1.9);
+  \draw[wf rib] (\x-3.1,1.05) -- (\x-1.05,1.05);
+  \draw[wf rib] (\x-3.1,-1.05) -- (\x-1.05,-1.05);
+  \draw[wf rib] (\x-3.7,-1.9)  -- (\x-1.9,-1.9);
+  \node[wf rib label, anchor=south west] at (\x-3.55,1.95)  {Content 1};
+  \node[wf rib label, anchor=south west] at (\x-2.95,1.1)  {Content 2};
+  \node[wf rib label, anchor=south west] at (\x-2.95,-1.0) {Content 3};
+  \node[wf rib label, anchor=north west] at (\x-3.55,-1.95) {Content 4};
+  \node[wf joint=\c, text=wfBone!70!black] at (\x,0) {\l};
+}
+\node[wf result] at (14.4,0) {Result};
+\end{tikzpicture}
+\end{document}

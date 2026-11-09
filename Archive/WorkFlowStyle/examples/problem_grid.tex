@@ -1,0 +1,90 @@
+% Reproduction of template 1/3/5/6 (four-problem grid).
+% Build:  latexmk -pdf problem_grid.tex
+% Other theme: pdflatex "\def\theme{slate}\input{problem_grid}"  (green|slate|vivid|indigo)
+\documentclass[tikz,border=2pt]{standalone}
+\usepackage{newtxtext}
+\usepackage{../mcmworkflow}
+\providecommand\theme{green}
+\begin{document}
+\wftheme{\theme}
+\begin{tikzpicture}
+% Grid: panels 8 cm wide, 4.9 cm tall, 1.2 cm gaps.
+
+% ---------------- Problem 1 (slot A, top left) ----------------
+\node[wf model, minimum width=2.8cm] (arima) at (1.65,-0.65) {ARIMA model};
+\node[wf model, minimum width=2.8cm] (lstm)  at (1.65,-1.5)  {LSTM model};
+\node[wf key, text width=3.3cm] (interval) at (6.0,-1.07)
+  {Predict interval for the number of the reported results};
+\draw[wf arrow] (3.35,-1.07) -- (interval);
+
+\node[wf plain] (attr) at (2.0,-2.35) {Attributes of the word};
+\node[wf chip, minimum width=2.15cm] (c1) at (1.33,-2.95) {commonness rating};
+\node[wf chip, minimum width=1.15cm] (c2) at (3.06,-2.95) {entropy};
+\node[wf chip, minimum width=1.5cm]  (c3) at (1.0,-3.45)  {frequency};
+\node[wf chip, minimum width=1.8cm]  (c4) at (2.73,-3.45) {number of letters};
+\node[wf chip, minimum width=3.38cm] (c5) at (1.94,-3.95) {number of vowels};
+\node[wf group, fit=(c1)(c2)(c5)] (attrs) {};
+
+\node[wf aux, text width=3.3cm] (hard) at (6.0,-2.75) {The percentage of Hard Mode};
+\node[wf aux, text width=3.3cm] (pct)  at (6.0,-4.1)  {The percentage of (1,2,3,4,5,6,X)};
+\draw[wf branch] (hard.west) -- (attrs.east) -- (pct.west);
+
+\wfpanelat{A}{P1}{(0,0)}{(8,-4.9)}{Problem1:}
+
+% ---------------- Problem 2 (slot B, bottom left) ----------------
+\node[wf input=B, minimum width=2.4cm] (fw) at (1.5,-6.9) {A future word};
+\node[wf input=B, minimum width=2.4cm] (fd) at (1.5,-8.0) {A future date};
+\node[wf mid=B, text width=2.3cm] (distr) at (4.3,-7.45) {Distribution of the reported results};
+\draw[wf branch c=B] (fw.east) -- (distr.west) -- (fd.east);
+\draw[wf branch c=B] (distr.east) -- (6.4,-7.45);
+\node[wf plain, align=left, anchor=west] at (6.6,-7.45)
+  {1 try\\[1pt]2 tries\\[-1pt]\quad\dots\\[1pt]6 tries\\[1pt]X tries};
+\node[wf input=B, minimum width=2.4cm] (lin)  at (1.5,-9.3)  {Linear models};
+\node[wf input=B, minimum width=2.4cm] (tree) at (1.5,-10.1) {Tree models};
+\node[wf note=B] (stack) at (4.3,-9.7) {Stacking model};
+\draw[wf link=B] (2.95,-9.7) -- (stack.west);
+\draw[wf link=B] (stack.north) -- (distr.south);
+\node[wf output=B, minimum width=2.4cm] (eerie) at (6.55,-10.45) {Predict ``EERIE''};
+
+\wfpanelat[below]{B}{P2}{(0,-6.1)}{(8,-11.0)}{Problem2:}
+
+% ---------------- Problem 3 (slot C, bottom right) ----------------
+\foreach \t [count=\i] in {
+  The number of reported results varied over time,
+  The percent of Hard Mode over time,
+  {The distribution of the results (1,2,3,4,5,6,X)},
+  The proportion of the position of the 26 letters in the word}
+  \node[wf input=C, text width=5.3cm, minimum height=.9cm] (t\i) at (12.2,-5.95-\i*1.07) {\t};
+\node[wf note=C] (fun) at (16.15,-8.55) {Find some\\interesting\\things};
+\draw[wf branch c=C] (fun.west) -- ++(-0.45,0);
+
+\wfpanelat[below]{C}{P3}{(9.2,-6.1)}{(17.2,-11.0)}{Problem3:}
+
+% ---------------- Problem 4 (slot D, top right) ----------------
+\node[wf plain] (hist) at (10.6,-1.0) {History and new\\attributes of a word};
+\node[wf mid=D, minimum width=1.6cm] (pca) at (12.9,-1.0) {PCA};
+\node[wf chip=D, minimum width=1.1cm, font=\bfseries\itshape\small] (w1) at (14.75,-0.65) {word};
+\node[wf chip=D, minimum width=1.6cm, font=\bfseries\itshape\small] (w2) at (16.2,-0.65) {semantics};
+\node[wf chip=D, minimum width=2.95cm, font=\bfseries\itshape\small] (w3) at (15.52,-1.25) {phonetic};
+\node[wf mid=D, minimum width=1.6cm] (gmm) at (12.9,-2.5) {GMM};
+\node[wf input=D, minimum width=2.8cm] (diff) at (15.6,-2.5) {Words' difficulty};
+\node[wf note=D, font=\bfseries\itshape\small] (lvl) at (10.7,-3.2) {Three Level:\\Easy medium difficult};
+\node[wf mid=D] (ident) at (12.75,-4.15) {Identify attributes};
+\node[wf output=D, minimum width=2.8cm] (cls) at (15.6,-4.15) {Classify ``EERIE''};
+\draw[wf arrow] (hist) -- (pca);
+\draw[wf arrow] (pca) -- (gmm);
+\draw[wf arrow] (gmm) -- (diff);
+\draw[wf arrow] (diff) -- (cls);
+\draw[wf soft=D] (gmm.south west) -- (lvl.north east);
+\draw[wf soft=D] (lvl.south east) -- (ident.west);
+
+\wfpanelat{D}{P4}{(9.2,0)}{(17.2,-4.9)}{Problem4:}
+
+% ---------------- flow between problems ----------------
+\draw[wf pass] (4,-4.9) -- (4,-6.1);
+\draw[wf pass] (8,-8.55) -- (9.2,-8.55);
+\draw[wf thick arrow] (13.2,-6.1) -- (13.2,-4.9);
+
+\wfpagebg
+\end{tikzpicture}
+\end{document}

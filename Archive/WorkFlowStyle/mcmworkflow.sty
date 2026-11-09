@@ -1,0 +1,193 @@
+% mcmworkflow.sty — TikZ styles that reproduce the workflow figures in
+% the PowerPoint templates in this folder (数学建模论文流程图1–6.pptx).
+% Read STYLE_GUIDE.md in this folder for how to turn content into a figure.
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{mcmworkflow}[2026/11/09 MCM workflow figure styles]
+\RequirePackage{tikz}
+\RequirePackage{xcolor}
+\usetikzlibrary{arrows.meta,positioning,fit,backgrounds,calc,shapes.geometric,shapes.arrows,shadings}
+
+\pgfdeclarelayer{wfpage}
+\pgfsetlayers{wfpage,background,main}
+
+% ---------------------------------------------------------------------------
+% Colour themes. Every theme has four panel "slots" A–D. Each slot has:
+%   Bg    panel fill                Light  input chips (black text)
+%   Mid   method boxes (black text) Dark   output boxes / accent text
+% plus global colours: Page, Model (strong, white text), Key (darkest output),
+% Grey (secondary output) and Link (inter-panel arrows).
+% Values were sampled from the rendered PowerPoint templates.
+% ---------------------------------------------------------------------------
+\newcommand\wf@slot[5]{% slot, bg, light, mid, dark
+  \definecolor{wf#1Bg}{HTML}{#2}\definecolor{wf#1Light}{HTML}{#3}%
+  \definecolor{wf#1Mid}{HTML}{#4}\definecolor{wf#1Dark}{HTML}{#5}}
+
+\newcommand\wftheme[1]{\csname wf@theme@#1\endcsname}
+
+\def\wf@theme@green{% template 1
+  \definecolor{wfPage}{HTML}{F6FCFA}\definecolor{wfModel}{HTML}{3EBA91}
+  \definecolor{wfKey}{HTML}{18473C}\definecolor{wfLink}{HTML}{55AB9B}
+  \wf@slot{A}{E3F0E5}{AED2B2}{8CC9A6}{18473C}%
+  \wf@slot{B}{E6ECDD}{CDDABC}{B4C89B}{41522D}%
+  \wf@slot{C}{CFEEE7}{A0DECF}{7FCDB9}{256B5B}%
+  \wf@slot{D}{DFF1E9}{BFE3D3}{9FD5BD}{40936D}}
+
+\def\wf@theme@slate{% template 3
+  \definecolor{wfPage}{HTML}{F6F8F9}\definecolor{wfModel}{HTML}{638394}
+  \definecolor{wfKey}{HTML}{152331}\definecolor{wfLink}{HTML}{526F88}
+  \wf@slot{A}{E9EEF1}{BECDD6}{9FB4C2}{152331}%
+  \wf@slot{B}{F1F4F9}{E3E9F3}{D5DFED}{3D608F}%
+  \wf@slot{C}{CBD9E8}{98B4D2}{7194C2}{20354A}%
+  \wf@slot{D}{DDE4E7}{BBC9D0}{99AFB9}{455A63}}
+
+\def\wf@theme@vivid{% template 5
+  \definecolor{wfPage}{HTML}{FEFAFF}\definecolor{wfModel}{HTML}{C900FC}
+  \definecolor{wfKey}{HTML}{5E2492}\definecolor{wfLink}{HTML}{CDAEEB}
+  \wf@slot{A}{E2F2FE}{A8D8FF}{7FC4FF}{5E2492}%
+  \wf@slot{B}{E6F6FA}{CDEDF5}{B5E4F1}{1C7F99}%
+  \wf@slot{C}{F1E8F9}{E3D1F3}{CDAEEB}{8D43D0}%
+  \wf@slot{D}{E8EEFF}{D2DDFF}{BBCCFF}{2B5EFF}}
+
+\def\wf@theme@indigo{% template 6
+  \definecolor{wfPage}{HTML}{F3F2F8}\definecolor{wfModel}{HTML}{62559F}
+  \definecolor{wfKey}{HTML}{332C5D}\definecolor{wfLink}{HTML}{9189C7}
+  \wf@slot{A}{E5E9F8}{B2BFEA}{8E9DD6}{332C5D}%
+  \wf@slot{B}{D6E4F1}{AEC9E3}{85AFD5}{1E3C58}%
+  \wf@slot{C}{E1DFEF}{C4BFE0}{9189C7}{4E438C}%
+  \wf@slot{D}{E0E4F0}{C1C9E3}{A2AED5}{435593}}
+
+% Template 2 (rounded, outlined, green) and template 4 (fishbone) colours.
+\definecolor{wfGrey}{HTML}{767171}
+\definecolor{wfoLine}{HTML}{738965}   % box outline
+\definecolor{wfoGreen}{HTML}{32B25C}  % block arrows, gradient top
+\definecolor{wfoText}{HTML}{3CBF6E}   % method names
+\definecolor{wfoTextDark}{HTML}{1E7A3F} % labels on green gradient
+\definecolor{wfoHead}{HTML}{A6DCB7}   % header boxes
+\definecolor{wfoDash}{HTML}{B6B3B3}   % dashed containers
+\definecolor{wfBone}{HTML}{8A95A5}    % fishbone lines and labels
+\definecolor{wfJointA}{HTML}{9A80B0}
+\definecolor{wfJointB}{HTML}{C3BCE8}
+\definecolor{wfJointC}{HTML}{DCDAEC}
+
+\wftheme{green}
+
+% ---------------------------------------------------------------------------
+% Style family 1: "problem grid" (templates 1, 3, 5, 6)
+% Flat rectangles, no outline, bold-italic Times, dashed panels.
+% ---------------------------------------------------------------------------
+\tikzset{
+  wf font/.style={font=\bfseries\itshape\small},
+  wf box/.style={wf font, rectangle, draw=none, align=center,
+    inner xsep=5pt, inner ysep=3pt, minimum height=0.62cm,
+    execute at begin node={\hyphenpenalty10000 }},
+  % roles ------------------------------------------------------------------
+  wf model/.style={wf box, fill=wfModel, text=white, font=\bfseries\itshape\normalsize,
+    minimum height=0.7cm},                                  % named models
+  wf key/.style={wf box, fill=wfKey, text=white},           % headline result
+  wf output/.style={wf box, fill=wf#1Dark, text=white},     % slot result
+  wf output/.default=A,
+  wf aux/.style={wf box, fill=wfGrey, text=white},          % side result
+  wf mid/.style={wf box, fill=wf#1Mid, text=black},         % method step
+  wf mid/.default=A,
+  wf input/.style={wf box, fill=wf#1Light, text=black},     % data / factor
+  wf input/.default=A,
+  wf chip/.style={wf input=#1, font=\bfseries\itshape\scriptsize,
+    minimum height=0.42cm, inner xsep=3pt, inner ysep=1.5pt},
+  wf chip/.default=A,
+  wf plain/.style={wf font, align=center, inner sep=2pt},   % free label
+  wf note/.style={wf font, align=center, inner sep=2pt, text=wf#1Dark,
+    font=\bfseries\itshape\normalsize},                     % coloured label
+  wf note/.default=A,
+  % containers --------------------------------------------------------------
+  wf panel/.style={rectangle, draw=black, fill=wf#1Bg, line width=1.1pt,
+    dash pattern=on 3pt off 2pt, inner sep=8pt},
+  wf panel/.default=A,
+  wf group/.style={rectangle, draw=black, line width=.8pt,
+    dash pattern=on 2pt off 1.5pt, inner sep=4pt},          % nested set
+  wf title/.style={font=\bfseries\itshape\Large, inner sep=1pt},
+  % connectors --------------------------------------------------------------
+  wf arrow/.style={draw=black, line width=.7pt,
+    -{Triangle[length=4.5pt,width=4pt]}},
+  wf thick arrow/.style={wf arrow, line width=1.3pt},
+  wf link/.style={wf arrow, draw=wf#1Dark},                 % coloured arrow
+  wf link/.default=A,
+  wf soft/.style={wf link=#1, dash pattern=on 2.5pt off 1.5pt}, % weak relation
+  wf soft/.default=A,
+  wf pass/.style={wf arrow, draw=wfLink, line width=.9pt},  % panel to panel
+  wf branch/.style={draw=black, line width=1.1pt},          % fork, no head
+  wf branch c/.style={draw=wf#1Dark, line width=.9pt},
+  wf branch c/.default=A,
+}
+
+\tikzset{wf panel extra/.style={}}
+% \wfpanel[title side]{slot}{name}{fit list}{title}
+% title side: above (default) | below | none
+\newcommand\wfpanel[5][above]{%
+  \begin{scope}[on background layer]
+    \node[wf panel=#2, wf panel extra, fit={#4}] (#3) {};
+  \end{scope}%
+  \def\wf@side{#1}\def\wf@above{above}\def\wf@below{below}%
+  \ifx\wf@side\wf@above
+    \node[wf title, anchor=south west] at ([xshift=2pt,yshift=3pt]#3.north west) {#5};\fi
+  \ifx\wf@side\wf@below
+    \node[wf title, anchor=north west] at ([xshift=-2pt,yshift=-3pt]#3.south west) {#5};\fi
+}
+
+% \wfpanelat[title side]{slot}{name}{(x0,y0)}{(x1,y1)}{title}
+% Same as \wfpanel but with exact corners — use this to keep a clean grid.
+\newcommand\wfpanelat[6][above]{%
+  \begingroup\tikzset{wf panel extra/.style={inner sep=0pt}}%
+  \wfpanel[#1]{#2}{#3}{#4#5}{#6}\endgroup}
+
+% \wfpagebg[margin] — tinted page behind everything (call last).
+\newcommand\wfpagebg[1][10pt]{%
+  \begin{pgfonlayer}{wfpage}
+    \fill[wfPage] ([shift={(-#1,-#1)}]current bounding box.south west)
+      rectangle ([shift={(#1,#1)}]current bounding box.north east);
+  \end{pgfonlayer}}
+
+% ---------------------------------------------------------------------------
+% Style family 2: "rounded outline" (template 2)
+% White rounded boxes, grey-green outline, bold upright Times, grey dashed
+% rounded containers, green block arrows, green gradient list panels.
+% ---------------------------------------------------------------------------
+\tikzset{
+  wfo font/.style={font=\bfseries\small},
+  wfo box/.style={wfo font, rectangle, rounded corners=3pt, draw=wfoLine,
+    line width=1pt, fill=white, align=center, inner xsep=6pt,
+    minimum height=0.62cm, execute at begin node={\hyphenpenalty10000 }},
+  wfo head/.style={wfo box, fill=wfoHead, font=\bfseries\normalsize},
+  wfo method/.style={wfo box, text=wfoText, font=\bfseries\large},
+  wfo label/.style={wfo font, align=center, inner sep=2pt},
+  wfo green/.style={wfo font, text=wfoText, align=center, inner sep=2pt},
+  wfo container/.style={rectangle, rounded corners=9pt, draw=wfoDash,
+    line width=.9pt, dash pattern=on 2.5pt off 2pt, inner sep=7pt},
+  wfo frame/.style={rectangle, draw=wfoDash!70!black, line width=.9pt,
+    dash pattern=on 2pt off 1.5pt, inner sep=8pt},
+  wfo gradient/.style={rectangle, draw=black, line width=.7pt,
+    top color=wfoGreen!60, bottom color=white, inner sep=5pt,
+    execute at begin node={\hyphenpenalty10000 }},
+  wfo arrow/.style={draw=wfoLine!80!black, line width=.9pt,
+    -{Triangle[length=4.5pt,width=4pt]}},
+  wfo big arrow/.style={single arrow, fill=wfoGreen, draw=none,
+    minimum height=1.5cm, minimum width=.75cm, single arrow head extend=.18cm,
+    inner sep=0pt},
+  wfo hollow arrow/.style={single arrow, fill=white, draw=wfoGreen,
+    line width=1.1pt, minimum height=1.5cm, minimum width=.7cm,
+    single arrow head extend=.16cm, inner sep=0pt},
+}
+
+% ---------------------------------------------------------------------------
+% Style family 3: fishbone (template 4)
+% ---------------------------------------------------------------------------
+\tikzset{
+  wf bone/.style={draw=wfBone, line width=2.6pt, line cap=butt},
+  wf rib/.style={draw=wfBone, line width=2pt, line cap=butt,
+    {Diamond[length=6pt,width=6pt]}-},
+  wf rib label/.style={text=wfBone!85!black, font=\normalsize, inner sep=1pt},
+  wf joint/.style={circle, draw=wfBone, line width=3pt, fill=#1,
+    minimum size=1.05cm, font=\bfseries\Large, text=white},
+  wf joint/.default=wfJointA,
+  wf result/.style={font=\bfseries\Large, text=wfBone!85!black, align=left},
+}
+\endinput
