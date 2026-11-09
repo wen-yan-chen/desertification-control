@@ -1,0 +1,162 @@
+\documentclass[11pt,a4paper]{ctexart}
+\usepackage[margin=2.2cm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs,tabularx,array}
+\usepackage{float}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue,urlcolor=blue}
+\setlength{\parindent}{2em}
+\setlength{\parskip}{0.25em}
+\renewcommand{\arraystretch}{1.12}
+\newcommand{\src}[1]{\textsuperscript{\scriptsize [#1]}}
+\title{数据预处理报告（修订版）}
+\author{CQU\_MCM 2026 · B 题《治沙是一项精细活》}
+\date{2026-11-09}
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+\newpage
+
+\section*{摘\quad 要}
+本报告说明建模数据的来源、质量控制与预处理流程。与上一版相比有三项结构性修正：
+（1）气象统一到 NASA POWER 单一口径并保存原响应哈希，不再混用未指定模型的再分析产品；
+（2）不再按文献量级人为设定各站输沙率目标，风蚀改以\textbf{无量纲侵蚀指数} $E$ 进入模型；
+（3）插补、截尾、标准化、共线性筛选\textbf{只在训练期拟合}，测试期不参与任何拟合。
+NDVI 官方 QA 波段仅在两站完整取得，本报告用它量化了 QA 对月最大合成的影响。
+
+\begin{table}[H]\centering\small\setlength{\parskip}{1pt}
+\begin{tabularx}{\textwidth}{|c|X|X|}
+\toprule
+S1 & 气象单一口径 & NASA POWER 月度产品，7 参数一次取齐，附 SHA256\\
+\midrule
+S2 & 单位换算 & mm/d→mm/月（按当月天数）；kWh/m²/d→MJ/m²/d\\
+S3 & NDVI 有效性 & 剔除填充值 −3000\\
+S4 & 替代质控 & 相对训练期同月气候态 $|z|>3$ 标记可疑\\
+S5 & 月最大合成 & 同月多期取最大，抑制云与阴影\\
+S6 & 覆盖度换算 & 像元二分，固定端元 0.05 / 0.85\\
+S7 & 侵蚀指数 & Lettau 单位宽度通量，训练期均值归一\\
+S8 & ET$_0$ & Hargreaves 原式，$R_a$ 按纬度与日序计算\\
+S9 & 湿度归一 & 根区湿度按训练期 5\%/90\% 分位线性归一\\
+S10 & 时间切分 & 训练 2015-01—2022-12；测试 2023-01—2024-12\\
+S11 & 缺失处理 & 站内线性插值（限 3 期）+ 训练期同月气候态\\
+S12 & 留痕 & 面板、特征、统计量、QA 抽样表全部落盘\\
+\bottomrule
+\end{tabularx}
+\caption*{表 3  预处理流程}
+\end{table}
+\begin{table}[H]\centering\small\setlength{\parskip}{1pt}
+\begin{tabularx}{\textwidth}{|c|X|c|X|}
+\toprule
+$P_t$ & 月降水量 & mm & POWER\src{观测}\\
+\midrule
+$T_t,T^{\max}_t,T^{\min}_t$ & 月均/最高/最低气温 & $^\circ$C & POWER\src{观测}\\
+$R_{s,t}$ & 短波辐射 & MJ m$^{-2}$ d$^{-1}$ & POWER\src{观测}\\
+$u_t$ & 10 m 风速 & m s$^{-1}$ & POWER\src{观测}\\
+$W_t$ & 根区湿度（0—1） & — & POWER(GWETROOT)\src{观测}\\
+$\mathrm{NDVI}_t$ & 归一化植被指数 & — & MODIS MOD13Q1\src{观测}\\
+$V_t$ & 植被覆盖度 & \% & 由 NDVI 反演\src{派生}\\
+$E_t$ & 侵蚀指数（无量纲） & — & 由 $u_t$ 计算\src{派生}\\
+$\mathrm{ET}_{0,t}$ & 参考蒸散 & mm & Hargreaves\src{派生}\\
+\bottomrule
+\end{tabularx}
+\caption*{表 4  面板变量与来源}
+\end{table}
+\begin{table}[H]\centering\small\setlength{\parskip}{1pt}
+\begin{tabularx}{\textwidth}{|c|c|c|c|c|c|}
+\toprule
+TZ & 230 & 0.87\% & 120 & 0.0 & 0.0\\
+\midrule
+XT & 230 & 0.87\% & 119 & 0.0 & 0.55\\
+QM & 184 & 15.22\% & 83 & 0.08 & 2.29\\
+\bottomrule
+\end{tabularx}
+\caption*{表 1  MOD13Q1 像元可靠性抽样评估（TZ、XT 完整，QM 部分）}
+\end{table}
+\begin{table}[H]\centering\small\setlength{\parskip}{1pt}
+\begin{tabularx}{\textwidth}{|c|c|}
+\toprule
+NDVI & 0\\
+\midrule
+NDVI\_qc & 19\\
+FVC\_fixed & 19\\
+P\_mm & 0\\
+ET0\_mm & 0\\
+GWETROOT & 0\\
+\bottomrule
+\end{tabularx}
+\caption*{表 2  面板缺失统计}
+\end{table}
+
+\section*{一、数据来源}
+\subsection*{1.1 气象与地表参数}
+全部气象要素取自 NASA POWER 官方 API 月度产品（8 个坐标点 $\times$ 120 个月，2015—2024）：
+\texttt{PRECTOTCORR}、\texttt{T2M}/\texttt{T2M\_MAX}/\texttt{T2M\_MIN}、\texttt{WS10M}、
+\texttt{ALLSKY\_SFC\_SW\_DWN}、\texttt{GWETROOT}。每个请求的 URL、返回字节数与 SHA256
+记录在 \texttt{Data/raw/nasa\_power\_verified/manifest\_v2.json}，可逐请求复核。
+\textbf{必须强调}：POWER 是同化/再分析产品，不是地名对应站的仪器观测，正文一律称“再分析产品”。
+
+\subsection*{1.2 遥感植被指数}
+NDVI 取自 ORNL DAAC 的 MOD13Q1 子集服务（250 m、16 天合成），单像元（\texttt{kmAboveBelow=0}），
+因此覆盖度代表\textbf{站点尺度}而非区段平均；全部合成期的原始响应保存在本地缓存，可重跑复现。
+
+\subsection*{1.3 工程与文献证据}
+两份政府/林草部门公开网页（民丰后河坝三期、于田—民丰锁边固沙工程）保存了原文与 SHA256。
+提取的 5 条工程参数（芦苇方格 1.5 m；果树密度 66 株/亩 = 990 株/hm$^2$；
+成本节约 964 元/亩 = 14\,460 元/hm$^2$；民丰生物治沙 13 万亩；于田工程固沙 10.5 万亩）
+记录在 \texttt{parameters.csv}。使用边界很严格：\textbf{节约额不是单价}，\textbf{规划面积不是已完成面积}。
+
+\section*{二、质量控制}
+\subsection*{2.1 NDVI 像元可靠性}
+表 1 显示：TZ、XT 两站 QA$>$1 的合成期比例均为 0.87\%，过滤前后\textbf{月最大合成几乎不变}
+（月均绝对差 0.00 pp，最大 0.55 pp）；QM 站 QA$>$1 比例 15.2\%，过滤后月均差 0.08 pp、最大 2.29 pp。
+\textbf{结论}：对“月最大合成”口径，QA 过滤的边际影响很小（最大合成本身倾向选取最清晰观测），
+但对单期 NDVI 不可忽略。因此全序列采用替代质控：相对训练期同月气候态 $|z|>3$ 记为可疑，
+共标记 19 个站点-月，按缺失处理并插补。
+
+\subsection*{2.2 缺失与异常}
+原始 8 站 $\times$ 120 月 = 960 行的气象字段无缺失；覆盖度经替代质控后缺失 19 个。
+\textbf{不做事先截尾}：本题需要保留沙尘暴等极端月，一律截尾会削弱风蚀与灾害识别；
+异常值只标记、不删除，标准化用中位数/四分位距抗极端值。
+
+\section*{三、派生变量}
+\subsection*{3.1 植被覆盖度（像元二分）}
+\begin{equation*}
+V_t=\mathrm{clip}\!\left(\frac{\mathrm{NDVI}_t-\mathrm{NDVI}_{soil}}
+{\mathrm{NDVI}_{veg}-\mathrm{NDVI}_{soil}},0,1\right)\times 100\%,
+\qquad \mathrm{NDVI}_{soil}=0.05,\ \mathrm{NDVI}_{veg}=0.85
+\end{equation*}
+固定端元便于跨站比较；另以各站训练期 5%/95% 分位作动态端元计算 $V^{\mathrm{dyn}}$ 作敏感性口径。
+端元取固定值是可检验的假设，取得地表分类与纯端元像元后应替换。
+
+\subsection*{3.2 侵蚀指数（无量纲）}
+Lettau 公式给出的 $q$ 是\textbf{单位宽度}质量通量（kg m$^{-1}$ s$^{-1}$）：
+\begin{equation*}
+q_t=C\frac{\rho}{g}u_{*t}^2\left(u_{*t}-u_{*T}\right),\qquad
+u_{*t}=\frac{\kappa u_t}{\ln(10/z_0)}
+\end{equation*}
+$C=6.7$、$\kappa=0.40$、$z_0=1$ mm、阈值由 10 m 高度 5 m/s 换算；$u_t$ 为月均风速乘阵风代理 1.8
+（\src{情景}，敏感 1.5—2.2）。换算面积模数需“宽度/面积/时长”三个额外定义，\textbf{本轮不做}，
+以免量纲不闭合；改用站内归一的无量纲指数 $E_t=q_t/\overline{q}_{2015\text{—}2022}$，
+只表达相对风蚀强度。
+
+\subsection*{3.3 参考蒸散与水分状态}
+\begin{equation*}
+\mathrm{ET}_0=0.0023\,R_a\,(T+17.8)\sqrt{T^{\max}-T^{\min}}\;d_m
+\end{equation*}
+$R_a$ 为天文辐射（按纬度与日序解析计算），$d_m$ 为当月天数。水分状态直接使用 \texttt{GWETROOT}，
+按训练期 5%/90% 分位归一为 $W_t\in[0,1]$，避免自造水桶的量纲问题。
+
+\section*{四、面板结构与划分}
+平衡面板 960 行，训练期 768 行（2015-01—2022-12）、测试期 192 行（2023-01—2024-12）。
+插补气候态、$W$ 归一化分位、$E$ 归一基准、标准化参数、共线性筛选\textbf{全部只用训练期}估计。
+
+\section*{五、局限}
+\begin{itemize}
+\item 8 个坐标点是区域点位，不是等距锁边带样带；塔中为腹地背景点，肖塘与塔中直线距离约 36 km，
+不能声称“各站均代表边缘”，代表区段边界仍需 GIS 划定。
+\item NDVI 为单像元、固定端元，官方 QA 仅两站完整；覆盖度适合时序分析，不宜当作地面实测。
+\item 根区湿度为再分析量，土壤有效水、盐分、地下水位未纳入。
+\item 输沙量、工程单价、电价、可用水量均为情景假设或部分外部证据，不能当作已测定真值。
+\end{itemize}
+
+\end{document}

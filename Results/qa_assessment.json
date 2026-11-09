@@ -1,0 +1,42 @@
+{
+  "stations": 8,
+  "rows": 960,
+  "missing": {
+    "NDVI": 0,
+    "NDVI_qc": 19,
+    "FVC_fixed": 19,
+    "P_mm": 0,
+    "ET0_mm": 0,
+    "GWETROOT": 0
+  },
+  "ndvi_flag_counts": {
+    "ok": 941,
+    "climatology_outlier": 19
+  },
+  "qa_sampling": {
+    "TZ": {
+      "composites": 230,
+      "qa_gt1_ratio": 0.0087,
+      "months_with_qa": 120,
+      "mean_abs_diff_pp": 0.0,
+      "max_abs_diff_pp": 0.0
+    },
+    "XT": {
+      "composites": 230,
+      "qa_gt1_ratio": 0.0087,
+      "months_with_qa": 119,
+      "mean_abs_diff_pp": 0.0,
+      "max_abs_diff_pp": 0.55
+    },
+    "QM": {
+      "composites": 184,
+      "qa_gt1_ratio": 0.1522,
+      "months_with_qa": 83,
+      "mean_abs_diff_pp": 0.08,
+      "max_abs_diff_pp": 2.29
+    }
+  },
+  "qa_note": "只有 TZ/XT 取得完整官方 QA；其余站点用相对气候态偏离筛查替代",
+  "train": "2015-01—2022-12",
+  "test": "2023-01—2024-12"
+}

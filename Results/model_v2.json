@@ -1,0 +1,538 @@
+{
+ "meta": {
+  "stations": 8,
+  "rows": 960,
+  "train": "2015-01—2022-12",
+  "test": "2023-01—2024-12",
+  "n_fvc_imputed": 19,
+  "AWC_mm": 42.00000000000001,
+  "Zr_m": 0.6,
+  "theta_fc": 0.1,
+  "theta_wp": 0.03
+ },
+ "task1": {
+  "fit": [
+   {
+    "站代码": "ALE",
+    "Vcap": 54.46,
+    "W_lo": 0.3,
+    "W_hi": 0.31,
+    "R2_h1_train": 0.561,
+    "R2_h1_test": 0.598,
+    "RMSE_h1": 9.5,
+    "RMSE_h1_persist": 9.58,
+    "RMSE_h3": 21.11,
+    "RMSE_h6": 27.81,
+    "RMSE_h12": 10.83,
+    "RMSE_h12_persist": 8.0,
+    "g": 0.2031,
+    "m": 0.01741,
+    "k": 0.0,
+    "V_anchor": 32.71,
+    "WfT_bar": 0.2145
+   },
+   {
+    "站代码": "KEL",
+    "Vcap": 31.28,
+    "W_lo": 0.5,
+    "W_hi": 0.52,
+    "R2_h1_train": 0.506,
+    "R2_h1_test": 0.453,
+    "RMSE_h1": 6.47,
+    "RMSE_h1_persist": 6.57,
+    "RMSE_h3": 12.14,
+    "RMSE_h6": 14.25,
+    "RMSE_h12": 9.46,
+    "RMSE_h12_persist": 5.09,
+    "g": 1.652,
+    "m": 0.18509,
+    "k": 0.0,
+    "V_anchor": 15.06,
+    "WfT_bar": 0.2161
+   },
+   {
+    "站代码": "MF",
+    "Vcap": 45.48,
+    "W_lo": 0.23,
+    "W_hi": 0.26,
+    "R2_h1_train": 0.268,
+    "R2_h1_test": 0.259,
+    "RMSE_h1": 9.08,
+    "RMSE_h1_persist": 8.48,
+    "RMSE_h3": 16.63,
+    "RMSE_h6": 17.91,
+    "RMSE_h12": 12.1,
+    "RMSE_h12_persist": 6.52,
+    "g": 1.0589,
+    "m": 0.11141,
+    "k": 0.0,
+    "V_anchor": 25.02,
+    "WfT_bar": 0.2339
+   },
+   {
+    "站代码": "QM",
+    "Vcap": 30.45,
+    "W_lo": 0.4,
+    "W_hi": 0.41,
+    "R2_h1_train": 0.464,
+    "R2_h1_test": 0.443,
+    "RMSE_h1": 6.36,
+    "RMSE_h1_persist": 6.42,
+    "RMSE_h3": 12.78,
+    "RMSE_h6": 16.63,
+    "RMSE_h12": 4.05,
+    "RMSE_h12_persist": 3.68,
+    "g": 0.6845,
+    "m": 0.00718,
+    "k": 0.0,
+    "V_anchor": 19.13,
+    "WfT_bar": 0.0282
+   },
+   {
+    "站代码": "RQ",
+    "Vcap": 38.21,
+    "W_lo": 0.37,
+    "W_hi": 0.38,
+    "R2_h1_train": 0.366,
+    "R2_h1_test": 0.247,
+    "RMSE_h1": 7.99,
+    "RMSE_h1_persist": 8.03,
+    "RMSE_h3": 11.65,
+    "RMSE_h6": 13.19,
+    "RMSE_h12": 8.36,
+    "RMSE_h12_persist": 3.21,
+    "g": 1.4856,
+    "m": 0.06057,
+    "k": 0.0,
+    "V_anchor": 22.48,
+    "WfT_bar": 0.099
+   },
+   {
+    "站代码": "TZ",
+    "Vcap": 14.62,
+    "W_lo": 0.09,
+    "W_hi": 0.11,
+    "R2_h1_train": 0.44,
+    "R2_h1_test": 0.427,
+    "RMSE_h1": 2.11,
+    "RMSE_h1_persist": 2.11,
+    "RMSE_h3": 3.89,
+    "RMSE_h6": 5.16,
+    "RMSE_h12": 4.07,
+    "RMSE_h12_persist": 1.7,
+    "g": 0.5385,
+    "m": 0.03706,
+    "k": 0.0,
+    "V_anchor": 9.56,
+    "WfT_bar": 0.1988
+   },
+   {
+    "站代码": "XT",
+    "Vcap": 1.73,
+    "W_lo": 0.09,
+    "W_hi": 0.11,
+    "R2_h1_train": -0.979,
+    "R2_h1_test": -0.872,
+    "RMSE_h1": 0.53,
+    "RMSE_h1_persist": 0.54,
+    "RMSE_h3": 0.59,
+    "RMSE_h6": 0.43,
+    "RMSE_h12": 0.54,
+    "RMSE_h12_persist": 0.54,
+    "g": 1.5052,
+    "m": 0.11823,
+    "k": 0.0,
+    "V_anchor": 1.05,
+    "WfT_bar": 0.1988
+   },
+   {
+    "站代码": "YL",
+    "Vcap": 46.51,
+    "W_lo": 0.34,
+    "W_hi": 0.35,
+    "R2_h1_train": 0.537,
+    "R2_h1_test": 0.471,
+    "RMSE_h1": 9.52,
+    "RMSE_h1_persist": 9.42,
+    "RMSE_h3": 18.96,
+    "RMSE_h6": 22.04,
+    "RMSE_h12": 8.34,
+    "RMSE_h12_persist": 4.92,
+    "g": 0.9257,
+    "m": 0.04604,
+    "k": 0.0,
+    "V_anchor": 27.82,
+    "WfT_bar": 0.1237
+   }
+  ],
+  "R2_h1_test_median": 0.435,
+  "n_positive_h1": 7,
+  "RMSE_h1_median": 7.23,
+  "RMSE_h12_median": 8.35,
+  "RMSE_h12_persist_median": 4.3,
+  "skill_note": "h 步为滚动起点自由推进；h≥6 时误差接近或超过持续性基线"
+ },
+ "task2_grid": [
+  {
+   "build": 1.5,
+   "pv_rev": 6.0,
+   "npv": 5799.7,
+   "a1": 2.0,
+   "cum": 14.0
+  },
+  {
+   "build": 1.5,
+   "pv_rev": 8.0,
+   "npv": 14901.8,
+   "a1": 2.0,
+   "cum": 24.0
+  },
+  {
+   "build": 1.5,
+   "pv_rev": 10.0,
+   "npv": 26647.4,
+   "a1": 2.0,
+   "cum": 30.0
+  },
+  {
+   "build": 2.0,
+   "pv_rev": 6.0,
+   "npv": 1187.6,
+   "a1": 2.0,
+   "cum": 6.0
+  },
+  {
+   "build": 2.0,
+   "pv_rev": 8.0,
+   "npv": 7082.1,
+   "a1": 2.0,
+   "cum": 16.0
+  },
+  {
+   "build": 2.0,
+   "pv_rev": 10.0,
+   "npv": 16730.0,
+   "a1": 2.0,
+   "cum": 26.0
+  },
+  {
+   "build": 2.5,
+   "pv_rev": 6.0,
+   "npv": 0.0,
+   "a1": 0.0,
+   "cum": 0.0
+  },
+  {
+   "build": 2.5,
+   "pv_rev": 8.0,
+   "npv": 1395.7,
+   "a1": 1.5,
+   "cum": 6.0
+  },
+  {
+   "build": 2.5,
+   "pv_rev": 10.0,
+   "npv": 6347.4,
+   "a1": 1.5,
+   "cum": 13.5
+  }
+ ],
+ "task2": {
+  "station": "ALE",
+  "npv": 7082.1,
+  "npv_uniform": 2237.4,
+  "path": [
+   {
+    "year": 2026,
+    "a_khm2": 2.0,
+    "cum_khm2": 2.0,
+    "V_eq": 42.91,
+    "I_mm": 60.0
+   },
+   {
+    "year": 2027,
+    "a_khm2": 2.0,
+    "cum_khm2": 4.0,
+    "V_eq": 42.91,
+    "I_mm": 60.0
+   },
+   {
+    "year": 2028,
+    "a_khm2": 2.0,
+    "cum_khm2": 6.0,
+    "V_eq": 42.91,
+    "I_mm": 60.0
+   },
+   {
+    "year": 2029,
+    "a_khm2": 2.0,
+    "cum_khm2": 8.0,
+    "V_eq": 42.91,
+    "I_mm": 60.0
+   },
+   {
+    "year": 2030,
+    "a_khm2": 2.0,
+    "cum_khm2": 10.0,
+    "V_eq": 42.91,
+    "I_mm": 60.0
+   },
+   {
+    "year": 2031,
+    "a_khm2": 2.0,
+    "cum_khm2": 12.0,
+    "V_eq": 42.91,
+    "I_mm": 60.0
+   },
+   {
+    "year": 2032,
+    "a_khm2": 2.0,
+    "cum_khm2": 14.0,
+    "V_eq": 42.91,
+    "I_mm": 60.0
+   },
+   {
+    "year": 2033,
+    "a_khm2": 2.0,
+    "cum_khm2": 16.0,
+    "V_eq": 42.91,
+    "I_mm": 60.0
+   },
+   {
+    "year": 2034,
+    "a_khm2": 0.0,
+    "cum_khm2": 16.0,
+    "V_eq": 32.71,
+    "I_mm": 0.0
+   },
+   {
+    "year": 2035,
+    "a_khm2": 0.0,
+    "cum_khm2": 16.0,
+    "V_eq": 32.71,
+    "I_mm": 0.0
+   },
+   {
+    "year": 2036,
+    "a_khm2": 0.0,
+    "cum_khm2": 16.0,
+    "V_eq": 32.71,
+    "I_mm": 0.0
+   },
+   {
+    "year": 2037,
+    "a_khm2": 0.0,
+    "cum_khm2": 16.0,
+    "V_eq": 32.71,
+    "I_mm": 0.0
+   },
+   {
+    "year": 2038,
+    "a_khm2": 0.0,
+    "cum_khm2": 16.0,
+    "V_eq": 32.71,
+    "I_mm": 0.0
+   },
+   {
+    "year": 2039,
+    "a_khm2": 0.0,
+    "cum_khm2": 16.0,
+    "V_eq": 32.71,
+    "I_mm": 0.0
+   },
+   {
+    "year": 2040,
+    "a_khm2": 0.0,
+    "cum_khm2": 16.0,
+    "V_eq": 32.71,
+    "I_mm": 0.0
+   }
+  ],
+  "scenario": {
+   "A_pot": 40.0,
+   "T": 15,
+   "build": 2.0,
+   "maint": 0.12,
+   "pv_rev": 8.0,
+   "pv_share": 0.3,
+   "eco": 1.2,
+   "water_cost": 0.5,
+   "B": 4000.0,
+   "W_max": 500.0,
+   "disc": 0.94,
+   "beta": 0.5
+  },
+  "break_even_pv_share": 0.2,
+  "sens": [
+   {
+    "pv_share": 0.15,
+    "npv": 0.0,
+    "end_cum_khm2": 0.0
+   },
+   {
+    "pv_share": 0.2,
+    "npv": 260.8,
+    "end_cum_khm2": 4.0
+   },
+   {
+    "pv_share": 0.25,
+    "npv": 2662.6,
+    "end_cum_khm2": 10.0
+   },
+   {
+    "pv_share": 0.3,
+    "npv": 7082.1,
+    "end_cum_khm2": 16.0
+   },
+   {
+    "pv_share": 0.35,
+    "npv": 13154.9,
+    "end_cum_khm2": 24.0
+   },
+   {
+    "pv_share": 0.4,
+    "npv": 20600.3,
+    "end_cum_khm2": 30.0
+   },
+   {
+    "pv_share": 0.45,
+    "npv": 28663.1,
+    "end_cum_khm2": 30.0
+   }
+  ],
+  "note": "全部经济参数为情景假设，结果只作相对比较，不作投资结论"
+ },
+ "task3": {
+  "station": "ALE",
+  "lambda_per_year": 0.625,
+  "n_events": 5,
+  "E_p95": 3.64,
+  "fail_prob": 1.0,
+  "recov_median_months": 282.0,
+  "n_recovered": 800,
+  "end_median": 4.19,
+  "end_p05": 0.37,
+  "end_p95": 18.02,
+  "V0": 32.71,
+  "thr": 27.23,
+  "clim_deltas": {
+   "dT_C_per_year": 0.03,
+   "wind_factor_per_year": 0.002
+  },
+  "note": "λ 由实测超额频率估计；冲击幅度 U~U(0.20,0.55) 为情景假设"
+ },
+ "task3_grid": [
+  [
+   {
+    "lam": 0.25,
+    "u_hi": 0.3,
+    "P_end_below_half": 0.477,
+    "end_median": 27.38
+   },
+   {
+    "lam": 0.25,
+    "u_hi": 0.45,
+    "P_end_below_half": 0.657,
+    "end_median": 24.38
+   },
+   {
+    "lam": 0.25,
+    "u_hi": 0.6,
+    "P_end_below_half": 0.75,
+    "end_median": 20.39
+   }
+  ],
+  [
+   {
+    "lam": 0.5,
+    "u_hi": 0.3,
+    "P_end_below_half": 0.865,
+    "end_median": 20.4
+   },
+   {
+    "lam": 0.5,
+    "u_hi": 0.45,
+    "P_end_below_half": 0.948,
+    "end_median": 14.38
+   },
+   {
+    "lam": 0.5,
+    "u_hi": 0.6,
+    "P_end_below_half": 0.97,
+    "end_median": 7.87
+   }
+  ],
+  [
+   {
+    "lam": 0.75,
+    "u_hi": 0.3,
+    "P_end_below_half": 0.99,
+    "end_median": 13.18
+   },
+   {
+    "lam": 0.75,
+    "u_hi": 0.45,
+    "P_end_below_half": 1.0,
+    "end_median": 5.86
+   },
+   {
+    "lam": 0.75,
+    "u_hi": 0.6,
+    "P_end_below_half": 1.0,
+    "end_median": 1.36
+   }
+  ],
+  [
+   {
+    "lam": 1.0,
+    "u_hi": 0.3,
+    "P_end_below_half": 1.0,
+    "end_median": 7.28
+   },
+   {
+    "lam": 1.0,
+    "u_hi": 0.45,
+    "P_end_below_half": 1.0,
+    "end_median": 1.46
+   },
+   {
+    "lam": 1.0,
+    "u_hi": 0.6,
+    "P_end_below_half": 1.0,
+    "end_median": 0.14
+   }
+  ]
+ ],
+ "task3_curves": [
+  {
+   "ratio": 0.3,
+   "thr": 16.34,
+   "P_below_end": 0.924,
+   "P_below_any": 1.0
+  },
+  {
+   "ratio": 0.4,
+   "thr": 21.79,
+   "P_below_end": 0.985,
+   "P_below_any": 1.0
+  },
+  {
+   "ratio": 0.5,
+   "thr": 27.23,
+   "P_below_end": 0.999,
+   "P_below_any": 1.0
+  },
+  {
+   "ratio": 0.6,
+   "thr": 32.68,
+   "P_below_end": 1.0,
+   "P_below_any": 1.0
+  },
+  {
+   "ratio": 0.7,
+   "thr": 38.12,
+   "P_below_end": 1.0,
+   "P_below_any": 1.0
+  }
+ ]
+}
