@@ -14,3 +14,6 @@
 *.bcf
 *.run.xml
 /main.pdf
+
+# biblatex / BibTeX auxiliary database
+*-blx.bib

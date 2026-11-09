@@ -7,7 +7,7 @@
 \newcommand{\ContestYear}{2026}
 \newcommand{\TeamNumber}{000000} % 待替换为本次参赛队号
 \newcommand{\ProblemLetter}{B}
-\newcommand{\PaperTitle}{TITLE} % 待替换为论文标题
+\newcommand{\PaperTitle}{Sand Control in Taklamakan Desert} % 待替换为论文标题
 \mcmsetup{
   tstyle=\color{red}\bfseries,
   tcn=\TeamNumber, problem=\ProblemLetter,
@@ -22,6 +22,17 @@
 \usepackage{needspace,tikz,subcaption,float,placeins}
 \usetikzlibrary{arrows.meta,positioning}
 \usepackage{lastpage}
+% 中英文文献库：XeLaTeX + BibTeX；正文使用 \cite{REF01} 等引用键。
+\usepackage{xeCJK}
+\setmainfont{texgyretermes-regular.otf}[BoldFont=texgyretermes-bold.otf,ItalicFont=texgyretermes-italic.otf,BoldItalicFont=texgyretermes-bolditalic.otf]
+\setCJKmainfont{FandolSong-Regular.otf}[BoldFont=FandolSong-Bold.otf,ItalicFont=FandolKai-Regular.otf]
+\setCJKsansfont{FandolHei-Regular.otf}[BoldFont=FandolHei-Bold.otf]
+\setCJKmonofont{FandolFang-Regular.otf}
+\usepackage[backend=bibtex,style=numeric,sorting=none,maxbibnames=3,giveninits=true]{biblatex}
+\usepackage{xurl}
+\addbibresource{bibliography/references.bib}
+% 有 DOI 时不重复输出同一文献的网址。
+\AtEveryBibitem{\iffieldundef{doi}{}{\clearfield{url}}}
 \graphicspath{{Figure/}}
 \geometry{headheight=14pt}
 \setlength{\emergencystretch}{1.2em}

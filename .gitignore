@@ -17,3 +17,6 @@ venv/
 *.partial
 *.part
 /tmp/
+
+# Local document reader state (all directories)
+.markmira/
