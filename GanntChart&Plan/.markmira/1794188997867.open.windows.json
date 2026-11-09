@@ -1,0 +1,21 @@
+{
+  "workDir": "/Users/zhangjiarui/Desktop/MCM:ICM/26CQUMCM_B/GanntChart",
+  "treeJson": "{\n  \"path\": \"/Users/zhangjiarui/Desktop/MCM:ICM/26CQUMCM_B/GanntChart\",\n  \"name\": \"GanntChart\",\n  \"isDirectory\": true,\n  \"isFile\": false,\n  \"isOpen\": true,\n  \"isDraft\": false,\n  \"draftKind\": null,\n  \"draftMode\": null,\n  \"draftFileExtension\": null,\n  \"originalPath\": null,\n  \"depth\": 0,\n  \"children\": [\n    {\n      \"path\": \"/Users/zhangjiarui/Desktop/MCM:ICM/26CQUMCM_B/GanntChart/Pasted 2026-11-08 at 10.48.26 AM.png\",\n      \"name\": \"Pasted 2026-11-08 at 10.48.26 AM.png\",\n      \"isDirectory\": false,\n      \"isFile\": true,\n      \"isOpen\": false,\n      \"isDraft\": false,\n      \"draftKind\": null,\n      \"draftMode\": null,\n      \"draftFileExtension\": null,\n      \"originalPath\": null,\n      \"depth\": 1,\n      \"children\": []\n    },\n    {\n      \"path\": \"/Users/zhangjiarui/Desktop/MCM:ICM/26CQUMCM_B/GanntChart/Plan.md\",\n      \"name\": \"Plan.md\",\n      \"isDirectory\": false,\n      \"isFile\": true,\n      \"isOpen\": false,\n      \"isDraft\": false,\n      \"draftKind\": null,\n      \"draftMode\": null,\n      \"draftFileExtension\": null,\n      \"originalPath\": null,\n      \"depth\": 1,\n      \"children\": []\n    },\n    {\n      \"path\": \"/Users/zhangjiarui/Desktop/MCM:ICM/26CQUMCM_B/GanntChart/总结事宜.md\",\n      \"name\": \"总结事宜.md\",\n      \"isDirectory\": false,\n      \"isFile\": true,\n      \"isOpen\": false,\n      \"isDraft\": false,\n      \"draftKind\": null,\n      \"draftMode\": null,\n      \"draftFileExtension\": null,\n      \"originalPath\": null,\n      \"depth\": 1,\n      \"children\": []\n    }\n  ]\n}",
+  "openedPaths": [
+    "/Users/zhangjiarui/Desktop/MCM:ICM/26CQUMCM_B/GanntChart/总结事宜.md"
+  ],
+  "activePath": "/Users/zhangjiarui/Desktop/MCM:ICM/26CQUMCM_B/GanntChart/总结事宜.md",
+  "pinnedPaths": [],
+  "layout.initialLeftPx": 300,
+  "layout.initialRightPx": 200,
+  "layout.minLeft": 150,
+  "layout.minRight": 200,
+  "layout.minMiddle": 300,
+  "layout.dividerWidth": 6,
+  "layout.expandLeft": true,
+  "layout.expandRight": false,
+  "layout.outlineHeight": 0,
+  "layout.outlineExpanded": true,
+  "layout.rightOutlineExpanded": true,
+  "layout.rightMaximized": false
+}
