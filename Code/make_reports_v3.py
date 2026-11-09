@@ -56,23 +56,32 @@ def esc(x):
 
 def tab(header, rows, widths=None, caption="", font=r"\small"):
     n = len(header)
-    spec = "|" + "|".join(widths if widths else ["X"] * n) + "|"
+    widths = widths if widths else ["X"] * n
+    spec = "|" + "|".join(widths) + "|"
     body = []
-    for i, row in enumerate(rows):
+    for i, row in enumerate([header] + list(rows)):
         body.append(" & ".join(esc(x) for x in row) + chr(92) + chr(92))
         if i == 0:
             body.append(chr(92) + "midrule")
-    cap = (chr(92) + "caption*{" + caption + "}") if caption else ""
-    return "".join([
+    env = "tabularx" if "X" in widths else "tabular"
+    if env == "tabularx":
+        begin = chr(92) + "begin{tabularx}{" + chr(92) + "textwidth}{" + spec + "}"
+        end = chr(92) + "end{tabularx}"
+    else:
+        begin = chr(92) + "begin{tabular}{" + spec + "}"
+        end = chr(92) + "end{tabular}"
+    cap = ((chr(92) + "begin{center}" + chr(92) + "small " + caption
+            + chr(92) + "end{center}")) if caption else ""
+    return chr(10).join([
         chr(92) + "begin{table}[H]" + chr(92) + "centering" + font
-        + chr(92) + "setlength{" + chr(92) + "parskip}{1pt}", chr(10),
-        chr(92) + "begin{tabularx}{" + chr(92) + "textwidth}{" + spec + "}", chr(10),
-        chr(92) + "toprule", chr(10),
-        (chr(10)).join(body), chr(10),
-        chr(92) + "bottomrule", chr(10),
-        chr(92) + "end{tabularx}", chr(10),
-        cap, chr(10),
-        chr(92) + "end{table}", chr(10)])
+        + chr(92) + "setlength{" + chr(92) + "parskip}{1pt}",
+        begin,
+        chr(92) + "toprule",
+        chr(10).join(body),
+        chr(92) + "bottomrule",
+        end,
+        cap,
+        chr(92) + "end{table}"])
 
 
 # ---------------------------------------------------------------- 预处理报告
@@ -302,7 +311,7 @@ m=g\,\overline{Wf(T)}\left(1-\frac{\bar V}{V_{cap}}\right)-k\bar E,\qquad
 """ + t_fit + r"""
 \begin{figure}[H]\centering
 \includegraphics[width=0.95\textwidth]{figs/figM1.png}
-\caption*{图 1  @BEST@ 站的观测与一步递推（左）以及技能随预报步长的衰减（右）}
+\begin{center}\small 图 1  @BEST@ 站的观测与一步递推（左）以及技能随预报步长的衰减（右）\end{center}
 \end{figure}
 
 \textbf{解读}：（i）训练与测试的一步技能接近，无明显过拟合；（ii）8 站 $k$ 全部落在下界 0，
@@ -335,7 +344,7 @@ J_t(A)=\max_{a\in\{0,0.5,1,1.5,2\}}\left\{r(A,a)+\delta J_{t+1}(A+a)\right\},\qq
 末年累计 @CUM@ 千 hm$^2$；光伏占比盈亏点 $s^*\approx@BE@$。
 \begin{figure}[H]\centering
 \includegraphics[width=0.95\textwidth]{figs/figM3.png}
-\caption*{图 2  情景参数下的最优建设路径（左）与光伏占比敏感性（右）}
+\begin{center}\small 图 2  情景参数下的最优建设路径（左）与光伏占比敏感性（右）\end{center}
 \end{figure}
 
 \textbf{这些数字都是同一情景下的相对比较，不构成投资结论}。表 4 显示 NPV 对单价与光伏收益高度敏感，
@@ -362,7 +371,7 @@ V_{t^+}=V_t(1-U),\quad U\sim\mathcal{U}(0.20,0.55)\ \text{\src{情景}}
 """ + t_g3 + r"""
 \begin{figure}[H]\centering
 \includegraphics[width=0.95\textwidth]{figs/figM4.png}
-\caption*{图 3  1000 次模拟的 2050 年覆盖度分布（左）与冲击—恢复轨迹带（右）}
+\begin{center}\small 图 3  1000 次模拟的 2050 年覆盖度分布（左）与冲击—恢复轨迹带（右）\end{center}
 \end{figure}
 
 \section*{五、检验与稳健性}

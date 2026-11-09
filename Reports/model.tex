@@ -37,8 +37,9 @@
 \begin{table}[H]\centering\small\setlength{\parskip}{1pt}
 \begin{tabularx}{\textwidth}{|c|X|c|X|}
 \toprule
-$V_t$ & 植被覆盖度 & \% & MODIS 反演\src{观测}\\
+符号 & 含义 & 单位 & 来源\\
 \midrule
+$V_t$ & 植被覆盖度 & \% & MODIS 反演\src{观测}\\
 $W_t$ & 根区湿度（归一） & — & POWER\src{观测}\\
 $E_t$ & 侵蚀指数 & — & $u_t$ 派生\src{派生}\\
 $V_{cap}$ & 承载上限（训练期 95\% 分位） & \% & 由数据确定\\
@@ -51,9 +52,8 @@ $I_t$ & 年灌溉深度 & mm/a & 决策变量\\
 $\delta$ & 贴现因子 & — & 情景 0.94\\
 \bottomrule
 \end{tabularx}
-\caption*{表 1  主要符号与来源}
+\begin{center}\small 表 1  主要符号与来源\end{center}
 \end{table}
-
 \section*{一、假设}
 \begin{enumerate}
 \item \textbf{尺度}：以站点为控制体，水平均匀；覆盖度由局地水分、温度、风蚀驱动。
@@ -86,10 +86,11 @@ m=g\,\overline{Wf(T)}\left(1-\frac{\bar V}{V_{cap}}\right)-k\bar E,\qquad
 
 \subsection*{2.3 检验}
 \begin{table}[H]\centering\footnotesize\setlength{\parskip}{1pt}
-\begin{tabularx}{\textwidth}{|c|c|c|c|c|c|c|c|c|c|}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
 \toprule
-ALE & 54.46 & 0.561 & 0.598 & 9.5 & 10.83 & 8.0 & 0.2031 & 0.01741 & 0.0\\
+站 & $V_{cap}$ & $R^2_1$(训) & $R^2_1$(测) & RMSE$_1$ & RMSE$_{12}$ & 持续基线 & $g$ & $m$ & $k$\\
 \midrule
+ALE & 54.46 & 0.561 & 0.598 & 9.5 & 10.83 & 8.0 & 0.2031 & 0.01741 & 0.0\\
 KEL & 31.28 & 0.506 & 0.453 & 6.47 & 9.46 & 5.09 & 1.652 & 0.18509 & 0.0\\
 MF & 45.48 & 0.268 & 0.259 & 9.08 & 12.1 & 6.52 & 1.0589 & 0.11141 & 0.0\\
 QM & 30.45 & 0.464 & 0.443 & 6.36 & 4.05 & 3.68 & 0.6845 & 0.00718 & 0.0\\
@@ -98,13 +99,12 @@ TZ & 14.62 & 0.44 & 0.427 & 2.11 & 4.07 & 1.7 & 0.5385 & 0.03706 & 0.0\\
 XT & 1.73 & -0.979 & -0.872 & 0.53 & 0.54 & 0.54 & 1.5052 & 0.11823 & 0.0\\
 YL & 46.51 & 0.537 & 0.471 & 9.52 & 8.34 & 4.92 & 0.9257 & 0.04604 & 0.0\\
 \bottomrule
-\end{tabularx}
-\caption*{表 2  任务一逐站标定与检验}
+\end{tabular}
+\begin{center}\small 表 2  任务一逐站标定与检验\end{center}
 \end{table}
-
 \begin{figure}[H]\centering
 \includegraphics[width=0.95\textwidth]{figs/figM1.png}
-\caption*{图 1  ALE 站的观测与一步递推（左）以及技能随预报步长的衰减（右）}
+\begin{center}\small 图 1  ALE 站的观测与一步递推（左）以及技能随预报步长的衰减（右）\end{center}
 \end{figure}
 
 \textbf{解读}：（i）训练与测试的一步技能接近，无明显过拟合；（ii）8 站 $k$ 全部落在下界 0，
@@ -137,17 +137,18 @@ J_t(A)=\max_{a\in\{0,0.5,1,1.5,2\}}\left\{r(A,a)+\delta J_{t+1}(A+a)\right\},\qq
 末年累计 16.0 千 hm$^2$；光伏占比盈亏点 $s^*\approx0.2$。
 \begin{figure}[H]\centering
 \includegraphics[width=0.95\textwidth]{figs/figM3.png}
-\caption*{图 2  情景参数下的最优建设路径（左）与光伏占比敏感性（右）}
+\begin{center}\small 图 2  情景参数下的最优建设路径（左）与光伏占比敏感性（右）\end{center}
 \end{figure}
 
 \textbf{这些数字都是同一情景下的相对比较，不构成投资结论}。表 4 显示 NPV 对单价与光伏收益高度敏感，
 网格中存在大片“零新增”区域（NPV$=0$，即不做优于做）——上一版“优于对照 2.2 倍”的结论只在单点情景下成立。
 
 \begin{table}[H]\centering\small\setlength{\parskip}{1pt}
-\begin{tabularx}{\textwidth}{|c|c|c|c|c|}
+\begin{tabular}{|c|c|c|c|c|}
 \toprule
-1.5 & 6.0 & 5799.7 & 2.0 & 14.0\\
+$c_b$(万元/hm$^2$) & $p_{pv}$(万元/hm$^2$a) & NPV(万元) & 首年新增 & 末年累计\\
 \midrule
+1.5 & 6.0 & 5799.7 & 2.0 & 14.0\\
 1.5 & 8.0 & 14901.8 & 2.0 & 24.0\\
 1.5 & 10.0 & 26647.4 & 2.0 & 30.0\\
 2.0 & 6.0 & 1187.6 & 2.0 & 6.0\\
@@ -157,10 +158,9 @@ J_t(A)=\max_{a\in\{0,0.5,1,1.5,2\}}\left\{r(A,a)+\delta J_{t+1}(A+a)\right\},\qq
 2.5 & 8.0 & 1395.7 & 1.5 & 6.0\\
 2.5 & 10.0 & 6347.4 & 1.5 & 13.5\\
 \bottomrule
-\end{tabularx}
-\caption*{表 4  任务二盈亏网格（其余情景参数不变）}
+\end{tabular}
+\begin{center}\small 表 4  任务二盈亏网格（其余情景参数不变）\end{center}
 \end{table}
-
 \section*{四、任务三：事件冲击下的韧性}
 \subsection*{4.1 事件与冲击}
 \begin{equation}
@@ -179,10 +179,11 @@ V_{t^+}=V_t(1-U),\quad U\sim\mathcal{U}(0.20,0.55)\ \text{\src{情景}}
 不给“失效概率 84\%”这类单点数字。
 
 \begin{table}[H]\centering\small\setlength{\parskip}{1pt}
-\begin{tabularx}{\textwidth}{|c|c|c|c|}
+\begin{tabular}{|c|c|c|c|}
 \toprule
-0.25 & 0.3 & 0.477 & 27.38\\
+$\lambda$(次/a) & $u_{\max}$ & $P(V_{2050}<0.5V_{cap})$ & 2050 中位(\%)\\
 \midrule
+0.25 & 0.3 & 0.477 & 27.38\\
 0.25 & 0.45 & 0.657 & 24.38\\
 0.25 & 0.6 & 0.75 & 20.39\\
 0.5 & 0.3 & 0.865 & 20.4\\
@@ -195,13 +196,12 @@ V_{t^+}=V_t(1-U),\quad U\sim\mathcal{U}(0.20,0.55)\ \text{\src{情景}}
 1.0 & 0.45 & 1.0 & 1.46\\
 1.0 & 0.6 & 1.0 & 0.14\\
 \bottomrule
-\end{tabularx}
-\caption*{表 5  任务三情景网格（冲击幅度无实测标定）}
+\end{tabular}
+\begin{center}\small 表 5  任务三情景网格（冲击幅度无实测标定）\end{center}
 \end{table}
-
 \begin{figure}[H]\centering
 \includegraphics[width=0.95\textwidth]{figs/figM4.png}
-\caption*{图 3  1000 次模拟的 2050 年覆盖度分布（左）与冲击—恢复轨迹带（右）}
+\begin{center}\small 图 3  1000 次模拟的 2050 年覆盖度分布（左）与冲击—恢复轨迹带（右）\end{center}
 \end{figure}
 
 \section*{五、检验与稳健性}
@@ -215,8 +215,9 @@ V_{t^+}=V_t(1-U),\quad U\sim\mathcal{U}(0.20,0.55)\ \text{\src{情景}}
 \begin{table}[H]\centering\footnotesize\setlength{\parskip}{1pt}
 \begin{tabularx}{\textwidth}{|c|X|X|}
 \toprule
-输沙率被设为目标 & 逐站贴近 400—3200 & 取消目标，改无量纲侵蚀指数\\
+审计意见 & 原问题 & 本版处理\\
 \midrule
+输沙率被设为目标 & 逐站贴近 400—3200 & 取消目标，改无量纲侵蚀指数\\
 Lettau 量纲 & kg m$^{-1}$s$^{-1}$ 换成 t km$^{-2}$ & 明确为单位宽度通量，仅站内归一\\
 水分量纲 & 体积含水率与 mm 混用 & 改用观测根区湿度 0—1\\
 ET$_0$ 名不副实 & 线性温度代理 & Hargreaves 原式，$R_a$ 解析\\
@@ -228,9 +229,8 @@ ET$_0$ 名不副实 & 线性温度代理 & Hargreaves 原式，$R_a$ 解析\\
 验收标准倒置 & 以期望 R$^2$、收益作验收 & 删除验收指标，改为检验与限定\\
 \bottomrule
 \end{tabularx}
-\caption*{表 6  审计意见与本版处理对照}
+\begin{center}\small 表 6  审计意见与本版处理对照\end{center}
 \end{table}
-
 \section*{六、局限}
 \begin{itemize}
 \item 代表区段边界未划定，模型为站点尺度；塔中为腹地背景点，不能代表锁边带。

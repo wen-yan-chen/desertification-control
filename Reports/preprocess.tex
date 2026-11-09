@@ -28,8 +28,9 @@ NDVI 官方 QA 波段仅在两站完整取得，本报告用它量化了 QA 对�
 \begin{table}[H]\centering\small\setlength{\parskip}{1pt}
 \begin{tabularx}{\textwidth}{|c|X|X|}
 \toprule
-S1 & 气象单一口径 & NASA POWER 月度产品，7 参数一次取齐，附 SHA256\\
+步骤 & 处理 & 依据\\
 \midrule
+S1 & 气象单一口径 & NASA POWER 月度产品，7 参数一次取齐，附 SHA256\\
 S2 & 单位换算 & mm/d→mm/月（按当月天数）；kWh/m²/d→MJ/m²/d\\
 S3 & NDVI 有效性 & 剔除填充值 −3000\\
 S4 & 替代质控 & 相对训练期同月气候态 $|z|>3$ 标记可疑\\
@@ -43,13 +44,13 @@ S11 & 缺失处理 & 站内线性插值（限 3 期）+ 训练期同月气候态
 S12 & 留痕 & 面板、特征、统计量、QA 抽样表全部落盘\\
 \bottomrule
 \end{tabularx}
-\caption*{表 3  预处理流程}
-\end{table}
-\begin{table}[H]\centering\small\setlength{\parskip}{1pt}
+\begin{center}\small 表 3  预处理流程\end{center}
+\end{table}\begin{table}[H]\centering\small\setlength{\parskip}{1pt}
 \begin{tabularx}{\textwidth}{|c|X|c|X|}
 \toprule
-$P_t$ & 月降水量 & mm & POWER\src{观测}\\
+变量 & 含义 & 单位 & 来源\\
 \midrule
+$P_t$ & 月降水量 & mm & POWER\src{观测}\\
 $T_t,T^{\max}_t,T^{\min}_t$ & 月均/最高/最低气温 & $^\circ$C & POWER\src{观测}\\
 $R_{s,t}$ & 短波辐射 & MJ m$^{-2}$ d$^{-1}$ & POWER\src{观测}\\
 $u_t$ & 10 m 风速 & m s$^{-1}$ & POWER\src{观测}\\
@@ -60,34 +61,33 @@ $E_t$ & 侵蚀指数（无量纲） & — & 由 $u_t$ 计算\src{派生}\\
 $\mathrm{ET}_{0,t}$ & 参考蒸散 & mm & Hargreaves\src{派生}\\
 \bottomrule
 \end{tabularx}
-\caption*{表 4  面板变量与来源}
-\end{table}
-\begin{table}[H]\centering\small\setlength{\parskip}{1pt}
-\begin{tabularx}{\textwidth}{|c|c|c|c|c|c|}
+\begin{center}\small 表 4  面板变量与来源\end{center}
+\end{table}\begin{table}[H]\centering\small\setlength{\parskip}{1pt}
+\begin{tabular}{|c|c|c|c|c|c|}
 \toprule
-TZ & 230 & 0.87\% & 120 & 0.0 & 0.0\\
+站点 & 合成期数 & QA$>$1 比例 & 有效月份 & 月均差异(pp) & 最大差异(pp)\\
 \midrule
+TZ & 230 & 0.87\% & 120 & 0.0 & 0.0\\
 XT & 230 & 0.87\% & 119 & 0.0 & 0.55\\
 QM & 184 & 15.22\% & 83 & 0.08 & 2.29\\
 \bottomrule
-\end{tabularx}
-\caption*{表 1  MOD13Q1 像元可靠性抽样评估（TZ、XT 完整，QM 部分）}
-\end{table}
-\begin{table}[H]\centering\small\setlength{\parskip}{1pt}
-\begin{tabularx}{\textwidth}{|c|c|}
+\end{tabular}
+\begin{center}\small 表 1  MOD13Q1 像元可靠性抽样评估（TZ、XT 完整，QM 部分）\end{center}
+\end{table}\begin{table}[H]\centering\small\setlength{\parskip}{1pt}
+\begin{tabular}{|c|c|}
 \toprule
-NDVI & 0\\
+字段 & 缺失数\\
 \midrule
+NDVI & 0\\
 NDVI\_qc & 19\\
 FVC\_fixed & 19\\
 P\_mm & 0\\
 ET0\_mm & 0\\
 GWETROOT & 0\\
 \bottomrule
-\end{tabularx}
-\caption*{表 2  面板缺失统计}
+\end{tabular}
+\begin{center}\small 表 2  面板缺失统计\end{center}
 \end{table}
-
 \section*{一、数据来源}
 \subsection*{1.1 气象与地表参数}
 全部气象要素取自 NASA POWER 官方 API 月度产品（8 个坐标点 $\times$ 120 个月，2015—2024）：
