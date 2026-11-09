@@ -1,0 +1,114 @@
+% !TeX program = xelatex
+% 编译：在 Main 目录运行 latexmk -xelatex main.tex。
+% 首页沿用所给 PDF 的 mcmthesis 模板；正文沿用所给 main.tex 的层级。
+\documentclass{mcmthesis}
+
+% ===== 基本信息：在此修改年份、队号、题号和论文标题 =====
+\newcommand{\ContestYear}{2026}
+\newcommand{\TeamNumber}{000000} % 待替换为本次参赛队号
+\newcommand{\ProblemLetter}{B}
+\newcommand{\PaperTitle}{TITLE} % 待替换为论文标题
+\mcmsetup{
+  tstyle=\color{red}\bfseries,
+  tcn=\TeamNumber, problem=\ProblemLetter,
+  sheet=true, titleinsheet=true, keywordsinsheet=true,
+  titlepage=false, abstract=true
+}
+\renewcommand{\headset}{\ContestYear\\MCM/ICM\\Summary Sheet}
+\title{\PaperTitle}
+
+\usepackage{times}
+\usepackage{indentfirst}
+\usepackage{needspace,tikz,subcaption,float,placeins}
+\usetikzlibrary{arrows.meta,positioning}
+\usepackage{lastpage}
+\graphicspath{{Figure/}}
+\geometry{headheight=14pt}
+\setlength{\emergencystretch}{1.2em}
+\hypersetup{hidelinks,pdfauthor={},pdftitle={MCM/ICM Paper}}
+
+% 保留旧论文的符号表、公式分组和交替灰底表格工具。
+\newcommand{\shade}{\rowcolor{gray!22}}
+\newcommand{\modelvars}[1]{%
+  \par\begingroup\small
+  \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.10}
+  \noindent\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.29\linewidth} >{\raggedright\arraybackslash}X@{}}
+  \toprule\textbf{Symbol} & \textbf{Meaning} \\\midrule
+  #1
+  \bottomrule\end{tabularx}\par\endgroup
+}
+\newenvironment{modeleq}
+  {\par\addvspace{0.4\baselineskip}\noindent\begin{minipage}{\linewidth}\setlength{\abovedisplayskip}{6pt}\setlength{\belowdisplayskip}{6pt}}
+  {\end{minipage}\par\addvspace{0.4\baselineskip}}
+
+% 占位内容仅供检查排版，写作时逐一替换；不包含旧题的模型与结论。
+\newcommand{\placeholder}[1]{\par\noindent\textit{[#1]}\par}
+
+\begin{document}
+
+% ===== 第一页：Summary Sheet（摘要不编入正文章节编号） =====
+% mcmthesis 要求先声明 abstract 和 keywords，再调用 maketitle。
+\begin{abstract}
+\placeholder{Write the problem overview, modeling methods, principal numerical
+results, sensitivity findings, and recommendations here. Keep the complete
+summary and keywords on this first page.}
+\begin{keywords}
+Keyword 1; Keyword 2; Keyword 3; Keyword 4
+\end{keywords}
+\end{abstract}
+\hypersetup{pageanchor=false}
+\maketitle
+\hypersetup{pageanchor=true}
+
+% ===== 第二页起：目录及正文 =====
+\pagestyle{main}
+\tableofcontents
+\clearpage
+
+\section{Introduction}
+\subsection{Problem background}
+\placeholder{Introduce the background and motivation of the current problem.}
+\subsection{Problem statement}
+\placeholder{Restate the modeling tasks and the required outputs.}
+\subsection{Our work}
+\placeholder{Describe the overall framework and the links among the models.}
+% \begin{figure}[H]\centering
+% \includegraphics[width=\linewidth]{workflow.pdf}
+% \caption{Overall modeling framework.}\label{fig:framework}
+% \end{figure}
+
+\clearpage
+\section{Assumptions and Justifications}
+\begin{enumerate}
+  \item \textbf{Assumption:} \textit{[State an assumption.]}
+
+  \textbf{Justification:} \textit{[Explain why it is reasonable.]}
+  % 按上述格式继续添加 \item，每条假设后给出对应解释。
+\end{enumerate}
+
+\clearpage
+\section{Notations}
+\placeholder{State the units and numerical conventions used throughout the paper.}
+\subsection*{Sets and indices}
+\modelvars{\textit{[Index]} & \textit{[Definition]} \\}
+\subsection*{Variables and derived quantities}
+\modelvars{\textit{[Variable]} & \textit{[Meaning and unit]} \\}
+\subsection*{Baseline quantities}
+\modelvars{\textit{[Parameter]} & \textit{[Value, unit, and source]} \\}
+
+\clearpage
+\section{Model 1: Model formulation}\label{sec:model1}
+\subsection{Data and model preparation}
+\placeholder{Introduce data sources, preprocessing, units, variables, and parameters.}
+\subsection{Model construction}
+\placeholder{Develop the governing equations, resource balances, feedbacks,
+performance indicators, objective function, and constraints.}
+\subsection{Solution and results}
+\placeholder{Describe the solution procedure, interpret the recommended strategy
+and resource allocation, and evaluate long-term performance.}
+
+% 第 4、5、6 节分别为 Model 1、Model 2、Model 3。
+\input{Section/model2}
+\input{Section/model3}
+\input{Section/references}
+\end{document}

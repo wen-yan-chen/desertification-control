@@ -1,0 +1,16 @@
+# LaTeX build files (figure PDFs remain tracked)
+*.aux
+*.log
+*.toc
+*.out
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.xdv
+*.lof
+*.lot
+*.bbl
+*.blg
+*.bcf
+*.run.xml
+/main.pdf
