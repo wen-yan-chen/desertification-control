@@ -1,0 +1,65 @@
+{
+  "date": "2026-11-09",
+  "raw_sha256": "0305353ba60888df33b2ea5a81113c539058fe4a55121b349d09b04baf5396c0",
+  "rows": 960,
+  "missing_raw": {
+    "月份": 0,
+    "站点": 0,
+    "站代码": 0,
+    "经度": 0,
+    "纬度": 0,
+    "地表类型": 0,
+    "风速": 0,
+    "风速日最大_月均": 0,
+    "降水": 0,
+    "气温": 0,
+    "土壤含水率_0_7cm": 0,
+    "土壤含水率_0_100cm": 0,
+    "NDVI": 0,
+    "输沙率": 0,
+    "输沙势": 0,
+    "样本天数": 0,
+    "植被覆盖度": 0,
+    "端元方案": 0
+  },
+  "changed_by_old_winsorization": {
+    "风速": 24,
+    "降水": 10,
+    "气温": 24,
+    "植被覆盖度": 13,
+    "输沙率": 9
+  },
+  "nasa_rows": 960,
+  "nasa_missing": {
+    "station": 0,
+    "month": 0,
+    "ALLSKY_SFC_SW_DWN": 0,
+    "PRECTOTCORR": 0,
+    "T2M": 0,
+    "WS10M": 0,
+    "days": 0,
+    "precip_mm_month": 0
+  },
+  "task3_authorized_condition_met": false,
+  "archive_files_verified": 50,
+  "local_official_pages_verified": 2,
+  "runtime_versions": {
+    "numpy": "2.5.4",
+    "pandas": "3.0.6",
+    "matplotlib": "3.11.2"
+  },
+  "formal_model_ready": false,
+  "blockers": [
+    "representative margin section geometry not identified",
+    "NDVI composite QA and original responses unavailable",
+    "root depth, field capacity, wilting point and local water supply not established",
+    "engineering costs, labor productivity, PV tariff and budget require local sources or explicit scenario specification",
+    "event damage/recovery observations and nonstationary climate inputs not established"
+  ],
+  "legacy_claims_invalidated": [
+    "NPV 20384万元",
+    "optimal plan superiority 2.2x",
+    "15-year failure probability 84%",
+    "2050 coverage 6.7%"
+  ]
+}

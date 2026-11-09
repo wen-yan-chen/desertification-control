@@ -1,0 +1,252 @@
+[
+  {
+    "original_path": "Results/fit_by_station.csv",
+    "archive_path": "archive/invalidated_20261109/Results/fit_by_station.csv",
+    "sha256": "5321aca4859e22ed2652c909380922599c2d8f13dd098964f2431a9298fa9516"
+  },
+  {
+    "original_path": "Results/model_results.json",
+    "archive_path": "archive/invalidated_20261109/Results/model_results.json",
+    "sha256": "422f2331f039400eb1234bbcb723bfd6dec56bdf6e7b85368f5864dd24b88b31"
+  },
+  {
+    "original_path": "Results/sens_dp.csv",
+    "archive_path": "archive/invalidated_20261109/Results/sens_dp.csv",
+    "sha256": "e8a8e161054691def3640a486ca0091e4ee5baf7e3fb46540b62f56bf645fae1"
+  },
+  {
+    "original_path": "Results/sens_params.csv",
+    "archive_path": "archive/invalidated_20261109/Results/sens_params.csv",
+    "sha256": "1d8487baf4e02f678ab03c0774b6cb4647edb55ece79426fad30b120bfba42b5"
+  },
+  {
+    "original_path": "Figures/fig1_数据审计.png",
+    "archive_path": "archive/invalidated_20261109/Figures/fig1_数据审计.png",
+    "sha256": "a47267dde281021ef69faa548462fede6674daafee17f7cee3d9f6dc09d54016"
+  },
+  {
+    "original_path": "Figures/fig10_参数敏感性.png",
+    "archive_path": "archive/invalidated_20261109/Figures/fig10_参数敏感性.png",
+    "sha256": "6ec3bb12d4eea3d3894674c7109130bccf70f919f44b1ad86c0c06cbb75227cb"
+  },
+  {
+    "original_path": "Figures/fig11_最优投资路径.png",
+    "archive_path": "archive/invalidated_20261109/Figures/fig11_最优投资路径.png",
+    "sha256": "66336fe84baf0a6ae13abed82d532299da00433e6b15b0ac79dbdd17015885b3"
+  },
+  {
+    "original_path": "Figures/fig12_韧性蒙特卡洛.png",
+    "archive_path": "archive/invalidated_20261109/Figures/fig12_韧性蒙特卡洛.png",
+    "sha256": "0d6bc792dbbad01d1efae938cde57776ede5c3da2c24c203f8e5c238787a9c3e"
+  },
+  {
+    "original_path": "Figures/fig13_长期情景.png",
+    "archive_path": "archive/invalidated_20261109/Figures/fig13_长期情景.png",
+    "sha256": "3a16e1e207191afa5540885f7bb4e7985a2564f1752f83910bd90e90330b644c"
+  },
+  {
+    "original_path": "Figures/fig2_异常值箱线图.png",
+    "archive_path": "archive/invalidated_20261109/Figures/fig2_异常值箱线图.png",
+    "sha256": "20c57c0651d56dfa413e6aa7060427166aacb29a1c4e556bb88d7f1cc00dff33"
+  },
+  {
+    "original_path": "Figures/fig3_插补策略对比.png",
+    "archive_path": "archive/invalidated_20261109/Figures/fig3_插补策略对比.png",
+    "sha256": "992f98278a96676471505f17165e257e534a3f6f6e464da4841c1f30b2b39e2d"
+  },
+  {
+    "original_path": "Figures/fig4_分布变换.png",
+    "archive_path": "archive/invalidated_20261109/Figures/fig4_分布变换.png",
+    "sha256": "32ea461abf262487a0814fec62529a24ca2e807717d99c4546cb104e46b037e3"
+  },
+  {
+    "original_path": "Figures/fig5_时序清洗示例.png",
+    "archive_path": "archive/invalidated_20261109/Figures/fig5_时序清洗示例.png",
+    "sha256": "c999db1177100de22fca97778fb4b1af6d1441fe30955dceb519e591d3b9abef"
+  },
+  {
+    "original_path": "Figures/fig6_相关性热图.png",
+    "archive_path": "archive/invalidated_20261109/Figures/fig6_相关性热图.png",
+    "sha256": "19a83ccc37dbe01c3a807698e6724f5e5829442e61df857cc6ad67f34b37d4cb"
+  },
+  {
+    "original_path": "Figures/fig7_共线性VIF.png",
+    "archive_path": "archive/invalidated_20261109/Figures/fig7_共线性VIF.png",
+    "sha256": "8d25efe194a213f1d4bb57cdd97393b7fd4251f1559b06e8add9edf20919b9e2"
+  },
+  {
+    "original_path": "Figures/fig8_交叉验证.png",
+    "archive_path": "archive/invalidated_20261109/Figures/fig8_交叉验证.png",
+    "sha256": "27f63647a372d47a2e05fa59889dec41be40514724e3da361c721ee903dc7a2a"
+  },
+  {
+    "original_path": "Figures/fig9_动力学拟合.png",
+    "archive_path": "archive/invalidated_20261109/Figures/fig9_动力学拟合.png",
+    "sha256": "79cfb68dbea6c13e3953358e07508df3cf8ea9d0f6a63256e2cd7f354c2ebced"
+  },
+  {
+    "original_path": "Data/processed/02_panel_clean.csv",
+    "archive_path": "archive/invalidated_20261109/Data/processed/02_panel_clean.csv",
+    "sha256": "8f579318570afb6ae11ed4c2a8d9521003629eef4f469af19f3bccc97e15b3cb"
+  },
+  {
+    "original_path": "Data/processed/03_features.csv",
+    "archive_path": "archive/invalidated_20261109/Data/processed/03_features.csv",
+    "sha256": "14dff12513d91bb72800bd7ea07008a06117fe3b710433d39abb781d22d6c79f"
+  },
+  {
+    "original_path": "Data/processed/04_train.csv",
+    "archive_path": "archive/invalidated_20261109/Data/processed/04_train.csv",
+    "sha256": "6e5e91633900c8c39f2c52023f55accb3b0003157c088c3c18f3e3d2c9842455"
+  },
+  {
+    "original_path": "Data/processed/05_test.csv",
+    "archive_path": "archive/invalidated_20261109/Data/processed/05_test.csv",
+    "sha256": "cf1dbdfe7f146dc3611eecdd7be934fc79246c8e1797fdcd0bc6ee6eed30377f"
+  },
+  {
+    "original_path": "Data/processed/06_scaler_params.csv",
+    "archive_path": "archive/invalidated_20261109/Data/processed/06_scaler_params.csv",
+    "sha256": "3e425d41bb4eb264c820563e477363d47d7291f035860dab60a7bf94df99160a"
+  },
+  {
+    "original_path": "Data/processed/07_交叉验证_POWER.csv",
+    "archive_path": "archive/invalidated_20261109/Data/processed/07_交叉验证_POWER.csv",
+    "sha256": "c93347e13a030455156a155603ba13c9407d51450669eb032a66622cdfcb7ef4"
+  },
+  {
+    "original_path": "Data/processed/stats.json",
+    "archive_path": "archive/invalidated_20261109/Data/processed/stats.json",
+    "sha256": "fab9ef6560bacf37fa73b26dd519d296d66dda5efd9bc4faa1dc6c7a8ccddc61"
+  },
+  {
+    "original_path": "Reports/data_source.pdf",
+    "archive_path": "archive/invalidated_20261109/Reports/data_source.pdf",
+    "sha256": "70b86d5725e40ed03b7a641651117a04c27463bd1a50e25a57c7f1b09b89a50c"
+  },
+  {
+    "original_path": "Reports/data_source.tex",
+    "archive_path": "archive/invalidated_20261109/Reports/data_source.tex",
+    "sha256": "a4ff683fcb0ccc89160561c17b7e8e2a0ceccfc65a7e420ab9fbb4f8eec11851"
+  },
+  {
+    "original_path": "Reports/model.pdf",
+    "archive_path": "archive/invalidated_20261109/Reports/model.pdf",
+    "sha256": "141f2edd7f2823396d56b3e5f8de6a1edb19e3ac2bc009b3087ae146d097c5d8"
+  },
+  {
+    "original_path": "Reports/model.tex",
+    "archive_path": "archive/invalidated_20261109/Reports/model.tex",
+    "sha256": "d77dcf9785ed2fddeb2100ffafb11b512d483a2cee691334616ff33626ad8f58"
+  },
+  {
+    "original_path": "Reports/preprocess.pdf",
+    "archive_path": "archive/invalidated_20261109/Reports/preprocess.pdf",
+    "sha256": "097b327cd20c23f9cdd5579840272df16a5888028e6b53bf45ac5372fa76151e"
+  },
+  {
+    "original_path": "Reports/preprocess.tex",
+    "archive_path": "archive/invalidated_20261109/Reports/preprocess.tex",
+    "sha256": "a3c415132b7670e6d1f8edd5aa0e8a391552b32a9ce8c54240301fecbb024402"
+  },
+  {
+    "original_path": "Reports/figs/image1.png",
+    "archive_path": "archive/invalidated_20261109/Reports/figs/image1.png",
+    "sha256": "79cfb68dbea6c13e3953358e07508df3cf8ea9d0f6a63256e2cd7f354c2ebced"
+  },
+  {
+    "original_path": "Reports/figs/image2.png",
+    "archive_path": "archive/invalidated_20261109/Reports/figs/image2.png",
+    "sha256": "66336fe84baf0a6ae13abed82d532299da00433e6b15b0ac79dbdd17015885b3"
+  },
+  {
+    "original_path": "Reports/figs/image3.png",
+    "archive_path": "archive/invalidated_20261109/Reports/figs/image3.png",
+    "sha256": "0d6bc792dbbad01d1efae938cde57776ede5c3da2c24c203f8e5c238787a9c3e"
+  },
+  {
+    "original_path": "Reports/figs/image4.png",
+    "archive_path": "archive/invalidated_20261109/Reports/figs/image4.png",
+    "sha256": "3a16e1e207191afa5540885f7bb4e7985a2564f1752f83910bd90e90330b644c"
+  },
+  {
+    "original_path": "Reports/figs/image5.png",
+    "archive_path": "archive/invalidated_20261109/Reports/figs/image5.png",
+    "sha256": "6ec3bb12d4eea3d3894674c7109130bccf70f919f44b1ad86c0c06cbb75227cb"
+  },
+  {
+    "original_path": "Reports/figs/image6.png",
+    "archive_path": "archive/invalidated_20261109/Reports/figs/image6.png",
+    "sha256": "8d25efe194a213f1d4bb57cdd97393b7fd4251f1559b06e8add9edf20919b9e2"
+  },
+  {
+    "original_path": "Reports/figs/image7.png",
+    "archive_path": "archive/invalidated_20261109/Reports/figs/image7.png",
+    "sha256": "19a83ccc37dbe01c3a807698e6724f5e5829442e61df857cc6ad67f34b37d4cb"
+  },
+  {
+    "original_path": "Reports/figs/image8.png",
+    "archive_path": "archive/invalidated_20261109/Reports/figs/image8.png",
+    "sha256": "27f63647a372d47a2e05fa59889dec41be40514724e3da361c721ee903dc7a2a"
+  },
+  {
+    "original_path": "Data/data_dictionary.md",
+    "archive_path": "archive/invalidated_20261109/Data/data_dictionary.md",
+    "sha256": "5b6d72d7ae52a50df591dc566a3a2097455467f84692831465ff2d63a6e0c5b1"
+  },
+  {
+    "original_path": "Code/01_fetch_real_data.py",
+    "archive_path": "archive/invalidated_20261109/Code/01_fetch_real_data.py",
+    "sha256": "5b3d495c0eff4433540ea182460287e359ab499c562329fc210ee14cd4f876d5"
+  },
+  {
+    "original_path": "Code/01b_fetch_ndvi.py",
+    "archive_path": "archive/invalidated_20261109/Code/01b_fetch_ndvi.py",
+    "sha256": "f47ea6440d0ab3ec9550389d20b3a2a26ec3eb7154fe21b96be1757fc152427c"
+  },
+  {
+    "original_path": "Code/02_crosscheck_power.py",
+    "archive_path": "archive/invalidated_20261109/Code/02_crosscheck_power.py",
+    "sha256": "de74350a1505099550d0e30827a3029a2cf51eb2352da8cf0dc4e6e09d894b56"
+  },
+  {
+    "original_path": "Code/03_modeling.py",
+    "archive_path": "archive/invalidated_20261109/Code/03_modeling.py",
+    "sha256": "2dad45279a38b70ba0814aeafaab7c6b38f0d0dcb589e12e72ce169a9fcd4568"
+  },
+  {
+    "original_path": "Code/build_model_report.py",
+    "archive_path": "archive/invalidated_20261109/Code/build_model_report.py",
+    "sha256": "9c59adeb3b959756861688c9f4140aa0c45e5301cd53d3ca740db93b7636065d"
+  },
+  {
+    "original_path": "Code/build_report_real.py",
+    "archive_path": "archive/invalidated_20261109/Code/build_report_real.py",
+    "sha256": "e87abe2ac497e4a7f4fedb6255295a32f79a42b0701bba65b6cb1b0f3c65eb52"
+  },
+  {
+    "original_path": "Code/build_source_report.py",
+    "archive_path": "archive/invalidated_20261109/Code/build_source_report.py",
+    "sha256": "801abddbad0e4cc44e56f1e8a5536abcd0a1e7ba0d8fa5ca2442ea4ca0c6365b"
+  },
+  {
+    "original_path": "Code/docx2tex.py",
+    "archive_path": "archive/invalidated_20261109/Code/docx2tex.py",
+    "sha256": "dcf6a050cdcb82f446e4bc9ce39ff706e17a1625cbed46861194339fcce8d830"
+  },
+  {
+    "original_path": "Code/gen_docx2tex.py",
+    "archive_path": "archive/invalidated_20261109/Code/gen_docx2tex.py",
+    "sha256": "4902b3e6c011eaf4bdba6f2e1541393a8651900c5f54cc2626eea7b6735e0ddd"
+  },
+  {
+    "original_path": "Code/preprocess.m",
+    "archive_path": "archive/invalidated_20261109/Code/preprocess.m",
+    "sha256": "50abc73a42154b3d86e8cd80b020d73d325d846bff94e2615d7ce60e6bf980e2"
+  },
+  {
+    "original_path": "Code/preprocess.py",
+    "archive_path": "archive/invalidated_20261109/Code/preprocess.py",
+    "sha256": "4d75613d407f55f77efe2e7d3beb779181af640b66e0804edbc63537ca623f51"
+  }
+]

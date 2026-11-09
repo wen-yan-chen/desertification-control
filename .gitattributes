@@ -12,3 +12,9 @@
 *.caj binary
 *.png binary
 *.html -text
+*.tex text eol=lf
+# Preserve historical/raw bytes, including original whitespace, for SHA256.
+archive/invalidated_20261109/** -text -whitespace
+Data/raw/*.csv -text -whitespace
+Data/raw/nasa_power_verified/*.json -text -whitespace
+Data/raw/local_project_evidence/*.html -text -whitespace

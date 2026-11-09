@@ -1,0 +1,405 @@
+{
+  "sources": [
+    {
+      "station": "ALE",
+      "url": "https://power.larc.nasa.gov/api/temporal/monthly/point",
+      "request": {
+        "parameters": "WS10M,T2M,PRECTOTCORR,ALLSKY_SFC_SW_DWN",
+        "community": "RE",
+        "longitude": 81.28,
+        "latitude": 40.55,
+        "start": "2015",
+        "end": "2024",
+        "format": "JSON"
+      },
+      "file": "Data/raw/nasa_power_verified/ALE.json",
+      "sha256": "f2a037342c6b95dc60813eddc7b80086a40cf44f0c7a38673cbc3457d8c47d97",
+      "units": {
+        "ALLSKY_SFC_SW_DWN": {
+          "units": "kW-hr/m^2/day",
+          "longname": "All Sky Surface Shortwave Downward Irradiance"
+        },
+        "PRECTOTCORR": {
+          "units": "mm/day",
+          "longname": "Precipitation Corrected"
+        },
+        "T2M": {
+          "units": "C",
+          "longname": "Temperature at 2 Meters"
+        },
+        "WS10M": {
+          "units": "m/s",
+          "longname": "Wind Speed at 10 Meters"
+        }
+      },
+      "provider_header": {
+        "title": "NASA/POWER Source Native Resolution Monthly and Annual",
+        "api": {
+          "version": "v2.10.0",
+          "name": "POWER Monthly and Annual API"
+        },
+        "sources": [
+          "SYN1DEG",
+          "MERRA2",
+          "POWER"
+        ],
+        "fill_value": -999.0,
+        "time_standard": "LST",
+        "start": "20150101",
+        "end": "20241231"
+      },
+      "retrieved_date": "2026-11-09"
+    },
+    {
+      "station": "KEL",
+      "url": "https://power.larc.nasa.gov/api/temporal/monthly/point",
+      "request": {
+        "parameters": "WS10M,T2M,PRECTOTCORR,ALLSKY_SFC_SW_DWN",
+        "community": "RE",
+        "longitude": 86.15,
+        "latitude": 41.76,
+        "start": "2015",
+        "end": "2024",
+        "format": "JSON"
+      },
+      "file": "Data/raw/nasa_power_verified/KEL.json",
+      "sha256": "0f82d86047d7070042e3a527b6a0a19e83bec9b19e2263a75a4d1dd11effa9d8",
+      "units": {
+        "ALLSKY_SFC_SW_DWN": {
+          "units": "kW-hr/m^2/day",
+          "longname": "All Sky Surface Shortwave Downward Irradiance"
+        },
+        "PRECTOTCORR": {
+          "units": "mm/day",
+          "longname": "Precipitation Corrected"
+        },
+        "T2M": {
+          "units": "C",
+          "longname": "Temperature at 2 Meters"
+        },
+        "WS10M": {
+          "units": "m/s",
+          "longname": "Wind Speed at 10 Meters"
+        }
+      },
+      "provider_header": {
+        "title": "NASA/POWER Source Native Resolution Monthly and Annual",
+        "api": {
+          "version": "v2.10.0",
+          "name": "POWER Monthly and Annual API"
+        },
+        "sources": [
+          "SYN1DEG",
+          "MERRA2",
+          "POWER"
+        ],
+        "fill_value": -999.0,
+        "time_standard": "LST",
+        "start": "20150101",
+        "end": "20241231"
+      },
+      "retrieved_date": "2026-11-09"
+    },
+    {
+      "station": "MF",
+      "url": "https://power.larc.nasa.gov/api/temporal/monthly/point",
+      "request": {
+        "parameters": "WS10M,T2M,PRECTOTCORR,ALLSKY_SFC_SW_DWN",
+        "community": "RE",
+        "longitude": 82.68,
+        "latitude": 37.06,
+        "start": "2015",
+        "end": "2024",
+        "format": "JSON"
+      },
+      "file": "Data/raw/nasa_power_verified/MF.json",
+      "sha256": "b45e3961cf1dc7e0081b379765b2a01f7785a2a7852a690265447dd1dc8465b9",
+      "units": {
+        "ALLSKY_SFC_SW_DWN": {
+          "units": "kW-hr/m^2/day",
+          "longname": "All Sky Surface Shortwave Downward Irradiance"
+        },
+        "PRECTOTCORR": {
+          "units": "mm/day",
+          "longname": "Precipitation Corrected"
+        },
+        "T2M": {
+          "units": "C",
+          "longname": "Temperature at 2 Meters"
+        },
+        "WS10M": {
+          "units": "m/s",
+          "longname": "Wind Speed at 10 Meters"
+        }
+      },
+      "provider_header": {
+        "title": "NASA/POWER Source Native Resolution Monthly and Annual",
+        "api": {
+          "version": "v2.10.0",
+          "name": "POWER Monthly and Annual API"
+        },
+        "sources": [
+          "SYN1DEG",
+          "MERRA2",
+          "POWER"
+        ],
+        "fill_value": -999.0,
+        "time_standard": "LST",
+        "start": "20150101",
+        "end": "20241231"
+      },
+      "retrieved_date": "2026-11-09"
+    },
+    {
+      "station": "QM",
+      "url": "https://power.larc.nasa.gov/api/temporal/monthly/point",
+      "request": {
+        "parameters": "WS10M,T2M,PRECTOTCORR,ALLSKY_SFC_SW_DWN",
+        "community": "RE",
+        "longitude": 85.53,
+        "latitude": 38.13,
+        "start": "2015",
+        "end": "2024",
+        "format": "JSON"
+      },
+      "file": "Data/raw/nasa_power_verified/QM.json",
+      "sha256": "76ca83562078261ae3f2424cb23818eb3825583134bcd4f321f049eefd971464",
+      "units": {
+        "ALLSKY_SFC_SW_DWN": {
+          "units": "kW-hr/m^2/day",
+          "longname": "All Sky Surface Shortwave Downward Irradiance"
+        },
+        "PRECTOTCORR": {
+          "units": "mm/day",
+          "longname": "Precipitation Corrected"
+        },
+        "T2M": {
+          "units": "C",
+          "longname": "Temperature at 2 Meters"
+        },
+        "WS10M": {
+          "units": "m/s",
+          "longname": "Wind Speed at 10 Meters"
+        }
+      },
+      "provider_header": {
+        "title": "NASA/POWER Source Native Resolution Monthly and Annual",
+        "api": {
+          "version": "v2.10.0",
+          "name": "POWER Monthly and Annual API"
+        },
+        "sources": [
+          "SYN1DEG",
+          "MERRA2",
+          "POWER"
+        ],
+        "fill_value": -999.0,
+        "time_standard": "LST",
+        "start": "20150101",
+        "end": "20241231"
+      },
+      "retrieved_date": "2026-11-09"
+    },
+    {
+      "station": "RQ",
+      "url": "https://power.larc.nasa.gov/api/temporal/monthly/point",
+      "request": {
+        "parameters": "WS10M,T2M,PRECTOTCORR,ALLSKY_SFC_SW_DWN",
+        "community": "RE",
+        "longitude": 88.17,
+        "latitude": 39.02,
+        "start": "2015",
+        "end": "2024",
+        "format": "JSON"
+      },
+      "file": "Data/raw/nasa_power_verified/RQ.json",
+      "sha256": "dd41c1821a8bd8716585c522e655075f25aa597d5c0618f51546bcf64f689f23",
+      "units": {
+        "ALLSKY_SFC_SW_DWN": {
+          "units": "kW-hr/m^2/day",
+          "longname": "All Sky Surface Shortwave Downward Irradiance"
+        },
+        "PRECTOTCORR": {
+          "units": "mm/day",
+          "longname": "Precipitation Corrected"
+        },
+        "T2M": {
+          "units": "C",
+          "longname": "Temperature at 2 Meters"
+        },
+        "WS10M": {
+          "units": "m/s",
+          "longname": "Wind Speed at 10 Meters"
+        }
+      },
+      "provider_header": {
+        "title": "NASA/POWER Source Native Resolution Monthly and Annual",
+        "api": {
+          "version": "v2.10.0",
+          "name": "POWER Monthly and Annual API"
+        },
+        "sources": [
+          "SYN1DEG",
+          "MERRA2",
+          "POWER"
+        ],
+        "fill_value": -999.0,
+        "time_standard": "LST",
+        "start": "20150101",
+        "end": "20241231"
+      },
+      "retrieved_date": "2026-11-09"
+    },
+    {
+      "station": "TZ",
+      "url": "https://power.larc.nasa.gov/api/temporal/monthly/point",
+      "request": {
+        "parameters": "WS10M,T2M,PRECTOTCORR,ALLSKY_SFC_SW_DWN",
+        "community": "RE",
+        "longitude": 83.65,
+        "latitude": 38.97,
+        "start": "2015",
+        "end": "2024",
+        "format": "JSON"
+      },
+      "file": "Data/raw/nasa_power_verified/TZ.json",
+      "sha256": "65afb50d5846687d24496906e7f3a757dbfacd74f484b1f44e23314b7a5da23a",
+      "units": {
+        "ALLSKY_SFC_SW_DWN": {
+          "units": "kW-hr/m^2/day",
+          "longname": "All Sky Surface Shortwave Downward Irradiance"
+        },
+        "PRECTOTCORR": {
+          "units": "mm/day",
+          "longname": "Precipitation Corrected"
+        },
+        "T2M": {
+          "units": "C",
+          "longname": "Temperature at 2 Meters"
+        },
+        "WS10M": {
+          "units": "m/s",
+          "longname": "Wind Speed at 10 Meters"
+        }
+      },
+      "provider_header": {
+        "title": "NASA/POWER Source Native Resolution Monthly and Annual",
+        "api": {
+          "version": "v2.10.0",
+          "name": "POWER Monthly and Annual API"
+        },
+        "sources": [
+          "SYN1DEG",
+          "MERRA2",
+          "POWER"
+        ],
+        "fill_value": -999.0,
+        "time_standard": "LST",
+        "start": "20150101",
+        "end": "20241231"
+      },
+      "retrieved_date": "2026-11-09"
+    },
+    {
+      "station": "XT",
+      "url": "https://power.larc.nasa.gov/api/temporal/monthly/point",
+      "request": {
+        "parameters": "WS10M,T2M,PRECTOTCORR,ALLSKY_SFC_SW_DWN",
+        "community": "RE",
+        "longitude": 84.02,
+        "latitude": 38.83,
+        "start": "2015",
+        "end": "2024",
+        "format": "JSON"
+      },
+      "file": "Data/raw/nasa_power_verified/XT.json",
+      "sha256": "5ad21635188c3ebd78de571cd28d17b68a14ac8502cc48dbf9b8bbf649535609",
+      "units": {
+        "ALLSKY_SFC_SW_DWN": {
+          "units": "kW-hr/m^2/day",
+          "longname": "All Sky Surface Shortwave Downward Irradiance"
+        },
+        "PRECTOTCORR": {
+          "units": "mm/day",
+          "longname": "Precipitation Corrected"
+        },
+        "T2M": {
+          "units": "C",
+          "longname": "Temperature at 2 Meters"
+        },
+        "WS10M": {
+          "units": "m/s",
+          "longname": "Wind Speed at 10 Meters"
+        }
+      },
+      "provider_header": {
+        "title": "NASA/POWER Source Native Resolution Monthly and Annual",
+        "api": {
+          "version": "v2.10.0",
+          "name": "POWER Monthly and Annual API"
+        },
+        "sources": [
+          "SYN1DEG",
+          "MERRA2",
+          "POWER"
+        ],
+        "fill_value": -999.0,
+        "time_standard": "LST",
+        "start": "20150101",
+        "end": "20241231"
+      },
+      "retrieved_date": "2026-11-09"
+    },
+    {
+      "station": "YL",
+      "url": "https://power.larc.nasa.gov/api/temporal/monthly/point",
+      "request": {
+        "parameters": "WS10M,T2M,PRECTOTCORR,ALLSKY_SFC_SW_DWN",
+        "community": "RE",
+        "longitude": 86.26,
+        "latitude": 41.34,
+        "start": "2015",
+        "end": "2024",
+        "format": "JSON"
+      },
+      "file": "Data/raw/nasa_power_verified/YL.json",
+      "sha256": "cdfa9d2d0b20618ce9e7de36503a2f5143cdea542489725f62132d93f4b109ca",
+      "units": {
+        "ALLSKY_SFC_SW_DWN": {
+          "units": "kW-hr/m^2/day",
+          "longname": "All Sky Surface Shortwave Downward Irradiance"
+        },
+        "PRECTOTCORR": {
+          "units": "mm/day",
+          "longname": "Precipitation Corrected"
+        },
+        "T2M": {
+          "units": "C",
+          "longname": "Temperature at 2 Meters"
+        },
+        "WS10M": {
+          "units": "m/s",
+          "longname": "Wind Speed at 10 Meters"
+        }
+      },
+      "provider_header": {
+        "title": "NASA/POWER Source Native Resolution Monthly and Annual",
+        "api": {
+          "version": "v2.10.0",
+          "name": "POWER Monthly and Annual API"
+        },
+        "sources": [
+          "SYN1DEG",
+          "MERRA2",
+          "POWER"
+        ],
+        "fill_value": -999.0,
+        "time_standard": "LST",
+        "start": "20150101",
+        "end": "20241231"
+      },
+      "retrieved_date": "2026-11-09"
+    }
+  ],
+  "failures": []
+}
