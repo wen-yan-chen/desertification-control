@@ -26,3 +26,46 @@ Data/cache/
 
 # 报告 docx 中间产物（tex/pdf 为权威版本，docx 由脚本重新生成，不入库）
 Reports/*.docx
+
+# LaTeX 编译辅助文件与缓存（保留 .tex、.bib、.sty、.cls 和 PDF 成品）
+*.aux
+*.log
+*.toc
+*.lof
+*.lot
+*.loa
+*.loe
+*.lol
+*.out
+*.fls
+*.fdb_latexmk
+*.synctex
+*.synctex.gz
+*.synctex(busy)
+*.synctex.gz(busy)
+*.xdv
+*.dvi
+*.bbl
+*.blg
+*.bcf
+*.run.xml
+*-blx.bib
+*.nav
+*.snm
+*.vrb
+*.idx
+*.ind
+*.ilg
+*.acn
+*.acr
+*.alg
+*.glg
+*.glo
+*.gls
+*.glsdefs
+*.nlo
+*.nls
+*.nlg
+*.tdo
+_minted*/
+.texpadtmp/
