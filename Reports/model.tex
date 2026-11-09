@@ -382,50 +382,31 @@ XT & -1.918 & 0.321 & 0.73 & 0.54 \\\\
 
 
 \section*{十、编程手要干什么（任务清单）}
-下面这张表是\textbf{直接可执行}的分工：每行给出模块、输入、输出、验收标准与工时。建模手负责方程与参数含义，编程手负责“让数字跑出来、让图能进论文、让结果可复现”。
+下面这张表是\textbf{直接可执行}的分工：每行给出模块、输入、输出与验收标准。建模手负责方程与参数含义，编程手负责“让数字跑出来、让图能进论文、让结果可复现”。
 
-表 12  编程手任务分解（共 6 天，可并行压缩到 3 天）
+表 12  编程手任务分解
 
 
 \begin{table}[H]\centering\small\setlength{\parskip}{2pt}
-\begin{tabularx}{\textwidth}{|X|X|X|X|X|X|}
+\begin{tabularx}{\textwidth}{|X|X|X|X|X|}
 \toprule
-\textbf{\#} & \textbf{任务} & \textbf{输入} & \textbf{输出} & \textbf{验收标准} & \textbf{工时} \\\\
+\textbf{\#} & \textbf{任务} & \textbf{输入} & \textbf{输出} & \textbf{验收标准} \\\\
 \midrule
-P1 & 数据管线维护与更新 & raw 两个 CSV + 4 个抓取脚本 & processed/ 6 个文件 + 7 张预处理图 & 重跑 preprocess.py 后 stats.json 与报告数字一致 & 0.5 天 \\\\
-P2 & 任务一：标定与拟合图 & 02\_panel\_clean.csv、03\_modeling.py 前 200 行 & fit\_by\_station.csv、fig9、参数表（表 7/8） & 8 站全部跑通；中位 $R^{2}$$\ge$0.45；图分辨率$\ge$200 dpi & 1.0 天 \\\\
-P3 & 任务一：敏感性分析 & 标定好的参数、TZ 站数据 & fig10、sens\_params.csv & 13 个参数 $\times$ $\pm$20\% 全部有结果；排序可复现 & 0.5 天 \\\\
-P4 & 任务二：动态规划求解器 & 成本/收益参数、V 响应函数 & 最优路径表（表 9）、fig11、NPV & NPV 与“均匀扩张”对照差 >1.5 倍；控制档位可配置 & 1.0 天 \\\\
-P5 & 任务二：投资结构敏感性 & dp\_plan() 函数 & 表 10、盈亏平衡点数值 & 能定位 NPV 骤降的临界光伏比例（约 0.17） & 0.5 天 \\\\
-P6 & 任务三：蒙特卡洛 & K、b、${\lambda}$、冲击分布 & fig12、失效概率/恢复时间 & 1000 次模拟 <30 s；种子固定；区间可复现 & 0.7 天 \\\\
-P7 & 任务三：2050 情景 & 长期情景参数 & fig13、情景对比表 & 两情景曲线可区分；结论句与数字一致 & 0.3 天 \\\\
-P8 & 论文图表统一 & 全部 fig*.png & 统一字号/配色/中文字的 15 张图 & 图中字号$\ge$8 pt；坐标轴带单位；无中文乱码 & 0.7 天 \\\\
-P9 & 结果表自动生成 & model\_results.json & 论文用的 8 张表（Markdown/CSV） & 改参数重跑后表格自动更新，不需手工抄数 & 0.5 天 \\\\
-P10 & 复现包与自检脚本 & 全部代码 & run\_all.py + README + 一键自检 & 新电脑上按 README 三步跑通；自检脚本输出 PASS/FAIL & 0.5 天 \\\\
+P1 & 数据管线维护与更新 & raw 两个 CSV + 4 个抓取脚本 & processed/ 6 个文件 + 7 张预处理图 & 重跑 preprocess.py 后 stats.json 与报告数字一致 \\\\
+P2 & 任务一：标定与拟合图 & 02\_panel\_clean.csv、03\_modeling.py 前 200 行 & fit\_by\_station.csv、fig9、参数表（表 7/8） & 8 站全部跑通；中位 $R^{2}$$\ge$0.45；图分辨率$\ge$200 dpi \\\\
+P3 & 任务一：敏感性分析 & 标定好的参数、TZ 站数据 & fig10、sens\_params.csv & 13 个参数 $\times$ $\pm$20\% 全部有结果；排序可复现 \\\\
+P4 & 任务二：动态规划求解器 & 成本/收益参数、V 响应函数 & 最优路径表（表 9）、fig11、NPV & NPV 与“均匀扩张”对照差 >1.5 倍；控制档位可配置 \\\\
+P5 & 任务二：投资结构敏感性 & dp\_plan() 函数 & 表 10、盈亏平衡点数值 & 能定位 NPV 骤降的临界光伏比例（约 0.17） \\\\
+P6 & 任务三：蒙特卡洛 & K、b、${\lambda}$、冲击分布 & fig12、失效概率/恢复时间 & 1000 次模拟 <30 s；种子固定；区间可复现 \\\\
+P7 & 任务三：2050 情景 & 长期情景参数 & fig13、情景对比表 & 两情景曲线可区分；结论句与数字一致 \\\\
+P8 & 论文图表统一 & 全部 fig*.png & 统一字号/配色/中文字的 15 张图 & 图中字号$\ge$8 pt；坐标轴带单位；无中文乱码 \\\\
+P9 & 结果表自动生成 & model\_results.json & 论文用的 8 张表（Markdown/CSV） & 改参数重跑后表格自动更新，不需手工抄数 \\\\
+P10 & 复现包与自检脚本 & 全部代码 & run\_all.py + README + 一键自检 & 新电脑上按 README 三步跑通；自检脚本输出 PASS/FAIL \\\\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-\subsection*{10.1 每天做什么（3 人并行版）}
-表 13  3 人并行的 5 天排期
-
-
-\begin{table}[H]\centering\small\setlength{\parskip}{2pt}
-\begin{tabularx}{\textwidth}{|X|X|X|X|}
-\toprule
-\textbf{时间} & \textbf{编程手 A（数据/图）} & \textbf{编程手 B（模型/求解）} & \textbf{建模手（方程/写作）} \\\\
-\midrule
-D1 上午 & P1 重跑到数字一致 & — & 定稿方程与参数含义 \\\\
-D1 下午 & P8 图表模板（字号/配色） & P2 逐站标定跑通 & 写 5.1—5.3 变量与假设 \\\\
-D2 & P3 敏感性 + 出图 & P4 动态规划 + 路径表 & 写任务一结果与解读 \\\\
-D3 & P6 蒙特卡洛 + 出图 & P5 光伏敏感性 + 平衡点 & 写任务二、三结果 \\\\
-D4 & P7 情景 + P9 表格自动生成 & P10 复现包与自检 & 写第七、八章与简报 \\\\
-D5 & 整篇图表核对（单位/图注） & 代码注释与异常处理 & 全文逻辑与数字一致性复核 \\\\
-\bottomrule
-\end{tabularx}
-\end{table}
-
-\subsection*{10.2 编程手的四条纪律}
+\subsection*{10.1 编程手的四条纪律}
 \textbf{所有输出必须来自脚本，不能手改数字}。论文里的每个数都应能在 model\_results.json 或 CSV 里找到；否则改一次参数就要重抄一遍全文，必然出错。
 
 \textbf{路径与编码统一}：脚本顶部集中配置 BASE 路径；CSV 一律 encoding='utf-8-sig'，否则 Excel 打开中文乱码、MATLAB 读入报错。
@@ -435,8 +416,8 @@ D5 & 整篇图表核对（单位/图注） & 代码注释与异常处理 & 全�
 \textbf{图先丑后美}：先确认坐标轴、单位、图例正确，再调配色与字号；论文图 200 dpi 以上，单栏 8 cm、双栏 16 cm，字号不小于 8 pt。
 
 
-\subsection*{10.3 交付清单（编程手最终要交的东西）}
-表 14  编程手交付清单
+\subsection*{10.2 交付清单（编程手最终要交的东西）}
+表 13  编程手交付清单
 
 
 \begin{table}[H]\centering\small\setlength{\parskip}{2pt}
@@ -448,7 +429,7 @@ D5 & 整篇图表核对（单位/图注） & 代码注释与异常处理 & 全�
 数据 & 数据/raw/*、数据/processed/*、数据/cache/ & 原始、清洗后、缓存三层齐全 \\\\
 结果 & model/model\_results.json、fit\_by\_station.csv、sens\_*.csv & 论文所有数字的唯一来源 \\\\
 图 & 图/fig1—fig13（PNG，200 dpi） & 预处理 8 张 + 建模 5 张 \\\\
-文档 & 数据来源与获取说明.docx、数据预处理报告.docx、建模报告.docx & 三份互引，数字一致 \\\\
+文档 & latex/ 下三份 .tex 源码与编译好的 .pdf & 三份互引，数字一致 \\\\
 自检 & run\_all.py（一键重跑）+ README.md（三步上手） & 换机器能复现 \\\\
 \bottomrule
 \end{tabularx}

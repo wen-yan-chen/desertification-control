@@ -23,13 +23,18 @@
 | `Docs/` | 读题、文献审计、协作约定 |
 | `Plan/` | 甘特图、时间计划与组员分工 |
 | `Code/` | 数据抓取、预处理、建模与报告生成脚本；脚本以 `Code` 的上一级（项目根）为 BASE 定位同级目录 |
-| `Data/` | 数据三层：`raw/`（原始）、`processed/`（清洗与特征）、`cache/`（接口缓存）；数据字典见 `Data/数据字典.md` |
+| `Data/` | 数据三层：`raw/`（原始）、`processed/`（清洗与特征）、`cache/`（接口缓存，不入库）；数据字典见 `Data/data_dictionary.md` |
 | `Figures/` | 分析流水线生成的图（fig1–fig13，PNG） |
 | `Results/` | 模型结果（model_results.json、逐站拟合、敏感性 CSV） |
 | `Reports/` | 三份支撑报告（data_source/preprocess/model 的 tex+pdf）及 `figs/` |
 | `Paper/` | 最终 LaTeX 论文：`main.tex` 入口，章节在 `Section/`，图在 `Figure/`，文献在 `bibliography/` |
 | `archive/` | 全部合成样张与排版风格实验；**合成数据，不是本题研究结果**，见 [archive 说明](archive/README.md) |
 | `Tools/` | 同步与文献完整性核验工具 |
+| `Code/` | 抓取、预处理、建模与报告生成脚本（Python / MATLAB） |
+| `Data/` | `raw/` 真实面板与数据源清单；`processed/` 清洗后数据、特征、训练/测试集；字段字典见 `data_dictionary.md` |
+| `Figures/` | 论文与报告用图 fig1—fig13（200 dpi PNG） |
+| `Results/` | 模型输出：标定参数、逐站拟合、敏感性、NPV 等 |
+| `Reports/` | 三份工作报告的 LaTeX 源码与编译 PDF（含 `figs/`）；docx 中间产物不入库 |
 
 大体量遥感/再分析数据不直接塞进 Git：保留下载脚本、清单、版本、校验和与处理后必要小样本；私钥、API 令牌和个人配置不提交。
 
