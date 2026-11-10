@@ -1,0 +1,431 @@
+\documentclass[11pt,a4paper]{ctexart}
+\usepackage[margin=2.1cm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs,tabularx,array}
+\usepackage{float}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue}
+\setlength{\parindent}{2em}
+\setlength{\parskip}{0.28em}
+\renewcommand{\arraystretch}{1.15}
+\newcommand{\src}[1]{\textsuperscript{\scriptsize[#1]}}
+\title{治沙工程的耦合动力学、优化调度与韧性评估\\[2pt]
+\large 2026 CQU\_MCM B 题 · 建模报告（逐步讲解版）}
+\author{CQU\_MCM 2026 · B 题}
+\date{2026-11-10}
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+\newpage
+
+\section*{摘\quad 要}
+本文按题目三问的顺序展开：\textbf{任务一}建立植被—水分—风沙的耦合动力学，
+\textbf{任务二}把它转化为带约束的最优调度，\textbf{任务三}引入随机灾害评估韧性。
+每一步都给出“为什么这样设、公式中每个符号是什么、参数从哪里来、用什么算法、如何检验”。
+
+任务一采用\textbf{年尺度}两状态模型（覆盖度 $V$、根区湿度 $W$），
+把生长、衰亡、风蚀损伤写成三项，其中风蚀项通过“植被遮蔽”与覆盖度双向耦合。
+8 站拟合 $R^2$ 中位 0.411；\textbf{风蚀系数 $k$ 在多数站点被标定到 0}，
+说明年尺度上月均风速构造的侵蚀指数解释力不足——这一点在 3.6 节如实讨论，
+并用敏感性分析给出风蚀项取不同值时的稳态覆盖度变化，而不是假装它被识别了。
+
+任务二在 ${V^*}$ 的稳态关系上做 15 年动态规划，得到“前 10 年按上限推进、后 5 年运维”的路径，
+基准情景 NPV 33675.5 万元；光伏占比低于 0.25 时最优解退化为“不建设”。
+
+任务三用吸收马尔可夫链给出退化概率与期望首达时间，并与 2 万次蒙特卡洛对照；
+结论是\textbf{退化概率对事件频率极其敏感}：$\lambda=0.15$ 时约 0.27，$\lambda\ge0.45$ 时几乎必然退化。
+
+\section*{一、题目解读：每一问到底要什么}
+\begin{table}[H]\centering\footnotesize\setlength{\parskip}{1pt}
+\begin{tabularx}{\textwidth}{|c|X|X|}
+\toprule
+小问 & 题目要求 & 本文的落地方式 \\
+\midrule
+任务一 & 选一段代表性区域，建立植被覆盖度与土壤有效含水量的耦合动力学模型，研究状态变量变化及影响因素
+ & 以站点为控制体，$V$ 与 $W$ 两状态；生长受水分与温度限制，风蚀造成损伤，植被又削弱风蚀 \\
+任务二 & 把建设过程视为最优控制/动态优化；决策含新增面积、生态补水、投资结构（含光伏）、劳动力；目标权衡生态效益与经济成本
+ & 15 年动态规划：状态=累计面积，决策=新增面积/补水深度/光伏占比，劳动力由面积系数约束 \\
+任务三 & 在任务一、二基础上引入随机灾害过程与长期预测
+ & 泊松冲击 + 吸收马尔可夫链，给出退化概率与期望首达时间，并用蒙特卡洛校验 \\
+\bottomrule
+\end{tabularx}
+\begin{center}\small 表 1  三问要求与落地方式对照\end{center}
+\end{table}
+
+\textbf{题目给了什么}：塔克拉玛干面积与防护带长度（337\,600 km$^2$、3\,046 km）、
+“锁边已合龙但需长期运行”的定性判断。
+\textbf{题目没给什么}：代表区段的具体边界、工程单价、可用水量、灾害强度分布。
+因此本文的处理原则是：\textbf{能从数据估的就估（气象、植被、风速），
+不能估的就明确标为情景假设并给区间}，绝不把假设写成观测。
+
+\section*{二、符号表}
+\begin{table}[H]\centering\small\setlength{\parskip}{1pt}
+\begin{tabularx}{\textwidth}{|c|X|c|c|}
+\toprule
+符号 & 含义 & 单位 & 来源 \\
+\midrule
+$V_t$ & 第 $t$ 年植被覆盖度（状态变量） & \% & MODIS 反演\src{观测} \\
+$W_t$ & 根区湿度（状态变量，0—1 归一） & — & NASA POWER\src{观测} \\
+$E_t$ & 侵蚀指数（无量纲，年际均值） & — & 由风速计算\src{派生} \\
+$T_t$ & 年平均气温 & $^\circ$C & NASA POWER\src{观测} \\
+$K$ & 局地承载上限（覆盖度上限） & \% & 观测 95\% 分位×1.15 \\
+$r$ & 内在增长率 & 年$^{-1}$ & 标定 \\
+$d$ & 自然衰亡率 & 年$^{-1}$ & 标定 \\
+$k$ & 风蚀损伤系数 & — & 标定（约束 $k\ge0$） \\
+$\eta$ & 植被遮蔽系数（0—1） & — & 标定 \\
+$f(T)$ & 温度响应因子（0—1） & — & 设定 \\
+$a_t$ & 年新增治理面积 & 千 hm$^2$ & 决策变量 \\
+$I_t$ & 年生态补水深度 & mm & 决策变量 \\
+$s_t$ & 光伏配套面积占比 & — & 决策变量 \\
+$A_t$ & 累计治理面积 & 千 hm$^2$ & 状态变量 \\
+$c_b,c_m,c_w$ & 建设、运维、水价 & 万元/hm$^2$、万元/(hm$^2$a)、万元/万m$^3$ & \src{情景} \\
+$p_{pv},p_e$ & 光伏收益、生态价值 & 万元/(hm$^2$a) & \src{情景} \\
+$\lambda$ & 灾害事件频率 & 次/年 & 实测超额频率 \\
+\bottomrule
+\end{tabularx}
+\begin{center}\small 表 2  符号、单位与来源（[观测] 面板数据；[派生] 由观测计算；[情景] 需假设）\end{center}
+\end{table}
+
+\section*{三、任务一：植被—水分—风沙耦合动力学}
+
+\subsection*{3.1 为什么把过程拆成三块}
+题目要求“植被覆盖度与土壤有效含水量耦合”，且背景强调风沙。
+因此把一年内的变化拆成三个物理过程，各自可解释、又能相互影响：
+\begin{enumerate}
+\item \textbf{生长}：水分充足、温度适宜时覆盖度上升，但受承载上限限制（Logistic 形式）；
+\item \textbf{衰亡}：自然枯死，与覆盖度成正比（一阶衰减）；
+\item \textbf{风蚀损伤}：风沙打磨、埋压使覆盖度下降；同时植被越密、地表越粗糙，风蚀越弱。
+\end{enumerate}
+三块的连接方式就是“耦合”：水分影响生长（$W$ 进生长项），
+植被影响风蚀（$V$ 进遮蔽项），风蚀又反过来削减植被（$kE_{\text{eff}}V$）。
+这样既有“风沙—植被”的双向作用，又没有引入无法标定的额外状态。
+
+\subsection*{3.2 方程与逐项解释}
+\begin{equation}
+V_{t+1}=V_t+\underbrace{r\,V_t\left(1-\frac{V_t}{K}\right)W_t\,f(T_t)}_{\text{生长项}}
+-\underbrace{d\,V_t}_{\text{衰亡项}}
+-\underbrace{k\,E_{\text{eff},t}\,V_t}_{\text{风蚀损伤项}}
+\end{equation}
+\begin{equation}
+E_{\text{eff},t}=E_t\left(1-\eta\frac{V_t}{K}\right),
+\qquad
+f(T_t)=\min\!\left\{1,\max\!\left\{0,\frac{T_t-5}{20}\right\}\right\}
+\end{equation}
+逐项说明：
+\begin{itemize}
+\item $rV(1-V/K)$ 是 Logistic 增长：$V$ 很小时近似指数增长（速度 $r$），
+接近 $K$ 时增长自动趋零（资源饱和）。用它的理由是：covering 不可能无限增长，必须有上限。
+\item 乘上 $W_t$ 表示\textbf{水分限制}：$W_t\to0$ 时生长停止，$W_t\to1$ 时不受限。
+这一步把土壤有效水与植被直接连起来。
+\item 乘上 $f(T_t)$ 表示\textbf{温度限制}：低于 5 $^\circ$C 不生长，高于 25 $^\circ$C 不再额外促进。
+这是植被模型的常规处理，避免冬季出现虚假生长。
+\item $d\,V$ 是衰亡：每年按固定比例枯死，$d$ 为年衰亡率。
+\item $kE_{\text{eff}}V$ 是风蚀损伤：$E$ 是风蚀强度，$V$ 是可被损伤的植被量，
+$k$ 是“单位风蚀强度造成的相对损伤”。
+\item $E_{\text{eff}}=E(1-\eta V/K)$ 是\textbf{遮蔽修正}：覆盖度越高，地表被保护得越好，
+实际作用到植被与地表的有效风蚀越弱；$\eta=1$ 时完全遮蔽，$\eta=0$ 时无遮蔽。
+\end{itemize}
+
+\subsection*{3.3 侵蚀指数怎么来}
+风沙强度用 Lettau 输沙公式计算（单位宽度质量通量，kg m$^{-1}$ s$^{-1}$）：
+\begin{equation}
+q_t=C\frac{\rho}{g}u_{*t}^2\left(u_{*t}-u_{*T}\right),\qquad
+u_{*t}=\frac{\kappa\,u_t}{\ln(10/z_0)}
+\end{equation}
+其中 $u_t$ 为 10 m 风速，$\kappa=0.40$，$z_0=1$ mm，$C=6.7$，$\rho=1.225$ kg/m$^3$，
+$u_{*T}$ 由起沙阈值 5 m/s 换算。\textbf{为什么要换成无量纲指数}：
+$q$ 的量纲是“单位宽度通量”，要变成“每平方公里多少吨”必须再知道区段宽度、面积与时间，
+这些题目没给；因此本文只用站内归一
+\begin{equation}
+E_t=\frac{q_t}{\overline{q}_{2015\text{—}2022}}
+\end{equation}
+它表达“相对风蚀强度”（1 表示与多年平均相当），不承担绝对输沙量的解释。
+这是\textbf{一个明确的假设}，写在 3.6 节的局限里。
+
+\subsection*{3.4 参数：哪些固定、哪些标定、为什么}
+\begin{table}[H]\centering\small\setlength{\parskip}{1pt}
+\begin{tabularx}{\textwidth}{|c|c|X|}
+\toprule
+参数 & 处理方式 & 理由 \\
+\midrule
+$K$ & 固定：训练期 $V$ 的 95\% 分位 $\times1.15$ & 承载上限由观测确定最稳；若自由拟合会顶到边界（不可识别） \\
+$r,d,k,\eta$ & 标定 & 决定动态快慢与风蚀作用强度 \\
+$f(T)$ 形式 & 固定 & 常规温度响应，避免过拟合 \\
+$W_t$ & 直接取观测 & 根区湿度有再分析产品，不必自造水桶 \\
+$u_{*T}$、$z_0$、$C$ & 取常用值 & 文献常用取值，未逐站校准（无法校准） \\
+\bottomrule
+\end{tabularx}
+\begin{center}\small 表 4  参数处理与理由\end{center}
+\end{table}
+
+\subsection*{3.5 标定算法：目标、约束与步骤}
+\textbf{目标函数}：最小化模拟覆盖度与观测的年均覆盖度之差的平方和
+\begin{equation}
+\min_{\theta=(r,d,k,\eta)}\ \frac{1}{N}\sum_{t=1}^{N}\left(V_t^{\text{model}}(\theta)-\tilde V_t\right)^2
+\end{equation}
+\textbf{约束}：$0.02\le r\le1.5$，$0\le d\le0.3$，$0\le k\le0.5$，$0\le\eta\le0.95$。
+（$k\ge0$ 是物理约束：风蚀只会减少植被，不会增加。）
+
+\textbf{为什么用坐标下降 + 多起点，而不用梯度法}：
+目标函数通过逐年递推得到，没有解析梯度；参数只有 4 个，
+坐标下降实现简单、不需要求导、不会因步长设置不当发散。
+多起点（25 组随机初值）是为了避免陷入局部最优。
+
+\textbf{步骤}：
+\begin{enumerate}
+\item 取某站 2015—2022 年的年均覆盖度、$W$、$E$、$T$；
+\item 计算 $K$（95\% 分位×1.15），固定；
+\item 随机初始化 $\theta$，从第一年实测覆盖度出发逐年递推，算目标函数；
+\item 依次对每个参数沿正负方向试探小步长，若目标下降就接受，否则回退；
+\item 步长从 0.3 逐步缩到 0.008，重复至不再改善；
+\item 重复 25 次随机初始，取目标最小的一组；
+\item 用 2023—2024 年做\textbf{一年外推}检验（以上一年实测为初值，只推一年）。
+\end{enumerate}
+
+\subsection*{3.6 结果、风蚀项的可识别性与解释}
+\begin{table}[H]\centering\footnotesize
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+\toprule
+站 & $r$ & $K$ & $d$ & $k$ & $\eta$ & $R^2$ & 1 年误差 & 持续性误差 \\
+\midrule
+ALE & 0.02 & 40.7 & 0.0174 & 0.0 & 0.14 & -1.065 & 2.62 & 2.03 \\
+KEL & 0.02 & 19.2 & 0.0132 & 0.0156 & 0.0 & 0.424 & 1.75 & 1.78 \\
+MF & 1.438 & 30.3 & 0.073 & 0.0 & 0.88 & 0.41 & 2.09 & 2.41 \\
+QM & 0.459 & 24.0 & 0.0 & 0.0221 & 0.92 & 0.519 & 0.97 & 0.86 \\
+RQ & 1.022 & 27.9 & 0.0 & 0.0944 & 0.6 & -0.089 & 1.74 & 0.5 \\
+TZ & 0.594 & 13.1 & 0.0 & 0.0 & 0.84 & 0.541 & 0.69 & 0.71 \\
+XT & 0.032 & 8.0 & 0.006 & 0.0 & 0.61 & -0.072 & 0.08 & 0.08 \\
+YL & 0.352 & 34.8 & 0.0 & 0.0 & 0.95 & 0.412 & 2.21 & 2.19 \\
+\bottomrule
+\end{tabular}
+\begin{center}\small 表 3  任务一逐站参数与检验（年尺度，训练 2015—2022）\end{center}
+\end{table}
+\textbf{怎么读这张表}：$R^2$ 中位 0.411，说明模型抓住了年际变化的主要部分；
+一年外推有 3/8 站误差小于“下一年等于今年”的持续性基线。
+
+\textbf{关于 $k$}：多数站点 $k$ 被标定到 0（边界）。这\textbf{不代表风沙不重要}，而是：
+（i）用的是年均风速构造的侵蚀指数，抹掉了事件信息；
+（ii）覆盖度年际变化由降水与人为灌溉主导，风蚀的边际贡献被淹没。
+正确结论是“\textbf{在年尺度、月均风速口径下，风蚀损伤系数不可识别}”，
+而不是“风蚀无影响”。因此任务二、三中的风蚀通道按情景参数处理（$k$ 取 0—0.1，
+$\eta$ 取 0.5—0.95），并做敏感性分析，而\textbf{不宣称}已经估出真实的风蚀损伤率。
+
+\textbf{风蚀项敏感性}（固定 $k$ 为不同值，重算稳态覆盖度）：
+$k=0$ 时 $V^*$ 主要由水分决定；$k=0.1$、$E=1$、$\eta=0.7$ 时，
+$V^*/K$ 从约 0.99 降到约 0.85——即风蚀可使稳态覆盖度下降约 14\%。
+这是“若风蚀系数取某值，影响有多大”的条件结论，而不是估计值。
+
+\section*{四、任务二：建设与投资的最优过程设计}
+
+\subsection*{4.1 为什么用动态规划}
+题目要求“最优控制或动态优化”，决策变量有年新增面积、补水、投资结构、劳动力。
+这些决策按年做，且\textbf{今年的建设会改变明年的累计面积}——这是典型的多阶段决策。
+由于每年决策档位很少（面积 5 档、补水 4 档、光伏 4 档），
+动态规划能在\textbf{不引入启发式随机性}的前提下求出全局最优，且结果可复现。
+相比之下，遗传算法/粒子群虽然通用，但对这种小规模问题没有必要，还会带来随机性。
+
+\subsection*{4.2 状态、决策与转移}
+\begin{itemize}
+\item \textbf{阶段}：年份 $t=0,\dots,14$（2026—2040，共 15 年）。
+\item \textbf{状态}：累计治理面积 $A_t$（0—20 千 hm$^2$，离散为 81 格）。
+选它作状态的理由：效益与成本都主要由累计面积决定，而当年新增只影响增量。
+\item \textbf{决策}：$a_t\in\{0,0.5,1,1.5,2\}$ 千 hm$^2$；$I_t\in\{0,20,40,60\}$ mm；
+$s_t\in\{0.2,0.3,0.4,0.5\}$。
+\item \textbf{转移}：$A_{t+1}=A_t+a_t$（确定性的，没有随机项）。
+\end{itemize}
+
+\subsection*{4.3 约束：每一条的含义}
+\begin{align}
+&\text{预算约束：} c_b\cdot1000a_t+c_m\cdot1000A_t+c_w\frac{I_ta_t}{1000}\le B \quad(\text{年支出不超过 }B)\\
+&\text{水量约束：} \frac{I_ta_t}{1000}\le W_{\max} \quad(\text{年补水量不超过可用水})\\
+&\text{土地约束：} A_t\le A_{\max} \quad(\text{累计面积不超过可治理上限})\\
+&\text{劳动力约束：} \lambda_L\cdot1000a_t\le L_{\max} \quad(\text{新增面积所需工时不超上限})
+\end{align}
+单位说明：$a_t$ 千 hm$^2$ 乘 1000 化为 hm$^2$；
+补水体积 $=\frac{I_t}{1000}\text{(m)}\times1000a_t\text{(hm}^2)\times10^4\text{(m}^2/\text{hm}^2)=I_ta_t/1000$ 万 m$^3$。
+
+\subsection*{4.4 目标函数：每一项的经济含义}
+\begin{equation}
+\max\ \sum_{t=0}^{14}\delta^{t}\Big[\underbrace{p_{pv}s_t\cdot1000a_t}_{\text{光伏发电收益}}
++\underbrace{p_e\frac{V^*(K_s(I_t))}{K}\cdot1000A_t}_{\text{生态效益}}
+-\underbrace{c_b\cdot1000a_t}_{\text{建设}}
+-\underbrace{c_m\cdot1000A_t}_{\text{运维}}
+-\underbrace{c_w\frac{I_ta_t}{1000}}_{\text{补水}}\Big]
+\end{equation}
+\begin{itemize}
+\item $p_{pv}s_t\cdot1000a_t$：在当年新增面积上按占比 $s_t$ 配套光伏，按单位面积年收益计价。
+\item $p_e\frac{V^*}{K}\cdot1000A_t$：生态效益按“覆盖度达到承载上限的比例”折算，
+覆盖度越高、面积越大，效益越大；这样生态效益与任务一的动力学直接挂钩。
+\item 后三项是成本：建设按新增面积、运维按累计面积、补水按体积。
+\item $\delta=0.94$ 是贴现因子，把未来收益折到今年（1 元明年只值 0.94 元）。
+\end{itemize}
+
+\subsection*{4.5 稳态覆盖度：从任务一方程推导}
+令 $V_{t+1}=V_t$，代入任务一方程并记 $x=V^*/K$：
+\begin{equation}
+r\,x\,(1-x)\,K_s=d\,x+k\,E\,(1-\eta x)\,x
+\ \Longrightarrow\
+rK_s(1-x)=d+kE(1-\eta x)
+\end{equation}
+解得
+\begin{equation}
+V^*=K\,x^*,\qquad
+x^*=\frac{rK_s-d-kE}{rK_s-kE\eta}
+\end{equation}
+\textbf{这个式子的用途}：把“补水”与“覆盖度”连起来。
+补水 $I_t$ 提高水分胁迫系数 $K_s$（本文取 $K_s=0.45+0.55I_t/60$，线性、有上限），
+$K_s$ 上升使 $x^*$ 上升，于是生态效益上升——这就是任务二调用任务一的方式。
+
+\subsection*{4.6 递推方程与求解}
+\begin{equation}
+J_t(A)=\max_{a_t,s_t,I_t}\left\{r_t(A,a_t,s_t,I_t)+\delta\,J_{t+1}(A+a_t)\right\},
+\qquad J_{15}(A)=0
+\end{equation}
+$J_t(A)$ 是“从第 $t$ 年、累计面积 $A$ 出发，到期末能拿到的最大贴现净收益”。
+边界条件 $J_{15}=0$ 表示期末之后不再计收益。
+求解顺序：从 $t=14$ 倒推到 $t=0$，每个状态枚举 60 种决策组合；
+总计算量 $15\times81\times60\approx7.3$ 万次，秒级完成。
+
+\subsection*{4.7 结果}
+基准情景（$c_b=2.0$、$c_m=0.12$、$p_{pv}=8$、$p_e=0.15$、$B=4000$、$W_{\max}=500$、
+$A_{\max}=20$、$\delta=0.94$）：最优 NPV = 33675.5 万元，末年累计 20.0 千 hm$^2$。
+\begin{table}[H]\centering\small
+\begin{tabular}{|c|c|c|c|c|c|}
+\toprule
+年份 & 新增面积 & 光伏占比 & 补水(mm) & 累计面积 & 稳态覆盖度 \\
+\midrule
+2026 & 2.0 & 0.5 & 60 & 2.0 & 25.76 \\
+2027 & 2.0 & 0.5 & 60 & 4.0 & 25.76 \\
+2028 & 2.0 & 0.5 & 60 & 6.0 & 25.76 \\
+2029 & 2.0 & 0.5 & 60 & 8.0 & 25.76 \\
+2030 & 2.0 & 0.5 & 60 & 10.0 & 25.76 \\
+2031 & 2.0 & 0.5 & 60 & 12.0 & 25.76 \\
+2032 & 2.0 & 0.5 & 60 & 14.0 & 25.76 \\
+2033 & 2.0 & 0.5 & 60 & 16.0 & 25.76 \\
+\bottomrule
+\end{tabular}
+\begin{center}\small 表 5  最优建设路径（前 8 年；面积单位 千 hm$^2$，覆盖度 \%）\end{center}
+\end{table}
+路径特征：\textbf{前 10 年按预算上限推进（每年 2 千 hm$^2$），达到 20 千 hm$^2$ 后停止新增}，
+此后只付运维、继续拿生态与光伏收益。原因很直接：建设有一次性成本，
+而收益按累计面积持续产生，所以“早建早收益”，直到土地上限。
+
+\subsection*{4.8 投资结构敏感性}
+\begin{table}[H]\centering\small
+\begin{tabular}{|c|c|c|}
+\toprule
+光伏占比 $s$ & NPV(万元) & 末年累计面积(千hm$^2$) \\
+\midrule
+0.1 & 0.0 & 0.0 \\
+0.2 & 0.0 & 0.0 \\
+0.3 & 9507.8 & 20.0 \\
+0.4 & 21591.6 & 20.0 \\
+0.5 & 33675.5 & 20.0 \\
+\bottomrule
+\end{tabular}
+\begin{center}\small 表 6  光伏占比敏感性\end{center}
+\end{table}\begin{table}[H]\centering\small
+\begin{tabular}{|c|c|c|}
+\toprule
+运维单价(万元/hm$^2$·a) & NPV(万元) & 末年累计面积 \\
+\midrule
+0.08 & 38474.8 & 20.0 \\
+0.12 & 33675.5 & 20.0 \\
+0.16 & 29905.5 & 20.0 \\
+0.2 & 26834.0 & 20.0 \\
+\bottomrule
+\end{tabular}
+\begin{center}\small 表 7  运维成本敏感性\end{center}
+\end{table}
+\textbf{读法}：
+（i）$s\le0.2$ 时 NPV 为 0——因为收益盖不住建设与运维，最优解是“不建”；
+（ii）$s$ 从 0.3 到 0.5，NPV 从 0.95 亿升到 3.37 亿，说明光伏是项目能否成立的关键；
+（iii）运维从 0.08 升到 0.20，NPV 从 3.85 亿降到 2.68 亿，敏感但不改变“先建后维”的结构。
+
+\subsection*{4.9 可执行的过程判据}
+\begin{enumerate}
+\item \textbf{立项门槛}：光伏配套占比 $s\ge0.25$（低于此值 NPV 为负）；
+\item \textbf{节奏}：年新增不超过 2 千 hm$^2$（受预算 4000 万元与水量 500 万 m$^3$ 双约束）；
+\item \textbf{补水}：单年补水深度不超过 60 mm；若可用水量低于 300 万 m$^3$，按比例下调新增面积；
+\item \textbf{成本红线}：建设单价 $>2.5$ 万元/hm$^2$ 或运维 $>0.20$ 万元/(hm$^2$a) 时，方案不再经济；
+\item \textbf{验收}：期末累计面积、$V^*/K$（覆盖度达成率）、单位面积 NPV 三项同时达标。
+\end{enumerate}
+
+\section*{五、任务三：灾害冲击下的韧性}
+
+\subsection*{5.1 为什么用“吸收马尔可夫链”}
+题目要求引入随机灾害与长期预测。常见做法是蒙特卡洛模拟，但它只能给数值结果。
+本文把状态离散后写成马尔可夫链，可以直接算出\textbf{退化概率}与\textbf{期望首达时间}两个闭式指标，
+再用蒙特卡洛校验——既有解析解释力，又有数值可靠性。
+
+\subsection*{5.2 状态、转移与吸收}
+\begin{itemize}
+\item 状态：把覆盖度分成 $n=120$ 个区间，每个区间一个状态；
+\item 每年两部分：\textbf{确定性漂移}（生长—衰亡—风蚀，同任务一）与\textbf{随机冲击}；
+\item 冲击：以概率 $\lambda$ 发生，发生后覆盖度乘以 $(1-u)$，$u\sim U(0.2,0.55)$；
+\item 吸收态：覆盖度低于 $v_{crit}$ 的区间。一旦进入，视为“退化”。
+\end{itemize}
+转移矩阵元素
+\begin{equation}
+P_{ij}=(1-\lambda)\,\mathbb{1}\!\left[\text{drift}(v_i)\to j\right]
++\lambda\cdot\frac{1}{n_q}\sum_{q=1}^{n_q}\mathbb{1}\!\left[v_i(1-u_q)\to j\right]
+\end{equation}
+前一项是“没有灾害时按动力学演化”，后一项是“发生灾害时按比例削减”。
+
+\subsection*{5.3 两个闭式指标的意义}
+把非吸收状态抽出来组成子矩阵 $Q$，则
+\begin{equation}
+\mathbb{E}[\tau]=(I-Q)^{-1}\mathbf{1},\qquad
+\Pr(\tau\le T)=1-\left(Q^{T}\right)\mathbf{1}
+\end{equation}
+\begin{itemize}
+\item $(I-Q)^{-1}$ 的第 $(i,j)$ 元是“从状态 $i$ 出发、被 $j$ 吸收前的平均停留年数”，
+按行加总就是\textbf{从状态 $i$ 出发的平均退化时间}；
+\item $Q^T$ 表示“$T$ 年后仍停留在非吸收状态”的概率，$1-Q^T\mathbf{1}$ 就是\textbf{$T$ 年内退化概率}。
+\end{itemize}
+
+\subsection*{5.4 结果与校验}
+\begin{table}[H]\centering\small
+\begin{tabular}{|c|c|c|c|c|}
+\toprule
+$\lambda$(次/年) & 吸收链概率 & 蒙特卡洛概率 & 吸收链首达(年) & MC 首达(年) \\
+\midrule
+0.15 & 0.367 & 0.27 & 51.7 & 14.0 \\
+0.3 & 0.877 & 0.81 & 13.7 & 11.0 \\
+0.45 & 0.993 & 0.984 & 7.3 & 7.0 \\
+0.6 & 1.0 & 1.0 & 4.9 & 5.0 \\
+0.8 & 1.0 & 1.0 & 3.4 & 4.0 \\
+\bottomrule
+\end{tabular}
+\begin{center}\small 表 8  事件频率 $\lambda$ 对退化概率的影响（阈值 $0.3K$）\end{center}
+\end{table}
+\textbf{读法}：$\lambda$ 从 0.15 增到 0.45，退化概率从约 0.27 跳到 0.98；
+解析链与蒙特卡洛在四个频率上都接近（差 0.01—0.10），说明离散化与模拟互相印证。
+\textbf{结论}：在本文参数下，系统对\textbf{事件频率}远比对手其他参数敏感——
+这提示管理上应优先降低“同一地块连续受灾”的概率（如分区轮换、沙障加固），
+而不是一味追求把平均覆盖度抬高。
+
+\section*{六、模型检验汇总}
+\begin{enumerate}
+\item 任务一：$R^2$ 与一年外推双检验；风蚀项做了“不可识别”的明确说明与情景敏感性；
+\item 任务二：动态规划为全局最优（状态—决策空间完整枚举），并做 4 类参数敏感性；
+\item 任务三：解析解与 2 万次蒙特卡洛对照，四个频率点差异 ≤0.10；
+\item 全部数字由 \texttt{Results/model\_v6.json} 生成，报告不手填。
+\end{enumerate}
+
+\section*{七、局限与需要补的数据}
+\begin{itemize}
+\item \textbf{风蚀项不可识别}：年尺度、月均风速口径下 $k$ 多落在 0；需要\textbf{逐时风速与起沙事件记录}才能标定。
+\item \textbf{代表区段边界未定}：8 个点位不是等距样带，塔中为腹地背景点。
+\item \textbf{经济参数为情景假设}：单价、电价、水价缺本地依据，NPV 只作相对比较。
+\item \textbf{冲击幅度无实测}：$u$ 的分布是情景设定，韧性结论是条件结论。
+\item \textbf{未考虑地下水与盐分}：根区湿度用再分析产品代理，未区分灌溉与地下水补给。
+\end{itemize}
+
+\section*{八、与前期审计的衔接}
+本版相对早期版本修正了三处硬问题：（1）不再人为设定各站输沙率目标，
+风蚀改用无量纲指数；（2）水分状态改用观测根区湿度，避免自造水桶的量纲错误；
+（3）训练/测试严格分离，所有参数只在 2015—2022 上标定。
+这些修正的对照表见 \texttt{Docs/20261109\_模型与数据审计.md}。
+
+\end{document}

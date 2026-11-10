@@ -38,8 +38,9 @@
 
 | 位置 | 内容 | 说明 |
 |---|---|---|
-| `Reports/model_v4.pdf` | **建模报告（当前版，7 页）** | 任务一/二保守方法、任务三创新方法；含公式、参数、约束、路径表与敏感性 |
-| `Reports/model_v4.tex` | 同上 LaTeX 源码 | `tectonic -X compile model_v4.tex` 可重编 |
+| `Reports/model_v6.pdf` | **建模报告（当前版，11 页，逐步讲解）** | 任务一植被—水分—风沙耦合（含风蚀项与遮蔽修正）、任务二动态规划、任务三吸收马尔可夫链 |
+| `Reports/model_v6.tex` | 同上 LaTeX 源码 | `tectonic -X compile model_v6.tex` 可重编 |
+| `Reports/model_v4.pdf` | 旧版建模报告（7 页） | 保留作对照，数字以 v6 为准 |
 | `Reports/model.pdf` / `.tex` | 建模报告（11-09 版） | 保留作历史对照，勿引用其中数字 |
 | `Reports/preprocess.pdf` / `.tex` | 数据预处理报告（5 页） | 数据来源、QA 抽样、派生变量、训练测试划分 |
 | `Docs/20261109_模型与数据审计.md` | 编程手审计 + 我方逐条修订状态 | 已解决的写“已解决”，未解决的写原因 |
