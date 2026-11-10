@@ -1,0 +1,255 @@
+{
+ "checks_of_v7_inputs": {
+  "W_v7_interannual_sd": {
+   "ALE": 0.0068,
+   "KEL": 0.0028,
+   "MF": 0.0107,
+   "QM": 0.0027,
+   "RQ": 0.0042,
+   "TZ": 0.0106,
+   "XT": 0.0106,
+   "YL": 0.0066,
+   "YT": 0.0125
+  },
+  "W_v7_site_mean": {
+   "ALE": 0.513,
+   "KEL": 0.995,
+   "MF": 0.361,
+   "QM": 0.741,
+   "RQ": 0.677,
+   "TZ": 0.017,
+   "XT": 0.017,
+   "YL": 0.606,
+   "YT": 0.226
+  },
+  "V_interannual_sd_pct": {
+   "ALE": 3.14,
+   "KEL": 1.49,
+   "MF": 1.67,
+   "QM": 2.04,
+   "RQ": 2.04,
+   "TZ": 1.41,
+   "XT": 0.23,
+   "YL": 2.26,
+   "YT": 3.6
+  },
+  "W_v7_between_site_variance_share": 0.9994,
+  "corr_dV_with_W_v7_pooled": -0.452,
+  "corr_dV_with_E_pooled": -0.138,
+  "corr_siteV_with_siteW_veg_sites": 0.096,
+  "f_T_range_within_site": 1.77,
+  "imputed_month_share": {
+   "ALE": 0.144,
+   "KEL": 0.311,
+   "MF": 0.008,
+   "QM": 0.083,
+   "RQ": 0.144,
+   "TZ": 0.008,
+   "XT": 0.008,
+   "YL": 0.061,
+   "YT": 0.068
+  },
+  "v7_per_station_fit": {
+   "R2_train_median": 0.004,
+   "hit_bound_frac": 0.889,
+   "d_median": 0.0,
+   "k_median": 0.025
+  }
+ },
+ "station_fit": {
+  "M0 (r,d)": {
+   "theta": [
+    0.5838,
+    0.1174
+   ],
+   "sd": [
+    0.1797,
+    0.0346
+   ],
+   "cond": 367.1693875414487,
+   "aic": -282.39,
+   "rmse_train": 0.0538,
+   "rmse_test": 0.0676,
+   "r2_test": 0.401
+  },
+  "M1 (r,d,k | eta=1)": {
+   "theta": [
+    0.5838,
+    0.1174,
+    0.0
+   ],
+   "sd": [
+    0.275,
+    0.0368,
+    0.2697
+   ],
+   "cond": 1443.2159029252007,
+   "aic": -280.39,
+   "rmse_train": 0.0538,
+   "rmse_test": 0.0676,
+   "r2_test": 0.401
+  },
+  "M2 (r,d,k,eta)": {
+   "theta": [
+    0.5719,
+    0.1054,
+    0.0097,
+    0.0
+   ],
+   "sd": [
+    1.0713,
+    0.1894,
+    0.9101,
+    111.8067
+   ],
+   "cond": 264934226.7082688,
+   "aic": -278.44,
+   "rmse_train": 0.0538,
+   "rmse_test": 0.0671,
+   "r2_test": 0.41
+  },
+  "baselines": {
+   "persistence_rmse_train": 0.06,
+   "persistence_rmse_test": 0.0576,
+   "site_mean_rmse_test": 0.0785,
+   "n_train": 49,
+   "n_test": 21
+  },
+  "leave_one_station_out_M0": {
+   "YT": {
+    "r": 0.988,
+    "d": 0.178,
+    "rmse": 0.1092,
+    "persistence": 0.0832
+   },
+   "MF": {
+    "r": 0.511,
+    "d": 0.103,
+    "rmse": 0.058,
+    "persistence": 0.0716
+   },
+   "QM": {
+    "r": 0.584,
+    "d": 0.124,
+    "rmse": 0.0676,
+    "persistence": 0.0477
+   },
+   "RQ": {
+    "r": 0.539,
+    "d": 0.11,
+    "rmse": 0.0532,
+    "persistence": 0.0553
+   },
+   "KEL": {
+    "r": 0.531,
+    "d": 0.109,
+    "rmse": 0.051,
+    "persistence": 0.0538
+   },
+   "YL": {
+    "r": 0.574,
+    "d": 0.115,
+    "rmse": 0.0391,
+    "persistence": 0.0405
+   },
+   "ALE": {
+    "r": 0.551,
+    "d": 0.116,
+    "rmse": 0.0546,
+    "persistence": 0.052
+   }
+  }
+ },
+ "cohort_transfer": {
+  "K_cohort": 45.4,
+  "v0": 13.58,
+  "plateau": 36.27,
+  "free_fit": {
+   "K": 41.65,
+   "v0": 12.7,
+   "r": 0.641,
+   "d": 0.097,
+   "net_rate": 0.543,
+   "plateau": 35.31
+  },
+  "calibration_CON1_3": {
+   "n": 116,
+   "transfer_r2": 0.401,
+   "transfer_rmse": 8.11,
+   "free_r2": 0.404,
+   "mean_baseline_r2": 0.0
+  },
+  "holdout_CON4": {
+   "n": 129,
+   "transfer_r2": 0.309,
+   "transfer_rmse": 12.16,
+   "free_r2": 0.287,
+   "mean_baseline_r2": -0.016
+  }
+ },
+ "water": {
+  "ET0_mm_yr": 1662.0,
+  "ET0g_mm_yr": 1163.0,
+  "P_mm_yr": 73.2,
+  "K_pct": 38.08,
+  "V_full_pct": 66.6,
+  "saturation_irrigation_mm_yr": 1420,
+  "years_to_90pct_of_steady": {
+   "300": 11,
+   "600": 10,
+   "1000": 10
+  },
+  "abandonment_half_life_years": 5.9,
+  "abandonment_series": [
+   34.27,
+   31.02,
+   28.77,
+   27.23,
+   26.18,
+   25.45,
+   24.96,
+   24.62,
+   24.39,
+   24.23,
+   24.12,
+   21.29,
+   18.79,
+   16.58,
+   14.64,
+   12.92,
+   11.4,
+   10.06,
+   8.88,
+   7.84,
+   6.92,
+   6.11,
+   5.39,
+   4.76,
+   4.2
+  ],
+  "rain_only": {
+   "model_steady_pct": 3.059633109565024e-10,
+   "observed_XT_pct": 1.17,
+   "observed_TZ_pct": 9.39
+  },
+  "ecotone": {
+   "observed_pct": 8.87,
+   "implied_G_mm_yr": 81.0
+  }
+ },
+ "adopted_parameters": {
+  "r": 0.5838,
+  "r_sd": 0.1797,
+  "d": 0.1174,
+  "d_sd": 0.0346,
+  "k": 0.0,
+  "k_status": "not identified; scenario range 0-0.10",
+  "eta": 1.0,
+  "eta_status": "fixed, not identifiable",
+  "K_section_pct": 38.08,
+  "x_star_no_water_limit": 0.799,
+  "c": 1.0,
+  "eta_w": 0.75,
+  "V_full_pct": 66.6
+ }
+}
