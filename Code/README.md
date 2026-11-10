@@ -1,4 +1,4 @@
-# Code/ · v7 数据流水线与预处理
+﻿# Code/ · v7 数据流水线与预处理
 
 本目录只保留 **2026-11-10 重新采集** 的流水线。旧版抓取/组装/建模/报告脚本已删除，
 历史实现见 `archive/invalidated_20261109/`（不可作为当前结果）。
@@ -12,6 +12,7 @@
 | 3 | `v7_clean.py` | 七项体检（缺失/异常/重复/类型/量纲/不平衡/时序）+ 派生 + 训练期隔离 | `Data/v7/processed/panel_monthly_{raw,clean}.csv`、`Results/v7/qc_report.json` |
 | 4 | `v7_missing.py` | 缺失专项：图谱、MCAR 检验、五种插补对比、真实缺失敏感度 | `Results/v7/missing.json`、`tab_impute_compare.csv` |
 | 5 | `v7_ablation.py` | 五套预处理方案消融（任务一/二/三复算） | `Results/v7/ablation.json`、`tab_ablation_*.csv` |
+| 7 | `v7_model1.py` | 任务一重建：合并标定、嵌套模型比较、区段像元迁移检验、水量闭合与 V*(I) 曲线 | `Results/v7/model1/`、`Figures/v7/m1_fig*.png`；说明见 `Docs/20261110_model1_v7_rebuild.md` |
 | 6 | `v7_figures.py`、`v7_fig_pre.py` | 生成报告用图 | `Figures/v7/*.png` |
 
 ## 双语言预处理脚本（面向使用者）
