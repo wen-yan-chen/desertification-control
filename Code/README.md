@@ -1,15 +1,40 @@
-# 当前可运行入口
+# Code/ · v7 数据流水线与预处理
 
-在仓库根目录执行（Python 3；依赖见 `requirements-audit.txt`）：
+本目录只保留 **2026-11-10 重新采集** 的流水线。旧版抓取/组装/建模/报告脚本已删除，
+历史实现见 `archive/invalidated_20261109/`（不可作为当前结果）。
 
-```powershell
-python Code/fetch_power_verified.py
-python Code/fetch_project_evidence.py
-python Code/audit_pipeline.py
+## 数据流水线（按顺序运行）
+
+| 顺序 | 脚本 | 作用 | 产物 |
+|---|---|---|---|
+| 1 | `v7_fetch.py` | 抓取 NASA POWER（月/日）、MODIS MOD13Q1、Open-Meteo ERA5、SoilGrids | `Data/v7/raw/*.json`、`raw/_cache/modis/` |
+| 2 | `v7_finalize_fetch.py` | 合并 MODIS 分块、按文件重建 SHA256 清单 | `raw/modis_{站}_{NDVI,QA}.json`、`raw/manifest.json` |
+| 3 | `v7_clean.py` | 七项体检（缺失/异常/重复/类型/量纲/不平衡/时序）+ 派生 + 训练期隔离 | `Data/v7/processed/panel_monthly_{raw,clean}.csv`、`Results/v7/qc_report.json` |
+| 4 | `v7_missing.py` | 缺失专项：图谱、MCAR 检验、五种插补对比、真实缺失敏感度 | `Results/v7/missing.json`、`tab_impute_compare.csv` |
+| 5 | `v7_ablation.py` | 五套预处理方案消融（任务一/二/三复算） | `Results/v7/ablation.json`、`tab_ablation_*.csv` |
+| 6 | `v7_figures.py`、`v7_fig_pre.py` | 生成报告用图 | `Figures/v7/*.png` |
+
+## 双语言预处理脚本（面向使用者）
+
+| 文件 | 说明 |
+|---|---|
+| `preprocess_v7.py` | Python 主程序：路径提示、异常处理、逐步中间结果、前后可视化、完整性断言；输出 CSV/XLSX/JSON |
+| `preprocess_v7.m` | MATLAB R2020b+ 等价实现，只用内置函数；输出 `panel_monthly_clean_matlab.csv` |
+
+两者输入都是 `Data/v7/processed/panel_monthly_raw.csv`，输出可逐列比对。
+MATLAB 版**尚未在真实 MATLAB 环境运行过**，首次使用请自行校验（脚本内含断言）。
+
+## 依赖
+
+```bash
+pip install pandas numpy matplotlib openpyxl scipy
 ```
 
-前两个脚本获取NASA POWER官方月数据与政府工程网页，已有原响应时复用，失败不以模拟值补齐。原响应已入库，因此审计脚本可以完全离线复核哈希、单位、记录、旧截尾改动和同高度产品一致性，并重建探索面板与诊断图。
+- Python 3.8–3.11
+- MATLAB R2020b 及以上（无需工具箱）
 
-`03_modeling.py`、`preprocess.py`目前明确以非零状态退出，防止误用旧流程。旧抓取、模型、报告生成、MATLAB预处理及硬编码本机路径的转换工具保存在 `archive/invalidated_20261109/Code/`。包括旧建模报告生成器在内，这些都不再是当前运行入口；不能重新生成被撤销的报告。
+## 说明
 
-当前 `Reports/model.tex` 是人工维护的模型规范；可用XeLaTeX编译。实现选择不由建模文档限定。此轮代码是数据补充与审计工具，不是任务三所说的正式模型求解。
+- 原始响应体积较大（约 14 MB，672 个文件），**不入库**；`Data/v7/raw/manifest.json` 保存了每个请求的
+  URL、字节数与 SHA256，可用 `v7_fetch.py` 完整重放。
+- 仓库内 `Data/v7/processed/` 保留了处理后的面板与元数据，可直接用于建模，不必重新抓取。

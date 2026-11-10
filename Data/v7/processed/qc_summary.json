@@ -1,0 +1,51 @@
+{
+ "before": {
+  "shape": [
+   1188,
+   45
+  ],
+  "duplicates_site_month": 0,
+  "missing": {
+   "T2M": {
+    "n": 0,
+    "pct": 0.0
+   },
+   "PRECTOTCORR": {
+    "n": 0,
+    "pct": 0.0
+   },
+   "GWETROOT": {
+    "n": 0,
+    "pct": 0.0
+   },
+   "WS10M_MAX": {
+    "n": 0,
+    "pct": 0.0
+   },
+   "ndvi_mvc_qa": {
+    "n": 110,
+    "pct": 9.26
+   }
+  },
+  "range_violation": {
+   "Tmin>Tmean": 0,
+   "P<0": 0,
+   "GWET∉[0,1]": 0
+  }
+ },
+ "imputation": {
+  "V_pct": {
+   "missing_before": 110,
+   "missing_after": 0
+  }
+ },
+ "checks": {
+  "行数": 1188,
+  "站点数": 9,
+  "月份数": 132,
+  "重复主键": 0,
+  "V_pct 仍缺失": 0,
+  "W 越界": 0,
+  "V 越界": 0
+ }
+}

@@ -1,6 +1,0 @@
-﻿id,source_id,locator,location,meaning,original_value,original_unit,converted_value,converted_unit,transformation,evidence_type,applicability
-G01-1,G01,后河坝三期工程模式段落,民丰后河坝三期,芦苇方格边长,1.5,m,1.5,m,identity,local_reported_configuration,不是最优尺寸；不是草方格保护系数
-G01-2,G01,后河坝三期工程模式段落,民丰后河坝三期,报道果树栽植密度,66,plants/mu,990,plants/ha,66*15,local_reported_configuration,沙枣等果树配置，不适用于所有灌木或风洞模型
-G01-3,G01,后河坝三期工程模式段落,民丰后河坝三期,三不模式成本节约,964,CNY/mu,14460,CNY/ha,964*15,reported_saving_only,节约额不是总造价；价格年/基准未详述，不能设为建设单价
-G02-1,G02,分别在民丰县于田县实施段落,民丰中国铁建项目,生物治沙规划面积,130000,mu,8666.666666666666,ha,130000/15,planned_area,2024年计划，不是已完成面积，缺GIS边界
-G02-2,G02,分别在民丰县于田县实施段落,于田中国铁建项目,工程固沙规划面积,105000,mu,7000,ha,105000/15,planned_area,不同县和工程类型，不与民丰面积相加作均质区段

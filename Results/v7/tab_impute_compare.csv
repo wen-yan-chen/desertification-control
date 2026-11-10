@@ -1,0 +1,11 @@
+﻿method,scheme,RMSE_pp,MAE_pp,bias_pp,n
+mean,MCAR_10pct,9.272,7.6,0.306,113
+median,MCAR_10pct,9.429,7.571,0.976,113
+linear,MCAR_10pct,3.075,2.24,-0.055,113
+clim,MCAR_10pct,2.565,1.929,0.175,113
+persistence,MCAR_10pct,5.005,3.475,0.711,113
+mean,dust_10pct,9.02,6.984,-4.172,127
+median,dust_10pct,9.398,7.102,-3.981,127
+linear,dust_10pct,5.414,3.775,-1.851,127
+clim,dust_10pct,3.596,2.501,-0.082,127
+persistence,dust_10pct,5.799,3.895,-1.701,127

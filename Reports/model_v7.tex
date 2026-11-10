@@ -1,0 +1,1013 @@
+﻿% !TEX program = xelatex
+% =============================================================================
+%  2026 CQU_MCM  B 题《治沙是一项精细活》
+%  建模说明：题目解读 · 公式 · 参数 · 约束 · 算法
+%  说明：本文只写"模型怎么建、每个符号是什么、为什么这样建、约束是什么"，
+%        不包含任何数据结果与求解数值；数据与结果另文给出。
+%  编译：xelatex 两遍（需要 ctex 宏包与中文字体）
+% =============================================================================
+\documentclass[11pt,a4paper]{ctexart}
+
+\usepackage[margin=2.3cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{bm}
+\usepackage{booktabs,tabularx,array,longtable,multirow}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage[hidelinks]{hyperref}
+
+\setlength{\parindent}{2em}
+\setlength{\parskip}{0.30em}
+\renewcommand{\arraystretch}{1.22}
+\captionsetup{font=small,labelsep=quad}
+\setlist[itemize]{leftmargin=1.6em,itemsep=1pt,topsep=2pt}
+\setlist[enumerate]{leftmargin=1.9em,itemsep=1pt,topsep=2pt}
+
+\newtheorem{proposition}{命题}
+\newtheorem{assumption}{假设}
+\newtheorem{definition}{定义}
+\newtheorem{remark}{注}
+\renewcommand{\proofname}{证明}
+
+% 常用记号
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Prob}{\mathbb{P}}
+\newcommand{\ind}[1]{\mathbf{1}\!\left[#1\right]}
+\newcommand{\clip}[1]{\operatorname{clip}\!\left(#1\right)}
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\unit}[1]{\,\mathrm{#1}}
+
+\title{\bfseries 治沙工程的耦合动力学、最优调度与韧性评估\\[6pt]
+\large 建模说明：题目解读、公式、参数与约束\\[2pt]
+\normalsize （2026 CQU\_MCM B 题 · 只含建模部分，不含数据结果）}
+\author{CQU\_MCM 2026 · B 题}
+\date{2026-11-10}
+
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+
+\begin{center}
+\begin{minipage}{0.88\textwidth}
+\small\itshape
+本文回答四个问题：题目每一问在数学上究竟要求什么；用什么方程或算法刻画它；
+方程中每一个符号的含义、单位与取值范围是什么；模型必须满足哪些约束。
+所有需要数据才能确定的量，本文只给出符号、量纲与取值域，不给数值。
+\end{minipage}
+\end{center}
+
+\vspace{0.6em}
+\tableofcontents
+\newpage
+
+% =============================================================================
+\section{题目解读：三问构成一条链}
+% =============================================================================
+
+\subsection{原文要求与数学对象的对应}
+
+题目的三问不是三个并列的小题，而是\textbf{同一个系统的三个层次}：第一问给出系统的运动规律，
+第二问在这条规律上做最优决策，第三问在规律上叠加随机扰动。若三问各建一套互不相干的模型，
+任务二、三就会失去物理基础，也无法互相校验。表~\ref{tab:map} 把每一问的原文要求翻译成数学对象。
+
+\begin{table}[H]\centering\small
+\begin{tabularx}{\textwidth}{|c|X|X|}
+\toprule
+小问 & 原文要求（要点） & 对应的数学对象 \\
+\midrule
+任务一 & 选一段代表性区域，建立植被覆盖度与土壤有效含水量的\textbf{耦合动力学}模型，
+研究状态变量变化及其影响因素 &
+状态向量 $\bm{x}_t=(V_t,W_t)$ 的\textbf{确定性差分方程}
+$\bm{x}_{t+1}=\bm{F}(\bm{x}_t;\bm{\theta})$，外加一个\textbf{参数标定问题}
+$\min_{\bm{\theta}}\sum_t\|\bm{F}^t(\bm{x}_0;\bm{\theta})-\tilde{\bm{x}}_t\|^2$ \\
+\addlinespace
+任务二 & 把建设过程视为\textbf{最优控制或动态优化}；决策含新增面积、生态补水、
+投资结构（含光伏）、劳动力；目标权衡生态效益与经济成本 &
+\textbf{有限期离散时间最优控制}：状态 $A_t$、决策 $\bm{u}_t=(a_t,I_t,s_t)$、
+转移 $A_{t+1}=A_t+a_t$、目标为贴现净现值，用\textbf{动态规划}求全局最优 \\
+\addlinespace
+任务三 & 在任务一、二基础上引入\textbf{随机灾害过程}与\textbf{长期预测} &
+\textbf{复合泊松冲击}驱动的\textbf{吸收马尔可夫链}：状态为覆盖度网格，
+吸收态为退化，输出退化概率与期望首达时间 \\
+\addlinespace
+任务四 & 一页简报 & 由前三问的输出派生（本文不展开） \\
+\bottomrule
+\end{tabularx}
+\caption{三问的原文要求与数学对象对照}\label{tab:map}
+\end{table}
+
+\subsection{三问之间的接口}
+
+三个接口决定了模型必须怎么写：
+
+\begin{enumerate}
+\item \textbf{任务一 $\to$ 任务二}：任务二目标函数中的"生态效益"不能凭空设定，
+必须由任务一的\textbf{稳态覆盖度} $V^*$ 提供；而 $V^*$ 又依赖补水量 $I_t$。
+因此任务一必须给出\textbf{解析的} $V^*(K_s)$，否则任务二每算一个决策都要重跑一遍动力学，
+计算量爆炸且不可解释。
+\item \textbf{任务一 $\to$ 任务三}：任务三的"漂移项"就是任务一的右端向量场 $\bm{F}$；
+两处必须用\textbf{同一组}参数，否则任务三的结论无法回溯到任务一。
+\item \textbf{任务二 $\to$ 任务三}：任务二的\textbf{建设路径} $\{A_t\}$ 决定了暴露在灾害下的资产规模，
+任务三的退化概率应作为"该路径是否稳健"的检验，而不是另起一套。
+\end{enumerate}
+
+\subsection{建模假设}
+
+每条假设都给出理由与"若被违反会怎样"，以便在检验章节逐条检查。
+
+\begin{assumption}[年尺度]\label{as:year}
+状态变量按年递推，年内过程（生长季、风季）已聚合成年值。
+\emph{理由}：题目给的规划期限是 10--20 年，决策按年做；且公开气象/遥感产品的年际可比性最好。
+\emph{代价}：年尺度会把"一场沙尘暴"抹成"一个月均值"，风蚀项的边际贡献容易被降水与灌溉淹没，
+参数 $k$ 因而可能弱可识别（第~\ref{sec:diag} 节给出可识别性判据）。
+\end{assumption}
+
+\begin{assumption}[控制体与空间均一]\label{as:box}
+把锁边带中一段代表性区段视为一个空间均一的控制体，用点位数据代表区段。
+\emph{理由}：区段宽数十米至数千米，远小于再分析格点（0.1\textdegree--0.5\textdegree），
+无法在格点内做梯度；且题目只要求"选一段代表性区域"。
+\emph{代价}：结论只对该区段成立，不能直接外推到全长 3046 km。
+\end{assumption}
+
+\begin{assumption}[承载上限由观测确定]\label{as:K}
+$K$ 不是自由参数，而由覆盖度观测的高分位放大一个安全系数确定。
+\emph{理由}：若让 $K$ 自由拟合，它必然顶到参数上界（不可识别），
+而 $K$ 的物理含义（局地水热条件能支撑的最大覆盖度）本应由观测界定。
+\end{assumption}
+
+\begin{assumption}[风蚀损伤的比例性]\label{as:erosion}
+风蚀造成的覆盖度损失与"当前覆盖度"和"有效侵蚀强度"的乘积成正比。
+\emph{理由}：可被吹蚀、埋压的植被量正比于现存植被量；同时植被越密地表越粗糙、风蚀越弱，
+故对侵蚀强度乘一个随 $V$ 递减的遮蔽因子。
+\end{assumption}
+
+\begin{assumption}[补水只改变水分胁迫系数]\label{as:water}
+生态补水通过提高水分胁迫系数 $K_s$ 影响稳态覆盖度，不直接进入年际动力学。
+\emph{理由}：补水是工程措施，效果以"维持根区水分"体现，年尺度上表现为承载能力的提升。
+\end{assumption}
+
+\begin{assumption}[灾害为泊松到达、幅度独立同分布]\label{as:poisson}
+灾害事件按泊松过程到达，年发生次数 $N_t\sim\mathrm{Poisson}(\lambda)$；
+每次事件使覆盖度按比例 $u$ 损失，$u$ 独立同分布。
+\emph{理由}：沙尘暴/极端干旱在年尺度上可近似为稀有独立事件；
+\emph{代价}：忽略了事件的自激与聚集（一次强沙尘后地表粗化，下一次损失可能更小），
+这一点在敏感性中讨论。
+\end{assumption}
+
+% =============================================================================
+\section{数据需求：从公式反推字段}\label{sec:data}
+% =============================================================================
+
+\subsection{反推方法}
+
+不从"网上有什么数据"出发，而从公式出发：把模型中出现的每一个符号归入五类之一，
+只有前三类需要数据。
+
+\begin{table}[H]\centering\small
+\begin{tabularx}{\textwidth}{|c|X|c|}
+\toprule
+类别 & 含义 & 是否需要数据字段 \\
+\midrule
+观测 & 可直接测量的量（气温、NDVI、土壤湿度） & 需要 \\
+派生 & 由观测经确定性公式算出（$E$、$V$、$V^*$、$K_s$） & 需要其上游观测 \\
+标定 & 由观测与模型反演的参数（$r,d,k,\eta$） & 需要观测做目标函数 \\
+决策 & 由优化决定的量（$a_t,I_t,s_t$） & 不需要 \\
+情景 & 由政策/文献设定的量（单价、$\lambda$、$u$ 分布） & 不需要（但需区间） \\
+\bottomrule
+\end{tabularx}
+\caption{符号的五种类型}\label{tab:five}
+\end{table}
+
+\subsection{字段清单与最小充分性}
+
+表~\ref{tab:fields} 是全部字段的清单。所谓\textbf{最小充分集}，是指"少一个就标定不出参数、
+多一个也不增加信息"的那一组；表中"可替代"一列说明冗余来源，
+这决定了采集失败时的降级方案。
+
+\begin{table}[H]\centering\footnotesize
+\begin{tabularx}{\textwidth}{|c|X|c|c|X|}
+\toprule
+符号 & 所需字段（含单位） & 时间分辨率 & 空间分辨率 & 最小充分性说明 \\
+\midrule
+$V_t$ & 归一化植被指数 NDVI（无量纲，$[-0.2,1]$），或直接给覆盖度（\%）
+& 16 天合成 & 250 m & 由像元二分反演 $V$；16 天是产品固有周期，需聚合到月 \\
+$W_t$ & 根区土壤湿度 $W\in[0,1]$（饱和度）或体积含水量 $\theta$（m$^3$/m$^3$）
+& 月 & 0.1\textdegree--0.5\textdegree & 若只有 $\theta$，须再用土壤孔隙度 $\phi$ 换算 $W=\theta/\phi$ \\
+$E_t$ & 10 m 风速 $u_{10}$（m/s），\textbf{日最大值} & 日 & 0.1\textdegree--0.5\textdegree
+& 只需风速，$E$ 由 Lettau 公式派生；用日均值会系统性低估（见 \S\ref{sec:t1} 的说明） \\
+$T_t$ & 2 m 气温 $T$、日最高 $T^{\max}$、日最低 $T^{\min}$（\textdegree C）
+& 月/日 & 0.1\textdegree--0.5\textdegree & $T$ 进温度响应 $f(T)$，$T^{\max}-T^{\min}$ 进 ET$_0$ \\
+$K$ & 不需要外部字段 & — & — & 由 $V$ 的训练期 95\% 分位 $\times$ 安全系数确定 \\
+$\lambda$ & 10 m 日最大风速序列（同上） & 日 & 0.1\textdegree--0.5\textdegree
+& 由超阈频率估计，不单独采集 \\
+$u$ & 不需要字段 & — & — & 情景给定分布 \\
+$c_b,c_m,c_w$ & 不需要字段 & — & — & 情景/文献给定，给出区间 \\
+$p_{pv},p_e$ & 不需要字段 & — & — & 同上 \\
+\bottomrule
+\end{tabularx}
+\caption{模型字段清单与最小充分性}\label{tab:fields}
+\end{table}
+
+\noindent\textbf{最小充分集}（缺一不可）：
+\[
+\mathcal{D}_{\min}=\Big\{\ \mathrm{NDVI},\ T,\ T^{\max},\ T^{\min},\ u_{10}^{\max},\ W\ \Big\},
+\]
+\textbf{可选增强集}：$\{\,P,\ R_s,\ \mathrm{RH},\ u_{10}^{\mathrm{mean}}\,\}$。可选集不进入状态方程，
+只用于\emph{交叉核验}（例如用 $P/ET_0$ 构造干燥度指数，检验水分状态是否合理）
+与\emph{敏感性分析}。这一区分很重要：把可选字段硬塞进模型，只会增加共线性与不可解释的自由度。
+
+\subsection{为什么必须是月尺度，而不是年尺度}
+
+年尺度模型只需要年值，但\textbf{参数标定}需要月尺度，理由是可识别性。
+
+设第 $i$ 个参数为 $\theta_p$，定义灵敏度 $s_t^{(p)}=\partial V_t^{\mathrm{mod}}/\partial\theta_p$。
+对任务一的状态方程逐项求导，得\textbf{前向灵敏度递推}
+\begin{equation}\label{eq:sens}
+s_{t+1}^{(p)}=A_t\,s_t^{(p)}+b_t^{(p)},\qquad
+A_t=1+r\Big(1-\tfrac{2V_t}{K}\Big)W_tf(T_t)-d-kE_t\Big(1-\tfrac{2\eta V_t}{K}\Big),
+\end{equation}
+\begin{equation}\label{eq:sensb}
+\bm{b}_t=
+\begin{pmatrix}
+V_t\big(1-V_t/K\big)W_tf(T_t)\\[2pt]
+-V_t\\[2pt]
+-E_t\big(1-\eta V_t/K\big)V_t\\[2pt]
+kE_tV_t^{2}/K
+\end{pmatrix},
+\end{equation}
+其中 $\bm{b}_t$ 的四个分量依次是右端项对 $r,d,k,\eta$ 的偏导（注意
+$\partial E_{\mathrm{eff}}/\partial\eta=-E_tV_t/K$，故对 $\eta$ 的导数带正号）。
+
+把 $s_t^{(p)}$ 按列排成灵敏度矩阵 $\bm{S}\in\R^{N\times4}$。若 $\bm{S}$ 的列近似共线，
+则不同参数组合会产生几乎相同的轨迹，参数\textbf{不可识别}。判据是条件数
+\begin{equation}\label{eq:cond}
+\kappa(\bm{S}^{\top}\bm{S})=\frac{\lambda_{\max}(\bm{S}^{\top}\bm{S})}{\lambda_{\min}(\bm{S}^{\top}\bm{S})},
+\end{equation}
+经验阈值 $\kappa>10^{6}$ 视为弱可识别。
+
+\textbf{结论（为什么需要月尺度）}：$A_t$ 中的 $W_t f(T_t)$ 在年尺度上被平均成接近常数的因子，
+使 $\bm{b}_t$ 的前两个分量与 $k,\eta$ 的分量高度相关，$\kappa$ 迅速增大；
+月尺度保留了"春季大风、夏季生长"的相位差，$\bm{S}$ 的列才可能张成四维空间。
+同理，要单独识别 $k$，必须让 $E_t$ 在年内有足够变差——这就是为什么 $E$ 必须用\textbf{日最大风速}构造，
+而不是月均风速（见 \S\ref{sec:t1}）。
+
+\subsection{字段的质量门槛（作为数据约束）}
+
+下列条件不是"建议"，而是\textbf{字段能否进入模型}的硬约束；不满足的站点必须降级或剔除，
+并在此处留下记录。
+
+\begin{table}[H]\centering\small
+\begin{tabularx}{\textwidth}{|c|c|X|}
+\toprule
+字段 & 取值域约束 & 质量门槛 \\
+\midrule
+$V$ & $0\le V\le 100$ & 单站训练期缺失率 $\le 20\%$；否则该站不参与标定 \\
+$W$ & $0\le W\le 1$ & 缺失率 $\le 10\%$；且与第二来源的秩相关 $\ge 0.3$ \\
+$T,T^{\max},T^{\min}$ & $-40\le T\le 50$，且 $T^{\min}\le T\le T^{\max}$
+& 物理一致性违反数 $=0$；与第二来源偏差 $|\Delta T|\le 3$\textdegree C \\
+$E$ & $E\ge0$，且 $\mathrm{median}(E)>0$ & 若 $>50\%$ 的月份 $E=0$，说明口径把信号抹平，须重算 \\
+$\lambda$ & $0<\lambda<1$ & 事件数 $\ge 10$，否则只能给区间不能给点估计 \\
+\bottomrule
+\end{tabularx}
+\caption{字段的取值域与质量门槛（可直接作为预处理阶段的验收条件）}\label{tab:quality}
+\end{table}
+
+% =============================================================================
+\section{任务一：植被—水分—风沙耦合动力学}\label{sec:t1}
+% =============================================================================
+
+\subsection{建模思路：把一年的变化拆成三个可解释的过程}
+
+题目要求"植被覆盖度与土壤有效含水量耦合"，背景又强调风沙。若直接把覆盖度写成时间的函数，
+就只剩拟合而没有机理。因此把一年的变化拆成三块，每块都有独立物理含义，再用两个耦合通道连起来：
+
+\begin{enumerate}
+\item \textbf{生长}：水分充足、温度适宜时覆盖度上升，但受资源上限约束（Logistic 型）；
+\item \textbf{衰亡}：自然枯死，与现存覆盖度成正比（一阶衰减）；
+\item \textbf{风蚀损伤}：风沙打磨与埋压使覆盖度下降；而植被越密、地表越粗糙，风蚀越弱。
+\end{enumerate}
+
+\textbf{两个耦合通道}：水分 $W$ 进入生长项（水限制生长）；覆盖度 $V$ 进入风蚀项（植被削弱风蚀），
+风蚀再反过来削减植被。这样"植被—水分—风沙"两两有反馈，且没有引入无法标定的额外状态。
+
+\subsection{状态方程与逐项解释}
+
+\begin{equation}\label{eq:t1}
+\boxed{\;
+V_{t+1}=V_t
++\underbrace{r\,V_t\Big(1-\frac{V_t}{K}\Big)W_t\,f(T_t)}_{\text{生长项 }G}
+-\underbrace{d\,V_t}_{\text{衰亡项 }L}
+-\underbrace{k\,E_{\mathrm{eff},t}\,V_t}_{\text{风蚀项 }D}
+\;}
+\end{equation}
+
+\begin{table}[H]\centering\small
+\begin{tabularx}{\textwidth}{|c|X|c|c|}
+\toprule
+符号 & 含义 & 单位 & 类型 \\
+\midrule
+$V_t$ & 第 $t$ 年末植被覆盖度（状态变量） & \% & 观测/派生 \\
+$W_t$ & 根区水分胁迫（0 全干，1 不受限） & — & 观测/归一 \\
+$T_t$ & 年平均气温 & \textdegree C & 观测 \\
+$E_{\mathrm{eff},t}$ & 有效侵蚀强度（经植被遮蔽修正） & — & 派生 \\
+$K$ & 局地承载上限（覆盖度上限） & \% & 由 $V$ 定 \\
+$r$ & 内在增长率 & a$^{-1}$ & 标定 \\
+$d$ & 自然衰亡率 & a$^{-1}$ & 标定 \\
+$k$ & 风蚀损伤系数 & — & 标定 \\
+$\eta$ & 植被遮蔽系数（0 无遮蔽，1 完全遮蔽） & — & 标定 \\
+$f(T)$ & 温度响应因子，$f\in[0,1]$ & — & 设定 \\
+\bottomrule
+\end{tabularx}
+\caption{任务一的状态、参数与单位}\label{tab:t1sym}
+\end{table}
+
+\paragraph{逐项解释。}
+\begin{itemize}
+\item \textbf{生长项} $G=rV(1-V/K)Wf(T)$：$rV$ 是"每株每年能长多少"（指数增长）；
+$(1-V/K)$ 是\textbf{资源饱和因子}——$V\to K$ 时它趋于 0，保证覆盖度不会无限增长；
+再乘 $W$（水不够就长不动）与 $f(T)$（太冷不长）。三项相乘意味着\textbf{三个条件必须同时满足}才生长，
+这是连乘而不是相加的原因：水、热、资源是"与"关系，不是"或"关系。
+\item \textbf{衰亡项} $L=dV$：每年固定比例枯死，对应一阶线性衰减，半衰期 $\ln2/d$。
+\item \textbf{风蚀项} $D=kE_{\mathrm{eff}}V$：$V$ 是可被损伤的植被量，$kE_{\mathrm{eff}}$ 是单位植被的\textbf{相对}损伤率。
+$k\ge0$ 是物理约束（风蚀只会减少植被）。
+\end{itemize}
+
+\subsection{辅助关系：遮蔽、温度响应、侵蚀强度、承载上限}
+
+\begin{align}
+E_{\mathrm{eff},t}&=E_t\Big(1-\eta\frac{V_t}{K}\Big),\label{eq:eeff}\\
+f(T_t)&=\min\Big\{1,\ \max\Big\{0,\ \frac{T_t-5}{20}\Big\}\Big\},\label{eq:fT}\\
+E_t&=\frac{q_t}{\overline{q}},\qquad
+q_t=C\frac{\rho}{g}u_{*t}^{2}\big(u_{*t}-u_{*T}\big),\qquad
+u_{*t}=\frac{\kappa\,u_{10,t}^{\max}}{\ln(10/z_0)},\label{eq:lettau}\\
+K&=1.15\times Q_{0.95}\big(\{V_t\}_{t\in\mathcal{T}_{\mathrm{train}}}\big).\label{eq:K}
+\end{align}
+
+\paragraph{每一式的含义。}
+\begin{itemize}
+\item 式~\eqref{eq:eeff}：遮蔽因子 $(1-\eta V/K)$ 随覆盖度线性下降，$\eta=0$ 表示植被完全不挡风，
+$\eta=1$ 表示覆盖度达到上限时风蚀被完全屏蔽。线性形式是可标定的最简形式；
+若用指数形式 $\exp(-\eta V/K)$，参数含义不变但多一处非线性，年尺度数据不足以区分两者。
+\item 式~\eqref{eq:fT}：梯形温度响应。低于 5\textdegree C 不生长（避免冬季虚假增长），
+5--25\textdegree C 线性上升，高于 25\textdegree C 不再额外促进（避免高温月份高估）。
+\item 式~\eqref{eq:lettau}：Lettau 输沙公式给出\textbf{单位宽度}质量通量 $q$（kg\,m$^{-1}$s$^{-1}$）。
+其中 $\kappa=0.40$ 为卡门常数，$z_0$ 为粗糙度长度，$u_{*}$ 为摩擦速度，$u_{*T}$ 为起沙阈值对应的摩擦速度，
+$C,\rho,g$ 为经验系数、空气密度与重力加速度。
+\textbf{为什么要归一成无量纲指数}：$q$ 要变成"某区段每年多少吨"必须再知道区段宽度、面积与时间，
+而题目没给；强行换算会造成量纲不闭合。因此只用站内归一 $E_t=q_t/\overline q$，
+它表达"相对风蚀强度"（1 表示与多年平均相当），不承担绝对输沙量的解释。
+\item 式~\eqref{eq:K}：$Q_{0.95}$ 是训练期 $V$ 的 95\% 分位，乘 1.15 作为安全系数。
+用分位而非最大值，是为了避免单年异常（如灌溉绿洲）把上限抬高。
+\end{itemize}
+
+\begin{remark}[为什么用日最大风速构造 $E$]
+若用月均风速 $u_{10}$ 代入式~\eqref{eq:lettau}，在干旱区月均风速常低于起沙阈值，
+$q$ 在多数月份被截断为 0，$E$ 退化成一列零，$k$ 必然标定为 0。
+这不是"风蚀不重要"，而是"口径把信号抹掉了"。沙粒起动由阵风控制，
+因此必须用\textbf{日最大风速}（或其月内均值）作为 $u_{10}^{\max}$。
+\end{remark}
+
+\subsection{无量纲化与稳态解}
+
+令 $x_t=V_t/K\in[0,1]$ 为\textbf{相对覆盖度}，代入式~\eqref{eq:t1} 并两边除以 $K$：
+\begin{equation}\label{eq:x}
+x_{t+1}=x_t\Big[1+r(1-x_t)W_tf(T_t)-d-kE_t(1-\eta x_t)\Big].
+\end{equation}
+稳态要求 $x_{t+1}=x_t=x^*$。若 $x^*>0$，两边约去 $x^*$：
+\begin{equation}\label{eq:steady0}
+r(1-x^*)Wf(T)-d-kE(1-\eta x^*)=0,
+\end{equation}
+整理得\textbf{稳态相对覆盖度}
+\begin{equation}\label{eq:xstar}
+\boxed{\;x^*=\frac{r\,Wf(T)-d-kE}{r\,Wf(T)-kE\eta}\;}
+\qquad\Longrightarrow\qquad
+V^*=K\,x^*.
+\end{equation}
+
+\begin{proposition}[稳态的可行性与单调性]\label{prop:steady}
+记 $R:=rWf(T)$ 为"有效增长率"。若 $R>d+kE$，则
+(i) $x^*\in(0,1)$ 且唯一；(ii) $\partial x^*/\partial R>0$；
+(iii) $\partial x^*/\partial(kE)<0$（当 $\eta<1$）。
+\end{proposition}
+\begin{proof}
+由 $R>d+kE\ge kE\ge kE\eta$ 知式~\eqref{eq:xstar} 的分母 $R-kE\eta>0$。
+分子 $R-d-kE>0$，故 $x^*>0$；又
+$1-x^*=\dfrac{(R-kE\eta)-(R-d-kE)}{R-kE\eta}=\dfrac{d+kE(1-\eta)}{R-kE\eta}\ge0$，
+故 $x^*\le1$，等号仅在 $d=0$ 且 $kE(1-\eta)=0$ 时成立。
+求偏导：
+\[
+\frac{\partial x^*}{\partial R}=\frac{(R-kE\eta)-(R-d-kE)}{(R-kE\eta)^2}
+=\frac{d+kE(1-\eta)}{(R-kE\eta)^2}\ \ge 0,
+\]
+\[
+\frac{\partial x^*}{\partial(kE)}
+=\frac{-(R-kE\eta)+\eta(R-d-kE)}{(R-kE\eta)^2}
+=\frac{-R(1-\eta)-\eta d}{(R-kE\eta)^2}\ <0\quad(\eta<1).
+\]
+\end{proof}
+
+\paragraph{这个命题的用处。}
+(i) 给出\textbf{系统不退化的充分条件} $R>d+kE$：有效生长必须超过自然衰亡与风蚀损失之和。
+(ii) 说明\textbf{补水一定有效}：补水提高 $W$，从而提高 $R$，$x^*$ 单调上升——
+这正是任务二把"补水 $I_t$"当作决策变量的合法性来源。
+(iii) 说明\textbf{风蚀一定有害}，且 $\eta$ 越接近 1（遮蔽越强）危害越小，
+这为"沙障＋植被"的组合措施提供了理论依据。
+
+\subsection{参数、约束与标定}
+
+\subsubsection{参数分类}
+
+\begin{table}[H]\centering\small
+\begin{tabularx}{\textwidth}{|c|c|X|X|}
+\toprule
+参数 & 处理方式 & 理由 & 取值域（约束） \\
+\midrule
+$K$ & 固定（式~\eqref{eq:K}） & 自由拟合必顶到边界，不可识别 & $K>0$ \\
+$r,d,k,\eta$ & 标定 & 决定动态快慢与风蚀强度 & $r\in[0.02,1.5]$，$d\in[0,0.3]$，
+$k\in[0,0.5]$，$\eta\in[0,0.95]$ \\
+$f(T)$ 形式 & 固定 & 常规温度响应，避免过拟合 & — \\
+$W_t,E_t,T_t$ & 直接用观测/派生 & 不另造状态，避免量纲问题 & 见表~\ref{tab:quality} \\
+$u_{*T},z_0,C$ & 取文献常用值 & 无法逐站校准 & — \\
+\bottomrule
+\end{tabularx}
+\caption{任务一的参数处理}\label{tab:t1par}
+\end{table}
+
+\subsubsection{约束条件}
+
+标定问题必须满足三类约束，缺一不可：
+
+\begin{align}
+&\text{（盒约束）} && \theta=(r,d,k,\eta)\in\Theta=[0.02,1.5]\times[0,0.3]\times[0,0.5]\times[0,0.95],\label{eq:box}\\
+&\text{（非负性）} && d+kE_{\max}\le 1,\quad\text{保证 }V_{t+1}\ge V_t(1-d-kE_{\mathrm{eff}})\ge0,\label{eq:nonneg}\\
+&\text{（物理符号）} && k\ge0,\quad \eta\ge0,\quad r>0,\quad d\ge0.\label{eq:sign}
+\end{align}
+式~\eqref{eq:nonneg} 常被忽略：若 $d+kE$ 超过 1，模型会给出负覆盖度，
+后续所有对数、比值与马尔可夫链都会失效。
+
+\subsubsection{标定问题}
+
+\begin{equation}\label{eq:obj}
+\min_{\theta\in\Theta}\ J(\theta)=\frac{1}{N}\sum_{t=1}^{N}\Big(V_t^{\mathrm{mod}}(\theta)-\tilde V_t\Big)^2
+\end{equation}
+其中 $V_t^{\mathrm{mod}}(\theta)$ 由式~\eqref{eq:t1} 从初始观测 $\tilde V_0$ 逐年递推得到，$N$ 为训练年数。
+
+\paragraph{为什么不用梯度法（Newton/Levenberg--Marquardt）作为主算法。}
+目标函数通过逐年递推定义，梯度需靠式~\eqref{eq:sens} 的灵敏度递推得到；理论上可算，
+但 $J(\theta)$ 在边界处不可微（$k=0$ 被截断），且只有 4 个参数，二阶方法的实现与调参成本高于收益。
+
+\paragraph{为什么用坐标下降＋多起点，而不是遗传算法/粒子群。}
+(i) 参数只有 4 个、每个都有明确物理区间，坐标下降的每步都可在区间内解释；
+(ii) 目标函数无解析梯度但有界，坐标下降不需要求导、不会因步长发散；
+(iii) 多起点（本文取 25 组）用于跳出局部极小；
+(iv) 遗传算法/粒子群引入随机性且需要调种群规模，对本问题属于"用大炮打蚊子"。
+
+\begin{algorithm}[H]
+\caption{任务一参数标定（坐标下降＋多起点）}\label{alg:t1}
+\begin{algorithmic}[1]
+\Require 训练期观测 $\{\tilde V_t,W_t,E_t,T_t\}_{t=1}^{N}$，上限 $K$，重复次数 $M$
+\Ensure 参数 $\hat\theta$，拟合值 $\{V_t^{\mathrm{mod}}\}$
+\State 由式~\eqref{eq:K} 计算 $K$
+\For{$m=1$ \textbf{to} $M$}
+  \State 在 $\Theta$ 内均匀随机取初值 $\theta^{(0)}$
+  \For{步长 $\Delta\in\{0.30,0.15,0.08,0.04,0.02,0.01,0.008\}$}
+    \Repeat
+      \For{每个参数 $p=1,\dots,4$}
+        \State 试探 $\theta_p\pm\Delta$（截断到区间），计算 $J$（式~\eqref{eq:obj}）
+        \State 若下降则接受，否则回退
+      \EndFor
+    \Until{本轮无改进}
+  \EndFor
+  \State 记录 $J(\theta^{(m)})$
+\EndFor
+\State \Return $\hat\theta=\arg\min_m J(\theta^{(m)})$ 及其轨迹
+\end{algorithmic}
+\end{algorithm}
+
+\paragraph{复杂度与停止准则。}每次 $J$ 的计算是 $O(N)$；一次完整坐标下降约 $7\times60\times8$ 次目标函数调用；
+25 组多起点总计算量约 $10^{5}$ 次递推，单站秒级完成。
+停止准则为"步长降到 $0.008$ 且一整轮无改进"。
+
+\subsubsection{可识别性诊断（对应式~\eqref{eq:cond}）}\label{sec:diag}
+
+标定完成后必须报告 $\kappa(\bm{S}^{\top}\bm{S})$ 与各参数的置信区间（可用残差自助法得到）。
+若某参数的区间覆盖整个取值域，则该参数\textbf{不可识别}，只能作为情景参数进入任务二、三，
+并在正文明确写"未识别"，而不是假装估出了真值。
+
+\subsection{检验指标}
+
+\begin{align}
+R^2&=1-\frac{\sum_t(\hat V_t-\tilde V_t)^2}{\sum_t(\tilde V_t-\bar{\tilde V})^2},\label{eq:r2}\\
+\mathrm{RMSE}&=\sqrt{\tfrac{1}{N}\sum_t(\hat V_t-\tilde V_t)^2},\label{eq:rmse}\\
+e^{\mathrm{1yr}}_t&=\big|\hat V_{t+1|t}-\tilde V_{t+1}\big|,\qquad
+\text{（以上一年实测为初值，只推一年）}\label{eq:oneyr}
+\end{align}
+并设\textbf{持续性基线} $\hat V^{\mathrm{pers}}_{t+1}=\tilde V_t$：若模型的一年外推误差
+不优于"下一年等于今年"，则模型没有提供增量信息（式~\eqref{eq:oneyr} 与基线的比较是必须报告的）。
+
+\subsection{敏感性设计（只给设计，不给结果）}
+
+固定 $(r,d,\eta)$，令 $k$ 在 $\{0,0.02,0.05,0.1\}$ 上取值，重算 $x^*$（式~\eqref{eq:xstar}），
+考察 $\Delta x^*/x^*$；同时令 $W$ 在 $\pm20\%$ 内变动，得到"风蚀 vs 水分"的相对重要性曲面。
+这是把"$k$ 不可识别"转化为"若 $k$ 取某值，结论会怎样"的标准做法。
+
+% =============================================================================
+\section{任务二：投资、调度与劳动力的最优过程设计}\label{sec:t2}
+% =============================================================================
+
+\subsection{为什么用动态规划，而不是连续最优控制}
+
+题目说"最优控制或动态优化"。选择离散动态规划的理由有三条：
+(i) 决策本身就是离散的——每年新增面积按 0.5 千 hm$^2$ 档、补水按 20 mm 档、光伏占比按 0.1 档，
+用连续控制需要先松弛再取整，反而丢失最优性；
+(ii) 状态转移是\textbf{确定性}的（$A_{t+1}=A_t+a_t$），没有随机项，
+因此 Bellman 方程退化为确定性递推，\textbf{枚举即全局最优}，不需要启发式；
+(iii) 状态空间小（累计面积离散为 81 格），总计算量 $O(T\cdot|A|\cdot|U|)\approx 7\times10^{4}$，秒级完成，
+结果完全可复现——这对"结论要能复核"的竞赛写作是加分项。
+
+\subsection{阶段、状态、决策与转移}
+
+\begin{table}[H]\centering\small
+\begin{tabularx}{\textwidth}{|c|X|}
+\toprule
+要素 & 定义 \\
+\midrule
+阶段 & $t=0,1,\dots,T-1$，$T$ 为规划期（建议 10--20 年，取 $T=15$） \\
+状态 & $A_t$：第 $t$ 年初的累计治理面积（千 hm$^2$），离散为 $A_t\in\mathcal{A}=\{0,\Delta_A,\dots,A_{\max}\}$ \\
+决策 & $\bm{u}_t=(a_t,I_t,s_t)$：新增面积、补水深度、光伏配套占比 \\
+决策集 & $a_t\in\{0,0.5,1,1.5,2\}$，$I_t\in\{0,20,40,60\}$ mm，$s_t\in\{0.2,0.3,0.4,0.5\}$ \\
+转移 & $A_{t+1}=A_t+a_t$（确定性） \\
+\bottomrule
+\end{tabularx}
+\caption{任务二的动态规划要素}\label{tab:dp}
+\end{table}
+
+\subsection{约束条件（逐条给出单位与来源）}
+
+\begin{align}
+&\text{（预算）} && c_b\cdot1000a_t+c_m\cdot1000A_t+c_w\,I_ta_t\ \le\ B, \label{eq:budget}\\
+&\text{（水量）} && I_t\,a_t\ \le\ W_{\max}, \label{eq:water}\\
+&\text{（土地）} && A_t+a_t\ \le\ A_{\max}, \label{eq:land}\\
+&\text{（劳动力）} && \lambda_L\,a_t\ \le\ L_{\max}, \label{eq:labor}\\
+&\text{（决策离散）} && a_t\in\mathcal{A}_a,\ I_t\in\mathcal{A}_I,\ s_t\in\mathcal{A}_s. \label{eq:discrete}
+\end{align}
+
+\paragraph{单位换算（最容易出错的地方，必须写清楚）。}
+$a_t$ 的单位是千 hm$^2$，$1$ 千 hm$^2=1000$ hm$^2$，故面积项统一乘 1000 化为 hm$^2$。
+补水体积：$I_t$ 以 mm 计，$1\ \mathrm{mm}=10^{-3}$ m；
+$1000a_t$ hm$^2$ $=1000a_t\times10^{4}$ m$^2$。两者相乘
+\[
+V^{\mathrm{water}}_t=I_t\times10^{-3}\times1000a_t\times10^{4}
+=10^{4}I_ta_t\ \mathrm{m^3}=I_ta_t\ \text{万m}^3 .
+\]
+因此式~\eqref{eq:water} 中水量约束直接写成 $I_ta_t\le W_{\max}$（$W_{\max}$ 以万 m$^3$ 计），
+水费为 $c_wI_ta_t$（$c_w$ 以万元/万 m$^3$ 计）。
+\textbf{若把体积写成 $I_ta_t/1000$，量纲会差 1000 倍，整个预算约束失效}——这是本模型最隐蔽的陷阱。
+
+\subsection{目标函数：贴现净现值}
+
+\begin{equation}\label{eq:npv}
+\max_{\{\bm{u}_t\}}\ \sum_{t=0}^{T-1}\delta^{t}\Big[
+\underbrace{p_{pv}s_t\cdot1000a_t}_{\text{光伏收益}}
++\underbrace{p_{e}\frac{V^*\big(K_s(I_t)\big)}{K}\cdot1000A_t}_{\text{生态效益}}
+-\underbrace{c_b\cdot1000a_t}_{\text{建设}}
+-\underbrace{c_m\cdot1000A_t}_{\text{运维}}
+-\underbrace{c_wI_ta_t}_{\text{补水}}
+\Big]
+\end{equation}
+
+\paragraph{逐项解释。}
+\begin{itemize}
+\item $p_{pv}s_t\cdot1000a_t$：只有\textbf{当年新增}面积可配套光伏，装机与新增同步；
+$p_{pv}$ 是单位面积年收益。
+\item $p_e\frac{V^*}{K}\cdot1000A_t$：生态效益按"覆盖度达成率 $V^*/K$"折算到\textbf{累计面积}上。
+这一项是任务一与任务二的接口：$V^*$ 由式~\eqref{eq:xstar} 给出，而 $V^*$ 通过 $K_s(I_t)$ 依赖补水量。
+\item $c_b\cdot1000a_t$：建设成本按新增面积一次性计。
+\item $c_m\cdot1000A_t$：运维成本按累计面积逐年计。
+\item $c_wI_ta_t$：补水成本按体积计。
+\item $\delta=1/(1+\rho)$ 为贴现因子，$\rho$ 为贴现率；$T$ 期后不再计收益（残值另作敏感性）。
+\end{itemize}
+
+\paragraph{补水—覆盖度的接口。}取线性、有上界的供水响应
+\begin{equation}\label{eq:Ks}
+K_s(I)=\min\Big\{1,\ k_{s0}+k_{s1}\frac{I}{I_{\max}}\Big\},\qquad k_{s0},k_{s1}>0,
+\end{equation}
+$K_s$ 是"水分胁迫系数"（$K_s=1$ 表示水分不再限制）。代入式~\eqref{eq:xstar} 时把 $Wf(T)$ 替换为 $K_s$：
+\begin{equation}\label{eq:xstar2}
+x^*(I)=\frac{rK_s(I)-d-kE}{rK_s(I)-kE\eta},\qquad V^*(I)=K\,x^*(I).
+\end{equation}
+由命题~\ref{prop:steady}(ii)，$x^*$ 关于 $K_s$ 单调递增，故生态效益关于 $I$ 单调递增；
+但 $K_s$ 有上界 1，所以补水的边际效益递减——这正是模型会出现"补水到 60 mm 封顶"这类结论的机理来源。
+
+\subsection{Bellman 递推与边界条件}
+
+定义值函数
+\begin{equation}\label{eq:value}
+J_t(A)=\max_{\bm{u}_t\in\mathcal{U}(A)}\Big\{\,g_t(A,\bm{u}_t)+\delta\,J_{t+1}(A+a_t)\,\Big\},
+\qquad J_T(A)=0,
+\end{equation}
+其中 $g_t$ 是式~\eqref{eq:npv} 的方括号项，$\mathcal{U}(A)$ 是满足式~\eqref{eq:budget}--\eqref{eq:discrete} 的决策集。
+$J_t(A)$ 的含义是："第 $t$ 年、手上已有 $A$ 千 hm$^2$ 时，到规划期末还能拿到的最大贴现净收益"。
+边界条件 $J_T\equiv0$ 表示期末之后不再计收益。
+
+\begin{algorithm}[H]
+\caption{任务二：有限期动态规划（后向归纳）}\label{alg:dp}
+\begin{algorithmic}[1]
+\Require 参数 $(c_b,c_m,c_w,p_{pv},p_e,B,W_{\max},A_{\max},\lambda_L,L_{\max},\delta)$，$K$，$\hat\theta$
+\Ensure 最优值 $J_0(0)$，最优路径 $\{\bm{u}^*_t\}$，$\{A^*_t\}$
+\State 构造状态网格 $\mathcal{A}$；令 $J_T(A)\gets0$，$\forall A\in\mathcal{A}$
+\For{$t=T-1$ \textbf{downto} $0$}
+  \For{$A\in\mathcal{A}$}
+    \State $J_t(A)\gets-\infty$
+    \For{$(a,I,s)\in\mathcal{A}_a\times\mathcal{A}_I\times\mathcal{A}_s$}
+      \If{式~\eqref{eq:budget}--\eqref{eq:land} 全部满足}
+        \State 由式~\eqref{eq:xstar2} 算 $V^*(I)$；由式~\eqref{eq:npv} 算 $g_t$
+        \State $v\gets g_t+\delta J_{t+1}(A+a)$
+        \If{$v>J_t(A)$}
+          \State $J_t(A)\gets v$；记录 $\bm{u}^*_t(A)\gets(a,I,s)$
+        \EndIf
+      \EndIf
+    \EndFor
+  \EndFor
+\EndFor
+\State 从 $A_0=0$ 出发前向回放 $\bm{u}^*_t(A_t)$，得到 $\{A_t\}$
+\end{algorithmic}
+\end{algorithm}
+
+\paragraph{最优性。}式~\eqref{eq:npv} 的可行域是有限集（$|\mathcal{A}_a||\mathcal{A}_I||\mathcal{A}_s|=5\times4\times4=80$ 个决策组合，
+$|\mathcal{A}|=81$ 个状态，$T=15$ 阶段），算法~\ref{alg:dp} 对每个状态枚举了全部可行决策，
+由 Bellman 最优性原理，后向归纳得到的是\textbf{全局最优}，不是局部最优。
+复杂度 $O(T|\mathcal{A}||\mathcal{U}|)\approx 7\times10^{4}$。
+
+\subsection{可执行判据：由目标函数直接导出的立项阈值}
+
+不必等数值结果，也能从式~\eqref{eq:npv} 导出"该不该建"的判据。
+考虑在第 $t$ 年\textbf{增加 1 hm$^2$} 并持有到期末，其边际收益与边际成本的贴现值分别为
+\begin{align}
+M^{+}_t&=D_t\Big(p_{pv}s_t+p_e\frac{V^*(I_t)}{K}\Big), \label{eq:mp}\\
+M^{-}_t&=c_b+D_t\Big(c_m+\frac{c_wI_t}{1000}\Big), \label{eq:mcost}
+\end{align}
+其中 $D_t=\sum_{\tau=t}^{T-1}\delta^{\tau-t}=\dfrac{1-\delta^{T-t}}{1-\delta}$ 为剩余年限的贴现和
+（运维与生态补水逐年发生，故乘贴现和 $D_t$；建设是一次性支出，不乘）。
+\textbf{立项判据}：$M^+_t>M^-_t$，即
+\begin{equation}\label{eq:threshold}
+\boxed{\;s_t\ >\ s^*=\frac{1}{p_{pv}}\left[\frac{c_b}{D_t}+c_m+\frac{c_wI_t}{1000}-p_e\frac{V^*(I_t)}{K}\right]\;}
+\end{equation}
+式~\eqref{eq:threshold} 就是"光伏配套占比的立项门槛"：低于 $s^*$ 时，任何建设规模都不划算，
+最优解退化为"不建设"。它还说明三件事：
+(i) 规划期越长（$D_t$ 越大），$c_b/D_t$ 越小，项目越容易成立——这是"早建早收益"的数学来源；
+(ii) 运维单价 $c_m$ 与建设单价 $c_b$ 的作用不同：前者按年摊、后者按期末摊；
+(iii) 生态效益 $p_eV^*/K$ 相当于对门槛的"补贴"，所以提高生态价值认定可以直接降低立项门槛。
+
+\subsection{参数与敏感性设计}
+
+\begin{table}[H]\centering\small
+\begin{tabularx}{\textwidth}{|c|X|c|}
+\toprule
+参数 & 含义 & 量纲 \\
+\midrule
+$c_b$ & 建设单价（含沙障、苗木、整地） & 万元/hm$^2$ \\
+$c_m$ & 年运维单价 & 万元/(hm$^2\cdot$a) \\
+$c_w$ & 水价（含输配） & 万元/万m$^3$ \\
+$p_{pv}$ & 光伏单位面积年收益 & 万元/(hm$^2\cdot$a) \\
+$p_e$ & 生态效益单位面积年价值（按 $V^*/K=1$ 计） & 万元/(hm$^2\cdot$a) \\
+$B$ & 年预算上限 & 万元/a \\
+$W_{\max}$ & 年可用水量上限 & 万m$^3$/a \\
+$A_{\max}$ & 可治理面积上限 & 千hm$^2$ \\
+$\lambda_L$ & 单位面积所需劳动力 & 人/千hm$^2$ \\
+$L_{\max}$ & 年劳动力上限 & 人 \\
+$\delta$ & 贴现因子 & — \\
+\bottomrule
+\end{tabularx}
+\caption{任务二的参数与量纲}\label{tab:t2par}
+\end{table}
+
+\paragraph{敏感性设计（四组单因素）。}
+分别令 $s\in\{0.1,\dots,0.5\}$、$c_m$ 上下浮动 $\pm50\%$、$c_b$ 上下浮动 $\pm25\%$、
+$p_{pv}$ 上下浮动 $\pm30\%$，重解式~\eqref{eq:value}，记录
+$\partial \mathrm{NPV}/\partial(\cdot)$ 与"最优路径结构是否改变"（例如是否仍为"先建后维"）。
+判据是：若某参数变动 $10\%$ 导致路径结构翻转，则该参数是\textbf{结论敏感参数}，
+必须在正文中给出区间而不是点估计。
+
+% =============================================================================
+\section{任务三：随机灾害下的韧性}\label{sec:t3}
+% =============================================================================
+
+\subsection{灾害过程：复合泊松}
+
+设第 $t$ 年灾害发生次数 $N_t\sim\mathrm{Poisson}(\lambda)$，各次独立；
+第 $q$ 次事件的损失比例 $u_q\sim F_u$（取 $U(u_{\mathrm{lo}},u_{\mathrm{hi}})$）。
+一年内的总冲击（对数尺度）为 $\sum_{q=1}^{N_t}\ln(1-u_q)$，其期望为
+\begin{equation}\label{eq:compound}
+\E\Big[\prod_{q=1}^{N_t}(1-u_q)\Big]
+=\exp\Big\{-\lambda\,\E[u]\Big\}\quad(\text{小 }u\text{ 近似}),
+\end{equation}
+即"事件频率 $\lambda$"与"单次幅度 $\E[u]$"以乘积形式进入，二者在年尺度上\textbf{不可分别识别}——
+这是任务三最重要的建模限制，因此敏感性必须做 $(\lambda,\E[u])$ 的\textbf{等值线}，而不是各自单因素。
+
+\subsection{状态离散与转移矩阵}
+
+把覆盖度离散为 $n$ 个状态 $v_j=j\Delta_v$，$j=0,\dots,n-1$，$\Delta_v=v_{\max}/(n-1)$，$v_{\max}=1.5K$。
+吸收态集合 $\mathcal{S}_0=\{v_j: v_j<v_{\mathrm{crit}}\}$，$v_{\mathrm{crit}}=\rho K$（退化阈值）。
+设 $\pi(\cdot)$ 为"把连续值投影到最近网格点"的算子，则一步转移矩阵
+\begin{equation}\label{eq:P}
+P_{ij}=(1-\lambda)\,\ind{\pi\big(F(v_i)\big)=j}
++\lambda\cdot\frac{1}{n_u}\sum_{q=1}^{n_u}\ind{\pi\big(F(v_i(1-u_q))\big)=j},
+\end{equation}
+其中 $F(\cdot)$ 是任务一的右端映射（式~\eqref{eq:t1}），$n_u$ 为 $u$ 的分位点个数（数值积分）。
+式~\eqref{eq:P} 的第一项是"本年无灾害、按动力学演化"，第二项是"发生一次灾害、按比例削减后再演化"。
+
+\begin{remark}[冲击与生长的次序]
+式~\eqref{eq:P} 取"先冲击、后生长"。若把灾害视为年末一次性事件，则应写成 $F(v_i)(1-u_q)$，
+两种次序给出不同的 $P$。本文固定一种，并在敏感性中对照另一种，避免"结论依赖未声明的约定"。
+\end{remark}
+
+\paragraph{矩阵性质（可作为实现的验收条件）。}
+$P$ 必须满足：(i) $P_{ij}\ge0$；(ii) $\sum_jP_{ij}=1$（行随机）；
+(iii) 对 $v_i\in\mathcal{S}_0$，$P_{ii}=1$（吸收态自封）。
+数值实现后应逐行检查这三条，否则 $(I-Q)^{-1}$ 会给出负数或发散的期望时间。
+
+\subsection{吸收马尔可夫链的两个闭式指标}
+
+把非吸收状态抽出，得到子矩阵 $Q$（$|Q|=n-|\mathcal{S}_0|$）。基本矩阵
+\begin{equation}\label{eq:N}
+\bm{N}=(\bm{I}-\bm{Q})^{-1}=\sum_{k=0}^{\infty}\bm{Q}^{k},
+\end{equation}
+其元素 $N_{ij}$ 是"从状态 $i$ 出发、被吸收前在状态 $j$ 的平均停留年数"。由此
+\begin{align}
+\E[\tau]&=\bm{N}\bm{1}, \label{eq:etime}\\
+\mathrm{Var}[\tau]&=(2\bm{N}-\bm{I})\bm{N}\bm{1}-\E[\tau]\circ\E[\tau], \label{eq:var}\\
+\Prob(\tau\le T)&=1-\bm{1}^{\top}\bm{Q}^{T}\bm{p}_0, \label{eq:ptau}
+\end{align}
+其中 $\bm{p}_0$ 为初始状态分布（通常置于 $v=K$ 所在格点），$\circ$ 为逐元素乘。
+
+\paragraph{逐式解释。}
+式~\eqref{eq:etime}：按行求和即"从 $i$ 出发到被吸收的平均年数"，这就是\textbf{期望寿命}（韧性的一种度量）。
+式~\eqref{eq:var} 给出波动，用于说明"平均 50 年退化"与"10 年内就有 30\% 概率退化"是两件事。
+式~\eqref{eq:ptau}：$\bm{Q}^{T}\bm{p}_0$ 是"$T$ 年后仍未退化"的概率向量之和，取补即\textbf{$T$ 年内退化概率}。
+两个指标一个给"时间"、一个给"概率"，合起来才构成完整的韧性描述。
+
+\paragraph{为什么用吸收链而不是只做蒙特卡洛。}
+蒙特卡洛只能给数值与置信区间，不能解释"为什么"；吸收链给出\textbf{闭式解}，
+可以直接对 $\lambda$、$\eta$、$v_{\mathrm{crit}}$ 求导做敏感性，且没有模拟误差。
+两者并用：解析解给结构，蒙特卡洛给校验（第~\ref{sec:mc} 节）。
+
+\subsection{长期预测：把趋势放进转移矩阵}
+
+题目要求"气候变化趋势本身在改变风速与湿润指数的基准水平"。做法是让参数随时间变化：
+\begin{equation}\label{eq:trend}
+E_t=E_0(1+\alpha_E t),\qquad
+W_t=W_0(1+\alpha_W t),\qquad
+\lambda_t=\lambda_0(1+\alpha_\lambda t),
+\end{equation}
+并逐项截断到物理区间（$E_t\ge0$，$W_t\in[0,1]$，$\lambda_t\in(0,1)$）。
+此时 $Q$ 变为时变矩阵 $Q_t$，生存概率写成乘积形式
+\begin{equation}\label{eq:tv}
+\Prob(\tau>T)=\bm{1}^{\top}\Big(\prod_{t=0}^{T-1}\bm{Q}_t\Big)\bm{p}_0 ,
+\end{equation}
+注意\textbf{矩阵乘法不交换}，必须按时间顺序左乘。
+若 $\alpha_E>0$ 或 $\alpha_W<0$，$x^*_t$（式~\eqref{eq:xstar}）逐年下移，
+$\Prob(\tau\le T)$ 随 $T$ 加速上升——这就是"气候趋势放大风险"的数学表达。
+
+\subsection{蒙特卡洛校验}\label{sec:mc}
+
+独立抽 $M$ 条路径：每年先抽 $N_t\sim\mathrm{Poisson}(\lambda_t)$，再抽 $N_t$ 个 $u_q$，
+按式~\eqref{eq:t1} 递推，记录首次低于 $v_{\mathrm{crit}}$ 的年份。
+估计量
+\begin{equation}\label{eq:mc}
+\hat p_T=\frac{1}{M}\sum_{m=1}^{M}\ind{\tau_m\le T},\qquad
+\mathrm{CI}_{95\%}\approx\hat p_T\pm1.96\sqrt{\frac{\hat p_T(1-\hat p_T)}{M}} .
+\end{equation}
+\textbf{校验判据}：解析值应落在蒙特卡洛的 95\% 置信区间内；若系统性偏离，
+说明离散化（网格数 $n$、冲击分位点 $n_u$）不足，或矩阵构造有误。
+
+\begin{algorithm}[H]
+\caption{任务三：吸收链指标与蒙特卡洛校验}\label{alg:mc}
+\begin{algorithmic}[1]
+\Require 任务一参数 $\hat\theta$，$K$，$\lambda$，$F_u$，$v_{\mathrm{crit}}$，网格数 $n$，路径数 $M$，期限 $T$
+\Ensure $\E[\tau]$，$\Prob(\tau\le T)$ 的解析值与 MC 值
+\State 构造网格 $\{v_j\}$；标记吸收态 $\mathcal{S}_0$
+\State 按式~\eqref{eq:P} 填充 $P$；逐行检查行随机性与吸收性
+\State 抽出 $\bm{Q}$，计算 $\bm{N}=(\bm{I}-\bm{Q})^{-1}$
+\State 由式~\eqref{eq:etime}、\eqref{eq:ptau} 算解析指标
+\For{$m=1$ \textbf{to} $M$}
+  \State $v\gets K$
+  \For{$t=1$ \textbf{to} $T$}
+    \State 抽 $N_t$
+    \For{$q=1$ \textbf{to} $N_t$}
+      \State $v\gets v(1-u_q)$
+    \EndFor
+    \State $v\gets F(v)$
+    \If{$v<v_{\mathrm{crit}}$}
+      \State 记录 $\tau_m=t$；跳出
+    \EndIf
+  \EndFor
+\EndFor
+\State 由式~\eqref{eq:mc} 算 $\hat p_T$ 与置信区间，与解析值对照
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{任务三的参数与约束}
+
+\begin{table}[H]\centering\small
+\begin{tabularx}{\textwidth}{|c|X|c|c|}
+\toprule
+参数 & 含义 & 单位 & 约束 \\
+\midrule
+$\lambda$ & 灾害事件年频率 & a$^{-1}$ & $0<\lambda<1$；由超阈频率估计 \\
+$u_{\mathrm{lo}},u_{\mathrm{hi}}$ & 单次损失比例上下界 & — & $0<u_{\mathrm{lo}}<u_{\mathrm{hi}}<1$ \\
+$v_{\mathrm{crit}}$ & 退化阈值 & \% & $v_{\mathrm{crit}}=\rho K$，$\rho\in(0,1)$ \\
+$n$ & 覆盖度网格数 & — & $n\ge100$（离散误差 $O(1/n)$） \\
+$n_u$ & 冲击分位点数 & — & $n_u\ge10$ \\
+$\alpha_E,\alpha_W,\alpha_\lambda$ & 气候趋势系数 & a$^{-1}$ & 由趋势检验给出区间 \\
+$T$ & 评估期限 & a & 30--50 年 \\
+\bottomrule
+\end{tabularx}
+\caption{任务三的参数与约束}\label{tab:t3par}
+\end{table}
+
+\paragraph{三条一致性约束。}
+(i) 任务三的 $F(\cdot)$ 必须与任务一同一个函数、同一组参数，不得另拟；
+(ii) $v_{\mathrm{crit}}<K$，否则初始状态即为吸收态，模型无意义；
+(iii) $\lambda$ 与 $u$ 的估计必须来自同一口径的日值序列（同为日最大风速超阈），
+不能一个用月均、一个用日值。
+
+% =============================================================================
+\section{模型检验与灵敏度的总体设计}\label{sec:check}
+% =============================================================================
+
+\subsection{三问各自的检验指标}
+
+\begin{table}[H]\centering\small
+\begin{tabularx}{\textwidth}{|c|X|X|}
+\toprule
+任务 & 指标 & 判据 \\
+\midrule
+任务一 & $R^2$（式~\eqref{eq:r2}）、RMSE（式~\eqref{eq:rmse}）、一年外推误差（式~\eqref{eq:oneyr}）
+& 一年外推误差应\textbf{优于}持续性基线；$R^2$ 只作参考 \\
+任务一 & 可识别性 $\kappa(\bm{S}^{\top}\bm{S})$（式~\eqref{eq:cond}）
+& 报告条件数与参数区间；不可识别者标为情景参数 \\
+任务二 & 最优性 & 与穷举/随机搜索对照；检查每条约束的影子价格是否非负 \\
+任务二 & 敏感性 & 单因素 $\pm$ 变动下的路径结构与 NPV \\
+任务三 & 解析 vs 蒙特卡洛 & 解析值落在 MC 的 95\% 置信区间内 \\
+任务三 & 离散化收敛 & $n$ 加倍后 $\Prob(\tau\le T)$ 变化 $<1\%$ \\
+\bottomrule
+\end{tabularx}
+\caption{检验指标与判据}\label{tab:check}
+\end{table}
+
+\subsection{跨任务的一致性检验}
+
+三问共用同一个 $F$ 与同一组 $\hat\theta$，因此可以做两个交叉检验：
+(i) 把任务二最优路径末年的稳态覆盖度代入任务三的初始状态，退化概率应随建设规模单调下降；
+(ii) 把任务三的 $\lambda$ 调为 0，退化概率应趋于 0、期望首达时间应趋于 $\infty$——
+若数值上不是这样，说明转移矩阵或吸收态设置有误。
+
+% =============================================================================
+\appendix
+\section{符号总表}\label{app:sym}
+% =============================================================================
+
+\begin{longtable}{|c|p{6.2cm}|c|c|}
+\caption{符号总表}\label{tab:sym}\\
+\hline
+符号 & 含义 & 单位 & 类型 \\
+\hline
+\endhead
+$V_t$ & 植被覆盖度（状态变量） & \% & 观测/派生 \\
+$W_t$ & 根区水分胁迫（0--1） & — & 观测/归一 \\
+$T_t$ & 年平均气温 & \textdegree C & 观测 \\
+$E_t$ & 无量纲侵蚀指数 & — & 派生 \\
+$E_{\mathrm{eff},t}$ & 遮蔽修正后的有效侵蚀强度 & — & 派生 \\
+$K$ & 承载上限 & \% & 由观测定 \\
+$K_s$ & 水分胁迫系数（补水后） & — & 派生 \\
+$r$ & 内在增长率 & a$^{-1}$ & 标定 \\
+$d$ & 自然衰亡率 & a$^{-1}$ & 标定 \\
+$k$ & 风蚀损伤系数 & — & 标定 \\
+$\eta$ & 植被遮蔽系数 & — & 标定 \\
+$f(T)$ & 温度响应因子 & — & 设定 \\
+$x_t$ & 相对覆盖度 $V_t/K$ & — & 派生 \\
+$x^*$ & 稳态相对覆盖度 & — & 解析 \\
+$A_t$ & 累计治理面积（状态） & 千hm$^2$ & 决策派生 \\
+$a_t$ & 年新增治理面积（决策） & 千hm$^2$ & 决策 \\
+$I_t$ & 年生态补水深度（决策） & mm & 决策 \\
+$s_t$ & 光伏配套面积占比（决策） & — & 决策 \\
+$\delta$ & 贴现因子 & — & 情景 \\
+$J_t(A)$ & 值函数 & 万元 & 派生 \\
+$c_b,c_m,c_w$ & 建设、运维、水价 & 见表~\ref{tab:t2par} & 情景 \\
+$p_{pv},p_e$ & 光伏收益、生态价值 & 万元/(hm$^2\cdot$a) & 情景 \\
+$\lambda$ & 灾害年频率 & a$^{-1}$ & 估计/情景 \\
+$u$ & 单次损失比例 & — & 情景 \\
+$\bm{P},\bm{Q}$ & 转移矩阵、非吸收子矩阵 & — & 派生 \\
+$\bm{N}$ & 基本矩阵 $(\bm{I}-\bm{Q})^{-1}$ & a & 派生 \\
+$\tau$ & 首次退化时间（首达时间） & a & 随机变量 \\
+$v_{\mathrm{crit}}$ & 退化阈值 & \% & 情景 \\
+$\kappa(\cdot)$ & 矩阵条件数 & — & 诊断 \\
+\hline
+\end{longtable}
+
+\section{三问所需字段—公式对照}\label{app:field}
+% =============================================================================
+
+\begin{longtable}{|c|c|c|}
+\caption{三问所需字段与公式对照}\label{tab:fieldmap}\\
+\hline
+公式 & 需要的字段 & 若缺该字段的降级方案 \\
+\hline
+\endhead
+式~\eqref{eq:t1} 生长项 & $V,W,T$ & 缺 $W$：用 $P/ET_0$ 构造代理并标为情景 \\
+式~\eqref{eq:fT} & $T$ & 缺 $T$：改用纬度—日序的气候态，误差计入 $f$ \\
+式~\eqref{eq:eeff}、\eqref{eq:lettau} & $u_{10}^{\max}$（日） & 只有月均：$E$ 退化，$k$ 不可识别，须声明 \\
+式~\eqref{eq:K} & $V$ 的训练期分位 & 样本不足：改用区域文献值并做敏感性 \\
+式~\eqref{eq:obj} & 全部状态序列 & 缺失：按第~\ref{sec:data} 节的门槛剔除站点 \\
+式~\eqref{eq:water} & $I,a$（决策） & 不需字段 \\
+式~\eqref{eq:threshold} & 全部经济参数 & 缺单价：给区间，结论写成条件结论 \\
+式~\eqref{eq:P} & $\lambda$、$u$ 分布 & 缺事件记录：用风速超阈频率作代理 \\
+式~\eqref{eq:tv} & 趋势系数 $\alpha$ & 缺趋势：令 $\alpha=0$ 作基准，另做情景 \\
+\hline
+\end{longtable}
+
+\section{参数取值域一览}\label{app:par}
+% =============================================================================
+
+\begin{longtable}{|c|c|c|c|}
+\caption{参数取值域一览}\label{tab:parrange}\\
+\hline
+参数 & 取值域 & 来源 & 是否进入敏感性 \\
+\hline
+\endhead
+$r$ & $[0.02,1.5]$ a$^{-1}$ & 标定 & 是 \\
+$d$ & $[0,0.3]$ a$^{-1}$ & 标定 & 是 \\
+$k$ & $[0,0.5]$ & 标定 & 是（多不可识别） \\
+$\eta$ & $[0,0.95]$ & 标定 & 是 \\
+$K$ & $1.15\times Q_{0.95}(V)$ & 观测 & 是（系数 1.0--1.3） \\
+$\rho$（退化阈值系数） & $[0.2,0.4]$ & 情景 & 是 \\
+$\lambda$ & $[0.15,0.6]$ a$^{-1}$ & 估计/情景 & 是 \\
+$\E[u]$ & $[0.2,0.55]$ & 情景 & 是（与 $\lambda$ 联合） \\
+$\delta$ & $[0.90,0.97]$ & 情景 & 是 \\
+$c_b$ & 见表~\ref{tab:t2par} & 情景 & 是 \\
+$c_m$ & 见表~\ref{tab:t2par} & 情景 & 是 \\
+$p_{pv}$ & 见表~\ref{tab:t2par} & 情景 & 是 \\
+$T$（规划期） & $[10,20]$ a & 题目建议 & 是 \\
+\hline
+\end{longtable}
+
+
+\section{公式速查表}\label{app:cheat}
+
+下表把全文的公式压成"一句话含义"，用于快速定位；具体推导与逐项解释见正文对应小节。
+
+\begin{longtable}{|c|p{7.4cm}|c|}
+\caption{公式速查：式号、一句话含义与所属任务}\label{tab:cheat}\\
+\hline
+式号 & 一句话含义 & 任务 \\
+\hline
+\endhead
+\eqref{eq:sens} & 灵敏度递推：参数变动如何传到覆盖度轨迹 & 一 \\
+\eqref{eq:sensb} & 右端项对 $r,d,k,\eta$ 的偏导向量 & 一 \\
+\eqref{eq:cond} & 可识别性判据（条件数） & 一 \\
+\eqref{eq:t1} & 覆盖度逐年更新＝原覆盖度＋生长－衰亡－风蚀 & 一 \\
+\eqref{eq:eeff} & 有效侵蚀强度＝侵蚀指数×（1－遮蔽因子） & 一 \\
+\eqref{eq:fT} & 温度响应：低于 5\textdegree C 不生长，高于 25\textdegree C 不再促进 & 一 \\
+\eqref{eq:lettau} & 由日最大风速算无量纲侵蚀指数（站内归一） & 一 \\
+\eqref{eq:K} & 承载上限＝覆盖度训练期 95\% 分位×1.15 & 一 \\
+\eqref{eq:x} & 无量纲化后的相对覆盖度递推 & 一 \\
+\eqref{eq:steady0} & 稳态条件：生长＝衰亡＋风蚀 & 一 \\
+\eqref{eq:xstar} & 稳态覆盖度的解析解（任务二的接口） & 一$\to$二 \\
+\eqref{eq:box} & 参数盒约束（含非负性与物理符号，另见式~\eqref{eq:nonneg}、\eqref{eq:sign}） & 一 \\
+\eqref{eq:obj} & 参数标定的最小二乘目标函数 & 一 \\
+\eqref{eq:r2} & 拟合优度 $R^2$（只作参考） & 一 \\
+\eqref{eq:rmse} & 均方根误差 & 一 \\
+\eqref{eq:oneyr} & 一年外推误差（须优于持续性基线） & 一 \\
+\eqref{eq:budget} & 预算约束 & 二 \\
+\eqref{eq:water} & 水量约束（注意体积＝$I_ta_t$ 万 m$^3$） & 二 \\
+\eqref{eq:land} & 土地约束 & 二 \\
+\eqref{eq:labor} & 劳动力约束 & 二 \\
+\eqref{eq:discrete} & 决策离散集 & 二 \\
+\eqref{eq:npv} & 贴现净现值：光伏＋生态－建设－运维－补水 & 二 \\
+\eqref{eq:Ks} & 补水深度到水分胁迫系数的线性映射 & 二 \\
+\eqref{eq:xstar2} & 补水后的稳态覆盖度 $V^*(I)$ & 二 \\
+\eqref{eq:value} & Bellman 递推与终端条件 & 二 \\
+\eqref{eq:mp} & 新增 1 hm$^2$ 的边际收益贴现值 & 二 \\
+\eqref{eq:mcost} & 新增 1 hm$^2$ 的边际成本贴现值 & 二 \\
+\eqref{eq:threshold} & 立项门槛：光伏占比不得低于 $s^*$ & 二 \\
+\eqref{eq:compound} & 复合泊松冲击的期望衰减（$\lambda$ 与 $\E[u]$ 不可分） & 三 \\
+\eqref{eq:P} & 一步转移矩阵＝无灾漂移＋有灾削减 & 三 \\
+\eqref{eq:N} & 基本矩阵 $\bm{N}=(\bm{I}-\bm{Q})^{-1}$ & 三 \\
+\eqref{eq:etime} & 期望首达时间（平均多少年退化） & 三 \\
+\eqref{eq:var} & 首达时间的方差 & 三 \\
+\eqref{eq:ptau} & $T$ 年内退化概率（韧性主指标） & 三 \\
+\eqref{eq:trend} & 风速、湿润、事件频率的线性气候趋势 & 三 \\
+\eqref{eq:tv} & 时变转移矩阵下的生存概率（矩阵连乘） & 三 \\
+\eqref{eq:mc} & 蒙特卡洛估计量与 95\% 置信区间 & 三 \\
+\hline
+\end{longtable}
+
+
+\end{document}
