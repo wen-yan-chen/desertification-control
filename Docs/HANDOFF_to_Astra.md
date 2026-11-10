@@ -18,11 +18,11 @@ Not touched: `Reports/model_v7.tex`, `Code/v7_*.py`, the v7 panel.
 
 The first-trial daily model (FAO-56 water balance, more parameters) is **not** in this branch any more. Its code (`Code/m1_*.py`), raw and processed data, results, figures, its own handoff note and the two Task 1 improvement notes stay on branch `model1-first-version` (tip f0b7750) and can be restored from there with `git checkout model1-first-version -- <path>`.
 
-Kept here as the record of that version:
+Kept on `main` as the record of that version (write-up and PDFs in `archive/model1_first_trial/`):
 
-- `Docs/20261110_audit_check_and_model1.md` — audit check, daily model, results, limits
-- `Reports/M1/model1_en.pdf`, `model1_zh.pdf` (with `.tex`; the figures they include are on the old branch)
-- `Data/v7/section_modis/` — the five small tables `v7_model1.py` needs from it
+- `archive/model1_first_trial/20261110_audit_check_and_model1.md` — audit check, daily model, results, limits
+- `archive/model1_first_trial/model1_en.pdf`, `model1_zh.pdf` (with `.tex`; the figures they include are on the old branch)
+- `Data/v7/section_modis/` (not archived, still in use) — the five small tables `v7_model1.py` needs from it
 
 ## The model in two lines
 

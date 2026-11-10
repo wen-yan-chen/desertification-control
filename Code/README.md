@@ -44,4 +44,4 @@ pip install pandas numpy matplotlib openpyxl scipy
 ## 模型一初版（日尺度）
 
 已归档在分支 `model1-first-version`（代码 `Code/m1_*.py`、数据、结果、图），本分支不再保留；
-说明文档 `Docs/20261110_audit_check_and_model1.md` 与 `Reports/M1/` 的两份 PDF 仍在。当前采用的模型一是 `v7_model1.py`。
+说明文档 `archive/model1_first_trial/20261110_audit_check_and_model1.md` 与两份 PDF 已移入 `archive/model1_first_trial/`。当前采用的模型一是 `v7_model1.py`。
