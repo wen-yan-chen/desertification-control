@@ -1,0 +1,158 @@
+\documentclass[11pt,a4paper]{ctexart}
+\usepackage[margin=2.25cm]{geometry}
+\usepackage{amsmath,amssymb,booktabs,tabularx,array,enumitem,hyperref,xcolor}
+\definecolor{teal}{HTML}{28686C}
+\hypersetup{colorlinks=true,linkcolor=teal,urlcolor=teal}
+\setlength{\parskip}{0.35em}
+\setlength{\parindent}{2em}
+\renewcommand{\arraystretch}{1.22}
+\setlist{nosep,leftmargin=2em}
+\title{沙漠边缘锁边治理：修正建模说明}
+\author{Practice2 · 2026 CQU\_MCM Problem B}
+\date{2026年11月9日 · 待区段与参数核验版}
+\begin{document}
+\maketitle
+\noindent\textbf{文档边界。}本建模文档只规定题目建模：公式、状态与决策变量、参数含义、单位、来源和约束；不规定编程方式、代码模块、交付产物或预设拟合与收益指标。具体实现由编程手决定。
+
+\noindent\textbf{证据状态。}以下为修正后的候选模型结构，不是已校准的实证模型。旧版拟合分数、投资净现值、灾害概率及2050年预测已撤回，不作为本版参数或结论。未取得的地方参数一律保持待定；不得用来源不明的点值补齐。
+
+\section{研究对象、尺度与数据含义}
+研究对象应为塔克拉玛干沙漠边缘的\emph{连续代表区段}，而非将8个背景坐标点直接拼成锁边带。设区段划分为单元$i=1,\ldots,n$，单元面积$a_i$以ha计；治理年$t=1,\ldots,T$，$T$可在题目推荐的10--20年内设为情景。民丰或于田可作为候选，但尚无已核验的边界、多边形面积、土地利用和植物配置。
+
+生态过程的时间$\tau$以天计，风沙阈值过程需要至少小时尺度输入，投资决策按年定义。月度遥感用于观测对照，不能把月均风代入非线性输沙公式后视作真实月输沙量。2015--2024年资料提供历史背景，2026年及以后规划须区分基年状态与未来驱动。
+
+新增NASA POWER月记录包含10m风速、气温、降水和水平面太阳辐射；属于格点产品，不是现场站测。旧NDVI缺逐合成质量标识，固定端元覆盖度不是独立真值。旧面板的人工缩放输沙列不能作为观测标签。水分0--7cm用于表层过程，0--100cm也不能在根深未知时直接等同植物有效水。
+
+\section{任务一：植被、水分与风沙耦合}
+\subsection{根区储水与有效水分}
+对每个已确定土地单元，$v_i\in[0,1]$为覆盖比例，$S_i$为单位地表面积根区储水深(mm)，$Z_i$为有效根深(m)。定义
+\begin{equation}
+ \theta_i=\frac{S_i}{1000Z_i},\qquad
+ f_{w,i}=\min\left\{1,\max\left[0,\frac{\theta_i-\theta_{wp,i}}{\theta_{fc,i}-\theta_{wp,i}}\right]\right\}.
+\end{equation}
+$\theta$为m$^3$/m$^3$，$\theta_{wp}$、$\theta_{fc}$分别为萎蔫点和田间持水量，并满足$0\leq\theta_{wp}<\theta_{fc}\leq\theta_{sat}$。盐分胁迫另设$f_{sal}\in[0,1]$，不与含水率或起沙表层湿度混为一量。
+
+水量平衡为
+\begin{equation}
+ \frac{dS_i}{d\tau}=P_{\mathrm{inf},i}+\frac{\eta_iQ_i}{10a_i}+G_i-E_{b,i}(v_i,S_i)-T_{v,i}(v_i,S_i)-D_i(S_i).
+\end{equation}
+各项均为mm/day；$Q_i$是调入单元的毛灌溉量(m$^3$/day)，$\eta_i$为到根区的效率。换算来自1ha上的1mm水深等于10m$^3$。$P_{\mathrm{inf}}$为扣除截留与地表径流的有效入渗，不得再次重复扣径流；$G$为有依据时的地下水补给，$E_b$为土壤蒸发，$T_v$为植被蒸腾，$D$为根区下渗。地下水深未知时，$G=0$只能作为显式假设并检查敏感性。
+
+储水需满足$0\leq S_i\leq1000Z_i\theta_{sat,i}$。缺水时蒸散应受可用水约束；饱和溢出进入径流或排水账本。不能先算出负水量再截断至正下限而不记水量来源。参考蒸散按FAO56适用方法定义，需核验辐射、温湿度、风速高度和气压；不能将温度线性代理命名为Hargreaves公式。荒漠植物蒸腾系数仍需本地依据。
+
+\subsection{植被演替与工程干预}
+候选连续过程为
+\begin{equation}
+ \frac{dv_i}{d\tau}=r_i(T_a)f_{w,i}f_{sal,i}v_i(1-v_i/K_i)
+ -\bigl[d_i+h_i(q_i,H_i)\bigr]v_i+b_i(\tau)(1-v_i).
+\end{equation}
+$r,d,h,b$均以day$^{-1}$计，$K_i\in(0,1]$是适用条件下的覆盖上限，不能用历史均值替代；$T_a$为气温。$b_i$表示有人工与种苗支持的补植建立率，须与任务二建设/管护投入相连。$h_i\geq0$表示风沙通量$q_i$与沙埋状态$H_i$导致的损伤率；该响应形式需要当地损伤资料，不预设已知系数。参数非负且满足边界时，$v=0$处导数不负、$v=1$处导数不正。
+
+\subsection{风沙通量与面积侵蚀量的区别}
+设$u_*$为近地层摩阻风速(m/s)，$u_{*t}$为起沙阈值。可比较一类阈值通量结构
+\begin{equation}
+ q_i=C_i\frac{\rho_a}{g}u_*\left(u_*^2-u_{*t}^2\right)_+\phi_i(v_i,e_i),
+ \qquad [q_i]=\mathrm{kg/(m\cdot s)}.
+\end{equation}
+此式是待比较的参数化结构，不代表已经验证的地区输沙定律；$C$无量纲，$\rho_a$为kg/m$^3$，$g$为m/s$^2$，$e$表示沙障等工程状态，$\phi\in[0,1]$表示屏蔽作用。由10m风推算$u_*$须给定粗糙度、零平面位移及稳定度适用条件；$u_{*t}$不是10m风阈值。
+
+干土起沙阈值可参考Shao--Lu (2000)，表层湿度修正可参考F\'ecan等(1999)。后者使用质量含水率，转换为百分数时需
+\begin{equation}
+ w_{s,\%}=100\theta_s\rho_w/\rho_{b,dry},
+\end{equation}
+其中密度单位一致，$\theta_s$为对应表层体积含水率；不能代入根区有效水分$f_w$。
+
+若需面积侵蚀量，必须由边界的\emph{净}沙通量构造质量收支。令$\mathbf q$为带方向的水平通量，单元面积$a_i^{(m^2)}$，外法线$\mathbf n$，则
+\begin{equation}
+ L_i=\frac{1}{a_i^{(m^2)}}\int_{\Delta t}\oint_{\partial\Omega_i}\mathbf q\cdot\mathbf n\,dl\,dt
+ \quad[\mathrm{kg/m^2}],\qquad L_i^{(\mathrm{t/km^2})}=1000L_i.
+\end{equation}
+外输为正、净沉积为负；积分时间以秒计。仅有一个点的标量$q$，没有边界、风向及输入输出，无法推出该$L$。沙埋深度还需净沉积质量与堆积密度，不能用区域侵蚀模数替代。
+
+\subsection{观测关系与可识别性}
+覆盖观测可记为$y^v_{im}=\bar v_{im}+\epsilon^v_{im}$，但仅在NDVI端元、QA和尺度匹配后成立。再分析水分与模型储水之间必须按土层厚度匹配；格点误差、代表性偏差与仪器误差分开说明。不可用另一个OLS水分回归的拟合分数代替上述耦合方程的预测分数。
+
+当前拟采用2015--2022年为训练期、2023--2024年为时间留出期；插补、端元估计和参数选择只从训练数据获知。该划分不自动保证识别性；应比较季节/持续性基线，检查参数相关性与跨点转移误差。可报告RMSE、偏差和$R^2=1-\sum(y-\hat y)^2/\sum(y-\bar y)^2$；负$R^2$需如实保留。相关系数平方并不等于上述预测$R^2$。
+
+\section{任务二：统一生态状态下的年度资源优化}
+\subsection{决策、土地与资产}
+在相同生态方程下，决策包括新治理面积$x_t$(ha)、年度毛补水$W_t=\sum_i\int_{t}Q_i\,d\tau$(m$^3$)、劳动投入$L_t$(人日)、新增光伏容量$k_t$(kW)，以及建设、运维、收益设施投资$(I^c_t,I^o_t,I^p_t)$(元)。总投入非零时，比例
+\begin{equation}
+ \alpha^j_t=I^j_t/(I^c_t+I^o_t+I^p_t),\quad \sum_{j\in\{c,o,p\}}\alpha^j_t=1.
+\end{equation}
+零投入年度不定义比例，不能除零。定义累计建设足迹$A_t=A_{t-1}+x_t\leq A_{\max}$，与存活覆盖面积$\sum_i a_iv_i$区分；已建设地块死亡后补植计入管护，不重复算新增土地。治理地块按建设年形成队列；新建与原有地块状态、灌溉和管护均须保留。光伏占地与生态用地的重合须在土地约束中说明。
+
+若未考虑退役，则$K^{pv}_t=\sum_{s\leq t}k_s$，年度售电收入可写为
+\begin{equation}
+ R_t=p_t\sum_{s\leq t} k_sY_{s,t}(1-\delta_s)^{t-s}(1-c_{s,t}),
+\end{equation}
+$p_t$为元/kWh，$Y_{s,t}$为kWh/kW/年、尚未包含式中衰减和弃光的单位装机发电量；$\delta$为年衰减率，$c$为弃光比例。首年并网月份计入$Y$。NASA水平面辐照不是$Y$，还需倾角、组件温度、系统损失等；既有每一批装机的后续收入和运维均应计入。
+
+\subsection{资金、用水与劳动约束}
+在统一币值年和税费口径下，总成本$C_t=I^c_t+I^o_t+I^p_t$。建设、供水、劳动、光伏及生态运维费用应分配到且仅分配到一个科目，避免既包含人工单价又重复加工资。成本函数需要材料、工时与设备能力的真实依据。
+
+给定外部总预算$B$，设外部年度拨款$b_t\geq0$，期初现金$F_0$已计入总预算。保守地按当年收入年末到账，则
+\begin{align}
+ F_0+\sum_{t=1}^T b_t&\leq B, & C_t&\leq F_{t-1}+b_t,\\
+ F_t&=F_{t-1}+b_t-C_t+\chi R_t, & F_t&\geq0.
+\end{align}
+$\chi\in[0,1]$为可用于项目再投入的收入比例。允许再投资与否须先声明；总预算是外部资金总额，不能偷换成年建设费上限。若研究的是总支出上限，则改用$\sum C_t\leq B$，不与前一种口径混称。
+
+物理约束至少包括
+\begin{align}
+ 0\leq W_t&\leq W^{\max}_t,\qquad 0\leq Q_i(\tau)\leq Q^{cap}_i(\tau),\\
+ \ell_cx_t+\ell_oA_t+\ell_pk_t+\ell_{pv}K^{pv}_t&\leq L_t\leq L^{\max}_t.
+\end{align}
+$W^{\max}$为当地可分配水量，不是全疆水资源总量；$Q^{cap}$为取输水能力，需另考虑季节性许可与用水窗口。$\ell_c$、$\ell_p$分别为人日/ha、人日/kW的一次性劳动；$\ell_o$、$\ell_{pv}$为每年的相应运维劳动系数，实际若有非线性成本须替换。月度管护/灌溉必须反馈任务一，不得另建无生态状态的面积优化替代。
+
+\subsection{生态与经济的明确权衡}
+定义覆盖服务量$E=\sum_t\Delta t\sum_i a_i\bar v_{it}$，单位ha·年，可按政策需要增加达标连续长度、水耗及防沙净效果。$E$本身仅衡量覆盖，不等于已货币化的防沙价值。项目净成本
+\begin{equation}
+ N=\sum_t\frac{C_t-R_t}{(1+d)^t}
+\end{equation}
+以元计，$d$为与实值/名义成本口径一致的折现率。推荐比较$\max E$且$N\leq\bar N$的多组成本上限，得到生态--成本权衡；若用加权目标，权重必须有单位或先归一化。不能无依据把ha直接加到元。
+
+与匀速建设、仅工程、无光伏等可行对照采用相同土地、水量、总预算与气候边界。行动准则来自约束可行性、边际生态收益与压力情景；不预定最优方案必然高出对照多少倍。
+
+\section{任务三：扰动、恢复与长期情景}
+优先由共同气象驱动表达干旱与风沙，在任务一过程内产生损伤。若额外引入随机冲击，必须表示过程模型未解释的损失，避免同一次沙尘既在$h$中又在冲击中重复扣覆盖。事件次数$N_{it}\sim\mathrm{Poisson}(\lambda_{it}\Delta t)$只是候选模型；强度分布与时变频率需事件记录估计，不得将常数宣称为已拟合频率。
+
+每次独立剩余冲击可用$v_i^+=(1-D_{ik})v_i^-$，$D_{ik}\in[0,1]$，同一时间段多次事件逐次作用。恢复仍由任务一状态与补水、补植、财政响应决定。若用AR(1)作比较，必须保留估计的时间尺度；月系数不能直接作年系数，平稳均值也不等于生态承载力。
+
+令事件发生时刻为$\tau_e$，恢复阈值为预先声明的事件前季节基线比例$v_{rec}(\tau)$，恢复时间定义为
+\begin{equation}
+ T_{rec}=\inf\{s\geq0:v(\tau_e+s)\geq v_{rec}(\tau_e+s)\}.
+\end{equation}
+截至观测终点仍未恢复的样本为右删失，不记为0或“剩余年数”。如要求持续恢复，应另外规定连续满足阈值的时长。失败概率也须先定义阈值、持续时间和空间聚合；未估计损伤参数前只能报告假设情景下的条件风险。
+
+未来气候可按NEX-GDDP-CMIP6等有版本的多模型、多SSP驱动，历史与未来使用一致变量、单位和偏差处理。日均风不代表阵风。规划到2050年时明确实际年份序列，不能以固定覆盖折减伪装风温变化；也不能把情景集合区间称为经校准的概率置信区间。
+
+\section{参数证据与尚未关闭的条件}
+\noindent\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{2.8cm}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{3.3cm}@{}}
+\toprule
+参数/数据 & 依据与用途 & 当前状态\\
+\midrule
+NASA月气象/辐射 & 官方原响应、请求、单位和哈希已留存；用于背景与来源一致性检查 & 8点共960月记录；非现场真值\\
+区段、土地与植物 & 实际边界、工程类型、根深、种植时间 & 未核验，尚不能确定代表区段\\
+NDVI/覆盖 & QA、像元范围、端元与独立覆盖调查 & 原资料缺QA，不作可靠覆盖标签\\
+水与土参数 & FAO56方法；土层/容重/持水参数及地方水许可 & 机制有文献，本地参数未齐\\
+风沙参数 & F\'ecan等、Shao--Lu及本地观测 & 原理可参考；旧逐站输沙目标撤销\\
+费用、人工、收益 & 工程清单、当地工资/电价；NREL运维结构、IRENA量级对照 & 行业平均不等于项目单价\\
+灾害与未来 & 地方事件/恢复记录；CMIP6情景与版本 & 频率、损伤和未来区段驱动待核验\\
+\bottomrule
+\end{tabularx}
+
+每项数值须区分原文测量、拟合、本文换算及假设，记录原始单位、地点/物种/深度、年份、文献页码或表号、不确定性及适用范围。现有A01--A16锚点尚缺逐项原文定位，不能自动进入参数集。以上缺口未关闭前，本文件不提供数值最优解、真实灾害概率或政策效果承诺。
+
+任务四的一页公众简报应据最终证据说明可行条件、财政口径、预期生态收益和失败条件，不能引用已撤销的旧结果。
+
+\section*{方法依据与来源定位}
+\begin{enumerate}[label={[\arabic*]}]
+\item 2026 CQU\_MCM Problem B原题，任务1--4；本文件未改变题目要求。
+\item Allen et al. (1998), \emph{Crop Evapotranspiration}, FAO Irrigation and Drainage Paper 56；本仓库版本附2006年勘误。
+\item F\'ecan et al. (1999), \emph{Annales Geophysicae}, 17:149--157. DOI: \href{https://doi.org/10.1007/s00585-999-0149-7}{10.1007/s00585-999-0149-7}；公式14--15，EN02本地PDF第6--9页。
+\item Shao and Lu (2000), \emph{JGR Atmospheres}. DOI: \href{https://doi.org/10.1029/2000JD900304}{10.1029/2000JD900304}；EN03在线原文入口见英文文献索引，本版未摘录系数。
+\item NREL (2018), \emph{Best Practices for Operation and Maintenance of Photovoltaic and Energy Storage Systems}, 3rd ed.；EN11 PDF第106--108、134页。IRENA (2026), \emph{Renewable Power Generation Costs in 2025}，EN12光伏章；仅用于费用结构/外部量级，不作新疆项目报价。
+\item NASA POWER, \url{https://power.larc.nasa.gov/api/temporal/monthly/point}；实际请求和返回单位见数据目录清单。NEX-GDDP-CMIP6 v2技术说明（2025），EN13第3--4、32--33页，变量与限制。
+\end{enumerate}
+\end{document}

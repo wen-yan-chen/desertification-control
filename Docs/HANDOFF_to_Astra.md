@@ -2,7 +2,7 @@
 
 Written by Claude. Read `Docs/20261110_model1_v7_rebuild.md` next; it has the evidence for everything below.
 
-## What was added (branch `model1-v7-rebuild`, cut from `main` at 32b6534; not committed)
+## What was added (branch `model1-v7-rebuild`, cut from `main` at 32b6534)
 
 | Path | What it is |
 |---|---|
@@ -13,6 +13,17 @@ Written by Claude. Read `Docs/20261110_model1_v7_rebuild.md` next; it has the ev
 | `Docs/20261110_model1_v7_rebuild.md` | model, check of v7 Task 1, changes C1–C7, results, limits, Chinese summary |
 
 Not touched: `Reports/model_v7.tex`, `Code/v7_*.py`, the v7 panel.
+
+## First-trial daily model, merged into this branch
+
+Branch `model1-first-version` is merged here (not into `main`), so both versions sit side by side:
+
+| Version | Code | Data | Results / figures | Write-up |
+|---|---|---|---|---|
+| v7 rebuild (current, yearly, simple) | `Code/v7_model1.py` | `Data/v7/` | `Results/v7/model1/`, `Figures/v7/m1_fig*.png` | `Docs/20261110_model1_v7_rebuild.md` |
+| First trial (daily, FAO-56 water balance, more parameters) | `Code/m1_*.py` | `Data/raw/model1/`, `Data/processed/model1/` | `Results/model1/`, `Figures/model1/` | `Docs/20261110_audit_check_and_model1.md`, `Reports/M1/model1_en.pdf`, `model1_zh.pdf`; its own handoff is `Docs/HANDOFF_to_Astra_first_trial.md` |
+
+Use the v7 rebuild as Model 1. The first trial is kept as a reference: it supplies the section pixel data, the daily water balance behind the water relation, and a cross-check of the water–cover curve. `Data/v7/section_modis/` is a copy of four of its tables so that `v7_model1.py` runs without it.
 
 ## The model in two lines
 
