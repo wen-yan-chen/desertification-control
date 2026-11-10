@@ -1,0 +1,1239 @@
+{
+ "files": {
+  "Data/raw/model1/modis_area/NDVI_A2001209.json.gz": {
+   "product": "MOD13Q1 v061",
+   "request": {
+    "band": "250m_16_days_NDVI",
+    "endDate": "A2001209",
+    "kmAboveBelow": 40,
+    "kmLeftRight": 85,
+    "latitude": 37.05,
+    "longitude": 82.15,
+    "startDate": "A2001209"
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "df1282c22b841d54ca06e82837ddb3a55e86c2357231c72a86e913479c4ba554",
+   "source": "ORNL DAAC MODIS subset API",
+   "url": "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset"
+  },
+  "Data/raw/model1/modis_area/NDVI_A2001225.json.gz": {
+   "product": "MOD13Q1 v061",
+   "request": {
+    "band": "250m_16_days_NDVI",
+    "endDate": "A2001225",
+    "kmAboveBelow": 40,
+    "kmLeftRight": 85,
+    "latitude": 37.05,
+    "longitude": 82.15,
+    "startDate": "A2001225"
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "be847e2b8dfea2a35641b1c8021bd10eddb0a265db515e4212cd34df834a25fb",
+   "source": "ORNL DAAC MODIS subset API",
+   "url": "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset"
+  },
+  "Data/raw/model1/modis_area/NDVI_A2002209.json.gz": {
+   "product": "MOD13Q1 v061",
+   "request": {
+    "band": "250m_16_days_NDVI",
+    "endDate": "A2002209",
+    "kmAboveBelow": 40,
+    "kmLeftRight": 85,
+    "latitude": 37.05,
+    "longitude": 82.15,
+    "startDate": "A2002209"
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "8532b610e7073c6661b94bc74421f6b77d0e1aef1195479c59fc1f0061f77c12",
+   "source": "ORNL DAAC MODIS subset API",
+   "url": "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset"
+  },
+  "Data/raw/model1/modis_area/NDVI_A2002225.json.gz": {
+   "product": "MOD13Q1 v061",
+   "request": {
+    "band": "250m_16_days_NDVI",
+    "endDate": "A2002225",
+    "kmAboveBelow": 40,
+    "kmLeftRight": 85,
+    "latitude": 37.05,
+    "longitude": 82.15,
+    "startDate": "A2002225"
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "a3e59bd018c069964dce38dca338ccf638853bb6ed7e4cf6206bcf7b991a252b",
+   "source": "ORNL DAAC MODIS subset API",
+   "url": "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset"
+  },
+  "Data/raw/model1/modis_area/NDVI_A2003209.json.gz": {
+   "product": "MOD13Q1 v061",
+   "request": {
+    "band": "250m_16_days_NDVI",
+    "endDate": "A2003209",
+    "kmAboveBelow": 40,
+    "kmLeftRight": 85,
+    "latitude": 37.05,
+    "longitude": 82.15,
+    "startDate": "A2003209"
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "a8fd7347c909e36927e97596b64fba9259934280caa123f8b5d58eea4864f592",
+   "source": "ORNL DAAC MODIS subset API",
+   "url": "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset"
+  },
+  "Data/raw/model1/modis_area/NDVI_A2003225.json.gz": {
+   "product": "MOD13Q1 v061",
+   "request": {
+    "band": "250m_16_days_NDVI",
+    "endDate": "A2003225",
+    "kmAboveBelow": 40,
+    "kmLeftRight": 85,
+    "latitude": 37.05,
+    "longitude": 82.15,
+    "startDate": "A2003225"
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "14b8a9f340cfd8f2819a1c7c81a1f0996ff21369f3cb347d079e5deb67329677",
+   "source": "ORNL DAAC MODIS subset API",
+   "url": "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset"
+  },
+  "Data/raw/model1/modis_area/NDVI_A2022209.json.gz": {
+   "product": "MOD13Q1 v061",
+   "request": {
+    "band": "250m_16_days_NDVI",
+    "endDate": "A2022209",
+    "kmAboveBelow": 40,
+    "kmLeftRight": 85,
+    "latitude": 37.05,
+    "longitude": 82.15,
+    "startDate": "A2022209"
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "7aa3b9da35568fc66c8abfc1109c2d56b3339d7d3b298f9166d0787da306341d",
+   "source": "ORNL DAAC MODIS subset API",
+   "url": "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset"
+  },
+  "Data/raw/model1/modis_area/NDVI_A2022225.json.gz": {
+   "product": "MOD13Q1 v061",
+   "request": {
+    "band": "250m_16_days_NDVI",
+    "endDate": "A2022225",
+    "kmAboveBelow": 40,
+    "kmLeftRight": 85,
+    "latitude": 37.05,
+    "longitude": 82.15,
+    "startDate": "A2022225"
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "e009f68839c3c25336354b2f6833cb82b68460729ed14967d2ba685d4e5cbfd4",
+   "source": "ORNL DAAC MODIS subset API",
+   "url": "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset"
+  },
+  "Data/raw/model1/modis_area/NDVI_A2023209.json.gz": {
+   "product": "MOD13Q1 v061",
+   "request": {
+    "band": "250m_16_days_NDVI",
+    "endDate": "A2023209",
+    "kmAboveBelow": 40,
+    "kmLeftRight": 85,
+    "latitude": 37.05,
+    "longitude": 82.15,
+    "startDate": "A2023209"
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "424af82219b90d9687bbab18f659e015033058bf79d41d62f7a1a556dce21c74",
+   "source": "ORNL DAAC MODIS subset API",
+   "url": "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset"
+  },
+  "Data/raw/model1/modis_area/NDVI_A2023225.json.gz": {
+   "product": "MOD13Q1 v061",
+   "request": {
+    "band": "250m_16_days_NDVI",
+    "endDate": "A2023225",
+    "kmAboveBelow": 40,
+    "kmLeftRight": 85,
+    "latitude": 37.05,
+    "longitude": 82.15,
+    "startDate": "A2023225"
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "9217f444e499cd758a408bb9ea1b563fab9400a79187b9ef5ebf4ac090ebbd4b",
+   "source": "ORNL DAAC MODIS subset API",
+   "url": "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset"
+  },
+  "Data/raw/model1/modis_area/NDVI_A2024209.json.gz": {
+   "product": "MOD13Q1 v061",
+   "request": {
+    "band": "250m_16_days_NDVI",
+    "endDate": "A2024209",
+    "kmAboveBelow": 40,
+    "kmLeftRight": 85,
+    "latitude": 37.05,
+    "longitude": 82.15,
+    "startDate": "A2024209"
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "718dbb7473833fbce3ad524e611c0beb27d5a810a7d8848de5b654380581c909",
+   "source": "ORNL DAAC MODIS subset API",
+   "url": "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset"
+  },
+  "Data/raw/model1/modis_area/NDVI_A2024225.json.gz": {
+   "product": "MOD13Q1 v061",
+   "request": {
+    "band": "250m_16_days_NDVI",
+    "endDate": "A2024225",
+    "kmAboveBelow": 40,
+    "kmLeftRight": 85,
+    "latitude": 37.05,
+    "longitude": 82.15,
+    "startDate": "A2024225"
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "0abe15dd2b7ae33b40bb0558665d1957f318619d70b7fb6e4831c55e6eae1a32",
+   "source": "ORNL DAAC MODIS subset API",
+   "url": "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset"
+  },
+  "Data/raw/model1/modis_windows/CON1_NDVI.json.gz": {
+   "note": "assembled from 10-date chunk responses; values unmodified",
+   "product": "MOD13Q1 v061",
+   "request": {
+    "band": "250m_16_days_NDVI",
+    "first": "A2001001",
+    "kmAboveBelow": 1,
+    "kmLeftRight": 1,
+    "last": "A2024353",
+    "latitude": 36.82187,
+    "longitude": 81.42931
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "0da524593040168bdb6bc3c2bacaf6544418fefe720e57b70c84eaa98cb4a7fd",
+   "source": "ORNL DAAC MODIS subset API",
+   "url": "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset"
+  },
+  "Data/raw/model1/modis_windows/CON1_pixel_reliability.json.gz": {
+   "note": "assembled from 10-date chunk responses; values unmodified",
+   "product": "MOD13Q1 v061",
+   "request": {
+    "band": "250m_16_days_pixel_reliability",
+    "first": "A2001001",
+    "kmAboveBelow": 1,
+    "kmLeftRight": 1,
+    "last": "A2024353",
+    "latitude": 36.82187,
+    "longitude": 81.42931
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "5b293295444b80b4624fd8f09690ddbad9a27e3d4ce892d77b84753b283b2b8a",
+   "source": "ORNL DAAC MODIS subset API",
+   "url": "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset"
+  },
+  "Data/raw/model1/modis_windows/CON2_NDVI.json.gz": {
+   "note": "assembled from 10-date chunk responses; values unmodified",
+   "product": "MOD13Q1 v061",
+   "request": {
+    "band": "250m_16_days_NDVI",
+    "first": "A2001001",
+    "kmAboveBelow": 1,
+    "kmLeftRight": 1,
+    "last": "A2024353",
+    "latitude": 36.82396,
+    "longitude": 81.79589
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "57675b9ae9285a03385ed4a3b7251335e976eb1bddebbf888fd726a27da7b887",
+   "source": "ORNL DAAC MODIS subset API",
+   "url": "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset"
+  },
+  "Data/raw/model1/modis_windows/CON2_pixel_reliability.json.gz": {
+   "note": "assembled from 10-date chunk responses; values unmodified",
+   "product": "MOD13Q1 v061",
+   "request": {
+    "band": "250m_16_days_pixel_reliability",
+    "first": "A2001001",
+    "kmAboveBelow": 1,
+    "kmLeftRight": 1,
+    "last": "A2024353",
+    "latitude": 36.82396,
+    "longitude": 81.79589
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "cd35d23dcbb1648a294ba72038996f59bdb95b037db97b9d14db3c0f493e18d8",
+   "source": "ORNL DAAC MODIS subset API",
+   "url": "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset"
+  },
+  "Data/raw/model1/modis_windows/CON3_NDVI.json.gz": {
+   "note": "assembled from 10-date chunk responses; values unmodified",
+   "product": "MOD13Q1 v061",
+   "request": {
+    "band": "250m_16_days_NDVI",
+    "first": "A2001001",
+    "kmAboveBelow": 1,
+    "kmLeftRight": 1,
+    "last": "A2024353",
+    "latitude": 36.81562,
+    "longitude": 82.09146
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "77c72f7930a0716ff530e5b9d0a5fa53a7ec23b69e1212eb1cb54b399458a8fb",
+   "source": "ORNL DAAC MODIS subset API",
+   "url": "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset"
+  },
+  "Data/raw/model1/modis_windows/CON3_pixel_reliability.json.gz": {
+   "note": "assembled from 10-date chunk responses; values unmodified",
+   "product": "MOD13Q1 v061",
+   "request": {
+    "band": "250m_16_days_pixel_reliability",
+    "first": "A2001001",
+    "kmAboveBelow": 1,
+    "kmLeftRight": 1,
+    "last": "A2024353",
+    "latitude": 36.81562,
+    "longitude": 82.09146
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "b10a925b728c51a46e2d1fca915165b8399ce5573734bb99303d4ea2f6dc954a",
+   "source": "ORNL DAAC MODIS subset API",
+   "url": "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset"
+  },
+  "Data/raw/model1/modis_windows/CON4_NDVI.json.gz": {
+   "note": "assembled from 10-date chunk responses; values unmodified",
+   "product": "MOD13Q1 v061",
+   "request": {
+    "band": "250m_16_days_NDVI",
+    "first": "A2001001",
+    "kmAboveBelow": 1,
+    "kmLeftRight": 1,
+    "last": "A2024353",
+    "latitude": 37.05729,
+    "longitude": 82.80643
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "e44770a6fdd7d762bfc482669bb6da1c0e87ea7db1529565ed0440c94e7ebbd5",
+   "source": "ORNL DAAC MODIS subset API",
+   "url": "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset"
+  },
+  "Data/raw/model1/modis_windows/CON4_pixel_reliability.json.gz": {
+   "note": "assembled from 10-date chunk responses; values unmodified",
+   "product": "MOD13Q1 v061",
+   "request": {
+    "band": "250m_16_days_pixel_reliability",
+    "first": "A2001001",
+    "kmAboveBelow": 1,
+    "kmLeftRight": 1,
+    "last": "A2024353",
+    "latitude": 37.05729,
+    "longitude": 82.80643
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "b149d811174e9468d059ead10be5a822b3fda3fbee68ee42ec9a42a20b2d7a9d",
+   "source": "ORNL DAAC MODIS subset API",
+   "url": "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset"
+  },
+  "Data/raw/model1/modis_windows/DES1_NDVI.json.gz": {
+   "note": "assembled from 10-date chunk responses; values unmodified",
+   "product": "MOD13Q1 v061",
+   "request": {
+    "band": "250m_16_days_NDVI",
+    "first": "A2001001",
+    "kmAboveBelow": 1,
+    "kmLeftRight": 1,
+    "last": "A2024353",
+    "latitude": 36.80729,
+    "longitude": 82.13977
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "3ed4536844fc85dd52d0b12768ec597da4d81b671a6b6d2ef31aaeb4bc2428b4",
+   "source": "ORNL DAAC MODIS subset API",
+   "url": "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset"
+  },
+  "Data/raw/model1/modis_windows/DES1_pixel_reliability.json.gz": {
+   "note": "assembled from 10-date chunk responses; values unmodified",
+   "product": "MOD13Q1 v061",
+   "request": {
+    "band": "250m_16_days_pixel_reliability",
+    "first": "A2001001",
+    "kmAboveBelow": 1,
+    "kmLeftRight": 1,
+    "last": "A2024353",
+    "latitude": 36.80729,
+    "longitude": 82.13977
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "19373f49c0d07d536304220ee2a5c1d7d4c591d172235cb22e769aff01aba00d",
+   "source": "ORNL DAAC MODIS subset API",
+   "url": "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset"
+  },
+  "Data/raw/model1/modis_windows/DES2_NDVI.json.gz": {
+   "note": "assembled from 10-date chunk responses; values unmodified",
+   "product": "MOD13Q1 v061",
+   "request": {
+    "band": "250m_16_days_NDVI",
+    "first": "A2001001",
+    "kmAboveBelow": 1,
+    "kmLeftRight": 1,
+    "last": "A2024353",
+    "latitude": 36.80729,
+    "longitude": 82.20742
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "53e67ccbdca841a02ab30b72c4166bd2b6cad68ebbb15e2c95acca8092d9578b",
+   "source": "ORNL DAAC MODIS subset API",
+   "url": "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset"
+  },
+  "Data/raw/model1/modis_windows/DES2_pixel_reliability.json.gz": {
+   "note": "assembled from 10-date chunk responses; values unmodified",
+   "product": "MOD13Q1 v061",
+   "request": {
+    "band": "250m_16_days_pixel_reliability",
+    "first": "A2001001",
+    "kmAboveBelow": 1,
+    "kmLeftRight": 1,
+    "last": "A2024353",
+    "latitude": 36.80729,
+    "longitude": 82.20742
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "da6c4b2fb1487694e078d3a4061e2d1b57f8dde172acf480c215f2bc2cebd841",
+   "source": "ORNL DAAC MODIS subset API",
+   "url": "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset"
+  },
+  "Data/raw/model1/modis_windows/ECO1_NDVI.json.gz": {
+   "note": "assembled from 10-date chunk responses; values unmodified",
+   "product": "MOD13Q1 v061",
+   "request": {
+    "band": "250m_16_days_NDVI",
+    "first": "A2001001",
+    "kmAboveBelow": 1,
+    "kmLeftRight": 1,
+    "last": "A2024353",
+    "latitude": 37.03646,
+    "longitude": 81.43962
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "1bf830d82f618097fb8861db8bc309ed239ccde2fab50f3d9d747bd52aab36c4",
+   "source": "ORNL DAAC MODIS subset API",
+   "url": "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset"
+  },
+  "Data/raw/model1/modis_windows/ECO1_pixel_reliability.json.gz": {
+   "note": "assembled from 10-date chunk responses; values unmodified",
+   "product": "MOD13Q1 v061",
+   "request": {
+    "band": "250m_16_days_pixel_reliability",
+    "first": "A2001001",
+    "kmAboveBelow": 1,
+    "kmLeftRight": 1,
+    "last": "A2024353",
+    "latitude": 37.03646,
+    "longitude": 81.43962
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "d5a968d4e8c2f8a0cefd04c14577b7331ee6d56bdf894fbc7a1c2a4f160fc462",
+   "source": "ORNL DAAC MODIS subset API",
+   "url": "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset"
+  },
+  "Data/raw/model1/modis_windows/ECO2_NDVI.json.gz": {
+   "note": "assembled from 10-date chunk responses; values unmodified",
+   "product": "MOD13Q1 v061",
+   "request": {
+    "band": "250m_16_days_NDVI",
+    "first": "A2001001",
+    "kmAboveBelow": 1,
+    "kmLeftRight": 1,
+    "last": "A2024353",
+    "latitude": 37.31146,
+    "longitude": 82.92578
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "82fb4daed0bf71f58f7d36a6d760c7ae3bbd06dac2bbb10ca68846769464d5e7",
+   "source": "ORNL DAAC MODIS subset API",
+   "url": "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset"
+  },
+  "Data/raw/model1/modis_windows/ECO2_pixel_reliability.json.gz": {
+   "note": "assembled from 10-date chunk responses; values unmodified",
+   "product": "MOD13Q1 v061",
+   "request": {
+    "band": "250m_16_days_pixel_reliability",
+    "first": "A2001001",
+    "kmAboveBelow": 1,
+    "kmLeftRight": 1,
+    "last": "A2024353",
+    "latitude": 37.31146,
+    "longitude": 82.92578
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "359fadf5da4cf304a37f1e4c6e8209eb614b3d310a39af1738f8fe3f358b2f8a",
+   "source": "ORNL DAAC MODIS subset API",
+   "url": "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset"
+  },
+  "Data/raw/model1/modis_windows/ECO3_NDVI.json.gz": {
+   "note": "assembled from 10-date chunk responses; values unmodified",
+   "product": "MOD13Q1 v061",
+   "request": {
+    "band": "250m_16_days_NDVI",
+    "first": "A2001001",
+    "kmAboveBelow": 1,
+    "kmLeftRight": 1,
+    "last": "A2024353",
+    "latitude": 37.28229,
+    "longitude": 83.00884
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "c439579f9369d0c0a47a99f5bf67a9b921c17f243dae7d45352ce441c1386ddd",
+   "source": "ORNL DAAC MODIS subset API",
+   "url": "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset"
+  },
+  "Data/raw/model1/modis_windows/ECO3_pixel_reliability.json.gz": {
+   "note": "assembled from 10-date chunk responses; values unmodified",
+   "product": "MOD13Q1 v061",
+   "request": {
+    "band": "250m_16_days_pixel_reliability",
+    "first": "A2001001",
+    "kmAboveBelow": 1,
+    "kmLeftRight": 1,
+    "last": "A2024353",
+    "latitude": 37.28229,
+    "longitude": 83.00884
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "e72613c43155a62f1b55cb731764cd438b0c731c28655a1df95060fac2cb2c00",
+   "source": "ORNL DAAC MODIS subset API",
+   "url": "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset"
+  },
+  "Data/raw/model1/modis_windows/OAS1_NDVI.json.gz": {
+   "note": "assembled from 10-date chunk responses; values unmodified",
+   "product": "MOD13Q1 v061",
+   "request": {
+    "band": "250m_16_days_NDVI",
+    "first": "A2001001",
+    "kmAboveBelow": 1,
+    "kmLeftRight": 1,
+    "last": "A2024353",
+    "latitude": 36.86979,
+    "longitude": 81.49858
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "5ed34426f79d8c3ffe3a11b5f834e1b66d08c43cc9adf032aad5f225d3e8b912",
+   "source": "ORNL DAAC MODIS subset API",
+   "url": "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset"
+  },
+  "Data/raw/model1/modis_windows/OAS1_pixel_reliability.json.gz": {
+   "note": "assembled from 10-date chunk responses; values unmodified",
+   "product": "MOD13Q1 v061",
+   "request": {
+    "band": "250m_16_days_pixel_reliability",
+    "first": "A2001001",
+    "kmAboveBelow": 1,
+    "kmLeftRight": 1,
+    "last": "A2024353",
+    "latitude": 36.86979,
+    "longitude": 81.49858
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "fcff31386b06b02b9909ae9656b6cce93765d8c864bbd118a39c8d62df3d86b9",
+   "source": "ORNL DAAC MODIS subset API",
+   "url": "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset"
+  },
+  "Data/raw/model1/modis_windows/OAS2_NDVI.json.gz": {
+   "note": "assembled from 10-date chunk responses; values unmodified",
+   "product": "MOD13Q1 v061",
+   "request": {
+    "band": "250m_16_days_NDVI",
+    "first": "A2001001",
+    "kmAboveBelow": 1,
+    "kmLeftRight": 1,
+    "last": "A2024353",
+    "latitude": 36.85937,
+    "longitude": 81.58642
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "865826f82960250d744f76da21c1085b033eaf7dbf5ca46be3236408270b1a0f",
+   "source": "ORNL DAAC MODIS subset API",
+   "url": "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset"
+  },
+  "Data/raw/model1/modis_windows/OAS2_pixel_reliability.json.gz": {
+   "note": "assembled from 10-date chunk responses; values unmodified",
+   "product": "MOD13Q1 v061",
+   "request": {
+    "band": "250m_16_days_pixel_reliability",
+    "first": "A2001001",
+    "kmAboveBelow": 1,
+    "kmLeftRight": 1,
+    "last": "A2024353",
+    "latitude": 36.85937,
+    "longitude": 81.58642
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "1299c9b8093fa8499053ab8f9db1bacce4796bbd3c826603b47935e623f7bcbd",
+   "source": "ORNL DAAC MODIS subset API",
+   "url": "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset"
+  },
+  "Data/raw/model1/nasa_power_daily/E_minfeng.json.gz": {
+   "request": {
+    "community": "AG",
+    "end": "20241231",
+    "format": "JSON",
+    "latitude": 37.1,
+    "longitude": 82.75,
+    "parameters": "T2M_MAX,T2M_MIN,RH2M,WS2M,ALLSKY_SFC_SW_DWN,PRECTOTCORR,PS",
+    "start": "20010101"
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "941427ae1ce0cfb8f3369515b17f14caa273f3d0cef652e515999ea96e0a8093",
+   "source": "NASA POWER daily API (MERRA-2 / CERES SYN1deg)",
+   "units": {
+    "ALLSKY_SFC_SW_DWN": "MJ/m^2/day",
+    "PRECTOTCORR": "mm/day",
+    "PS": "kPa",
+    "RH2M": "%",
+    "T2M_MAX": "C",
+    "T2M_MIN": "C",
+    "WS2M": "m/s"
+   },
+   "url": "https://power.larc.nasa.gov/api/temporal/daily/point"
+  },
+  "Data/raw/model1/nasa_power_daily/M_gap.json.gz": {
+   "request": {
+    "community": "AG",
+    "end": "20241231",
+    "format": "JSON",
+    "latitude": 37.0,
+    "longitude": 82.35,
+    "parameters": "T2M_MAX,T2M_MIN,RH2M,WS2M,ALLSKY_SFC_SW_DWN,PRECTOTCORR,PS",
+    "start": "20010101"
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "c3230b8f9345febd831b536bc30669bc828c6c00a080527fa47c2833b2031aa0",
+   "source": "NASA POWER daily API (MERRA-2 / CERES SYN1deg)",
+   "units": {
+    "ALLSKY_SFC_SW_DWN": "MJ/m^2/day",
+    "PRECTOTCORR": "mm/day",
+    "PS": "kPa",
+    "RH2M": "%",
+    "T2M_MAX": "C",
+    "T2M_MIN": "C",
+    "WS2M": "m/s"
+   },
+   "url": "https://power.larc.nasa.gov/api/temporal/daily/point"
+  },
+  "Data/raw/model1/nasa_power_daily/W_yutian.json.gz": {
+   "request": {
+    "community": "AG",
+    "end": "20241231",
+    "format": "JSON",
+    "latitude": 36.95,
+    "longitude": 81.95,
+    "parameters": "T2M_MAX,T2M_MIN,RH2M,WS2M,ALLSKY_SFC_SW_DWN,PRECTOTCORR,PS",
+    "start": "20010101"
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "ffd733193374ce72db6a695f7e51c452c5da6f01b8bb835b0d669a4bd12b62f7",
+   "source": "NASA POWER daily API (MERRA-2 / CERES SYN1deg)",
+   "units": {
+    "ALLSKY_SFC_SW_DWN": "MJ/m^2/day",
+    "PRECTOTCORR": "mm/day",
+    "PS": "kPa",
+    "RH2M": "%",
+    "T2M_MAX": "C",
+    "T2M_MIN": "C",
+    "WS2M": "m/s"
+   },
+   "url": "https://power.larc.nasa.gov/api/temporal/daily/point"
+  },
+  "Data/raw/model1/openmeteo_era5/E_minfeng_daily.json.gz": {
+   "grid": {
+    "elevation_m": 1394.0,
+    "lat": 37.1,
+    "lon": 82.80002
+   },
+   "model": "era5_seamless",
+   "request": {
+    "daily": "temperature_2m_max,temperature_2m_min,temperature_2m_mean,dew_point_2m_mean,precipitation_sum,shortwave_radiation_sum,wind_speed_10m_mean,surface_pressure_mean,et0_fao_evapotranspiration,soil_moisture_0_to_7cm_mean,soil_moisture_7_to_28cm_mean,soil_moisture_28_to_100cm_mean",
+    "end_date": "2024-12-31",
+    "latitude": 37.1,
+    "longitude": 82.75,
+    "models": "era5_seamless",
+    "start_date": "2001-01-01",
+    "timezone": "Asia/Urumqi",
+    "wind_speed_unit": "ms"
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "96f4410187101590259d71647042847aad47699c0aa876ce401c54e3ff2b5ec6",
+   "source": "Open-Meteo Historical Weather API",
+   "units": {
+    "dew_point_2m_mean": "°C",
+    "et0_fao_evapotranspiration": "mm",
+    "precipitation_sum": "mm",
+    "shortwave_radiation_sum": "MJ/m²",
+    "soil_moisture_0_to_7cm_mean": "m³/m³",
+    "soil_moisture_28_to_100cm_mean": "m³/m³",
+    "soil_moisture_7_to_28cm_mean": "m³/m³",
+    "surface_pressure_mean": "hPa",
+    "temperature_2m_max": "°C",
+    "temperature_2m_mean": "°C",
+    "temperature_2m_min": "°C",
+    "time": "iso8601",
+    "wind_speed_10m_mean": "m/s"
+   },
+   "url": "https://archive-api.open-meteo.com/v1/archive"
+  },
+  "Data/raw/model1/openmeteo_era5/E_minfeng_hourly_2001_2004.json.gz": {
+   "grid": {
+    "lat": 37.1,
+    "lon": 82.80002
+   },
+   "model": "era5_seamless",
+   "request": {
+    "end_date": "2004-12-31",
+    "hourly": "wind_speed_10m,wind_gusts_10m,wind_direction_10m",
+    "latitude": 37.1,
+    "longitude": 82.75,
+    "models": "era5_seamless",
+    "start_date": "2001-01-01",
+    "timezone": "Asia/Urumqi",
+    "wind_speed_unit": "ms"
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "d2d66404ee10cd98c45a950be7623799c51686667aab8db8747b5ff9c8be95cd",
+   "source": "Open-Meteo Historical Weather API",
+   "units": {
+    "time": "iso8601",
+    "wind_direction_10m": "°",
+    "wind_gusts_10m": "m/s",
+    "wind_speed_10m": "m/s"
+   },
+   "url": "https://archive-api.open-meteo.com/v1/archive"
+  },
+  "Data/raw/model1/openmeteo_era5/E_minfeng_hourly_2005_2008.json.gz": {
+   "grid": {
+    "lat": 37.1,
+    "lon": 82.80002
+   },
+   "model": "era5_seamless",
+   "request": {
+    "end_date": "2008-12-31",
+    "hourly": "wind_speed_10m,wind_gusts_10m,wind_direction_10m",
+    "latitude": 37.1,
+    "longitude": 82.75,
+    "models": "era5_seamless",
+    "start_date": "2005-01-01",
+    "timezone": "Asia/Urumqi",
+    "wind_speed_unit": "ms"
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "6d07ea9bb891ba30fb548058f04022294963a2383a922b790c4986f89467df3d",
+   "source": "Open-Meteo Historical Weather API",
+   "units": {
+    "time": "iso8601",
+    "wind_direction_10m": "°",
+    "wind_gusts_10m": "m/s",
+    "wind_speed_10m": "m/s"
+   },
+   "url": "https://archive-api.open-meteo.com/v1/archive"
+  },
+  "Data/raw/model1/openmeteo_era5/E_minfeng_hourly_2009_2012.json.gz": {
+   "grid": {
+    "lat": 37.1,
+    "lon": 82.80002
+   },
+   "model": "era5_seamless",
+   "request": {
+    "end_date": "2012-12-31",
+    "hourly": "wind_speed_10m,wind_gusts_10m,wind_direction_10m",
+    "latitude": 37.1,
+    "longitude": 82.75,
+    "models": "era5_seamless",
+    "start_date": "2009-01-01",
+    "timezone": "Asia/Urumqi",
+    "wind_speed_unit": "ms"
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "e9f42201e6a0216149f1e9dcf8c3ea4c976a2d832eda6c5ea7546fb8961c08d0",
+   "source": "Open-Meteo Historical Weather API",
+   "units": {
+    "time": "iso8601",
+    "wind_direction_10m": "°",
+    "wind_gusts_10m": "m/s",
+    "wind_speed_10m": "m/s"
+   },
+   "url": "https://archive-api.open-meteo.com/v1/archive"
+  },
+  "Data/raw/model1/openmeteo_era5/E_minfeng_hourly_2013_2016.json.gz": {
+   "grid": {
+    "lat": 37.1,
+    "lon": 82.80002
+   },
+   "model": "era5_seamless",
+   "request": {
+    "end_date": "2016-12-31",
+    "hourly": "wind_speed_10m,wind_gusts_10m,wind_direction_10m",
+    "latitude": 37.1,
+    "longitude": 82.75,
+    "models": "era5_seamless",
+    "start_date": "2013-01-01",
+    "timezone": "Asia/Urumqi",
+    "wind_speed_unit": "ms"
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "4e737d7754350c2ef4056d0c43638fbfc008672724763e984d58ae097e686b5e",
+   "source": "Open-Meteo Historical Weather API",
+   "units": {
+    "time": "iso8601",
+    "wind_direction_10m": "°",
+    "wind_gusts_10m": "m/s",
+    "wind_speed_10m": "m/s"
+   },
+   "url": "https://archive-api.open-meteo.com/v1/archive"
+  },
+  "Data/raw/model1/openmeteo_era5/E_minfeng_hourly_2017_2020.json.gz": {
+   "grid": {
+    "lat": 37.1,
+    "lon": 82.80002
+   },
+   "model": "era5_seamless",
+   "request": {
+    "end_date": "2020-12-31",
+    "hourly": "wind_speed_10m,wind_gusts_10m,wind_direction_10m",
+    "latitude": 37.1,
+    "longitude": 82.75,
+    "models": "era5_seamless",
+    "start_date": "2017-01-01",
+    "timezone": "Asia/Urumqi",
+    "wind_speed_unit": "ms"
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "8688b95549e67ab7fe20ed29065d6c382ba89084eaa48f0f1d4f298c3b6c2549",
+   "source": "Open-Meteo Historical Weather API",
+   "units": {
+    "time": "iso8601",
+    "wind_direction_10m": "°",
+    "wind_gusts_10m": "m/s",
+    "wind_speed_10m": "m/s"
+   },
+   "url": "https://archive-api.open-meteo.com/v1/archive"
+  },
+  "Data/raw/model1/openmeteo_era5/E_minfeng_hourly_2021_2024.json.gz": {
+   "grid": {
+    "lat": 37.1,
+    "lon": 82.80002
+   },
+   "model": "era5_seamless",
+   "request": {
+    "end_date": "2024-12-31",
+    "hourly": "wind_speed_10m,wind_gusts_10m,wind_direction_10m",
+    "latitude": 37.1,
+    "longitude": 82.75,
+    "models": "era5_seamless",
+    "start_date": "2021-01-01",
+    "timezone": "Asia/Urumqi",
+    "wind_speed_unit": "ms"
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "7409f9433e95838d1407b3f9fef305e16ea83cfc0f27c03d9a4a93eca618b9ca",
+   "source": "Open-Meteo Historical Weather API",
+   "units": {
+    "time": "iso8601",
+    "wind_direction_10m": "°",
+    "wind_gusts_10m": "m/s",
+    "wind_speed_10m": "m/s"
+   },
+   "url": "https://archive-api.open-meteo.com/v1/archive"
+  },
+  "Data/raw/model1/openmeteo_era5/M_gap_daily.json.gz": {
+   "grid": {
+    "elevation_m": 1468.0,
+    "lat": 37.0,
+    "lon": 82.399994
+   },
+   "model": "era5_seamless",
+   "request": {
+    "daily": "temperature_2m_max,temperature_2m_min,temperature_2m_mean,dew_point_2m_mean,precipitation_sum,shortwave_radiation_sum,wind_speed_10m_mean,surface_pressure_mean,et0_fao_evapotranspiration,soil_moisture_0_to_7cm_mean,soil_moisture_7_to_28cm_mean,soil_moisture_28_to_100cm_mean",
+    "end_date": "2024-12-31",
+    "latitude": 37.0,
+    "longitude": 82.35,
+    "models": "era5_seamless",
+    "start_date": "2001-01-01",
+    "timezone": "Asia/Urumqi",
+    "wind_speed_unit": "ms"
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "1dff7369e5f11a2d79743b1063d8978df73322f0ce5985543fe420038d932651",
+   "source": "Open-Meteo Historical Weather API",
+   "units": {
+    "dew_point_2m_mean": "°C",
+    "et0_fao_evapotranspiration": "mm",
+    "precipitation_sum": "mm",
+    "shortwave_radiation_sum": "MJ/m²",
+    "soil_moisture_0_to_7cm_mean": "m³/m³",
+    "soil_moisture_28_to_100cm_mean": "m³/m³",
+    "soil_moisture_7_to_28cm_mean": "m³/m³",
+    "surface_pressure_mean": "hPa",
+    "temperature_2m_max": "°C",
+    "temperature_2m_mean": "°C",
+    "temperature_2m_min": "°C",
+    "time": "iso8601",
+    "wind_speed_10m_mean": "m/s"
+   },
+   "url": "https://archive-api.open-meteo.com/v1/archive"
+  },
+  "Data/raw/model1/openmeteo_era5/M_gap_hourly_2001_2004.json.gz": {
+   "grid": {
+    "lat": 37.0,
+    "lon": 82.399994
+   },
+   "model": "era5_seamless",
+   "request": {
+    "end_date": "2004-12-31",
+    "hourly": "wind_speed_10m,wind_gusts_10m,wind_direction_10m",
+    "latitude": 37.0,
+    "longitude": 82.35,
+    "models": "era5_seamless",
+    "start_date": "2001-01-01",
+    "timezone": "Asia/Urumqi",
+    "wind_speed_unit": "ms"
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "c3703318ca841f45f746c1f28a148066ac57e2bc099aec76630eb402d48a82a5",
+   "source": "Open-Meteo Historical Weather API",
+   "units": {
+    "time": "iso8601",
+    "wind_direction_10m": "°",
+    "wind_gusts_10m": "m/s",
+    "wind_speed_10m": "m/s"
+   },
+   "url": "https://archive-api.open-meteo.com/v1/archive"
+  },
+  "Data/raw/model1/openmeteo_era5/M_gap_hourly_2005_2008.json.gz": {
+   "grid": {
+    "lat": 37.0,
+    "lon": 82.399994
+   },
+   "model": "era5_seamless",
+   "request": {
+    "end_date": "2008-12-31",
+    "hourly": "wind_speed_10m,wind_gusts_10m,wind_direction_10m",
+    "latitude": 37.0,
+    "longitude": 82.35,
+    "models": "era5_seamless",
+    "start_date": "2005-01-01",
+    "timezone": "Asia/Urumqi",
+    "wind_speed_unit": "ms"
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "7c20fd2d333e204d65a62e656ae21c508eeece4adc78400ce6d77048d38d3406",
+   "source": "Open-Meteo Historical Weather API",
+   "units": {
+    "time": "iso8601",
+    "wind_direction_10m": "°",
+    "wind_gusts_10m": "m/s",
+    "wind_speed_10m": "m/s"
+   },
+   "url": "https://archive-api.open-meteo.com/v1/archive"
+  },
+  "Data/raw/model1/openmeteo_era5/M_gap_hourly_2009_2012.json.gz": {
+   "grid": {
+    "lat": 37.0,
+    "lon": 82.399994
+   },
+   "model": "era5_seamless",
+   "request": {
+    "end_date": "2012-12-31",
+    "hourly": "wind_speed_10m,wind_gusts_10m,wind_direction_10m",
+    "latitude": 37.0,
+    "longitude": 82.35,
+    "models": "era5_seamless",
+    "start_date": "2009-01-01",
+    "timezone": "Asia/Urumqi",
+    "wind_speed_unit": "ms"
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "866731719a4a8de62359d9fbca7f2de9f61a2d7d2bbd70369d96d04949d8c815",
+   "source": "Open-Meteo Historical Weather API",
+   "units": {
+    "time": "iso8601",
+    "wind_direction_10m": "°",
+    "wind_gusts_10m": "m/s",
+    "wind_speed_10m": "m/s"
+   },
+   "url": "https://archive-api.open-meteo.com/v1/archive"
+  },
+  "Data/raw/model1/openmeteo_era5/M_gap_hourly_2013_2016.json.gz": {
+   "grid": {
+    "lat": 37.0,
+    "lon": 82.399994
+   },
+   "model": "era5_seamless",
+   "request": {
+    "end_date": "2016-12-31",
+    "hourly": "wind_speed_10m,wind_gusts_10m,wind_direction_10m",
+    "latitude": 37.0,
+    "longitude": 82.35,
+    "models": "era5_seamless",
+    "start_date": "2013-01-01",
+    "timezone": "Asia/Urumqi",
+    "wind_speed_unit": "ms"
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "09fbf9be4c14f9d7e1adfb337fec30c9d6e68fc4d11222a4eb06921aebfc45d2",
+   "source": "Open-Meteo Historical Weather API",
+   "units": {
+    "time": "iso8601",
+    "wind_direction_10m": "°",
+    "wind_gusts_10m": "m/s",
+    "wind_speed_10m": "m/s"
+   },
+   "url": "https://archive-api.open-meteo.com/v1/archive"
+  },
+  "Data/raw/model1/openmeteo_era5/M_gap_hourly_2017_2020.json.gz": {
+   "grid": {
+    "lat": 37.0,
+    "lon": 82.399994
+   },
+   "model": "era5_seamless",
+   "request": {
+    "end_date": "2020-12-31",
+    "hourly": "wind_speed_10m,wind_gusts_10m,wind_direction_10m",
+    "latitude": 37.0,
+    "longitude": 82.35,
+    "models": "era5_seamless",
+    "start_date": "2017-01-01",
+    "timezone": "Asia/Urumqi",
+    "wind_speed_unit": "ms"
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "ac8839b8505560122020c3a7c6a819b9420efb3dbcfded5470ae663e16ca27c1",
+   "source": "Open-Meteo Historical Weather API",
+   "units": {
+    "time": "iso8601",
+    "wind_direction_10m": "°",
+    "wind_gusts_10m": "m/s",
+    "wind_speed_10m": "m/s"
+   },
+   "url": "https://archive-api.open-meteo.com/v1/archive"
+  },
+  "Data/raw/model1/openmeteo_era5/M_gap_hourly_2021_2024.json.gz": {
+   "grid": {
+    "lat": 37.0,
+    "lon": 82.399994
+   },
+   "model": "era5_seamless",
+   "request": {
+    "end_date": "2024-12-31",
+    "hourly": "wind_speed_10m,wind_gusts_10m,wind_direction_10m",
+    "latitude": 37.0,
+    "longitude": 82.35,
+    "models": "era5_seamless",
+    "start_date": "2021-01-01",
+    "timezone": "Asia/Urumqi",
+    "wind_speed_unit": "ms"
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "dcc4684627a99f9eb43f01a6457032e8545942b80f2090257b6cf8074bc64296",
+   "source": "Open-Meteo Historical Weather API",
+   "units": {
+    "time": "iso8601",
+    "wind_direction_10m": "°",
+    "wind_gusts_10m": "m/s",
+    "wind_speed_10m": "m/s"
+   },
+   "url": "https://archive-api.open-meteo.com/v1/archive"
+  },
+  "Data/raw/model1/openmeteo_era5/W_yutian_daily.json.gz": {
+   "grid": {
+    "elevation_m": 1432.0,
+    "lat": 37.0,
+    "lon": 82.0
+   },
+   "model": "era5_seamless",
+   "request": {
+    "daily": "temperature_2m_max,temperature_2m_min,temperature_2m_mean,dew_point_2m_mean,precipitation_sum,shortwave_radiation_sum,wind_speed_10m_mean,surface_pressure_mean,et0_fao_evapotranspiration,soil_moisture_0_to_7cm_mean,soil_moisture_7_to_28cm_mean,soil_moisture_28_to_100cm_mean",
+    "end_date": "2024-12-31",
+    "latitude": 36.95,
+    "longitude": 81.95,
+    "models": "era5_seamless",
+    "start_date": "2001-01-01",
+    "timezone": "Asia/Urumqi",
+    "wind_speed_unit": "ms"
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "70f7c3a85f93b36733580d6b62234586694aa295b2cc1f4bfacf5c758c1380e0",
+   "source": "Open-Meteo Historical Weather API",
+   "units": {
+    "dew_point_2m_mean": "°C",
+    "et0_fao_evapotranspiration": "mm",
+    "precipitation_sum": "mm",
+    "shortwave_radiation_sum": "MJ/m²",
+    "soil_moisture_0_to_7cm_mean": "m³/m³",
+    "soil_moisture_28_to_100cm_mean": "m³/m³",
+    "soil_moisture_7_to_28cm_mean": "m³/m³",
+    "surface_pressure_mean": "hPa",
+    "temperature_2m_max": "°C",
+    "temperature_2m_mean": "°C",
+    "temperature_2m_min": "°C",
+    "time": "iso8601",
+    "wind_speed_10m_mean": "m/s"
+   },
+   "url": "https://archive-api.open-meteo.com/v1/archive"
+  },
+  "Data/raw/model1/openmeteo_era5/W_yutian_hourly_2001_2004.json.gz": {
+   "grid": {
+    "lat": 37.0,
+    "lon": 82.0
+   },
+   "model": "era5_seamless",
+   "request": {
+    "end_date": "2004-12-31",
+    "hourly": "wind_speed_10m,wind_gusts_10m,wind_direction_10m",
+    "latitude": 36.95,
+    "longitude": 81.95,
+    "models": "era5_seamless",
+    "start_date": "2001-01-01",
+    "timezone": "Asia/Urumqi",
+    "wind_speed_unit": "ms"
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "ecac58d14e4ca143ec36eb66f2fe8066ba5104078a9829d2ab690edd250a0a39",
+   "source": "Open-Meteo Historical Weather API",
+   "units": {
+    "time": "iso8601",
+    "wind_direction_10m": "°",
+    "wind_gusts_10m": "m/s",
+    "wind_speed_10m": "m/s"
+   },
+   "url": "https://archive-api.open-meteo.com/v1/archive"
+  },
+  "Data/raw/model1/openmeteo_era5/W_yutian_hourly_2005_2008.json.gz": {
+   "grid": {
+    "lat": 37.0,
+    "lon": 82.0
+   },
+   "model": "era5_seamless",
+   "request": {
+    "end_date": "2008-12-31",
+    "hourly": "wind_speed_10m,wind_gusts_10m,wind_direction_10m",
+    "latitude": 36.95,
+    "longitude": 81.95,
+    "models": "era5_seamless",
+    "start_date": "2005-01-01",
+    "timezone": "Asia/Urumqi",
+    "wind_speed_unit": "ms"
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "26e098ed8196f31733740efddf73e6efb4f9bfa44b77a2ec26f024958653e07c",
+   "source": "Open-Meteo Historical Weather API",
+   "units": {
+    "time": "iso8601",
+    "wind_direction_10m": "°",
+    "wind_gusts_10m": "m/s",
+    "wind_speed_10m": "m/s"
+   },
+   "url": "https://archive-api.open-meteo.com/v1/archive"
+  },
+  "Data/raw/model1/openmeteo_era5/W_yutian_hourly_2009_2012.json.gz": {
+   "grid": {
+    "lat": 37.0,
+    "lon": 82.0
+   },
+   "model": "era5_seamless",
+   "request": {
+    "end_date": "2012-12-31",
+    "hourly": "wind_speed_10m,wind_gusts_10m,wind_direction_10m",
+    "latitude": 36.95,
+    "longitude": 81.95,
+    "models": "era5_seamless",
+    "start_date": "2009-01-01",
+    "timezone": "Asia/Urumqi",
+    "wind_speed_unit": "ms"
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "7fa28e79070701f9c175aa4879596ade3ed990c4aa38617cc0a7bbf8fc5af190",
+   "source": "Open-Meteo Historical Weather API",
+   "units": {
+    "time": "iso8601",
+    "wind_direction_10m": "°",
+    "wind_gusts_10m": "m/s",
+    "wind_speed_10m": "m/s"
+   },
+   "url": "https://archive-api.open-meteo.com/v1/archive"
+  },
+  "Data/raw/model1/openmeteo_era5/W_yutian_hourly_2013_2016.json.gz": {
+   "grid": {
+    "lat": 37.0,
+    "lon": 82.0
+   },
+   "model": "era5_seamless",
+   "request": {
+    "end_date": "2016-12-31",
+    "hourly": "wind_speed_10m,wind_gusts_10m,wind_direction_10m",
+    "latitude": 36.95,
+    "longitude": 81.95,
+    "models": "era5_seamless",
+    "start_date": "2013-01-01",
+    "timezone": "Asia/Urumqi",
+    "wind_speed_unit": "ms"
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "a40bbf4d32ad39ef238fbd5efb82b8b84d0b2744f4793628c296a6ede8c3b9da",
+   "source": "Open-Meteo Historical Weather API",
+   "units": {
+    "time": "iso8601",
+    "wind_direction_10m": "°",
+    "wind_gusts_10m": "m/s",
+    "wind_speed_10m": "m/s"
+   },
+   "url": "https://archive-api.open-meteo.com/v1/archive"
+  },
+  "Data/raw/model1/openmeteo_era5/W_yutian_hourly_2017_2020.json.gz": {
+   "grid": {
+    "lat": 37.0,
+    "lon": 82.0
+   },
+   "model": "era5_seamless",
+   "request": {
+    "end_date": "2020-12-31",
+    "hourly": "wind_speed_10m,wind_gusts_10m,wind_direction_10m",
+    "latitude": 36.95,
+    "longitude": 81.95,
+    "models": "era5_seamless",
+    "start_date": "2017-01-01",
+    "timezone": "Asia/Urumqi",
+    "wind_speed_unit": "ms"
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "b8eb399dc2ad2e6512fae1af611ee32cce1e68c5596ffd6c6aeb6b1c2da4db2c",
+   "source": "Open-Meteo Historical Weather API",
+   "units": {
+    "time": "iso8601",
+    "wind_direction_10m": "°",
+    "wind_gusts_10m": "m/s",
+    "wind_speed_10m": "m/s"
+   },
+   "url": "https://archive-api.open-meteo.com/v1/archive"
+  },
+  "Data/raw/model1/openmeteo_era5/W_yutian_hourly_2021_2024.json.gz": {
+   "grid": {
+    "lat": 37.0,
+    "lon": 82.0
+   },
+   "model": "era5_seamless",
+   "request": {
+    "end_date": "2024-12-31",
+    "hourly": "wind_speed_10m,wind_gusts_10m,wind_direction_10m",
+    "latitude": 36.95,
+    "longitude": 81.95,
+    "models": "era5_seamless",
+    "start_date": "2021-01-01",
+    "timezone": "Asia/Urumqi",
+    "wind_speed_unit": "ms"
+   },
+   "retrieved_utc": "2026-11-10",
+   "sha256": "840d7606606e0c91164a9d28f11847f0cc6de9b558f71da65460a01292a2ec31",
+   "source": "Open-Meteo Historical Weather API",
+   "units": {
+    "time": "iso8601",
+    "wind_direction_10m": "°",
+    "wind_gusts_10m": "m/s",
+    "wind_speed_10m": "m/s"
+   },
+   "url": "https://archive-api.open-meteo.com/v1/archive"
+  }
+ }
+}

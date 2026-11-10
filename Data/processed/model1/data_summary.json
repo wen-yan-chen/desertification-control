@@ -1,0 +1,205 @@
+{
+ "W_yutian": {
+  "grid": {
+   "lat": 37.0,
+   "lon": 82.0,
+   "elev": 1432.0
+  },
+  "P_mm_yr": 32.5,
+  "P_power_mm_yr": 62.9,
+  "ET0_mm_yr": 1661.0,
+  "ET0_provider_mm_yr": 1756.0,
+  "ET0_power_mm_yr": 1664.0,
+  "ET0_daily_r_vs_provider": 0.996,
+  "ET0_daily_r_vs_power": 0.955,
+  "T_mean": 14.08,
+  "u10_mean": 3.02,
+  "DP_mean_wind_VU": 47.0,
+  "DP_gust_VU": 673.7,
+  "hours_ge6_per_yr_mean_wind": 587.0,
+  "hours_ge6_per_yr_gust": 3016.0,
+  "RDP_over_DP": 0.47,
+  "RDD_deg_towards": 85.0,
+  "sm_0_7": 0.0121,
+  "sm_28_100": 0.1103
+ },
+ "M_gap": {
+  "grid": {
+   "lat": 37.0,
+   "lon": 82.399994,
+   "elev": 1468.0
+  },
+  "P_mm_yr": 30.6,
+  "P_power_mm_yr": 63.2,
+  "ET0_mm_yr": 1663.0,
+  "ET0_provider_mm_yr": 1755.0,
+  "ET0_power_mm_yr": 1717.0,
+  "ET0_daily_r_vs_provider": 0.996,
+  "ET0_daily_r_vs_power": 0.961,
+  "T_mean": 13.84,
+  "u10_mean": 3.08,
+  "DP_mean_wind_VU": 54.6,
+  "DP_gust_VU": 750.5,
+  "hours_ge6_per_yr_mean_wind": 588.0,
+  "hours_ge6_per_yr_gust": 3099.0,
+  "RDP_over_DP": 0.62,
+  "RDD_deg_towards": 80.0,
+  "sm_0_7": 0.0122,
+  "sm_28_100": 0.0968
+ },
+ "E_minfeng": {
+  "grid": {
+   "lat": 37.1,
+   "lon": 82.80002,
+   "elev": 1394.0
+  },
+  "P_mm_yr": 29.8,
+  "P_power_mm_yr": 63.2,
+  "ET0_mm_yr": 1668.0,
+  "ET0_provider_mm_yr": 1752.0,
+  "ET0_power_mm_yr": 1716.0,
+  "ET0_daily_r_vs_provider": 0.997,
+  "ET0_daily_r_vs_power": 0.965,
+  "T_mean": 13.97,
+  "u10_mean": 3.01,
+  "DP_mean_wind_VU": 45.3,
+  "DP_gust_VU": 653.8,
+  "hours_ge6_per_yr_mean_wind": 450.0,
+  "hours_ge6_per_yr_gust": 2991.0,
+  "RDP_over_DP": 0.75,
+  "RDD_deg_towards": 77.0,
+  "sm_0_7": 0.0191,
+  "sm_28_100": 0.1008
+ },
+ "endmembers": {
+  "ndvi_soil": 0.0505,
+  "ndvi_soil_iqr": [
+   0.0446,
+   0.0558
+  ],
+  "ndvi_soil_sd_interannual": 0.0062,
+  "ndvi_veg": 0.5827,
+  "ndvi_veg_p90_p99": [
+   0.5688,
+   0.6052
+  ],
+  "method": "linear mixing (Gutman & Ignatov 1998): FVC=(NDVI-soil)/(veg-soil), clipped to [0,1]"
+ },
+ "pixel_reliability_counts": {
+  "CON1": {
+   "0": 40736,
+   "1": 2571,
+   "2": 280,
+   "3": 1125
+  },
+  "CON2": {
+   "0": 40399,
+   "1": 3195,
+   "2": 165,
+   "3": 953
+  },
+  "CON3": {
+   "0": 40825,
+   "1": 2537,
+   "2": 292,
+   "3": 1058
+  },
+  "CON4": {
+   "0": 30205,
+   "1": 10497,
+   "2": 210,
+   "3": 3800
+  },
+  "ECO1": {
+   "0": 41983,
+   "1": 1397,
+   "2": 146,
+   "3": 1186
+  },
+  "ECO2": {
+   "0": 39085,
+   "1": 3714,
+   "2": 15,
+   "3": 1898
+  },
+  "ECO3": {
+   "0": 39350,
+   "1": 4284,
+   "3": 1078
+  },
+  "DES1": {
+   "0": 42091,
+   "1": 849,
+   "2": 434,
+   "3": 1338
+  },
+  "DES2": {
+   "0": 41151,
+   "1": 2262,
+   "2": 400,
+   "3": 899
+  },
+  "OAS1": {
+   "0": 30391,
+   "1": 8684,
+   "2": 467,
+   "3": 5170
+  },
+  "OAS2": {
+   "0": 29354,
+   "1": 11723,
+   "2": 390,
+   "3": 3245
+  }
+ },
+ "pixels_per_class": {
+  "converted": 218,
+  "desert": 162,
+  "ecotone": 242,
+  "oasis": 158,
+  "other": 111
+ },
+ "pixels_per_window_class": {
+  "CON1|converted": 76,
+  "CON1|other": 5,
+  "CON2|converted": 49,
+  "CON2|other": 32,
+  "CON3|converted": 41,
+  "CON3|other": 40,
+  "CON4|converted": 52,
+  "CON4|other": 29,
+  "DES1|desert": 81,
+  "DES2|desert": 81,
+  "ECO1|ecotone": 81,
+  "ECO2|ecotone": 81,
+  "ECO3|ecotone": 80,
+  "ECO3|other": 1,
+  "OAS1|oasis": 81,
+  "OAS2|oasis": 77,
+  "OAS2|other": 4
+ },
+ "cohort": {
+  "n_pixels": 217,
+  "t0_counts": {
+   "2003": 5,
+   "2004": 9,
+   "2005": 12,
+   "2006": 5,
+   "2007": 5,
+   "2008": 3,
+   "2009": 9,
+   "2010": 4,
+   "2011": 1,
+   "2012": 7,
+   "2013": 10,
+   "2014": 11,
+   "2015": 68,
+   "2016": 16,
+   "2017": 5,
+   "2019": 10,
+   "2020": 31,
+   "2021": 6
+  }
+ },
+ "peak_season_valid_fraction": 0.9999
+}

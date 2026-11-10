@@ -13,3 +13,14 @@ python Code/audit_pipeline.py
 `03_modeling.py`、`preprocess.py`目前明确以非零状态退出，防止误用旧流程。旧抓取、模型、报告生成、MATLAB预处理及硬编码本机路径的转换工具保存在 `archive/invalidated_20261109/Code/`。包括旧建模报告生成器在内，这些都不再是当前运行入口；不能重新生成被撤销的报告。
 
 当前 `Reports/model.tex` 是人工维护的模型规范；可用XeLaTeX编译。实现选择不由建模文档限定。此轮代码是数据补充与审计工具，不是任务三所说的正式模型求解。
+
+
+## 模型一（2026-11-10）
+
+```sh
+.venv/bin/python Code/m1_fetch_data.py      # 原始数据已入库时只做校验
+.venv/bin/python Code/m1_build_dataset.py   # 离线：QA、端元、FVC、FAO-56 ET0、小时风输沙势
+.venv/bin/python Code/m1_run.py             # 离线约1分钟：标定、留出验证、水—覆盖曲线、敏感性、图
+```
+
+`m1_config.py` 为区段与数据源设定，`m1_model.py` 为模型本体。说明见 `Docs/20261110_audit_check_and_model1.md` 与 `Docs/HANDOFF_to_Astra.md`。依赖另需 scipy。
