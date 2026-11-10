@@ -1,0 +1,154 @@
+% !TeX program = xelatex
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=2.2cm]{geometry}
+\usepackage{amsmath,amssymb,booktabs,tabularx,array,graphicx,enumitem,xcolor,hyperref,float}
+\hypersetup{colorlinks=true,linkcolor=black,urlcolor=blue}
+\setlength{\parskip}{0.45em}\setlength{\parindent}{0pt}
+\renewcommand{\arraystretch}{1.2}
+\setlist{nosep,leftmargin=1.6em}
+\graphicspath{{../Figures/model1/}}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+\title{Model 1: Coupled Vegetation--Water--Sand Dynamics\\[2pt]\large Yutian--Minfeng section of the Taklamakan edge-locking belt}
+\author{2026 CQU\_MCM Problem B, Task 1 \quad$\cdot$\quad first version, 2026-11-10}
+\date{}
+\begin{document}
+\maketitle
+
+\noindent\textbf{What this is.} A daily model of one land cell of the belt. The two main states are vegetation cover $V$ and effective soil moisture $M$; sand enters as a wind-driven flux that couples to both. All numbers below are produced by \texttt{Code/m1\_run.py} and stored in \texttt{Results/model1/}. Evidence and page references are in \texttt{Docs/20261110\_audit\_check\_and\_model1.md}.
+
+\section{Data}
+\textbf{Section.} Southern margin between the Yutian and Minfeng oases, stylised as $100\ \text{km}\times1.5\ \text{km}=15{,}000$ ha. This is our assumption; no public boundary of the belt exists.
+
+\begin{table}[H]\small
+\begin{tabularx}{\linewidth}{@{}p{4.6cm}p{4.4cm}L@{}}
+\toprule
+Data (2001--2024) & Source & Used for\\
+\midrule
+NDVI and pixel reliability, 250 m, 16-day & MODIS MOD13Q1 v061 & observed cover\\
+Daily $T_{\max}$, $T_{\min}$, dew point, wind, radiation, pressure, rain & ERA5 / ERA5-Land (model fixed) & reference evapotranspiration, water balance\\
+Hourly 10 m wind & ERA5 & drift potential\\
+Daily weather & NASA POWER & independent check of ET$_0$\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\textbf{Cover from NDVI.} End-members are read from the section's own desert and oasis pixels:
+\begin{equation}
+\mathrm{FVC}=\min\Bigl\{1,\max\Bigl[0,\frac{\mathrm{NDVI}-0.0505}{0.5827-0.0505}\Bigr]\Bigr\}.
+\end{equation}
+
+\textbf{Land classes} (9$\times$9-pixel windows chosen by rule from mean summer NDVI of 2001--03 and 2022--24): 218 \emph{converted} pixels (bare, then vegetated: irrigated, treated land), 242 natural \emph{ecotone} pixels, 162 \emph{desert} pixels, 158 \emph{oasis} pixels.
+
+\textbf{Climate of the section.} Rain 31 mm/yr; ET$_0$ 1663 mm/yr (FAO-56 Penman--Monteith; two independent sources agree within about 5\%); mean temperature 13.8\,$^\circ$C; drift potential 45--55 VU; 450--590 h/yr with wind $\ge 6$ m/s.
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.92\linewidth]{fig2_data_overview.png}
+\caption{Observed cover by land class and yearly drivers on the section.}
+\end{figure}
+
+\section{Formulas}
+\textbf{Effective soil moisture.} $D_r$ is the root-zone depletion below field capacity (mm):
+\begin{equation}
+\mathrm{TAW}=1000\,Z_r(\theta_{fc}-\theta_{wp})=75\ \text{mm},\qquad M=1-\frac{D_r}{\mathrm{TAW}}\in[0,1].
+\end{equation}
+
+\textbf{Water balance} (FAO-56 dual crop coefficient, daily, all terms in mm/day):
+\begin{align}
+D_r(t+1)&=D_r(t)+T+E-P-\eta I-G \quad\text{(water above field capacity drains)},\\
+K_s&=\min\Bigl\{1,\frac{M}{1-p}\Bigr\},\\
+T&=K_s\,K_{cb,\mathrm{full}}\,\min(1,2V)\,\varphi(T_a)\,\mathrm{ET}_0,\\
+E&=\sum_{x}K_r(D_{e,x})\,f_{ew,x}\,K_{c,\max}\,\mathrm{ET}_0,\qquad \sum_x f_{ew,x}=1-V,\\
+\varphi(T_a)&=\min\Bigl\{1,\max\Bigl[0,\frac{T_a-10}{25-10}\Bigr]\Bigr\}.
+\end{align}
+$P$ is rain, $I$ gross irrigation, $\eta$ the share reaching the roots, $G$ groundwater supply (zero under dunes), $K_s$ the water-stress coefficient, $T$ transpiration, $E$ soil evaporation from the unshaded fraction, $\varphi$ thermal activity from the 15-day mean air temperature.
+
+\textbf{Vegetation cover.}
+\begin{equation}
+\frac{dV}{dt}=\underbrace{r\,\varphi\,K_s\,V\Bigl(1-\frac{V}{V_{\max}}\Bigr)}_{\text{growth}}
+-\Bigl[\underbrace{m_0}_{\text{background}}+\underbrace{m_w\,\varphi\,(1-K_s)}_{\text{drought}}+\underbrace{\varepsilon\,g}_{\text{sand}}+\underbrace{\gamma\,\mathrm{DP}^{2/3}}_{\text{wind drag}}\Bigr]V+b(t).
+\end{equation}
+$b(t)$ is cover added by planting (the link to Task 2).
+
+\textbf{Sand.} With $U$ the hourly 10 m wind in knots and $U_t=12$ knots ($\approx 6$ m/s):
+\begin{align}
+\mathrm{DP}&=\bigl\langle U^2\,(U-U_t)_+\bigr\rangle\quad[\text{vector units, VU}],\\
+g&=\tfrac12\,\mathrm{DP}\,\bigl[\tanh\bigl(d\,(v_c-V)\bigr)+1\bigr](1-V),\\
+U_t^{\text{wet}}&=U_t\sqrt{1+1.21\,(w-w')^{0.68}}\quad(w>w').
+\end{align}
+Sand transport is switched off once cover passes the critical value $v_c$; a moist surface raises the threshold ($w$: gravimetric surface moisture in \%).
+
+\textbf{Couplings.} Water $\to$ vegetation ($K_s$); vegetation $\to$ water (transpiration, shading); vegetation $\to$ sand ($g$); sand $\to$ vegetation ($\varepsilon g$, $\gamma$ term); water $\to$ sand (wet threshold).
+
+\section{Parameters}
+\begin{table}[H]\small
+\begin{tabularx}{\linewidth}{@{}p{3.2cm}p{4.2cm}L@{}}
+\toprule
+Parameter & Value & Origin\\
+\midrule
+$\theta_{fc},\ \theta_{wp}$ & 0.12, 0.045 m$^3$/m$^3$ & FAO-56 Table 19, sand\\
+$K_{cb,\mathrm{full}},\ K_{c,\max}$ & 1.0, 1.2 & FAO-56; $K_{cb,\mathrm{full}}$ uncertain (0.7--1.2)\\
+$Z_r,\ p,\ \eta$ & 1.0 m, 0.6, 0.9 & assumptions\\
+$r$ & $1.43\pm0.28$ yr$^{-1}$ & fitted to converted pixels\\
+$V_{\max}$ & $0.55\pm0.03$ & fitted to converted pixels\\
+$m_0$ & 0.02 yr$^{-1}$ & Yizhaq \& Ashkenazy (2021)\\
+$m_w$ & 1.0 yr$^{-1}$ & assumption (0.3--3); the weakest number\\
+$\varepsilon,\ \gamma,\ v_c,\ d$ & 0.001, $8\times10^{-4}$, 0.30, 15 & Yizhaq \& Ashkenazy (2021)\\
+Irrigation timing & every 15 d Mar--Oct, 10 d Jul--Aug & Tarim Desert Highway shelterbelt practice\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Fit and hold-out}
+\begin{table}[H]\small
+\begin{tabularx}{\linewidth}{@{}p{4.4cm}p{2.6cm}p{2.9cm}L@{}}
+\toprule
+Fit & Calibration & Hold-out & Reading\\
+\midrule
+Irrigated establishment (3 windows fitted, 1 held out) & $R^2=0.40$ & $R^2=0.29$ (plain logistic 0.29; mean $-0.02$) & average rise captured; no better than a logistic because water is not limiting in these runs\\
+Natural ecotone (fit $\le$2016, test 2017--24) & RMSE 0.008 & $R^2=-0.76$ (same as the mean) & level 0.13 reproduced with $G=166$ mm/yr; year-to-year change not explained\\
+Bare desert (no fit) & -- & cover $\to$ 0.001; observed 0.002 & rain alone cannot hold cover\\
+\bottomrule
+\end{tabularx}
+\end{table}
+\begin{figure}[H]\centering
+\includegraphics[width=\linewidth]{fig3_calibration_validation.png}
+\caption{Calibration and hold-out.}
+\end{figure}
+
+\section{Results}
+\begin{table}[H]\small\centering
+\begin{tabular}{@{}lrrrrrrrr@{}}
+\toprule
+Gross irrigation (mm/yr) & 0 & 100 & 200 & 300 & 400 & 500 & 600 & 800\\
+\midrule
+Steady cover $V$ & 0.004 & 0.03 & 0.11 & 0.17 & 0.22 & 0.26 & 0.29 & 0.35\\
+Sand transport / bare sand & 0.98 & 0.95 & 0.88 & 0.80 & 0.70 & 0.55 & 0.36 & 0.10\\
+Transpiration (mm/yr) & 3 & 37 & 128 & 219 & 302 & 370 & 436 & 564\\
+Soil evaporation (mm/yr) & 21 & 75 & 74 & 72 & 71 & 71 & 70 & 68\\
+\bottomrule
+\end{tabular}
+\end{table}
+\begin{itemize}
+\item \textbf{Water constraint.} Holding 30\% cover needs about 624 mm/yr (6{,}240 m$^3$/ha/yr; 94 million m$^3$/yr for 15{,}000 ha). Use the range 400--750 mm/yr: $m_w$ and $K_{cb,\mathrm{full}}$ are not fixed by data.
+\item \textbf{Establishment.} At 600 mm/yr a new planting reaches 30\% cover in 13 years; at 400 mm/yr or less it never does.
+\item \textbf{Stopping irrigation.} Half the cover is lost in 2 years.
+\item \textbf{Water balance} closes to $10^{-12}$ mm over 24 years.
+\end{itemize}
+\begin{figure}[H]\centering
+\includegraphics[width=\linewidth]{fig4_model_behaviour.png}
+\caption{Model behaviour: water--cover curve, establishment, water use, abandonment, daily states, sand transport.}
+\end{figure}
+\begin{figure}[H]\centering
+\includegraphics[width=0.95\linewidth]{fig5_sensitivity.png}
+\caption{One-at-a-time sensitivity.}
+\end{figure}
+
+\section{Limits}
+\begin{enumerate}
+\item The water--cover curve is model output; no field measurement of belt cover against applied water is available to validate it.
+\item Converted pixels are irrigated land of unknown type (shelter forest, orchard or field).
+\item Year-to-year variation of natural cover is not explained.
+\item Drift potential is relative (VU); converting it to a mass flux needs a local coefficient. ERA5 hourly mean wind misses sub-hourly peaks.
+\item Salinity of irrigation water is not modelled; $v_c=0.30$ comes from a model calibrated elsewhere.
+\end{enumerate}
+\end{document}

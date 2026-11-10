@@ -1,0 +1,154 @@
+% !TeX program = xelatex
+\documentclass[11pt,a4paper]{ctexart}
+\usepackage[margin=2.2cm]{geometry}
+\usepackage{amsmath,amssymb,booktabs,tabularx,array,graphicx,enumitem,xcolor,hyperref,float}
+\hypersetup{colorlinks=true,linkcolor=black,urlcolor=blue}
+\setlength{\parskip}{0.45em}\setlength{\parindent}{0pt}
+\renewcommand{\arraystretch}{1.25}
+\setlist{nosep,leftmargin=1.8em}
+\graphicspath{{../Figures/model1/}}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+\title{模型一：植被—水—沙耦合动力学\\[2pt]\large 塔克拉玛干锁边带于田—民丰区段}
+\author{2026 CQU\_MCM B题 任务一 \quad$\cdot$\quad 第一版，2026-11-10}
+\date{}
+\begin{document}
+\maketitle
+
+\noindent\textbf{这是什么。}对锁边带上一个土地单元建立的日步长模型。两个主要状态变量是植被覆盖度 $V$ 和有效土壤含水量 $M$；风沙以风驱动的输沙通量进入模型，并与两者耦合。下文所有数字均由 \texttt{Code/m1\_run.py} 计算得到，保存在 \texttt{Results/model1/}。证据与文献页码见 \texttt{Docs/20261110\_audit\_check\_and\_model1.md}（英文）。图中文字为英文。
+
+\section{数据}
+\textbf{区段。}于田绿洲与民丰绿洲之间的沙漠南缘，简化为 $100\ \text{km}\times1.5\ \text{km}=15{,}000$ ha。这是我们的假设；锁边带没有公开的边界数据。
+
+\begin{table}[H]\small
+\begin{tabularx}{\linewidth}{@{}p{4.8cm}p{4.4cm}L@{}}
+\toprule
+数据（2001--2024） & 来源 & 用途\\
+\midrule
+NDVI 及像元可靠性，250 m，16 天 & MODIS MOD13Q1 v061 & 观测覆盖度\\
+逐日最高/最低气温、露点、风速、辐射、气压、降水 & ERA5 / ERA5-Land（固定模型） & 参考蒸散、水量平衡\\
+逐小时 10 m 风速 & ERA5 & 输沙势\\
+逐日气象 & NASA POWER & 独立核对 ET$_0$\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\textbf{由 NDVI 计算覆盖度。}端元取自本区段自身的沙漠像元和绿洲像元：
+\begin{equation}
+\mathrm{FVC}=\min\Bigl\{1,\max\Bigl[0,\frac{\mathrm{NDVI}-0.0505}{0.5827-0.0505}\Bigr]\Bigr\}.
+\end{equation}
+
+\textbf{地表类别}（按 2001--03 与 2022--24 夏季平均 NDVI 的规则选取 9$\times$9 像元窗口）：218 个\emph{转化}像元（原为裸沙、后有植被，即已治理的灌溉地），242 个天然\emph{过渡带}像元，162 个\emph{沙漠}像元，158 个\emph{绿洲}像元。
+
+\textbf{区段气候。}降水 31 mm/年；ET$_0$ 1663 mm/年（FAO-56 Penman--Monteith，与两套独立来源相差约 5\% 以内）；年均气温 13.8\,$^\circ$C；输沙势 45--55 VU；风速 $\ge 6$ m/s 的时间为 450--590 小时/年。
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.92\linewidth]{fig2_data_overview.png}
+\caption{各地表类别的观测覆盖度及区段逐年驱动因子。}
+\end{figure}
+
+\section{公式}
+\textbf{有效土壤含水量。}$D_r$ 为根区相对田间持水量的亏缺量（mm）：
+\begin{equation}
+\mathrm{TAW}=1000\,Z_r(\theta_{fc}-\theta_{wp})=75\ \text{mm},\qquad M=1-\frac{D_r}{\mathrm{TAW}}\in[0,1].
+\end{equation}
+
+\textbf{水量平衡}（FAO-56 双作物系数法，日步长，各项单位 mm/天）：
+\begin{align}
+D_r(t+1)&=D_r(t)+T+E-P-\eta I-G \quad\text{（超过田间持水量的水下渗流失）},\\
+K_s&=\min\Bigl\{1,\frac{M}{1-p}\Bigr\},\\
+T&=K_s\,K_{cb,\mathrm{full}}\,\min(1,2V)\,\varphi(T_a)\,\mathrm{ET}_0,\\
+E&=\sum_{x}K_r(D_{e,x})\,f_{ew,x}\,K_{c,\max}\,\mathrm{ET}_0,\qquad \sum_x f_{ew,x}=1-V,\\
+\varphi(T_a)&=\min\Bigl\{1,\max\Bigl[0,\frac{T_a-10}{25-10}\Bigr]\Bigr\}.
+\end{align}
+$P$ 为降水，$I$ 为毛灌溉量，$\eta$ 为到达根区的比例，$G$ 为地下水补给（沙丘下取 0），$K_s$ 为水分胁迫系数，$T$ 为蒸腾，$E$ 为未被遮蔽地表的土壤蒸发，$\varphi$ 为由 15 天平均气温决定的热量活性。
+
+\textbf{植被覆盖度。}
+\begin{equation}
+\frac{dV}{dt}=\underbrace{r\,\varphi\,K_s\,V\Bigl(1-\frac{V}{V_{\max}}\Bigr)}_{\text{生长}}
+-\Bigl[\underbrace{m_0}_{\text{本底死亡}}+\underbrace{m_w\,\varphi\,(1-K_s)}_{\text{干旱死亡}}+\underbrace{\varepsilon\,g}_{\text{风沙损伤}}+\underbrace{\gamma\,\mathrm{DP}^{2/3}}_{\text{风力拖曳}}\Bigr]V+b(t).
+\end{equation}
+$b(t)$ 为种植带来的覆盖度增量（与任务二的接口）。
+
+\textbf{风沙。}$U$ 为逐小时 10 m 风速（节），$U_t=12$ 节（约 6 m/s）：
+\begin{align}
+\mathrm{DP}&=\bigl\langle U^2\,(U-U_t)_+\bigr\rangle\quad[\text{矢量单位 VU}],\\
+g&=\tfrac12\,\mathrm{DP}\,\bigl[\tanh\bigl(d\,(v_c-V)\bigr)+1\bigr](1-V),\\
+U_t^{\text{湿}}&=U_t\sqrt{1+1.21\,(w-w')^{0.68}}\quad(w>w').
+\end{align}
+覆盖度超过临界值 $v_c$ 后输沙被关闭；地表湿润时起沙阈值升高（$w$ 为表层质量含水率，\%）。
+
+\textbf{耦合关系。}水 $\to$ 植被（$K_s$）；植被 $\to$ 水（蒸腾、遮荫）；植被 $\to$ 沙（$g$）；沙 $\to$ 植被（$\varepsilon g$ 与 $\gamma$ 项）；水 $\to$ 沙（湿润阈值）。
+
+\section{参数}
+\begin{table}[H]\small
+\begin{tabularx}{\linewidth}{@{}p{3.2cm}p{4.4cm}L@{}}
+\toprule
+参数 & 取值 & 来源\\
+\midrule
+$\theta_{fc},\ \theta_{wp}$ & 0.12, 0.045 m$^3$/m$^3$ & FAO-56 表 19，砂土\\
+$K_{cb,\mathrm{full}},\ K_{c,\max}$ & 1.0, 1.2 & FAO-56；$K_{cb,\mathrm{full}}$ 不确定（0.7--1.2）\\
+$Z_r,\ p,\ \eta$ & 1.0 m, 0.6, 0.9 & 假设\\
+$r$ & $1.43\pm0.28$ 年$^{-1}$ & 由转化像元拟合\\
+$V_{\max}$ & $0.55\pm0.03$ & 由转化像元拟合\\
+$m_0$ & 0.02 年$^{-1}$ & Yizhaq \& Ashkenazy (2021)\\
+$m_w$ & 1.0 年$^{-1}$ & 假设（0.3--3），最薄弱的参数\\
+$\varepsilon,\ \gamma,\ v_c,\ d$ & 0.001, $8\times10^{-4}$, 0.30, 15 & Yizhaq \& Ashkenazy (2021)\\
+灌溉时间 & 3--10 月每 15 天一次，7--8 月每 10 天一次 & 塔里木沙漠公路防护林的做法\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{拟合与留出检验}
+\begin{table}[H]\small
+\begin{tabularx}{\linewidth}{@{}p{4.2cm}p{2.4cm}p{3.3cm}L@{}}
+\toprule
+拟合对象 & 标定 & 留出 & 解读\\
+\midrule
+灌溉条件下的建植（3 个窗口标定，1 个留出） & $R^2=0.40$ & $R^2=0.29$（普通 logistic 0.29；均值 $-0.02$） & 能刻画平均上升过程；因这些模拟中水分不受限，并不优于普通 logistic 曲线\\
+天然过渡带（2016 年及以前标定，2017--24 检验） & RMSE 0.008 & $R^2=-0.76$（与均值预测相同） & 以 $G=166$ mm/年重现了 0.13 的平均水平；年际变化未能解释\\
+裸沙漠（不拟合） & -- & 覆盖度 $\to$ 0.001；观测 0.002 & 仅靠降水无法维持植被\\
+\bottomrule
+\end{tabularx}
+\end{table}
+\begin{figure}[H]\centering
+\includegraphics[width=\linewidth]{fig3_calibration_validation.png}
+\caption{标定与留出检验。}
+\end{figure}
+
+\section{结果}
+\begin{table}[H]\small\centering
+\begin{tabular}{@{}lrrrrrrrr@{}}
+\toprule
+毛灌溉量（mm/年） & 0 & 100 & 200 & 300 & 400 & 500 & 600 & 800\\
+\midrule
+稳态覆盖度 $V$ & 0.004 & 0.03 & 0.11 & 0.17 & 0.22 & 0.26 & 0.29 & 0.35\\
+输沙量 / 裸沙输沙量 & 0.98 & 0.95 & 0.88 & 0.80 & 0.70 & 0.55 & 0.36 & 0.10\\
+蒸腾（mm/年） & 3 & 37 & 128 & 219 & 302 & 370 & 436 & 564\\
+土壤蒸发（mm/年） & 21 & 75 & 74 & 72 & 71 & 71 & 70 & 68\\
+\bottomrule
+\end{tabular}
+\end{table}
+\begin{itemize}
+\item \textbf{水量约束。}维持 30\% 覆盖度约需 624 mm/年（6{,}240 m$^3$/ha/年；15{,}000 ha 合计 0.94 亿 m$^3$/年）。应按 400--750 mm/年的区间使用：$m_w$ 与 $K_{cb,\mathrm{full}}$ 尚无数据确定。
+\item \textbf{建植时间。}600 mm/年时，新植林 13 年达到 30\% 覆盖度；400 mm/年及以下永远达不到。
+\item \textbf{停止灌溉。}2 年内覆盖度损失一半。
+\item \textbf{水量平衡}闭合：24 年残差 $10^{-12}$ mm。
+\end{itemize}
+\begin{figure}[H]\centering
+\includegraphics[width=\linewidth]{fig4_model_behaviour.png}
+\caption{模型行为：水—覆盖度曲线、建植过程、水分去向、停灌后果、逐日状态、输沙量。}
+\end{figure}
+\begin{figure}[H]\centering
+\includegraphics[width=0.95\linewidth]{fig5_sensitivity.png}
+\caption{单因素敏感性分析。}
+\end{figure}
+
+\section{局限}
+\begin{enumerate}
+\item 水—覆盖度曲线是模型输出；没有“灌水量—林带覆盖度”的实测数据可用于验证。
+\item 转化像元是类型未知的灌溉地（防护林、果园或农田）。
+\item 天然植被覆盖度的年际变化未能解释。
+\item 输沙势是相对量（VU），换算为质量通量需要当地系数；ERA5 小时平均风会漏掉小时以内的峰值。
+\item 未考虑灌溉水的盐分；$v_c=0.30$ 来自在其他地区标定的模型。
+\end{enumerate}
+\end{document}
