@@ -2,6 +2,8 @@
 
 ## 当前 M1 数值入口（2026-11-10 复核后）
 
+当前依赖要求 Python 3.11 或更新；本轮在 Python 3.12 环境执行。
+
 ```powershell
 python -m pip install -r Code/requirements-m1.txt
 python Code/v7_model1.py

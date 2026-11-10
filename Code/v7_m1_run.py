@@ -147,7 +147,8 @@ def main():
             "selected cohort is retrospective, not independent prospective validation",
             "site windows are not an engineering belt polygon; no verified section area",
             "wind index from daily maximum is a proxy, not actual erosion or hazard counts"],
-        input_sha256={str(p.relative_to(ROOT)).replace('\\','/'):hashlib.sha256(p.read_bytes()).hexdigest() for p in inputs},
+        input_text_sha256_lf={str(p.relative_to(ROOT)).replace('\\','/'):hashlib.sha256(p.read_bytes().replace(b'\r\n',b'\n')).hexdigest() for p in inputs},
+        input_hash_convention="Text inputs normalized to LF before SHA256, independent of Git checkout newlines; raw-response hashes remain byte-exact",
         runtime=dict(python=platform.python_version(),numpy=np.__version__,pandas=pd.__version__,scipy=scipy.__version__))
     save(annual, "yearly_table.csv")
     save(ftab, "section_forcing_climatology.csv")

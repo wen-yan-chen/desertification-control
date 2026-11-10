@@ -2,6 +2,8 @@
 
 入口：`python Code/v7_model1.py`。输入为 `Data/v7/m1_audited/`。
 
+`input_text_sha256_lf` 对文本输入先统一为 LF 再计算，避免三台电脑的 Git 换行转换造成伪差异；原始响应清单的哈希仍严格按原始字节计算。
+
 | 文件 | 含义与 Claude 制图用途 |
 |---|---|
 | `model1_results.json` | 参数、训练/留出指标、数据哈希、运行环境、限制条件 |

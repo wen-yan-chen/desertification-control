@@ -295,13 +295,14 @@
     "site windows are not an engineering belt polygon; no verified section area",
     "wind index from daily maximum is a proxy, not actual erosion or hazard counts"
   ],
-  "input_sha256": {
-    "Data/v7/m1_audited/panel_m1.csv": "dc914546aa8245dc3f2807bcd31441fbafeacb3747a0ca1e81735c3d559114fb",
-    "Data/v7/m1_audited/replay_manifest.json": "186607221dad27c421b09992fb5012e5e47f2240be47fc773b699d552423d408",
-    "Data/v7/section_modis/cohort_converted.csv": "81824c38f8eb1fa45f77b570ccfa6612dc39a2b6fd97a75c382912b710af5f4d",
-    "Data/v7/m1_audited/section_definition.json": "2d20cb1abb2bc5d70dc70da3196ea1957ef6fa89e55effb46594d9b748238de6",
+  "input_text_sha256_lf": {
+    "Data/v7/m1_audited/panel_m1.csv": "d6ac4fce8c528cefc7176ba5b1af14777b3313b1ff97cef91a065078267deed6",
+    "Data/v7/m1_audited/replay_manifest.json": "0cc506224e3c0aa86b83356994f8024dd7b9e7450b625755ed62bcc854c7c4ef",
+    "Data/v7/section_modis/cohort_converted.csv": "91db5bc2c402178cfb3d7df1c28670c9eaf38f8db0a8493ab74c625f89c39190",
+    "Data/v7/m1_audited/section_definition.json": "4052984045df493c78e54c313b809624ae35c5a5733f22234f4ff2e675bc4311",
     "Data/v7/section_modis/endmembers.json": "c677afe2213a41d14e2e0986cac2034fddbcc10f7f9910c076612520baf0b031"
   },
+  "input_hash_convention": "Text inputs normalized to LF before SHA256, independent of Git checkout newlines; raw-response hashes remain byte-exact",
   "runtime": {
     "python": "3.12.14",
     "numpy": "2.3.5",
