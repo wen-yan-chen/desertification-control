@@ -1,0 +1,29 @@
+{
+  "name": "Yutian-Minfeng study transect",
+  "centerline": [
+    {
+      "window": "CON1",
+      "lat": 36.82187,
+      "lon": 81.42931
+    },
+    {
+      "window": "CON2",
+      "lat": 36.82396,
+      "lon": 81.79589
+    },
+    {
+      "window": "CON3",
+      "lat": 36.81562,
+      "lon": 82.09146
+    },
+    {
+      "window": "CON4",
+      "lat": 37.05729,
+      "lon": 82.80643
+    }
+  ],
+  "polyline_length_km": 127.9503169161748,
+  "assumed_width_km": 1.0,
+  "status": "representative research scenario, not a surveyed engineering boundary",
+  "area_usage": "do not infer actual treated area or project water totals from this line"
+}

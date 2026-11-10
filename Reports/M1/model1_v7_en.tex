@@ -4,6 +4,7 @@
 \usepackage{amsmath,amssymb,booktabs,tabularx,array,graphicx,enumitem,xcolor,hyperref,float}
 \hypersetup{colorlinks=true,linkcolor=black,urlcolor=blue}
 \setlength{\parskip}{0.45em}\setlength{\parindent}{0pt}
+\setlength{\emergencystretch}{2em}
 \renewcommand{\arraystretch}{1.2}
 \setlist{nosep,leftmargin=1.6em}
 \graphicspath{{../../Figures/v7/}}
@@ -14,6 +15,15 @@
 \date{}
 \begin{document}
 \maketitle
+\begin{quote}\small\bfseries
+HISTORICAL DRAFT -- superseded by the 2026-11-10 audit. The old numbers and figures
+below are not current results. Dynamic water storage was missing; pixel-level QA
+has been corrected; free r, d and K are structurally non-identifiable; the selected
+greening cohort is retrospective, not independent forecast validation.
+Current equations: the correction in Reports/model\_v7.pdf.
+Current numerical results: Results/v7/model1/.
+\end{quote}
+
 
 \noindent\textbf{What this is.} Model 1 rebuilt on the v7 data panel. It keeps the yearly state equation of \texttt{Reports/model\_v7.tex} unchanged, adds one water relation, and fits only the two parameters the data can identify. All numbers come from \texttt{Code/v7\_model1.py} and are stored in \texttt{Results/v7/model1/}. The detailed evidence is in \texttt{Docs/20261110\_model1\_v7\_rebuild.md}.
 

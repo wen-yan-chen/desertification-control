@@ -23,6 +23,7 @@
 
 \setlength{\parindent}{2em}
 \setlength{\parskip}{0.30em}
+\setlength{\emergencystretch}{2em}
 \renewcommand{\arraystretch}{1.22}
 \captionsetup{font=small,labelsep=quad}
 \setlist[itemize]{leftmargin=1.6em,itemsep=1pt,topsep=2pt}
@@ -51,6 +52,12 @@
 
 \begin{document}
 \maketitle
+\begin{quote}\small\bfseries
+复核状态（2026-11-10）：任务一以本文末尾“复核更正”节为准。
+前文外生水分定义、月/年混用和静态接口已被更正；任务二、三尚未完成计算核验。
+本建模文档只管理公式、参数和约束，不规定编程交付物。
+\end{quote}
+
 \thispagestyle{empty}
 
 \begin{center}
@@ -1010,4 +1017,5 @@ $T$（规划期） & $[10,20]$ a & 题目建议 & 是 \\
 \end{longtable}
 
 
+\input{m1_correction.tex}
 \end{document}

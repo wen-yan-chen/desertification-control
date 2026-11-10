@@ -134,11 +134,15 @@ def rebuild_manifest():
                 code = parts[-2]
                 band, start = fn.rsplit(".", 1)[0].split("_A")
                 doys = f"A{start}"
+                records = parse_records(json.load(open(fp, encoding="utf-8")))
+                if not records:
+                    raise ValueError(f"Empty MODIS response: {fp}")
+                end = max(r["modis_date"] for r in records)
                 q = urllib.parse.urlencode({
                     "latitude": LAT[code], "longitude": LON[code], "band": band,
-                    "startDate": doys, "endDate": doys,
+                    "startDate": doys, "endDate": end,
                     "kmAboveBelow": 1, "kmLeftRight": 1})
-                # endDate 取该块最后一期：由文件名只能确定首期，这里标注为分块首期
+                # Read end date from response contents, not just the filename.
                 u = "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset?" + q
                 note = f"MOD13Q1 {band} {code} 分块起始 {doys}"
             else:

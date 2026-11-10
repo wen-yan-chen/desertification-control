@@ -1,4 +1,20 @@
-﻿# Code/ · v7 数据流水线与预处理
+# Code/ · v7 数据流水线与预处理
+
+## 当前 M1 数值入口（2026-11-10 复核后）
+
+```powershell
+python -m pip install -r Code/requirements-m1.txt
+python Code/v7_model1.py
+python -m unittest discover -s Code -p test_v7_m1.py -v
+```
+
+`v7_model1.py` 提供合并标定，`v7_m1_water.py` 提供有效储水状态，`v7_m1_run.py` 统一导出数表。
+没有 matplotlib 依赖，不生成图片。只读取 `Data/v7/m1_audited/`；[输出说明](../Results/v7/model1/README.md)。
+重建输入才运行 `v7_replay_m1.py`、`v7_prepare_m1.py`；直接克隆后即可离线计算。
+
+**以下旧预处理/消融链是历史方案，不是当前 M1 生产入口。** 其窗口 QA、月极值温差、双向插值等
+未被本轮认证；不能覆盖新 M1 输入。旧图仅作历史参考，Claude 应使用新数表制图。
+
 
 本目录只保留 **2026-11-10 重新采集** 的流水线。旧版抓取/组装/建模/报告脚本已删除，
 历史实现见 `archive/invalidated_20261109/`（不可作为当前结果）。
@@ -12,7 +28,7 @@
 | 3 | `v7_clean.py` | 七项体检（缺失/异常/重复/类型/量纲/不平衡/时序）+ 派生 + 训练期隔离 | `Data/v7/processed/panel_monthly_{raw,clean}.csv`、`Results/v7/qc_report.json` |
 | 4 | `v7_missing.py` | 缺失专项：图谱、MCAR 检验、五种插补对比、真实缺失敏感度 | `Results/v7/missing.json`、`tab_impute_compare.csv` |
 | 5 | `v7_ablation.py` | 五套预处理方案消融（任务一/二/三复算） | `Results/v7/ablation.json`、`tab_ablation_*.csv` |
-| 7 | `v7_model1.py` | 任务一重建：合并标定、嵌套模型比较、区段像元迁移检验、水量闭合与 V*(I) 曲线 | `Results/v7/model1/`、`Figures/v7/m1_fig*.png`；说明见 `Docs/20261110_model1_v7_rebuild.md` |
+| 7 | `v7_model1.py` | 任务一重建：合并标定、嵌套模型比较、区段像元迁移检验、水量闭合与 V*(I) 曲线 | `Results/v7/model1/`；不出图，说明见 `Docs/20261110_m1_audit_and_implementation.md` |
 | 6 | `v7_figures.py`、`v7_fig_pre.py` | 生成报告用图 | `Figures/v7/*.png` |
 
 ## 双语言预处理脚本（面向使用者）

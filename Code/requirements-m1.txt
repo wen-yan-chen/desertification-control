@@ -1,0 +1,5 @@
+numpy==2.3.5
+pandas==3.0.1
+scipy==1.18.1
+# Only needed when rebuilding raw public responses:
+truststore==0.10.5

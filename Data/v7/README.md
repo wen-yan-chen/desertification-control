@@ -1,4 +1,8 @@
-﻿# Data/v7 —— 2026 CQU_MCM B 题数据（重新采集版）
+# Data/v7 —— 2026 CQU_MCM B 题数据（重新采集版）
+
+> **M1 当前数据入口是 [m1_audited/](m1_audited/README.md)**。
+> 以下 `processed/` 是原 v7 快照，含已确认的窗口 QA 和派生变量口径问题，不能直接作为当前 M1 输入。
+> 重放清单及逐像元修正另存；本轮不将历史表静默覆盖。
 
 > **仓库版说明**：原始响应（`raw/*.json`、`_cache/`）体积约 14 MB，**不入库**；
 > 仓库内保留 `raw/manifest.json`（672 个请求的 URL + SHA256）与 `processed/` 全部处理后数据。

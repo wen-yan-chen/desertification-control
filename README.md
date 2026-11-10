@@ -4,6 +4,11 @@
 
 仓库：<https://github.com/wen-yan-chen/desertification-control>。本机唯一项目工作目录为 `C:\ModelingProgram\Practice2`；其他电脑克隆到各自固定目录即可，路径不必相同。
 
+> **当前 M1（2026-11-10 复核后）**：已完成数值实现，运行 `python Code/v7_model1.py`，只输出 CSV/JSON。
+> 先读 [复核与实现说明](Docs/20261110_m1_audit_and_implementation.md)、[经复核输入](Data/v7/m1_audited/README.md)、[输出表说明](Results/v7/model1/README.md)。
+> 当前公式以 `model_v7.pdf` 末尾更正节为准，旧 M1 图与旧报告数字已失效。
+> 水分与风损伤仍含未标定情景参数，`formal_model_ready=false`；任务二、三尚未实现验证。
+
 > **2026-11-10 更新**：旧数据与旧处理代码（`Data/raw`、`Data/processed`、`Code/*.py` 中的抓取/组装/建模入口）已全部删除，
 > 替换为重新采集的 **v7 数据**与**只含建模公式的规范文档**。历史留档在 `archive/invalidated_20261109/`，不可作为当前结果。
 
@@ -78,7 +83,7 @@ B 题重逻辑闭环，不追求方程复杂度，因此按“保守—保守—
 ## 当前状态（2026-11-10）
 
 数据已重新采集并按规范完成预处理，建模规范已重写为“只含公式与约束”的版本；
-**尚未进行正式标定与求解**，`Reports/model_v7.pdf` 中不含任何数值结果，避免把未验证的数字写进论文。
+**M1 已完成条件标定与情景计算**，详见页首当前入口。旧预处理和消融描述保留作历史方案，不代表当前计算结果。
 
 已知边界：再分析产品不是站点观测；9 个点位不是等距样带；MODIS 端元为固定值；
 SoilGrids 覆盖不完整；经济参数为情景假设。上述均已在两份文档的“局限”中写明。

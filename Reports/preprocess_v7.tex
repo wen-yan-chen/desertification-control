@@ -48,6 +48,14 @@
 
 \begin{document}
 \maketitle
+\begin{quote}\small\bfseries
+复核更正（2026-11-10）：本报告记录原 v7 预处理，不能作为当前 M1 的验收结论。
+已确认窗口级 QA 不能代替逐像元 QA；月极端温差不能直接代替 Hargreaves 的平均日温差；
+旧插值与旧消融不用于当前评分。M1 已采用逐像元质量控制、生长季观测值及日风代理重算。
+当前数据说明见 Data/v7/m1\_audited/README.md，复核说明见 Docs 中当日 m1 审计文档。
+原图表与数字保留为版本记录，未重绘。
+\end{quote}
+
 \thispagestyle{empty}
 
 \begin{center}
@@ -701,24 +709,24 @@ incomplete data from consideration were \emph{not evaluated highly}."
 \section{字段字典（处理后主要字段）}
 % =============================================================================
 
-\begin{longtable}{|c|p{6.3cm}|c|c|}
+\begin{longtable}{|p{4.5cm}|p{4.8cm}|p{1.4cm}|p{3.0cm}|}
 \caption{处理后面板的主要字段}\label{tab:dict}\\
 \hline
 字段 & 含义 & 单位 & 来源 \\
 \hline
 \endhead
 \texttt{site}/\texttt{date} & 站点代码 / 年月 & — & 主键 \\
-\texttt{T2M}/\texttt{T2M\_MAX}/\texttt{T2M\_MIN} & 月均 / 日最高均值 / 日最低均值气温 & \textdegree C & POWER \\
+\texttt{T2M}/\allowbreak\texttt{T2M\_MAX}/\allowbreak\texttt{T2M\_MIN} & 月均 / 月最高 / 月最低气温（后两者不是日极值的月均） & \textdegree C & POWER \\
 \texttt{P\_mm} & 月降水总量 & mm/月 & POWER（原值×天数） \\
 \texttt{GWETROOT} & 根区土壤湿度（饱和度） & 0—1 & POWER \\
 \texttt{W} & 归一化水分状态 & 0—1 & 训练期 5\%/95\% 分位 \\
-\texttt{WS10M}/\texttt{WS10M\_MAX} & 月均 / 月内日最大均值风速 & m\,s$^{-1}$ & POWER \\
+\texttt{WS10M}/\allowbreak\texttt{WS10M\_MAX} & 月均 / 月最大风速（不能当作日最大值的月均） & m\,s$^{-1}$ & POWER \\
 \texttt{E} & 无量纲侵蚀指数 & — & Lettau 公式 \\
-\texttt{ndvi\_mvc}/\texttt{ndvi\_mvc\_qa} & 月最大合成 NDVI（未/已 QA 过滤） & — & MODIS \\
+\texttt{ndvi\_mvc}/\allowbreak\texttt{ndvi\_mvc\_qa} & 旧月最大合成 NDVI（原 QA 是窗口级，不是逐像元） & — & MODIS \\
 \texttt{V\_pct}/\texttt{V\_dyn} & 覆盖度（固定/动态端元） & \% & 像元二分 \\
 \texttt{ET0\_hargreaves} & 参考蒸散 & mm/月 & Hargreaves \\
 \texttt{AI} & 干燥度指数 $P/ET_0$ & — & 派生 \\
-\texttt{dust\_days\_8/10/12/15} & 各阈值下沙尘事件日数 & 日/月 & 日最大风速 \\
+\texttt{dust\_days\_8/10/12/15} & 各风速阈值的超阈日数，不是观测的沙尘事件日数 & 日/月 & 日最大风速 \\
 \texttt{flag\_P\_mm} 等 & 稳健 $z>3.5$ 的异常标记 & 布尔 & 本报告 \\
 \hline
 \end{longtable}

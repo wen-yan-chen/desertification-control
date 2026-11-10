@@ -1,255 +1,311 @@
 {
- "checks_of_v7_inputs": {
-  "W_v7_interannual_sd": {
-   "ALE": 0.0068,
-   "KEL": 0.0028,
-   "MF": 0.0107,
-   "QM": 0.0027,
-   "RQ": 0.0042,
-   "TZ": 0.0106,
-   "XT": 0.0106,
-   "YL": 0.0066,
-   "YT": 0.0125
+  "status": "implemented; scenario-ready; NOT field-calibrated water or erosion forecast",
+  "formal_model_ready": false,
+  "station_fit": {
+    "M0 (r,d)": {
+      "theta": [
+        0.5467,
+        0.1073
+      ],
+      "sd": [
+        0.1737,
+        0.0328
+      ],
+      "cond": 375.2289465217412,
+      "aic": -286.48,
+      "rmse_train": 0.0516,
+      "rmse_test": 0.0635,
+      "r2_test": 0.463
+    },
+    "M1 (r,d,k | eta=1)": {
+      "theta": [
+        0.7776,
+        0.1049,
+        0.2492
+      ],
+      "sd": [
+        0.436,
+        0.0333,
+        0.431
+      ],
+      "cond": 4406.45739018737,
+      "aic": -284.83,
+      "rmse_train": 0.0514,
+      "rmse_test": 0.0657,
+      "r2_test": 0.424
+    },
+    "M2 (r,d,k,eta)": {
+      "theta": [
+        0.7776,
+        0.1049,
+        0.2492,
+        1.0
+      ],
+      "sd": [
+        1.827,
+        0.3367,
+        1.5399,
+        1.3734
+      ],
+      "cond": 94351.08921663424,
+      "aic": -282.83,
+      "rmse_train": 0.0514,
+      "rmse_test": 0.0657,
+      "r2_test": 0.424
+    },
+    "baselines": {
+      "persistence_rmse_train": 0.0572,
+      "persistence_rmse_test": 0.0536,
+      "site_mean_rmse_test": 0.0737,
+      "n_train": 49,
+      "n_test": 21,
+      "eligible_sites": [
+        "ALE",
+        "KEL",
+        "MF",
+        "QM",
+        "RQ",
+        "YL",
+        "YT"
+      ]
+    },
+    "leave_one_station_out_M0": {
+      "ALE": {
+        "r": 0.505,
+        "d": 0.104,
+        "rmse": 0.0507,
+        "persistence": 0.0499
+      },
+      "KEL": {
+        "r": 0.513,
+        "d": 0.103,
+        "rmse": 0.0432,
+        "persistence": 0.0447
+      },
+      "MF": {
+        "r": 0.474,
+        "d": 0.093,
+        "rmse": 0.057,
+        "persistence": 0.0695
+      },
+      "QM": {
+        "r": 0.53,
+        "d": 0.109,
+        "rmse": 0.0634,
+        "persistence": 0.0477
+      },
+      "RQ": {
+        "r": 0.521,
+        "d": 0.105,
+        "rmse": 0.0508,
+        "persistence": 0.0484
+      },
+      "YL": {
+        "r": 0.532,
+        "d": 0.104,
+        "rmse": 0.0378,
+        "persistence": 0.0405
+      },
+      "YT": {
+        "r": 0.958,
+        "d": 0.168,
+        "rmse": 0.1083,
+        "persistence": 0.0805
+      }
+    }
   },
-  "W_v7_site_mean": {
-   "ALE": 0.513,
-   "KEL": 0.995,
-   "MF": 0.361,
-   "QM": 0.741,
-   "RQ": 0.677,
-   "TZ": 0.017,
-   "XT": 0.017,
-   "YL": 0.606,
-   "YT": 0.226
+  "uncertainty": {
+    "method": "local least-squares sd is conditional IID approximation; cluster bootstrap separately",
+    "cluster_count": 7,
+    "bootstrap_seed": 20261110,
+    "bootstrap_percentiles": {
+      "r": {
+        "0.025": 0.33545829493751966,
+        "0.5": 0.5543476887298813,
+        "0.975": 1.167963336904566
+      },
+      "d": {
+        "0.025": 0.07712244733594524,
+        "0.5": 0.10877580856054164,
+        "0.975": 0.20213435162779764
+      }
+    }
   },
-  "V_interannual_sd_pct": {
-   "ALE": 3.14,
-   "KEL": 1.49,
-   "MF": 1.67,
-   "QM": 2.04,
-   "RQ": 2.04,
-   "TZ": 1.41,
-   "XT": 0.23,
-   "YL": 2.26,
-   "YT": 3.6
+  "adopted_parameters": {
+    "r": 0.5466977488023371,
+    "d": 0.10730569418611004,
+    "K_section_pct": 38.07541078360937,
+    "k": 0.0,
+    "eta": 1.0,
+    "water": {
+      "capacity_mm": 75.0,
+      "depletion_fraction": 0.5,
+      "c": 1.0,
+      "eta_w": 0.75,
+      "rain_fraction": 0.25,
+      "groundwater_mm_yr": 0.0,
+      "v_full_pct": 66.5875
+    }
   },
-  "W_v7_between_site_variance_share": 0.9994,
-  "corr_dV_with_W_v7_pooled": -0.452,
-  "corr_dV_with_E_pooled": -0.138,
-  "corr_siteV_with_siteW_veg_sites": 0.096,
-  "f_T_range_within_site": 1.77,
-  "imputed_month_share": {
-   "ALE": 0.144,
-   "KEL": 0.311,
-   "MF": 0.008,
-   "QM": 0.083,
-   "RQ": 0.144,
-   "TZ": 0.008,
-   "XT": 0.008,
-   "YL": 0.061,
-   "YT": 0.068
+  "qa75_sensitivity": {
+    "M0 (r,d)": {
+      "theta": [
+        0.5098,
+        0.1031
+      ],
+      "sd": [
+        0.187,
+        0.0362
+      ],
+      "cond": 351.3645450879195,
+      "aic": -243.14,
+      "rmse_train": 0.0528,
+      "rmse_test": 0.0672,
+      "r2_test": 0.482
+    },
+    "M1 (r,d,k | eta=1)": {
+      "theta": [
+        0.6297,
+        0.1018,
+        0.1293
+      ],
+      "sd": [
+        0.4625,
+        0.0369,
+        0.4552
+      ],
+      "cond": 3943.7607289271873,
+      "aic": -241.22,
+      "rmse_train": 0.0527,
+      "rmse_test": 0.0683,
+      "r2_test": 0.464
+    },
+    "M2 (r,d,k,eta)": {
+      "theta": [
+        0.6297,
+        0.1018,
+        0.1293,
+        1.0
+      ],
+      "sd": [
+        1.913,
+        0.3564,
+        1.608,
+        2.8001
+      ],
+      "cond": 134533.81336560025,
+      "aic": -239.22,
+      "rmse_train": 0.0527,
+      "rmse_test": 0.0683,
+      "r2_test": 0.464
+    },
+    "baselines": {
+      "persistence_rmse_train": 0.0579,
+      "persistence_rmse_test": 0.0584,
+      "site_mean_rmse_test": 0.0787,
+      "n_train": 42,
+      "n_test": 18,
+      "eligible_sites": [
+        "ALE",
+        "MF",
+        "QM",
+        "RQ",
+        "YL",
+        "YT"
+      ]
+    },
+    "leave_one_station_out_M0": {
+      "ALE": {
+        "r": 0.462,
+        "d": 0.1,
+        "rmse": 0.0524,
+        "persistence": 0.0499
+      },
+      "MF": {
+        "r": 0.422,
+        "d": 0.085,
+        "rmse": 0.0583,
+        "persistence": 0.0695
+      },
+      "QM": {
+        "r": 0.504,
+        "d": 0.109,
+        "rmse": 0.0653,
+        "persistence": 0.0477
+      },
+      "RQ": {
+        "r": 0.489,
+        "d": 0.102,
+        "rmse": 0.0524,
+        "persistence": 0.0498
+      },
+      "YL": {
+        "r": 0.489,
+        "d": 0.099,
+        "rmse": 0.0384,
+        "persistence": 0.0405
+      },
+      "YT": {
+        "r": 0.911,
+        "d": 0.161,
+        "rmse": 0.1042,
+        "persistence": 0.0805
+      }
+    }
   },
-  "v7_per_station_fit": {
-   "R2_train_median": 0.004,
-   "hit_bound_frac": 0.889,
-   "d_median": 0.0,
-   "k_median": 0.025
-  }
- },
- "station_fit": {
-  "M0 (r,d)": {
-   "theta": [
-    0.5838,
-    0.1174
-   ],
-   "sd": [
-    0.1797,
-    0.0346
-   ],
-   "cond": 367.1693875414487,
-   "aic": -282.39,
-   "rmse_train": 0.0538,
-   "rmse_test": 0.0676,
-   "r2_test": 0.401
+  "cohort_transfer": {
+    "status": "retrospective selected-cohort diagnostic, NOT independent forecast validation",
+    "selection": "late-period greening and future years used to select pixels and align t0",
+    "parameter_warning": "free r,d,K structurally non-identifiable; only r-d and r/K identifiable",
+    "K_cohort": 45.65451422313445,
+    "v0": 13.915169060225388,
+    "plateau": 36.69345785848798,
+    "free_fit": {
+      "net_rate": 0.5430713408009437,
+      "plateau": 35.311506344061044,
+      "v0": 12.702468733635826
+    },
+    "calibration_CON1_3": {
+      "n": 116,
+      "transfer_r2": 0.39849066934449495,
+      "transfer_rmse": 8.120990784172696,
+      "free_r2": 0.4038971553587939,
+      "mean_baseline_r2": 0.0
+    },
+    "spatial_diagnostic_CON4": {
+      "n": 129,
+      "transfer_r2": 0.3183108657217699,
+      "transfer_rmse": 12.084162423077233,
+      "free_r2": 0.2866452904067134,
+      "mean_baseline_r2": -0.01636502635896009
+    }
   },
-  "M1 (r,d,k | eta=1)": {
-   "theta": [
-    0.5838,
-    0.1174,
-    0.0
-   ],
-   "sd": [
-    0.275,
-    0.0368,
-    0.2697
-   ],
-   "cond": 1443.2159029252007,
-   "aic": -280.39,
-   "rmse_train": 0.0538,
-   "rmse_test": 0.0676,
-   "r2_test": 0.401
+  "water": {
+    "forcing": "2015-2022 YT/MF Open-Meteo archive monthly climatology; provider model unspecified",
+    "annual_rain_mm": 52.15625,
+    "annual_ET0g_mm": 1190.845055631181,
+    "maximum_balance_residual_mm": 5.258016244624741e-13,
+    "discrete_no_water_half_life_years": 6.106427531579636
   },
-  "M2 (r,d,k,eta)": {
-   "theta": [
-    0.5719,
-    0.1054,
-    0.0097,
-    0.0
-   ],
-   "sd": [
-    1.0713,
-    0.1894,
-    0.9101,
-    111.8067
-   ],
-   "cond": 264934226.7082688,
-   "aic": -278.44,
-   "rmse_train": 0.0538,
-   "rmse_test": 0.0671,
-   "r2_test": 0.41
-  },
-  "baselines": {
-   "persistence_rmse_train": 0.06,
-   "persistence_rmse_test": 0.0576,
-   "site_mean_rmse_test": 0.0785,
-   "n_train": 49,
-   "n_test": 21
-  },
-  "leave_one_station_out_M0": {
-   "YT": {
-    "r": 0.988,
-    "d": 0.178,
-    "rmse": 0.1092,
-    "persistence": 0.0832
-   },
-   "MF": {
-    "r": 0.511,
-    "d": 0.103,
-    "rmse": 0.058,
-    "persistence": 0.0716
-   },
-   "QM": {
-    "r": 0.584,
-    "d": 0.124,
-    "rmse": 0.0676,
-    "persistence": 0.0477
-   },
-   "RQ": {
-    "r": 0.539,
-    "d": 0.11,
-    "rmse": 0.0532,
-    "persistence": 0.0553
-   },
-   "KEL": {
-    "r": 0.531,
-    "d": 0.109,
-    "rmse": 0.051,
-    "persistence": 0.0538
-   },
-   "YL": {
-    "r": 0.574,
-    "d": 0.115,
-    "rmse": 0.0391,
-    "persistence": 0.0405
-   },
-   "ALE": {
-    "r": 0.551,
-    "d": 0.116,
-    "rmse": 0.0546,
-    "persistence": 0.052
-   }
-  }
- },
- "cohort_transfer": {
-  "K_cohort": 45.4,
-  "v0": 13.58,
-  "plateau": 36.27,
-  "free_fit": {
-   "K": 41.65,
-   "v0": 12.7,
-   "r": 0.641,
-   "d": 0.097,
-   "net_rate": 0.543,
-   "plateau": 35.31
-  },
-  "calibration_CON1_3": {
-   "n": 116,
-   "transfer_r2": 0.401,
-   "transfer_rmse": 8.11,
-   "free_r2": 0.404,
-   "mean_baseline_r2": 0.0
-  },
-  "holdout_CON4": {
-   "n": 129,
-   "transfer_r2": 0.309,
-   "transfer_rmse": 12.16,
-   "free_r2": 0.287,
-   "mean_baseline_r2": -0.016
-  }
- },
- "water": {
-  "ET0_mm_yr": 1662.0,
-  "ET0g_mm_yr": 1163.0,
-  "P_mm_yr": 73.2,
-  "K_pct": 38.08,
-  "V_full_pct": 66.6,
-  "saturation_irrigation_mm_yr": 1420,
-  "years_to_90pct_of_steady": {
-   "300": 11,
-   "600": 10,
-   "1000": 10
-  },
-  "abandonment_half_life_years": 5.9,
-  "abandonment_series": [
-   34.27,
-   31.02,
-   28.77,
-   27.23,
-   26.18,
-   25.45,
-   24.96,
-   24.62,
-   24.39,
-   24.23,
-   24.12,
-   21.29,
-   18.79,
-   16.58,
-   14.64,
-   12.92,
-   11.4,
-   10.06,
-   8.88,
-   7.84,
-   6.92,
-   6.11,
-   5.39,
-   4.76,
-   4.2
+  "limitations": [
+    "W=1 for oasis parameter fitting is an unverified calibration assumption",
+    "annual June-September cover proxy, not measured ground cover or year-end cover",
+    "no field water-storage/irrigation pairs; bucket parameters are scenarios",
+    "selected cohort is retrospective, not independent prospective validation",
+    "site windows are not an engineering belt polygon; no verified section area",
+    "wind index from daily maximum is a proxy, not actual erosion or hazard counts"
   ],
-  "rain_only": {
-   "model_steady_pct": 3.059633109565024e-10,
-   "observed_XT_pct": 1.17,
-   "observed_TZ_pct": 9.39
+  "input_sha256": {
+    "Data/v7/m1_audited/panel_m1.csv": "dc914546aa8245dc3f2807bcd31441fbafeacb3747a0ca1e81735c3d559114fb",
+    "Data/v7/m1_audited/replay_manifest.json": "186607221dad27c421b09992fb5012e5e47f2240be47fc773b699d552423d408",
+    "Data/v7/section_modis/cohort_converted.csv": "81824c38f8eb1fa45f77b570ccfa6612dc39a2b6fd97a75c382912b710af5f4d",
+    "Data/v7/m1_audited/section_definition.json": "2d20cb1abb2bc5d70dc70da3196ea1957ef6fa89e55effb46594d9b748238de6",
+    "Data/v7/section_modis/endmembers.json": "c677afe2213a41d14e2e0986cac2034fddbcc10f7f9910c076612520baf0b031"
   },
-  "ecotone": {
-   "observed_pct": 8.87,
-   "implied_G_mm_yr": 81.0
+  "runtime": {
+    "python": "3.12.14",
+    "numpy": "2.3.5",
+    "pandas": "3.0.1",
+    "scipy": "1.18.1"
   }
- },
- "adopted_parameters": {
-  "r": 0.5838,
-  "r_sd": 0.1797,
-  "d": 0.1174,
-  "d_sd": 0.0346,
-  "k": 0.0,
-  "k_status": "not identified; scenario range 0-0.10",
-  "eta": 1.0,
-  "eta_status": "fixed, not identifiable",
-  "K_section_pct": 38.08,
-  "x_star_no_water_limit": 0.799,
-  "c": 1.0,
-  "eta_w": 0.75,
-  "V_full_pct": 66.6
- }
 }

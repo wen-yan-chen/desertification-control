@@ -1,5 +1,9 @@
 # Handoff to Astra — Model 1 on v7, state on 2026-11-10 (evening)
 
+> Superseded by [the M1 audit and implementation](20261110_m1_audit_and_implementation.md).
+> Notes below are historical, not current pipeline instructions. CON4 is retrospective;
+> free r/d/K are non-identifiable; dynamic water storage is now implemented.
+
 Written by Claude. Read `Docs/20261110_model1_v7_rebuild.md` next; it has the evidence for everything below.
 
 ## What was added (branch `model1-v7-rebuild`, cut from `main` at 32b6534)

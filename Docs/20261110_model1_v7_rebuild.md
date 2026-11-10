@@ -1,5 +1,8 @@
 # Model 1 rebuilt on v7 (2026-11-10) · 模型一 v7 重建
 
+> **历史记录，已被复核替代。** 下文旧数字及“独立验证”“自由 r,d 一致”等结论不得作为当前结论引用。
+> 当前模型及数值见 [M1 审计与实现](20261110_m1_audit_and_implementation.md)。新增动态储水、逐像元 QA 和明确的回溯诊断；旧图片未重绘。
+
 Code: `Code/v7_model1.py` (offline, about 10 s). Numbers: `Results/v7/model1/`. Figures: `Figures/v7/m1_fig1_*.png`, `m1_fig2_*.png`.
 中文摘要见文末。
 
