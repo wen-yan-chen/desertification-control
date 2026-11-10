@@ -41,8 +41,7 @@ pip install pandas numpy matplotlib openpyxl scipy
 - 仓库内 `Data/v7/processed/` 保留了处理后的面板与元数据，可直接用于建模，不必重新抓取。
 
 
-## 模型一初版（日尺度，仅作参考；已并入本分支，未并入 main）
+## 模型一初版（日尺度）
 
-`m1_config.py`、`m1_fetch_data.py`、`m1_build_dataset.py`、`m1_model.py`、`m1_run.py`：于田—民丰区段的日尺度植被—水—沙模型（FAO-56 水量平衡）。
-数据在 `Data/raw/model1/`、`Data/processed/model1/`，结果在 `Results/model1/`、`Figures/model1/`，说明见 `Docs/20261110_audit_check_and_model1.md`。
-依赖见 `requirements-audit.txt`。当前采用的模型一是 `v7_model1.py`。
+已归档在分支 `model1-first-version`（代码 `Code/m1_*.py`、数据、结果、图），本分支不再保留；
+说明文档 `Docs/20261110_audit_check_and_model1.md` 与 `Reports/M1/` 的两份 PDF 仍在。当前采用的模型一是 `v7_model1.py`。

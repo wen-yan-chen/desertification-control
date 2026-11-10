@@ -14,16 +14,15 @@ Written by Claude. Read `Docs/20261110_model1_v7_rebuild.md` next; it has the ev
 
 Not touched: `Reports/model_v7.tex`, `Code/v7_*.py`, the v7 panel.
 
-## First-trial daily model, merged into this branch
+## First-trial daily model: archived on its own branch
 
-Branch `model1-first-version` is merged here (not into `main`), so both versions sit side by side:
+The first-trial daily model (FAO-56 water balance, more parameters) is **not** in this branch any more. Its code (`Code/m1_*.py`), raw and processed data, results, figures, its own handoff note and the two Task 1 improvement notes stay on branch `model1-first-version` (tip f0b7750) and can be restored from there with `git checkout model1-first-version -- <path>`.
 
-| Version | Code | Data | Results / figures | Write-up |
-|---|---|---|---|---|
-| v7 rebuild (current, yearly, simple) | `Code/v7_model1.py` | `Data/v7/` | `Results/v7/model1/`, `Figures/v7/m1_fig*.png` | `Docs/20261110_model1_v7_rebuild.md` |
-| First trial (daily, FAO-56 water balance, more parameters) | `Code/m1_*.py` | `Data/raw/model1/`, `Data/processed/model1/` | `Results/model1/`, `Figures/model1/` | `Docs/20261110_audit_check_and_model1.md`, `Reports/M1/model1_en.pdf`, `model1_zh.pdf`; its own handoff is `Docs/HANDOFF_to_Astra_first_trial.md` |
+Kept here as the record of that version:
 
-Use the v7 rebuild as Model 1. The first trial is kept as a reference: it supplies the section pixel data, the daily water balance behind the water relation, and a cross-check of the water–cover curve. `Data/v7/section_modis/` is a copy of four of its tables so that `v7_model1.py` runs without it.
+- `Docs/20261110_audit_check_and_model1.md` — audit check, daily model, results, limits
+- `Reports/M1/model1_en.pdf`, `model1_zh.pdf` (with `.tex`; the figures they include are on the old branch)
+- `Data/v7/section_modis/` — the five small tables `v7_model1.py` needs from it
 
 ## The model in two lines
 

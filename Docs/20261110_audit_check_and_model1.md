@@ -1,5 +1,7 @@
 # 2026-11-10 · Audit check, fixes, and Model 1 (first version)
 
+> **Archived version (2026-11-10).** The code, data, results and figures this note refers to (`Code/m1_*.py`, `Data/raw/model1/`, `Data/processed/model1/`, `Results/model1/`, `Figures/model1/`) are kept on branch `model1-first-version`, not in this branch. The current Model 1 is `Code/v7_model1.py`; see `Docs/20261110_model1_v7_rebuild.md`.
+
 Scope: Task 1 of 2026 CQU_MCM Problem B. This note (1) checks the 2026-11-09 audit written with GPT, (2) lists what was fixed and how, (3) documents Model 1 as built, with every number traced to a file. All numbers below are produced by `Code/m1_run.py` and stored in `Results/model1/`.
 
 Status in one paragraph: the audit's criticisms of the old data and model are correct and I found three more structural problems. Its conclusion, "no formal model until local GIS boundaries, permits and cost sheets are obtained", is not workable for this problem, which gives no data and asks teams to consult public data and state assumptions. The data layer has been rebuilt for one defined section with verified public sources, and a first coupled vegetation–water–sand model runs on it. The model reproduces levels and establishment curves; it does **not** explain year-to-year variation of natural cover, and its water-requirement numbers depend strongly on two uncertain parameters. Both limits are stated with numbers in §5–6.
