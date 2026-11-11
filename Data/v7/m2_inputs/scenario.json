@@ -1,5 +1,5 @@
 {
-  "scenario_id": "illustrative_15y_v2_min_cover",
+  "scenario_id": "illustrative_15y_v1",
   "formal_model_ready": false,
   "years": 15,
   "area_block_ha": 50.0,
@@ -32,8 +32,6 @@
   "pv_capex_share_max": 1.0,
   "discount_rate": 0.05,
   "ecological_target_fraction": 0.60,
-  "min_cover_pct": 20.0,
-  "min_cover_by_age_year": 10,
   "solver_relative_gap": 0.002,
   "solver_time_limit_s": 30.0
 }

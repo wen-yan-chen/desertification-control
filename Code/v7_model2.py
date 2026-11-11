@@ -8,7 +8,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import scipy
-from v7_m2_core import ROOT, load_inputs, build_problem, solve, replay, simulate_policy, meets_min_cover
+from v7_m2_core import ROOT, load_inputs, build_problem, solve, replay, simulate_policy
 
 
 def write_json(path, value):
@@ -35,8 +35,7 @@ def run(output, suite=True):
     library = []
     for name, quotas in p.policies.items():
         ann, _ = simulate_policy(cfg, m1, forcing, quotas)
-        ok = meets_min_cover(cfg, ann)
-        library.extend(dict(policy=name, meets_min_cover=ok, **row) for row in ann.to_dict("records"))
+        library.extend(dict(policy=name, **row) for row in ann.to_dict("records"))
     pd.DataFrame(library).to_csv(output/"policy_library.csv", index=False, float_format="%.10g")
     # Standalone PV break-even tariff is a screening condition only. The MILP
     # still accounts for competing land, water, labor and gross-budget capacity.
@@ -105,15 +104,6 @@ def run(output, suite=True):
             prob = build_problem(c,mm,forcing)
             x, meta = solve(prob,"cost",target)
             record(label,prob,x,meta,"sensitivity")
-        # Protection-threshold checks. The score definition itself changes with the rule, so
-        # these are comparisons of rules at one numerical target, not of like-for-like plans.
-        for label, changes in (("min_cover_off", {"min_cover_pct":0.}),
-                               ("min_cover_15pct", {"min_cover_pct":15.}),
-                               ("min_cover_25pct", {"min_cover_pct":25.}),
-                               ("min_cover_by_age_12", {"min_cover_by_age_year":12})):
-            prob = build_problem({**cfg, **changes},m1,forcing)
-            x, meta = solve(prob,"cost",target)
-            record(label,prob,x,meta,"threshold")
         constant = {k:v for k,v in p.policies.items() if k.startswith("constant_")}
         prob = build_problem(cfg,m1,forcing,constant)
         x, meta = solve(prob,"cost",target)
@@ -128,7 +118,7 @@ def run(output, suite=True):
               "Code/v7_m2_core.py", "Code/v7_model2.py"]
     provenance = {name: hashlib.sha256((ROOT/name).read_bytes().replace(b"\r\n", b"\n")).hexdigest() for name in inputs}
     summary = dict(status="scenario-ready; restricted finite control library", formal_model_ready=False,
-        units="ha, mm, m3, kW, CNY, person-days; ecology = undiscounted effective ha-years of batches meeting the minimum-cover rule",
+        units="ha, mm, m3, kW, CNY, person-days; ecology = undiscounted effective ha-years",
         input_text_sha256_lf=provenance, config=cfg, m1_parameters=m1,
         environment=dict(python=platform.python_version(), numpy=np.__version__, pandas=pd.__version__, scipy=scipy.__version__),
         maximum_ecology_reference=maxmeta, base=base_meta, replay_max_abs_errors=errors,
@@ -139,7 +129,6 @@ def run(output, suite=True):
                      "M1 long-term states are conditional scenarios, not validated predictions",
                      "Initial planted cover/storage and irrigation policy library are assumptions",
                      "Ecological score is managed-area cover/K, not causal additionality, measured erosion or monetized ecosystem services",
-                     "Minimum-cover rule (threshold and age) is a scenario assumption without a site-verified protection threshold; batches below it score zero but still cost money and water",
                      "PV and restoration occupy disjoint land; no inferred PV vegetation benefit",
                      "Unit prices include labor; person-days constrain capacity and are not charged twice"],
         runs=runs)

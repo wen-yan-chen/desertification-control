@@ -12,13 +12,11 @@
 | `cohort_water.csv` | 生态批次×年×月，完整M1土壤水量账；`*_mm`为面积归一化深度，乘`area_ha*10`才是m³ |
 | `policy_library.csv` | 18种候选年补水路径的M1逐龄轨迹，年份为**林龄**而非项目日历年 |
 | `pv_screening.csv` | 各建设年独立PV保本电价元/kWh、独立NPV元/kW；不含稀缺资源机会成本 |
-| `scenario_summary.csv` | 33次优化状态、目标、界/gap、生态积分、净现成本、全期支出和最终规模；`group=threshold`为最低覆盖规则对照；`feasible=False`的行没有方案，其余表中也没有对应`case` |
+| `scenario_summary.csv` | 29次优化状态、目标、界/gap、生态积分、净现成本、全期支出和最终规模 |
 | `scenario_annual.csv` | 各情景逐年方案，`case`为连接键 |
 | `scenario_decisions.csv` | 各情景所选批次，`case`连接对应配置 |
 | `scenario_monthly.csv` | 各情景逐月供水量、上限和余量 |
 | `scenario_configs.json` | 每个`case`实际使用的参数、M1参数和策略名称 |
-
-**最低覆盖规则（2026-11-11起）。** 生态积分只统计达标批次：`annual.csv`的`counted_effective_ha`是计分量，`effective_ha`仍是全部批次的物理量；`cohorts.csv`的`counts_toward_score`、`policy_library.csv`的`meets_min_cover`标明批次/路径是否达标（基准为林龄10年末V≥20%）。`scenario_summary.csv`的`ecological_ha_year`与目标值均按计分量。本次`initial_cover_low`在同一绝对目标下不可行，属于正常记录，不得补造路径。
 
 `year`从1开始；资本发生于该年年初，运维与发电收入发生于年末；PV建设年没有发电，次年投产收益。生态`V_start_pct`决定当年`effective_ha`，`V_end_pct`为年末状态；不能混用。V与M均跨年继承。
 
