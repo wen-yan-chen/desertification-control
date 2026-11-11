@@ -37,10 +37,10 @@ FigureStyleDemos/
 在仓库根目录运行（只查看现有图片无需安装依赖）：
 
 ```sh
-python3 -m pip install -r archive/FigureStyleDemos/requirements.txt
-python3 archive/FigureStyleDemos/Scripts/demo_figures.py
-python3 archive/FigureStyleDemos/Scripts/demo_figures2.py
-python3 archive/FigureStyleDemos/Scripts/mcm_figures.py
+python3 -m pip install -r FigureAndFlowworkStyle/FigureStyleDemos/requirements.txt
+python3 FigureAndFlowworkStyle/FigureStyleDemos/Scripts/demo_figures.py
+python3 FigureAndFlowworkStyle/FigureStyleDemos/Scripts/demo_figures2.py
+python3 FigureAndFlowworkStyle/FigureStyleDemos/Scripts/mcm_figures.py
 ```
 
 脚本通过 `figure_paths.py` 按 `catalog.json` 中的类别输出到 `Images/`，不依赖终端的当前目录。运行会覆盖对应的同名演示图。改变函数的 `name` 参数后，新图会进入 `Images/06_自定义输出/`；如需纳入现有分类，可更新 `catalog.json`。
@@ -50,5 +50,3 @@ python3 archive/FigureStyleDemos/Scripts/mcm_figures.py
 ## 用于论文
 
 这里全部为合成／示例数据，部分沿用旧旅游题变量与标签，不是本次治沙题结果。选定图形后替换实际数据、变量、单位、图例与来源，将正式结果另存到 `Paper/Figure/`；LaTeX 优先引用 PDF。
-
-2026-11-09 整合：取消 Batch1、Batch2、PaperTemplate 三个物理目录，全部图片按用途合并，脚本集中到 Scripts。46 个原图按 SHA-256 校验内容一致，未重新生成图片。

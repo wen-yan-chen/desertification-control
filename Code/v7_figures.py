@@ -17,7 +17,7 @@ sys.stdout.reconfigure(encoding="utf-8")
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(BASE, "Data", "v7", "processed")
 RES = os.path.join(BASE, "Results", "v7")
-FIG = os.path.join(BASE, "Figures", "v7")
+FIG = os.path.join(BASE, "Figures", "v7_init_test")
 os.makedirs(FIG, exist_ok=True)
 
 plt.rcParams["font.sans-serif"] = ["Microsoft YaHei", "SimHei", "DejaVu Sans"]
@@ -269,7 +269,7 @@ def main():
     print("绘制图6 相关与共线性 ...", flush=True); fig_collinear(clean)
     if os.path.exists(os.path.join(RES, "tab_ablation_summary.csv")):
         print("绘制图7 消融 ...", flush=True); fig_ablation()
-    print("全部图件已写入 Figures/v7", flush=True)
+    print("全部图件已写入 Figures/v7_init_test", flush=True)
 
 
 if __name__ == "__main__":

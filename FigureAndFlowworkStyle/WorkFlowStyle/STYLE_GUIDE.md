@@ -86,7 +86,7 @@ Joint fills go dark → light (`wfJointA`, `B`, `C`) toward the result.
 % Paper/Figure/workflow.tex
 \documentclass[tikz,border=2pt]{standalone}
 \usepackage{newtxtext}
-\usepackage{../../archive/WorkFlowStyle/mcmworkflow}
+\usepackage{../../FigureAndFlowworkStyle/WorkFlowStyle/mcmworkflow}
 \begin{document}
 \wftheme{green}
 \begin{tikzpicture}

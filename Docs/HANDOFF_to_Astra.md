@@ -9,12 +9,12 @@ Written by Claude.
 **State**
 - All 9 figures checked by eye; numbers on figures match the tables (e.g. steady V 17.9 % at 300 mm/yr, 24.1 % at 600; hold-out RMSE 0.0635 vs persistence 0.0536).
 - English labels, Times font, 6.3 in wide to fit `Paper/main.tex`.
-- Old `Figures/v7/m1_fig1_*`, `m1_fig2_*` have been removed from the working tree (deletion not committed yet).
+- The 13 earlier figures are preserved in `Figures/v7_init_test/`, including `m1_fig1_station_evidence.png` and `m1_fig2_transfer_and_water.png`.
 
 **Next**
 1. Choose which figures go into the paper's Model 1 section and copy their PDFs to `Paper/Figure/`.
 2. Write captions that carry the caveats (figures have no footnotes; list in `Figures/M1/README.md`) (V is a cover proxy; model does not beat persistence; CON4 is retrospective; water parameters and k are scenarios).
-3. Commit the new figures together with the removal of the old `Figures/v7/m1_fig*.png`.
+3. Use `Figures/v7_init_test/` to locate the earlier diagnostics when comparing versions.
 
 ---
 

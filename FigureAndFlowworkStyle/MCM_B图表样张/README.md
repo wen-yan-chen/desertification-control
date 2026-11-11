@@ -44,7 +44,3 @@
 ## 复现
 
 运行 generate_gallery.py 可按随机种子 20271107 重建图集。依赖 Python、NumPy、SciPy、Matplotlib、Pillow、PyMuPDF。生成程序与校验记录随图集提供。
-
-## 参考建议
-
-本次结合了 [O奖论文风格解析](../../../AwardPapers/O奖论文风格解析.md)、[Practice1 优化清单](../../../Practice1/Docs/Practice1_向O奖优化清单.md) 和此前复盘。图型展示按本次请求使用合成数据。

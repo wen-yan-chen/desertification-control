@@ -4,7 +4,7 @@
 %
 %  输入：Data/v7/processed/panel_monthly_raw.csv
 %  输出：Data/v7/processed/panel_monthly_clean_matlab.csv
-%        Figures/v7/pre_matlab.png
+%        Figures/v7_init_test/pre_matlab.png
 %
 %  运行：在 MATLAB 中把"当前文件夹"切到本仓库根目录，直接运行 preprocess_v7
 %  说明：抓取与合并（JSON→面板）由 Python 完成；MATLAB 负责清洗、派生与出图，
@@ -21,7 +21,7 @@ end
 
 IN_CSV  = fullfile(BASE, 'Data', 'v7', 'processed', 'panel_monthly_raw.csv');
 OUT_DIR = fullfile(BASE, 'Data', 'v7', 'processed');
-FIG_DIR = fullfile(BASE, 'Figures', 'v7');
+FIG_DIR = fullfile(BASE, 'Figures', 'v7_init_test');
 OUT_CSV = fullfile(OUT_DIR, 'panel_monthly_clean_matlab.csv');
 OUT_FIG = fullfile(FIG_DIR, 'pre_matlab.png');
 

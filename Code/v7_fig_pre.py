@@ -16,7 +16,7 @@ sys.stdout.reconfigure(encoding="utf-8")
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(BASE, "Data", "v7", "processed")
 RES = os.path.join(BASE, "Results", "v7")
-FIG = os.path.join(BASE, "Figures", "v7")
+FIG = os.path.join(BASE, "Figures", "v7_init_test")
 os.makedirs(FIG, exist_ok=True)
 
 plt.rcParams["font.sans-serif"] = ["Microsoft YaHei", "SimHei", "DejaVu Sans"]

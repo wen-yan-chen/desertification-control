@@ -15,7 +15,7 @@ preprocess_v7.py —— 治沙工程（2026 CQU_MCM B 题）数据预处理主�
     Data/v7/processed/panel_monthly_clean.csv     清洗后的建模面板
     Data/v7/processed/panel_monthly_clean.xlsx    同内容 Excel（便于核对）
     Data/v7/processed/qc_summary.json             质量审计汇总
-    Figures/v7/pre_before.png / pre_after.png     预处理前后可视化
+    Figures/v7_init_test/pre_before.png / pre_after.png     预处理前后可视化
 
 运行
     python preprocess_v7.py
@@ -40,7 +40,7 @@ BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 INPUT_CSV = os.path.join(BASE, "Data", "v7", "processed", "panel_monthly_raw.csv")
 OUT_DIR = os.path.join(BASE, "Data", "v7", "processed")
-FIG_DIR = os.path.join(BASE, "Figures", "v7")
+FIG_DIR = os.path.join(BASE, "Figures", "v7_init_test")
 OUT_CSV = os.path.join(OUT_DIR, "panel_monthly_clean.csv")
 OUT_XLSX = os.path.join(OUT_DIR, "panel_monthly_clean.xlsx")
 OUT_JSON = os.path.join(OUT_DIR, "qc_summary.json")

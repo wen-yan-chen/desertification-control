@@ -1,7 +1,13 @@
-# 当前报告
+# 历史版本索引
 
-- `model.tex` / `model.pdf`：修正的候选模型规范，尚未校准；只规定模型公式、参数与约束。
-- [模型与数据审计](../Docs/20261109_模型与数据审计.md)：旧问题、来源证据、补充数据及剩余条件。
-- [数据字典](../Data/data_dictionary.md)：当前数据字段、单位及使用限制。
+| 目录 | 保存内容 |
+|---|---|
+| `InitialVersion/` | 初版报告和配图 |
+| `invalidated_20261109/` | 审计前的代码、数据、结果和记录 |
+| `model1_first_trial/` | 模型一初版说明和报告 |
 
-旧版 `model`、`preprocess`、`data_source` 报告及配图已归档，不能作为当前有效论证。特别是原始面板文件名中的 `real_raw` 不表示其全部列是真实观测。
+当前 M1 的数据、公式与结果入口见
+[M1 审计与实现](../Docs/20261110_m1_audit_and_implementation.md)、
+[经复核输入](../Data/v7/m1_audited/README.md)和
+[结果说明](../Results/v7/model1/README.md)。
+图表和流程图样式见 [FigureAndFlowworkStyle](../FigureAndFlowworkStyle/README.md)。

@@ -98,5 +98,3 @@ python Code/v7_prepare_m1.py
 - [NASA POWER 时间聚合文档](https://power.larc.nasa.gov/docs/methodology/data/processing/)：极值参数与日极值均值不同，不能在 ET0 公式中混用。
 - [Open-Meteo 历史接口说明](https://open-meteo.com/en/docs/historical-weather-api)：若需一致的特定再分析模式，应显式选择模式；本项目原请求没有这样做。
 - [FAO-56 土壤水分与胁迫](https://www.fao.org/4/x0490e/x0490e0e.htm)：水分容量应由土壤水力性质和根深定义；当前没有当地实测参数，采用的数值明确是情景。
-
-上一轮未提交修正及预存审计草稿保存在本机具名 Git stash：`Preserve unfinished pre-v7 repairs and existing review draft before 20261110 sync`，没有混入本轮实现。

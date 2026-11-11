@@ -1,92 +1,73 @@
-# Practice2 · Desertification Control
+# Desertification Control
 
-团队练习题：**2026 CQU_MCM Problem B — Sand Control is Meticulous Work**。2027 MCM/ICM 备赛练习，不是 2027 正式赛题。
+2026 CQU_MCM Problem B — Sand Control is Meticulous Work，团队数学建模练习项目。
 
-仓库：<https://github.com/wen-yan-chen/desertification-control>。本机唯一项目工作目录为 `C:\ModelingProgram\Practice2`；其他电脑克隆到各自固定目录即可，路径不必相同。
+## 项目入口
 
-> **当前 M1（2026-11-10 复核后）**：已完成数值实现，运行 `python Code/v7_model1.py`，只输出 CSV/JSON。
-> 先读 [复核与实现说明](Docs/20261110_m1_audit_and_implementation.md)、[经复核输入](Data/v7/m1_audited/README.md)、[输出表说明](Results/v7/model1/README.md)。
-> 当前公式以 `model_v7.pdf` 末尾更正节为准，旧 M1 图与旧报告数字已失效。
-> 水分与风损伤仍含未标定情景参数，`formal_model_ready=false`；任务二、三尚未实现验证。
-
-> **2026-11-10 更新**：旧数据与旧处理代码（`Data/raw`、`Data/processed`、`Code/*.py` 中的抓取/组装/建模入口）已全部删除，
-> 替换为重新采集的 **v7 数据**与**只含建模公式的规范文档**。历史留档在 `archive/invalidated_20261109/`，不可作为当前结果。
-
-## 从哪里开始
-
-1. **[数据预处理（LaTeX，当前版）](Reports/preprocess_v7.pdf)** —— 七项体检、缺失值专项排查（缺失图谱 / 机制检验 / 五种插补对比）、
-   双语言（Python + MATLAB）代码与前后对比
-2. **[建模说明（LaTeX，当前版）](Reports/model_v7.pdf)** —— 只含题目解读、公式、参数、约束与算法步骤，不含数据结果
-3. [英文题目 PDF](Problem/2026_CQU_MCM_Problem_B.pdf) / Word 原题
-4. [读题与约束登记](Docs/2026_CQU_MCM_B题_读题文档.md)
-5. [已有文献覆盖、缺口与建模接口](Docs/文献覆盖审计与建模接口.md)
-6. [组员原有资料导航](Reference/00_阅读导航与资料清单.md)、[英文补充与来源核验](Reference/05_英文补充与来源核验/README.md)
-7. [三机协作与同步](Docs/协作同步.md)
-
-## 目录约定
-
-| 目录 | 内容 |
+| 内容 | 位置 |
 |---|---|
-| `Problem/` | 原始赛题，保持源文件不改 |
-| `Reference/` | 组员已有 PDF、CAJ、网页资料与英文补充 |
-| `Docs/` | 读题、文献审计、协作约定、历史审计记录 |
-| `Plan/` | 甘特图、时间计划与组员分工 |
-| `Code/` | **v7 数据流水线**（抓取 → 合并 → 清洗 → 审计 → 消融）+ 双语言预处理脚本，见 [Code/README](Code/README.md) |
-| `Data/v7/` | 重新采集的原始清单 `raw/manifest.json` 与处理后数据 `processed/`，见 [Data/v7/README](Data/v7/README.md) |
-| `Figures/v7/` | 预处理与建模图（缺失图谱、插补对比、量纲陷阱、跨源一致性、消融） |
-| `Results/v7/` | 审计、缺失排查、消融结果（JSON/CSV） |
-| `Reports/` | `model_v7.*`（建模规范）与 `preprocess_v7.*`（数据预处理），tex + pdf |
-| `Paper/` | 最终 LaTeX 论文：`main.tex` 入口，章节在 `Section/`，图在 `Figure/`，文献在 `bibliography/` |
-| `archive/` | 合成风格样张及失效历史快照；均不可作为当前实证结果 |
-| `Tools/` | 同步与文献完整性核验工具 |
+| 赛题 | [Problem/](Problem/) |
+| 最终论文 | [Paper/main.tex](Paper/main.tex) |
+| M1 公式、数据审计与证据边界 | [M1 审计与实现](Docs/20261110_m1_audit_and_implementation.md) |
+| M1 输入 | [Data/v7/m1_audited/](Data/v7/m1_audited/README.md) |
+| M1 计算结果 | [Results/v7/model1/](Results/v7/model1/README.md) |
+| 代码与运行方法 | [Code/](Code/README.md) |
+| 建模与预处理报告 | [Reports/](Reports/README.md) |
+| 文献与来源 | [Reference/](Reference/00_阅读导航与资料清单.md) |
+| 图表和流程图样式 | [FigureAndFlowworkStyle/](FigureAndFlowworkStyle/README.md) |
+| 团队协作 | [协作同步](Docs/协作同步.md) |
 
-大体量遥感/再分析数据不直接塞进 Git：仓库只保留**下载脚本、清单（含 SHA256）、处理后数据**；
-原始响应可用 `Code/v7_fetch.py` 重新下载。私钥、API 令牌和个人配置不提交。
+## 当前模型
 
-## 数据 v7（2026-11-10 重新采集）
+M1 已实现条件合并标定、有效储水动态、逐像元 QA、水量闭合和情景计算。数据入口为
+`Data/v7/m1_audited/`，数值出口为 `Results/v7/model1/`。公式参考
+`Reports/model_v7.tex` 末尾的复核更正节及 `Reports/m1_correction.tex`。
 
-| 来源 | 变量 | 分辨率 | 说明 |
-|---|---|---|---|
-| NASA POWER | 降水、气温、湿度、10 m 风速/日最大风速、根区湿度、辐射 | 0.5°×0.625°，月 + 日 | 月产品是**日均值**，月总量须乘天数 |
-| ORNL DAAC MODIS MOD13Q1 | NDVI、像元可靠性（9×9 像元窗口） | 250 m，16 天 | 整型 ×10⁻⁴，填充 −3000 |
-| Open-Meteo（ERA5） | 4 层土壤含水量、ET₀、阵风、VPD | 0.1°—0.25°，日 | 风速交付单位是 km/h |
-| ISRIC SoilGrids | 砂/黏/有机碳 | 250 m，静态 | 81 项中成功 62 项，覆盖不完整，未纳入面板 |
+当前结果保留 `formal_model_ready=false`。水分和风损伤参数仍需现场证据，区段工程边界、
+可用水量、成本和劳动力约束仍待补充。任务二、三的优化与韧性计算尚待实现验证。
 
-- 规模：9 个点位 × 132 个月（2015-01—2025-12），面板 1188 行；原始响应 672 个、14.1 MB。
-- 点位的选择与说明见 [Data/v7/README](Data/v7/README.md)；肖塘与塔中落在同一 MERRA-2 格点，气象独立样本为 8 个。
-- 处理后数据：`Data/v7/processed/panel_monthly_clean.csv`（1188×62，UTF-8），附 `qc_summary.json` 审计记录。
+在仓库根目录运行。
 
-## 文档目录（2026-11-10）
+```sh
+python -m pip install -r Code/requirements-m1.txt
+python Code/v7_model1.py
+python -m unittest discover -s Code -p test_v7_m1.py -v
+python Tools/check_references.py
+```
 
-| 位置 | 内容 | 说明 |
-|---|---|---|
-| `Reports/preprocess_v7.pdf` / `.tex` | **数据预处理（当前版，16 页）** | 必要性判断、缺失专项、环节优先级、双语言方法对比、代码、前后对比、评分权重 |
-| `Reports/model_v7.pdf` / `.tex` | **建模说明（当前版，21 页）** | 题目解读、假设、公式逐项解释、参数与约束、三个算法与伪代码、公式速查表 |
-| `Code/preprocess_v7.py` / `.m` | 双语言预处理主程序 | 路径提示、异常处理、中间结果、可视化、完整性断言 |
-| `Code/v7_fetch.py` 等 | 数据流水线 | 抓取 → 合并 → 清洗 → 缺失排查 → 消融 → 出图 |
-| `Data/v7/processed/*` | 处理后数据 | CSV/XLSX/JSON，可直接用于建模 |
-| `Results/v7/*` | 审计与消融结果 | `qc_report.json`、`missing.json`、`ablation.json` 等 |
-| `Docs/20261109_*.md` | 历史审计记录 | 保留作决策留痕，其中的数字已被 v7 取代 |
+Python 版本要求为 3.11 及以上。已提交的小表支持离线运行 M1。
+重建数据时依次运行 `Code/v7_replay_m1.py`、`Code/v7_prepare_m1.py`。
 
-### 建模路线（为什么这样选）
+## 数据与文献
 
-B 题重逻辑闭环，不追求方程复杂度，因此按“保守—保守—创新”配置：
+v7 月面板覆盖 9 个点位和 2015—2025 年，共 1188 行。来源包括 NASA POWER、
+MODIS MOD13Q1、Open-Meteo 历史归档和 SoilGrids。原始请求与哈希保存在
+`Data/v7/raw/manifest.json`，数据结构与处理口径见 [数据说明](Data/v7/README.md)。
 
-1. **任务一（保守）**：年尺度水量限制 Logistic + 风蚀损伤项，承载上限 $K$ 由观测 95% 分位确定；
-   同时给出解析稳态 $V^*(K_s)$ 与可识别性判据（灵敏度矩阵条件数），不宣称年尺度能识别风蚀系数。
-2. **任务二（保守，重点）**：15 年动态规划，决策为年新增面积、补水深度、光伏占比，
-   约束为预算、水量、土地、劳动力；状态—决策空间完整枚举，**全局最优且可复现**；
-   另给出立项门槛 $s^*$ 的解析式。
-3. **任务三（创新）**：泊松冲击 + 吸收马尔可夫链，用 $(I-Q)^{-1}$ 闭式给出期望首达时间与退化概率，
-   并用蒙特卡洛交叉验证；气候趋势以时变转移矩阵连乘的形式进入。
+`Data/v7/processed/` 保存预处理对比材料。经复核的 M1 输入和 QA 记录位于
+`Data/v7/m1_audited/`，模型运行方法见 [代码说明](Code/README.md)。
 
-## 当前状态（2026-11-10）
+参考资料按水盐灌溉、风沙韧性、经济优化、工程背景和英文补充组织。
+原有索引为 `Reference/资料索引.json`，英文补充索引为
+`Reference/05_英文补充与来源核验/sources.json`。
 
-数据已重新采集并按规范完成预处理，建模规范已重写为“只含公式与约束”的版本；
-**M1 已完成条件标定与情景计算**，详见页首当前入口。旧预处理和消融描述保留作历史方案，不代表当前计算结果。
+## 目录用途
 
-已知边界：再分析产品不是站点观测；9 个点位不是等距样带；MODIS 端元为固定值；
-SoilGrids 覆盖不完整；经济参数为情景假设。上述均已在两份文档的“局限”中写明。
+| 目录 | 用途 |
+|---|---|
+| `Problem/` | 赛题原文件 |
+| `Reference/` | 文献、网页存档、题录与来源核验 |
+| `Docs/` | 读题、当前模型审计、文献接口与协作说明 |
+| `Plan/` | 计划与分工 |
+| `Code/` | M1 实现、输入重建、预处理与对比工具 |
+| `Data/v7/` | 请求清单、面板和经复核输入 |
+| `Results/v7/` | 审计、对比材料及 M1 数值结果 |
+| `Figures/M1/` | 当前 M1 数表生成的图片 |
+| `Figures/v7_init_test/` | 初版预处理与模型图，使用时核对对应数据版本 |
+| `Reports/` | 建模与预处理报告 |
+| `Paper/` | 论文源码、章节、图片与文献库 |
+| `FigureAndFlowworkStyle/` | 图表样张、生成脚本和流程图样式 |
+| `Tools/` | 同步和完整性核验工具 |
 
-开始工作前运行 `git pull --ff-only`，或在 PowerShell 中使用 `.\Tools\sync.ps1`。
-完成一项工作后明确选择文件、提交、推送，再通知队友拉取。远程推送不会自动刷新另外两台电脑。
+开始工作前按 [协作说明](Docs/协作同步.md) 同步仓库。完成修改后选择实际文件提交、推送。
+原始响应、个人环境和编译缓存按 `.gitignore` 管理。
