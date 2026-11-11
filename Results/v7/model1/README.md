@@ -25,4 +25,4 @@
 
 基准年度气象重复用于未来情景，不是未来天气预报。14 个情景包括 13 档恒定灌溉，以及前 10 年 600 mm/年、随后停灌。实际储水和灌溉数据不足，`formal_model_ready=false`。
 
-原 `Figures/v7/m1_fig*.png` 与 `Reports/M1/model1_v7_*` 的旧数字已失效；本轮不重绘，Claude 应从以上新表制作图片。
+原 `Figures/v7/m1_fig*.png` 与 `archive/model1_v7_drafts/model1_v7_*` 的旧数字已失效；本轮不重绘，Claude 应从以上新表制作图片。

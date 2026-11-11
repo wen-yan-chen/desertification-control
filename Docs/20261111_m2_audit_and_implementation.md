@@ -4,7 +4,7 @@
 
 已同步到队友提交 `8623204`，保留 M1 代码、数据、数表和已上传的 `Figures/M1/`。M2 原方案存在实质问题，不能直接按原简化 DP 出结果。本轮已更正 M2 公式及相关索引，完成独立调用 M1 的批次动态优化、数表导出与测试。**未生成 M2 图片，交由 Claude 绘制。**
 
-运行入口 `Code/v7_model2.py`；输入 `Data/v7/m2_inputs/scenario.json`；结果 `Results/v7/model2/`；制图交接 `Docs/20261111_m2_figure_handoff.md`。报告 `Reports/model_v7.tex` 在原 M2 章节位置引入 `m2_correction.tex`，更新 PDF；其余章节只修正受 M2 变更影响的接口、单位和索引，M1 更正节仅更新状态说明。M3 尚未检验实现。
+运行入口 `Code/v7_model2.py`；输入 `Data/v7/m2_inputs/scenario.json`；结果 `Results/v7/model2/`；制图交接 `Docs/20261111_m2_figure_handoff.md`。报告 `Reports/model_v7/model_v7.tex` 在原 M2 章节位置引入同目录的 `m2_correction.tex`，更新 PDF；其余章节只修正受 M2 变更影响的接口、单位和索引，M1 更正节仅更新状态说明。M3 尚未检验实现。
 
 ## 原方案问题及处理
 

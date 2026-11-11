@@ -1,7 +1,7 @@
 # archive/model1_first_trial — 模型一初版（日尺度），已归档
 
 First-trial Model 1 (daily FAO-56 water balance, hourly-wind drift potential). Superseded by the
-v7 rebuild (`Code/v7_model1.py`, `Docs/20261110_model1_v7_rebuild.md`, `Reports/M1/model1_v7_*.pdf`).
+v7 rebuild (`Code/v7_model1.py`, `Docs/20261110_model1_v7_rebuild.md`, `archive/model1_v7_drafts/model1_v7_*.pdf`).
 
 | File | Content |
 |---|---|

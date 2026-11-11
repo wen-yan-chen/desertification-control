@@ -25,7 +25,7 @@
 
 M1 已实现条件合并标定、有效储水动态、逐像元 QA、水量闭合和情景计算。数据入口为
 `Data/v7/m1_audited/`，数值出口为 `Results/v7/model1/`。公式参考
-`Reports/model_v7.tex` 第 3 节（任务一，已并入复核更正）。
+`Reports/model_v7/model_v7.tex` 第 3 节（任务一，已并入复核更正）。
 
 当前结果保留 `formal_model_ready=false`。水分和风损伤参数仍需现场证据，区段工程边界、
 可用水量、成本和劳动力约束仍待补充。M2 已完成批次动态优化、预算/水量/劳动约束、

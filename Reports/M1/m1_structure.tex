@@ -1,0 +1,47 @@
+% M1 model structure. Build: pdflatex m1_structure.tex (in Reports/M1)
+\documentclass[tikz,border=2pt]{standalone}
+\usepackage{newtxtext}
+\usepackage{amsmath}
+\usepackage{../../FigureAndFlowworkStyle/WorkFlowStyle/mcmworkflow}
+\begin{document}
+\wftheme{green}
+\begin{tikzpicture}
+% ---- inputs (column 1)
+\node[wf input, text width=3.0cm] (clim) at (1.85,-0.95) {Monthly $P$, ET$_0$, $T$\\(2015--2022 climatology)};
+\node[wf input, text width=3.0cm] (irr)  at (1.85,-2.15) {Irrigation quota $I_t$ (mm/yr)};
+\node[wf input, text width=3.0cm] (wind) at (1.85,-3.35) {Daily max wind $u_{10}^{\max}$};
+\node[wf input, text width=3.0cm] (ndvi) at (1.85,-4.55) {MODIS NDVI with pixel QA};
+
+% ---- derived quantities and water module (column 2)
+\node[wf model, text width=3.9cm] (bucket) at (6.55,-0.95) {Storage bucket $M_j$\\(daily sub-steps)};
+\node[wf mid, text width=3.9cm] (wbar) at (6.55,-2.15) {$\overline W_t$ = met / potential\\transpiration};
+\node[wf mid, text width=3.9cm] (eidx) at (6.55,-3.35) {Wind index $E_t$\\(nonlinear first, then average)};
+\node[wf mid, text width=3.9cm] (cover) at (6.55,-4.55) {Cover proxy $V_t$;\ $K=1.15\,Q_{0.95}$};
+
+% ---- vegetation map and calibration (column 3)
+\node[wf model, text width=3.2cm] (veg) at (11.25,-2.15) {Annual vegetation map\\growth $-$ decay $-$ wind};
+\node[wf mid, text width=3.2cm] (cal) at (11.25,-4.55) {Pooled one-step least squares $\Rightarrow r,d$};
+
+% ---- outputs (column 4)
+\node[wf key, text width=2.9cm] (curve) at (15.35,-0.95) {Water--cover curve $V^*(I)$};
+\node[wf output, text width=2.9cm] (scen) at (15.35,-2.15) {2026--2050 scenario paths};
+\node[wf aux, text width=2.9cm] (iface) at (15.35,-3.35) {$(V,M)$ passed to Task 2};
+
+% ---- flows
+\draw[wf arrow] (clim.east) -- (bucket.west);
+\draw[wf arrow] (irr.east) -- ++(0.45,0) |- (bucket.west);
+\draw[wf arrow] (wind.east) -- (eidx.west|-wind.east);
+\draw[wf arrow] (ndvi.east) -- (cover.west|-ndvi.east);
+\draw[wf arrow] (bucket) -- (wbar);
+\draw[wf arrow] (wbar.east) -- (veg.west);
+\draw[wf arrow] (eidx.east) -- ++(0.45,0) |- ([yshift=-4pt]veg.west);
+\draw[wf arrow] (cover.east) -- (cal.west);
+\draw[wf arrow] (cal) -- (veg);
+\draw[wf soft] (veg.north) -- (11.25,0.15) -- node[wf plain, above, font=\bfseries\itshape\scriptsize] {feedback: $V_t$ sets transpiration demand} (6.55,0.15) -- (bucket.north);
+\draw[wf arrow] (veg.east) -- (scen.west);
+\draw[wf arrow] (veg.east) -- ++(0.35,0) |- (curve.west);
+\draw[wf arrow] (veg.east) -- ++(0.35,0) |- (iface.west);
+
+\wfpanelat{A}{P1}{(0,0.75)}{(17.1,-5.35)}{Model 1: coupled vegetation--water--sand dynamics}
+\end{tikzpicture}
+\end{document}

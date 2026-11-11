@@ -5,5 +5,5 @@
 原文及程序保留原样，因此其中仍含已撤销的数值、数据来源断言、编程任务清单及旧路径。不能据此覆盖当前模型说明或用于论文结果。代码仅供检查历史错误，不能作为正式运行入口；在此目录运行也不保证路径有效。
 
 当前模型见 [M1 审计与实现](../../Docs/20261110_m1_audit_and_implementation.md)，
-公式见 [model_v7.tex](../../Reports/model_v7.tex) 任务一节（已并入复核更正）。
+公式见 [model_v7.tex](../../Reports/model_v7/model_v7.tex) 任务一节（已并入复核更正）。
 当前输入见 [m1_audited](../../Data/v7/m1_audited/README.md)。

@@ -5,6 +5,7 @@
 | `InitialVersion/` | 初版报告和配图 |
 | `invalidated_20261109/` | 审计前的代码、数据、结果和记录 |
 | `model1_first_trial/` | 模型一初版说明和报告 |
+| `model1_v7_drafts/` | 模型一 v7 重建稿（中/英 tex 与 PDF），数字已失效；现行内容见 `Reports/M1/M1_writing_brief.pdf`。tex 中的相对路径未随迁移修改，仅保留 PDF 供查阅 |
 
 当前 M1 的数据、公式与结果入口见
 [M1 审计与实现](../Docs/20261110_m1_audit_and_implementation.md)、

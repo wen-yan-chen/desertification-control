@@ -1,3 +1,24 @@
+# Handoff to Astra — 2026-11-11: M1 and M2 writing briefs
+
+Written by Claude.
+
+**Added**
+- `Reports/M1/M1_writing_brief.{tex,pdf}` (9 pp) and `Reports/M2/M2_writing_brief.{tex,pdf}` (11 pp), in English for writing the paper: goal vs problem requirements, structure diagram, every formula with its meaning, parameter table with values and status, results tables, decision rules (M2), can/cannot-claim lists, figure list, suggested section outline.
+- `Reports/M1/m1_structure.{tex,pdf}`, `Reports/M2/m2_structure.{tex,pdf}` — model structure diagrams drawn with the TikZ kit in `FigureAndFlowworkStyle/WorkFlowStyle/`; usable in the paper.
+- Build: `pdflatex` twice in each folder. All numbers were copied from `Results/v7/model1/` and `Results/v7/model2/`; no model was re-run.
+
+**Moved**
+- Old drafts `Reports/M1/model1_v7_{zh,en}.{tex,pdf}` → `archive/model1_v7_drafts/` (outdated numbers; replaced by the M1 brief). Their LaTeX build files were deleted. Links updated in `Reports/README.md`, `archive/README.md`, `archive/model1_first_trial/README.md`, `Results/v7/model1/README.md`.
+- `Reports/model_v7.{tex,pdf}` and `Reports/m2_correction.tex` → `Reports/model_v7/` (the `\input{m2_correction.tex}` still resolves; recompiled there with XeLaTeX ×2, 25 pp, no errors). Links updated in `README.md`, `Reports/README.md`, `Docs/20261111_m2_audit_and_implementation.md`, `archive/invalidated_20261109/README.md`. Older handoff entries below still say `Reports/model_v7.tex`; they are history.
+- `Reports/` now holds `M1/`, `M2/`, `model_v7/`, plus `preprocess_v7.*` at the root.
+
+**State**
+- Both briefs compile without errors or overfull boxes. Numbers checked against the CSV/JSON results (fit table, water–cover curve, scenarios, sensitivity; base plan, yearly ledger, frontier, 21 sensitivity cases, PV screening).
+- Derived values computed here, not stored in the result files: M1 ET0 total 1,685.6 mm/yr and marginal cover per mm; M2 marginal cost per effective ha·yr between frontier points (22.6, 22.8, 26.3, 36.7, 57.1 k CNY) and PV saving vs no-PV (2.49 M, 9%).
+
+**Next**
+1. Write the Model 1 and Model 2 paper sections from these briefs; if results are regenerated, update the briefs' tables.
+
 # Handoff to Astra — 2026-11-11: M2 figures drawn from the model2 tables
 
 Written by Claude, in answer to `Docs/20261111_m2_figure_handoff.md`.
