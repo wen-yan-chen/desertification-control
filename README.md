@@ -11,6 +11,9 @@
 | M1 公式、数据审计与证据边界 | [M1 审计与实现](Docs/20261110_m1_audit_and_implementation.md) |
 | M1 输入 | [Data/v7/m1_audited/](Data/v7/m1_audited/README.md) |
 | M1 计算结果 | [Results/v7/model1/](Results/v7/model1/README.md) |
+| M2 复核与实现 | [M2 审计说明](Docs/20261111_m2_audit_and_implementation.md) |
+| M2 情景输入与数表 | [参数登记](Data/v7/m2_inputs/README.md) / [结果说明](Results/v7/model2/README.md) |
+| M2 制图交接 | [给 Claude 的数表说明](Docs/20261111_m2_figure_handoff.md) |
 | 代码与运行方法 | [Code/](Code/README.md) |
 | 建模与预处理报告 | [Reports/](Reports/README.md) |
 | 文献与来源 | [Reference/](Reference/00_阅读导航与资料清单.md) |
@@ -24,7 +27,9 @@ M1 已实现条件合并标定、有效储水动态、逐像元 QA、水量闭�
 `Reports/model_v7.tex` 末尾的复核更正节及 `Reports/m1_correction.tex`。
 
 当前结果保留 `formal_model_ready=false`。水分和风损伤参数仍需现场证据，区段工程边界、
-可用水量、成本和劳动力约束仍待补充。任务二、三的优化与韧性计算尚待实现验证。
+可用水量、成本和劳动力约束仍待补充。M2 已完成批次动态优化、预算/水量/劳动约束、
+光伏资产现金流、成本—生态权衡及敏感性数表，仅作条件情景，图交由 Claude 完成。
+任务三的韧性计算尚待实现验证。
 
 在仓库根目录运行。
 
@@ -32,6 +37,8 @@ M1 已实现条件合并标定、有效储水动态、逐像元 QA、水量闭�
 python -m pip install -r Code/requirements-m1.txt
 python Code/v7_model1.py
 python -m unittest discover -s Code -p test_v7_m1.py -v
+python Code/v7_model2.py
+python -m unittest discover -s Code -p test_v7_m2.py -v
 python Tools/check_references.py
 ```
 
@@ -59,9 +66,9 @@ MODIS MOD13Q1、Open-Meteo 历史归档和 SoilGrids。原始请求与哈希保�
 | `Reference/` | 文献、网页存档、题录与来源核验 |
 | `Docs/` | 读题、当前模型审计、文献接口与协作说明 |
 | `Plan/` | 计划与分工 |
-| `Code/` | M1 实现、输入重建、预处理与对比工具 |
+| `Code/` | M1/M2 实现、输入重建、预处理与对比工具 |
 | `Data/v7/` | 请求清单、面板和经复核输入 |
-| `Results/v7/` | 审计、对比材料及 M1 数值结果 |
+| `Results/v7/` | 审计、对比材料及 M1/M2 数值结果 |
 | `Figures/M1/` | 当前 M1 数表生成的图片 |
 | `Figures/v7_init_test/` | 初版预处理与模型图，使用时核对对应数据版本 |
 | `Reports/` | 建模与预处理报告 |

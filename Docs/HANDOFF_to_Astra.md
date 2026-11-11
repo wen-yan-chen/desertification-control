@@ -1,3 +1,7 @@
+# M2 update — 2026-11-11
+
+M2 is implemented as a scenario-only cohort MILP; no figures generated. Read [M2 audit](20261111_m2_audit_and_implementation.md) and [figure handoff to Claude](20261111_m2_figure_handoff.md). Use `Results/v7/model2/`; preserve the completed M1 figures. M3 is still pending.
+
 # Handoff to Astra — 2026-11-11: M1 figures redrawn from the new tables
 
 Written by Claude.

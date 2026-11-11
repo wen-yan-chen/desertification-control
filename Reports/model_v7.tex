@@ -48,13 +48,13 @@
 \large 建模说明：题目解读、公式、参数与约束\\[2pt]
 \normalsize （2026 CQU\_MCM B 题 · 只含建模部分，不含数据结果）}
 \author{CQU\_MCM 2026 · B 题}
-\date{2026-11-10}
+\date{2026-11-11}
 
 \begin{document}
 \maketitle
 \begin{quote}\small\bfseries
-复核状态（2026-11-10）：任务一以本文末尾“复核更正”节为准。
-前文外生水分定义、月/年混用和静态接口已被更正；任务二、三尚未完成计算核验。
+复核状态（2026-11-11）：任务一以本文末尾“复核更正”节为准；任务二采用本轮批次动态更正。
+前文任务一外生水分定义、月/年混用和静态接口以更正节为准；任务二已完成情景实现核验，任务三尚未核验。
 本建模文档只管理公式、参数和约束，不规定编程交付物。
 \end{quote}
 
@@ -96,8 +96,7 @@ $\min_{\bm{\theta}}\sum_t\|\bm{F}^t(\bm{x}_0;\bm{\theta})-\tilde{\bm{x}}_t\|^2$ 
 \addlinespace
 任务二 & 把建设过程视为\textbf{最优控制或动态优化}；决策含新增面积、生态补水、
 投资结构（含光伏）、劳动力；目标权衡生态效益与经济成本 &
-\textbf{有限期离散时间最优控制}：状态 $A_t$、决策 $\bm{u}_t=(a_t,I_t,s_t)$、
-转移 $A_{t+1}=A_t+a_t$、目标为贴现净现值，用\textbf{动态规划}求全局最优 \\
+\textbf{有限期动态优化}：各建植批次的 $(V,M)$、光伏资产与剩余预算；决策含面积、补水、三类资金分配及劳动，以有限策略库混合整数优化权衡生态积分与净现成本 \\
 \addlinespace
 任务三 & 在任务一、二基础上引入\textbf{随机灾害过程}与\textbf{长期预测} &
 \textbf{复合泊松冲击}驱动的\textbf{吸收马尔可夫链}：状态为覆盖度网格，
@@ -115,9 +114,8 @@ $\min_{\bm{\theta}}\sum_t\|\bm{F}^t(\bm{x}_0;\bm{\theta})-\tilde{\bm{x}}_t\|^2$ 
 
 \begin{enumerate}
 \item \textbf{任务一 $\to$ 任务二}：任务二目标函数中的"生态效益"不能凭空设定，
-必须由任务一的\textbf{稳态覆盖度} $V^*$ 提供；而 $V^*$ 又依赖补水量 $I_t$。
-因此任务一必须给出\textbf{解析的} $V^*(K_s)$，否则任务二每算一个决策都要重跑一遍动力学，
-计算量爆炸且不可解释。
+必须由任务一逐批动态状态 $(V,M)$ 提供，不能将新植面积赋为稳态。
+给定灌溉策略后预计算单位面积逐龄轨迹，再进行面积与资产配置优化。
 \item \textbf{任务一 $\to$ 任务三}：任务三的"漂移项"就是任务一的右端向量场 $\bm{F}$；
 两处必须用\textbf{同一组}参数，否则任务三的结论无法回溯到任务一。
 \item \textbf{任务二 $\to$ 任务三}：任务二的\textbf{建设路径} $\{A_t\}$ 决定了暴露在灾害下的资产规模，
@@ -154,9 +152,9 @@ $K$ 不是自由参数，而由覆盖度观测的高分位放大一个安全系�
 故对侵蚀强度乘一个随 $V$ 递减的遮蔽因子。
 \end{assumption}
 
-\begin{assumption}[补水只改变水分胁迫系数]\label{as:water}
-生态补水通过提高水分胁迫系数 $K_s$ 影响稳态覆盖度，不直接进入年际动力学。
-\emph{理由}：补水是工程措施，效果以"维持根区水分"体现，年尺度上表现为承载能力的提升。
+\begin{assumption}[补水通过有效储水影响生长]\label{as:water}
+生态补水先进入有效储水质量平衡，再通过实际/潜在蒸腾比影响年际生长；
+保留前期储水记忆，参数与状态定义按末尾任务一复核更正节。
 \end{assumption}
 
 \begin{assumption}[灾害为泊松到达、幅度独立同分布]\label{as:poisson}
@@ -215,7 +213,7 @@ $\lambda$ & 10 m 日最大风速序列（同上） & 日 & 0.1\textdegree--0.5\t
 & 由超阈频率估计，不单独采集 \\
 $u$ & 不需要字段 & — & — & 情景给定分布 \\
 $c_b,c_m,c_w$ & 不需要字段 & — & — & 情景/文献给定，给出区间 \\
-$p_{pv},p_e$ & 不需要字段 & — & — & 同上 \\
+$c_p,c_{pm},p_e,e_0$ & 光伏合同成本、净结算价与净上网电量 & 年 & 项目 & 未核实则作为情景 \\
 \bottomrule
 \end{tabularx}
 \caption{模型字段清单与最小充分性}\label{tab:fields}
@@ -525,182 +523,7 @@ e^{\mathrm{1yr}}_t&=\big|\hat V_{t+1|t}-\tilde V_{t+1}\big|,\qquad
 这是把"$k$ 不可识别"转化为"若 $k$ 取某值，结论会怎样"的标准做法。
 
 % =============================================================================
-\section{任务二：投资、调度与劳动力的最优过程设计}\label{sec:t2}
-% =============================================================================
-
-\subsection{为什么用动态规划，而不是连续最优控制}
-
-题目说"最优控制或动态优化"。选择离散动态规划的理由有三条：
-(i) 决策本身就是离散的——每年新增面积按 0.5 千 hm$^2$ 档、补水按 20 mm 档、光伏占比按 0.1 档，
-用连续控制需要先松弛再取整，反而丢失最优性；
-(ii) 状态转移是\textbf{确定性}的（$A_{t+1}=A_t+a_t$），没有随机项，
-因此 Bellman 方程退化为确定性递推，\textbf{枚举即全局最优}，不需要启发式；
-(iii) 状态空间小（累计面积离散为 81 格），总计算量 $O(T\cdot|A|\cdot|U|)\approx 7\times10^{4}$，秒级完成，
-结果完全可复现——这对"结论要能复核"的竞赛写作是加分项。
-
-\subsection{阶段、状态、决策与转移}
-
-\begin{table}[H]\centering\small
-\begin{tabularx}{\textwidth}{|c|X|}
-\toprule
-要素 & 定义 \\
-\midrule
-阶段 & $t=0,1,\dots,T-1$，$T$ 为规划期（建议 10--20 年，取 $T=15$） \\
-状态 & $A_t$：第 $t$ 年初的累计治理面积（千 hm$^2$），离散为 $A_t\in\mathcal{A}=\{0,\Delta_A,\dots,A_{\max}\}$ \\
-决策 & $\bm{u}_t=(a_t,I_t,s_t)$：新增面积、补水深度、光伏配套占比 \\
-决策集 & $a_t\in\{0,0.5,1,1.5,2\}$，$I_t\in\{0,20,40,60\}$ mm，$s_t\in\{0.2,0.3,0.4,0.5\}$ \\
-转移 & $A_{t+1}=A_t+a_t$（确定性） \\
-\bottomrule
-\end{tabularx}
-\caption{任务二的动态规划要素}\label{tab:dp}
-\end{table}
-
-\subsection{约束条件（逐条给出单位与来源）}
-
-\begin{align}
-&\text{（预算）} && c_b\cdot1000a_t+c_m\cdot1000A_t+c_w\,I_ta_t\ \le\ B, \label{eq:budget}\\
-&\text{（水量）} && I_t\,a_t\ \le\ W_{\max}, \label{eq:water}\\
-&\text{（土地）} && A_t+a_t\ \le\ A_{\max}, \label{eq:land}\\
-&\text{（劳动力）} && \lambda_L\,a_t\ \le\ L_{\max}, \label{eq:labor}\\
-&\text{（决策离散）} && a_t\in\mathcal{A}_a,\ I_t\in\mathcal{A}_I,\ s_t\in\mathcal{A}_s. \label{eq:discrete}
-\end{align}
-
-\paragraph{单位换算（最容易出错的地方，必须写清楚）。}
-$a_t$ 的单位是千 hm$^2$，$1$ 千 hm$^2=1000$ hm$^2$，故面积项统一乘 1000 化为 hm$^2$。
-补水体积：$I_t$ 以 mm 计，$1\ \mathrm{mm}=10^{-3}$ m；
-$1000a_t$ hm$^2$ $=1000a_t\times10^{4}$ m$^2$。两者相乘
-\[
-V^{\mathrm{water}}_t=I_t\times10^{-3}\times1000a_t\times10^{4}
-=10^{4}I_ta_t\ \mathrm{m^3}=I_ta_t\ \text{万m}^3 .
-\]
-因此式~\eqref{eq:water} 中水量约束直接写成 $I_ta_t\le W_{\max}$（$W_{\max}$ 以万 m$^3$ 计），
-水费为 $c_wI_ta_t$（$c_w$ 以万元/万 m$^3$ 计）。
-\textbf{若把体积写成 $I_ta_t/1000$，量纲会差 1000 倍，整个预算约束失效}——这是本模型最隐蔽的陷阱。
-
-\subsection{目标函数：贴现净现值}
-
-\begin{equation}\label{eq:npv}
-\max_{\{\bm{u}_t\}}\ \sum_{t=0}^{T-1}\delta^{t}\Big[
-\underbrace{p_{pv}s_t\cdot1000a_t}_{\text{光伏收益}}
-+\underbrace{p_{e}\frac{V^*\big(K_s(I_t)\big)}{K}\cdot1000A_t}_{\text{生态效益}}
--\underbrace{c_b\cdot1000a_t}_{\text{建设}}
--\underbrace{c_m\cdot1000A_t}_{\text{运维}}
--\underbrace{c_wI_ta_t}_{\text{补水}}
-\Big]
-\end{equation}
-
-\paragraph{逐项解释。}
-\begin{itemize}
-\item $p_{pv}s_t\cdot1000a_t$：只有\textbf{当年新增}面积可配套光伏，装机与新增同步；
-$p_{pv}$ 是单位面积年收益。
-\item $p_e\frac{V^*}{K}\cdot1000A_t$：生态效益按"覆盖度达成率 $V^*/K$"折算到\textbf{累计面积}上。
-这一项是任务一与任务二的接口：$V^*$ 由式~\eqref{eq:xstar} 给出，而 $V^*$ 通过 $K_s(I_t)$ 依赖补水量。
-\item $c_b\cdot1000a_t$：建设成本按新增面积一次性计。
-\item $c_m\cdot1000A_t$：运维成本按累计面积逐年计。
-\item $c_wI_ta_t$：补水成本按体积计。
-\item $\delta=1/(1+\rho)$ 为贴现因子，$\rho$ 为贴现率；$T$ 期后不再计收益（残值另作敏感性）。
-\end{itemize}
-
-\paragraph{补水—覆盖度的接口。}取线性、有上界的供水响应
-\begin{equation}\label{eq:Ks}
-K_s(I)=\min\Big\{1,\ k_{s0}+k_{s1}\frac{I}{I_{\max}}\Big\},\qquad k_{s0},k_{s1}>0,
-\end{equation}
-$K_s$ 是"水分胁迫系数"（$K_s=1$ 表示水分不再限制）。代入式~\eqref{eq:xstar} 时把 $Wf(T)$ 替换为 $K_s$：
-\begin{equation}\label{eq:xstar2}
-x^*(I)=\frac{rK_s(I)-d-kE}{rK_s(I)-kE\eta},\qquad V^*(I)=K\,x^*(I).
-\end{equation}
-由命题~\ref{prop:steady}(ii)，$x^*$ 关于 $K_s$ 单调递增，故生态效益关于 $I$ 单调递增；
-但 $K_s$ 有上界 1，所以补水的边际效益递减——这正是模型会出现"补水到 60 mm 封顶"这类结论的机理来源。
-
-\subsection{Bellman 递推与边界条件}
-
-定义值函数
-\begin{equation}\label{eq:value}
-J_t(A)=\max_{\bm{u}_t\in\mathcal{U}(A)}\Big\{\,g_t(A,\bm{u}_t)+\delta\,J_{t+1}(A+a_t)\,\Big\},
-\qquad J_T(A)=0,
-\end{equation}
-其中 $g_t$ 是式~\eqref{eq:npv} 的方括号项，$\mathcal{U}(A)$ 是满足式~\eqref{eq:budget}--\eqref{eq:discrete} 的决策集。
-$J_t(A)$ 的含义是："第 $t$ 年、手上已有 $A$ 千 hm$^2$ 时，到规划期末还能拿到的最大贴现净收益"。
-边界条件 $J_T\equiv0$ 表示期末之后不再计收益。
-
-\begin{algorithm}[H]
-\caption{任务二：有限期动态规划（后向归纳）}\label{alg:dp}
-\begin{algorithmic}[1]
-\Require 参数 $(c_b,c_m,c_w,p_{pv},p_e,B,W_{\max},A_{\max},\lambda_L,L_{\max},\delta)$，$K$，$\hat\theta$
-\Ensure 最优值 $J_0(0)$，最优路径 $\{\bm{u}^*_t\}$，$\{A^*_t\}$
-\State 构造状态网格 $\mathcal{A}$；令 $J_T(A)\gets0$，$\forall A\in\mathcal{A}$
-\For{$t=T-1$ \textbf{downto} $0$}
-  \For{$A\in\mathcal{A}$}
-    \State $J_t(A)\gets-\infty$
-    \For{$(a,I,s)\in\mathcal{A}_a\times\mathcal{A}_I\times\mathcal{A}_s$}
-      \If{式~\eqref{eq:budget}--\eqref{eq:land} 全部满足}
-        \State 由式~\eqref{eq:xstar2} 算 $V^*(I)$；由式~\eqref{eq:npv} 算 $g_t$
-        \State $v\gets g_t+\delta J_{t+1}(A+a)$
-        \If{$v>J_t(A)$}
-          \State $J_t(A)\gets v$；记录 $\bm{u}^*_t(A)\gets(a,I,s)$
-        \EndIf
-      \EndIf
-    \EndFor
-  \EndFor
-\EndFor
-\State 从 $A_0=0$ 出发前向回放 $\bm{u}^*_t(A_t)$，得到 $\{A_t\}$
-\end{algorithmic}
-\end{algorithm}
-
-\paragraph{最优性。}式~\eqref{eq:npv} 的可行域是有限集（$|\mathcal{A}_a||\mathcal{A}_I||\mathcal{A}_s|=5\times4\times4=80$ 个决策组合，
-$|\mathcal{A}|=81$ 个状态，$T=15$ 阶段），算法~\ref{alg:dp} 对每个状态枚举了全部可行决策，
-由 Bellman 最优性原理，后向归纳得到的是\textbf{全局最优}，不是局部最优。
-复杂度 $O(T|\mathcal{A}||\mathcal{U}|)\approx 7\times10^{4}$。
-
-\subsection{可执行判据：由目标函数直接导出的立项阈值}
-
-不必等数值结果，也能从式~\eqref{eq:npv} 导出"该不该建"的判据。
-考虑在第 $t$ 年\textbf{增加 1 hm$^2$} 并持有到期末，其边际收益与边际成本的贴现值分别为
-\begin{align}
-M^{+}_t&=D_t\Big(p_{pv}s_t+p_e\frac{V^*(I_t)}{K}\Big), \label{eq:mp}\\
-M^{-}_t&=c_b+D_t\Big(c_m+\frac{c_wI_t}{1000}\Big), \label{eq:mcost}
-\end{align}
-其中 $D_t=\sum_{\tau=t}^{T-1}\delta^{\tau-t}=\dfrac{1-\delta^{T-t}}{1-\delta}$ 为剩余年限的贴现和
-（运维与生态补水逐年发生，故乘贴现和 $D_t$；建设是一次性支出，不乘）。
-\textbf{立项判据}：$M^+_t>M^-_t$，即
-\begin{equation}\label{eq:threshold}
-\boxed{\;s_t\ >\ s^*=\frac{1}{p_{pv}}\left[\frac{c_b}{D_t}+c_m+\frac{c_wI_t}{1000}-p_e\frac{V^*(I_t)}{K}\right]\;}
-\end{equation}
-式~\eqref{eq:threshold} 就是"光伏配套占比的立项门槛"：低于 $s^*$ 时，任何建设规模都不划算，
-最优解退化为"不建设"。它还说明三件事：
-(i) 规划期越长（$D_t$ 越大），$c_b/D_t$ 越小，项目越容易成立——这是"早建早收益"的数学来源；
-(ii) 运维单价 $c_m$ 与建设单价 $c_b$ 的作用不同：前者按年摊、后者按期末摊；
-(iii) 生态效益 $p_eV^*/K$ 相当于对门槛的"补贴"，所以提高生态价值认定可以直接降低立项门槛。
-
-\subsection{参数与敏感性设计}
-
-\begin{table}[H]\centering\small
-\begin{tabularx}{\textwidth}{|c|X|c|}
-\toprule
-参数 & 含义 & 量纲 \\
-\midrule
-$c_b$ & 建设单价（含沙障、苗木、整地） & 万元/hm$^2$ \\
-$c_m$ & 年运维单价 & 万元/(hm$^2\cdot$a) \\
-$c_w$ & 水价（含输配） & 万元/万m$^3$ \\
-$p_{pv}$ & 光伏单位面积年收益 & 万元/(hm$^2\cdot$a) \\
-$p_e$ & 生态效益单位面积年价值（按 $V^*/K=1$ 计） & 万元/(hm$^2\cdot$a) \\
-$B$ & 年预算上限 & 万元/a \\
-$W_{\max}$ & 年可用水量上限 & 万m$^3$/a \\
-$A_{\max}$ & 可治理面积上限 & 千hm$^2$ \\
-$\lambda_L$ & 单位面积所需劳动力 & 人/千hm$^2$ \\
-$L_{\max}$ & 年劳动力上限 & 人 \\
-$\delta$ & 贴现因子 & — \\
-\bottomrule
-\end{tabularx}
-\caption{任务二的参数与量纲}\label{tab:t2par}
-\end{table}
-
-\paragraph{敏感性设计（四组单因素）。}
-分别令 $s\in\{0.1,\dots,0.5\}$、$c_m$ 上下浮动 $\pm50\%$、$c_b$ 上下浮动 $\pm25\%$、
-$p_{pv}$ 上下浮动 $\pm30\%$，重解式~\eqref{eq:value}，记录
-$\partial \mathrm{NPV}/\partial(\cdot)$ 与"最优路径结构是否改变"（例如是否仍为"先建后维"）。
-判据是：若某参数变动 $10\%$ 导致路径结构翻转，则该参数是\textbf{结论敏感参数}，
-必须在正文中给出区间而不是点估计。
+\input{m2_correction.tex}
 
 % =============================================================================
 \section{任务三：随机灾害下的韧性}\label{sec:t3}
@@ -860,8 +683,8 @@ $T$ & 评估期限 & a & 30--50 年 \\
 & 一年外推误差应\textbf{优于}持续性基线；$R^2$ 只作参考 \\
 任务一 & 可识别性 $\kappa(\bm{S}^{\top}\bm{S})$（式~\eqref{eq:cond}）
 & 报告条件数与参数区间；不可识别者标为情景参数 \\
-任务二 & 最优性 & 与穷举/随机搜索对照；检查每条约束的影子价格是否非负 \\
-任务二 & 敏感性 & 单因素 $\pm$ 变动下的路径结构与 NPV \\
+任务二 & 最优性 & 小实例穷举对照、逐批回放及资源账本；报告整数求解界与间隙 \\
+任务二 & 敏感性 & 固定绝对生态目标下的单因素情景、路径结构与净现成本 \\
 任务三 & 解析 vs 蒙特卡洛 & 解析值落在 MC 的 95\% 置信区间内 \\
 任务三 & 离散化收敛 & $n$ 加倍后 $\Prob(\tau\le T)$ 变化 $<1\%$ \\
 \bottomrule
@@ -872,7 +695,7 @@ $T$ & 评估期限 & a & 30--50 年 \\
 \subsection{跨任务的一致性检验}
 
 三问共用同一个 $F$ 与同一组 $\hat\theta$，因此可以做两个交叉检验：
-(i) 把任务二最优路径末年的稳态覆盖度代入任务三的初始状态，退化概率应随建设规模单调下降；
+(i) 任务三应继承任务二各批次末年 $(V,M)$ 和资产状态；建设规模增加不保证单位面积退化概率下降；
 (ii) 把任务三的 $\lambda$ 调为 0，退化概率应趋于 0、期望首达时间应趋于 $\infty$——
 若数值上不是这样，说明转移矩阵或吸收态设置有误。
 
@@ -883,6 +706,10 @@ $T$ & 评估期限 & a & 30--50 年 \\
 
 \begin{longtable}{|c|p{6.2cm}|c|c|}
 \caption{符号总表}\label{tab:sym}\\
+\hline
+符号 & 含义 & 单位 & 类型 \\
+\hline
+\endfirsthead
 \hline
 符号 & 含义 & 单位 & 类型 \\
 \hline
@@ -901,14 +728,14 @@ $\eta$ & 植被遮蔽系数 & — & 标定 \\
 $f(T)$ & 温度响应因子 & — & 设定 \\
 $x_t$ & 相对覆盖度 $V_t/K$ & — & 派生 \\
 $x^*$ & 稳态相对覆盖度 & — & 解析 \\
-$A_t$ & 累计治理面积（状态） & 千hm$^2$ & 决策派生 \\
-$a_t$ & 年新增治理面积（决策） & 千hm$^2$ & 决策 \\
-$I_t$ & 年生态补水深度（决策） & mm & 决策 \\
-$s_t$ & 光伏配套面积占比（决策） & — & 决策 \\
+$A_t$ & 累计治理面积（状态） & hm$^2$ & 决策派生 \\
+$a_t$ & 年新增治理面积（决策） & hm$^2$ & 决策 \\
+$q_{p,h}$ & 策略库逐龄补水深度 & mm/年 & 情景控制 \\
+$f_t^b,f_t^o,f_t^p$ & 三类资金分配比例 & — & 决策派生 \\
 $\delta$ & 贴现因子 & — & 情景 \\
-$J_t(A)$ & 值函数 & 万元 & 派生 \\
+$N,H$ & 净现成本、生态积分 & 元；hm$^2$年 & 派生 \\
 $c_b,c_m,c_w$ & 建设、运维、水价 & 见表~\ref{tab:t2par} & 情景 \\
-$p_{pv},p_e$ & 光伏收益、生态价值 & 万元/(hm$^2\cdot$a) & 情景 \\
+$p_e,e_0$ & 光伏净结算价、净上网比产出 & 元/kWh；kWh/(kW年) & 情景 \\
 $\lambda$ & 灾害年频率 & a$^{-1}$ & 估计/情景 \\
 $u$ & 单次损失比例 & — & 情景 \\
 $\bm{P},\bm{Q}$ & 转移矩阵、非吸收子矩阵 & — & 派生 \\
@@ -922,8 +749,12 @@ $\kappa(\cdot)$ & 矩阵条件数 & — & 诊断 \\
 \section{三问所需字段—公式对照}\label{app:field}
 % =============================================================================
 
-\begin{longtable}{|c|c|c|}
+\begin{longtable}{|p{3.7cm}|p{4.7cm}|p{6.0cm}|}
 \caption{三问所需字段与公式对照}\label{tab:fieldmap}\\
+\hline
+公式 & 需要的字段 & 若缺该字段的降级方案 \\
+\hline
+\endfirsthead
 \hline
 公式 & 需要的字段 & 若缺该字段的降级方案 \\
 \hline
@@ -933,7 +764,7 @@ $\kappa(\cdot)$ & 矩阵条件数 & — & 诊断 \\
 式~\eqref{eq:eeff}、\eqref{eq:lettau} & $u_{10}^{\max}$（日） & 只有月均：$E$ 退化，$k$ 不可识别，须声明 \\
 式~\eqref{eq:K} & $V$ 的训练期分位 & 样本不足：改用区域文献值并做敏感性 \\
 式~\eqref{eq:obj} & 全部状态序列 & 缺失：按第~\ref{sec:data} 节的门槛剔除站点 \\
-式~\eqref{eq:water} & $I,a$（决策） & 不需字段 \\
+式~\eqref{eq:water} & 各批次定额、面积、年/月供水上限 & 缺取水批复：仅作资源情景 \\
 式~\eqref{eq:threshold} & 全部经济参数 & 缺单价：给区间，结论写成条件结论 \\
 式~\eqref{eq:P} & $\lambda$、$u$ 分布 & 缺事件记录：用风速超阈频率作代理 \\
 式~\eqref{eq:tv} & 趋势系数 $\alpha$ & 缺趋势：令 $\alpha=0$ 作基准，另做情景 \\
@@ -945,6 +776,10 @@ $\kappa(\cdot)$ & 矩阵条件数 & — & 诊断 \\
 
 \begin{longtable}{|c|c|c|c|}
 \caption{参数取值域一览}\label{tab:parrange}\\
+\hline
+参数 & 取值域 & 来源 & 是否进入敏感性 \\
+\hline
+\endfirsthead
 \hline
 参数 & 取值域 & 来源 & 是否进入敏感性 \\
 \hline
@@ -960,7 +795,7 @@ $\E[u]$ & $[0.2,0.55]$ & 情景 & 是（与 $\lambda$ 联合） \\
 $\delta$ & $[0.90,0.97]$ & 情景 & 是 \\
 $c_b$ & 见表~\ref{tab:t2par} & 情景 & 是 \\
 $c_m$ & 见表~\ref{tab:t2par} & 情景 & 是 \\
-$p_{pv}$ & 见表~\ref{tab:t2par} & 情景 & 是 \\
+$p_e$ & 见表~\ref{tab:t2par} & 情景 & 是 \\
 $T$（规划期） & $[10,20]$ a & 题目建议 & 是 \\
 \hline
 \end{longtable}
@@ -975,6 +810,10 @@ $T$（规划期） & $[10,20]$ a & 题目建议 & 是 \\
 \hline
 式号 & 一句话含义 & 任务 \\
 \hline
+\endfirsthead
+\hline
+式号 & 一句话含义 & 任务 \\
+\hline
 \endhead
 \eqref{eq:sens} & 灵敏度递推：参数变动如何传到覆盖度轨迹 & 一 \\
 \eqref{eq:sensb} & 右端项对 $r,d,k,\eta$ 的偏导向量 & 一 \\
@@ -986,24 +825,22 @@ $T$（规划期） & $[10,20]$ a & 题目建议 & 是 \\
 \eqref{eq:K} & 承载上限＝覆盖度训练期 95\% 分位×1.15 & 一 \\
 \eqref{eq:x} & 无量纲化后的相对覆盖度递推 & 一 \\
 \eqref{eq:steady0} & 稳态条件：生长＝衰亡＋风蚀 & 一 \\
-\eqref{eq:xstar} & 稳态覆盖度的解析解（任务二的接口） & 一$\to$二 \\
+\eqref{eq:xstar} & 旧外生水分条件稳态式（非任务二动态接口） & 一 \\
 \eqref{eq:box} & 参数盒约束（含非负性与物理符号，另见式~\eqref{eq:nonneg}、\eqref{eq:sign}） & 一 \\
 \eqref{eq:obj} & 参数标定的最小二乘目标函数 & 一 \\
 \eqref{eq:r2} & 拟合优度 $R^2$（只作参考） & 一 \\
 \eqref{eq:rmse} & 均方根误差 & 一 \\
 \eqref{eq:oneyr} & 一年外推误差（须优于持续性基线） & 一 \\
 \eqref{eq:budget} & 预算约束 & 二 \\
-\eqref{eq:water} & 水量约束（注意体积＝$I_ta_t$ 万 m$^3$） & 二 \\
+\eqref{eq:water} & 全部在役批次的年/月取水约束（面积为hm$^2$时，体积为$10Ia$ m$^3$） & 二 \\
 \eqref{eq:land} & 土地约束 & 二 \\
 \eqref{eq:labor} & 劳动力约束 & 二 \\
 \eqref{eq:discrete} & 决策离散集 & 二 \\
-\eqref{eq:npv} & 贴现净现值：光伏＋生态－建设－运维－补水 & 二 \\
-\eqref{eq:Ks} & 补水深度到水分胁迫系数的线性映射 & 二 \\
-\eqref{eq:xstar2} & 补水后的稳态覆盖度 $V^*(I)$ & 二 \\
-\eqref{eq:value} & Bellman 递推与终端条件 & 二 \\
-\eqref{eq:mp} & 新增 1 hm$^2$ 的边际收益贴现值 & 二 \\
-\eqref{eq:mcost} & 新增 1 hm$^2$ 的边际成本贴现值 & 二 \\
-\eqref{eq:threshold} & 立项门槛：光伏占比不得低于 $s^*$ & 二 \\
+\eqref{eq:npv} & 贴现净成本：建设＋运维＋补水－光伏现金收入 & 二 \\
+\eqref{eq:Ks} & 逐批调用任务一有效储水与蒸腾模块 & 二 \\
+\eqref{eq:xstar2} & 逐批植被状态转移（非瞬时稳态） & 二 \\
+\eqref{eq:value} & 固定生态目标下的全期净成本最小化 & 二 \\
+\eqref{eq:threshold} & 光伏独立收支平衡电价（非系统最优充分条件） & 二 \\
 \eqref{eq:compound} & 复合泊松冲击的期望衰减（$\lambda$ 与 $\E[u]$ 不可分） & 三 \\
 \eqref{eq:P} & 一步转移矩阵＝无灾漂移＋有灾削减 & 三 \\
 \eqref{eq:N} & 基本矩阵 $\bm{N}=(\bm{I}-\bm{Q})^{-1}$ & 三 \\

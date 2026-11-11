@@ -31,6 +31,25 @@ python Code/v7_prepare_m1.py
 前者重放来源请求并记录原、新哈希，后者执行逐像元 QA 和当前 M1 数据整理。
 日常计算可直接使用已提交的输入表。
 
+## M2 计算（不生成图片）
+
+使用同一份 `requirements-m1.txt` 的 NumPy、Pandas、SciPy 环境，无需联网。
+
+```sh
+python Code/v7_model2.py
+python -m unittest discover -s Code -p test_v7_m2.py -v
+```
+
+`v7_m2_core.py` 按建植批次调用 M1 的 `(V,M)` 轨迹，将有限灌溉路径、面积块及PV资产
+组成混合整数优化；`v7_model2.py` 导出基准、成本生态前沿、投资结构与资源敏感性，
+并逐批回放检查；`test_v7_m2.py` 包括水量/现金流/预算/劳动及穷举对照测试。
+
+输入和假设见 [m2_inputs](../Data/v7/m2_inputs/README.md)，
+数表见 [model2](../Results/v7/model2/README.md)，
+图交接见 [说明](../Docs/20261111_m2_figure_handoff.md)。
+快速检查可运行 `python Code/v7_model2.py --base-only --output tmp/m2_smoke`。
+`formal_model_ready=false`，最优界只适用于给定网格与策略库。
+
 ## 预处理与对比工具
 
 下列程序支撑 v7 面板预处理、诊断和方法对比。窗口 QA、ET0 温差口径及插值方式的适用限制
@@ -48,5 +67,7 @@ python Code/v7_prepare_m1.py
 | `preprocess_v7.m` | MATLAB 预处理实现 | MATLAB 面板 CSV |
 
 这些工具使用 NumPy、Pandas、SciPy、Matplotlib、OpenPyXL。
+`v7_ablation.py` 内历史 `task2_npv` 不是当前 M2 求解器，存在水量单位和静态收益口径问题；
+只保留作旧消融对照，不应用其 Task2 数值出论文图或结论。
 MATLAB 程序面向 R2020b 及以上，执行结果仍需在 MATLAB 环境验证。
 原始响应与缓存通过请求清单重建，数据范围见 [Data/v7](../Data/v7/README.md)。
