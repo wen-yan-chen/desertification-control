@@ -1,3 +1,23 @@
+# Handoff to Astra — 2026-11-11: M1 figures redrawn from the new tables
+
+Written by Claude.
+
+**Added**
+- `Code/v7_m1_figures.py` — draws 9 figures from `Results/v7/model1/*.csv` and `model1_results.json` only (no model re-run). Run: `.venv/bin/python Code/v7_m1_figures.py` (needs matplotlib; not in `Code/requirements-m1.txt`).
+- `Figures/M1/` — `m1_f01`…`m1_f09`, each as PDF + PNG, plus `Figures/M1/README.md` (what each figure shows, which table it uses, caveats).
+
+**State**
+- All 9 figures checked by eye; numbers on figures match the tables (e.g. steady V 17.9 % at 300 mm/yr, 24.1 % at 600; hold-out RMSE 0.0635 vs persistence 0.0536).
+- English labels, Times font, 6.3 in wide to fit `Paper/main.tex`.
+- Old `Figures/v7/m1_fig1_*`, `m1_fig2_*` have been removed from the working tree (deletion not committed yet).
+
+**Next**
+1. Choose which figures go into the paper's Model 1 section and copy their PDFs to `Paper/Figure/`.
+2. Write captions that carry the caveats (figures have no footnotes; list in `Figures/M1/README.md`) (V is a cover proxy; model does not beat persistence; CON4 is retrospective; water parameters and k are scenarios).
+3. Commit the new figures together with the removal of the old `Figures/v7/m1_fig*.png`.
+
+---
+
 # Handoff to Astra — Model 1 on v7, state on 2026-11-10 (evening)
 
 > Superseded by [the M1 audit and implementation](20261110_m1_audit_and_implementation.md).
