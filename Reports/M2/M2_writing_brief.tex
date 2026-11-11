@@ -109,10 +109,10 @@ P_t^{\rm inst}&=\textstyle\sum_{s\le t}y_s,\quad P_t^{\rm op}=\sum_{s<t}y_s &&\t
 \subsection{Link to Model 1 (each cohort)}
 \begin{align}
 (M_{sp,t+1},\ \omega_{sp,t})&=\mathcal W\big(V_{sp,t},M_{sp,t},q_{p,t-s}\big)\label{eq:bucket}\\
-V_{sp,t+1}&=V_{sp,t}+rV_{sp,t}(1-V_{sp,t}/K)\,\omega_{sp,t}-dV_{sp,t}-kE(1-\eta V_{sp,t}/K)V_{sp,t}\label{eq:veg}
+V_{sp,t+1}&=V_{sp,t}+rV_{sp,t}(1-V_{sp,t}/K)\,\omega_{sp,t}-dV_{sp,t}\label{eq:veg}
 \end{align}
 $\mathcal W$ is the Model 1 storage bucket run over one year with quota $q_{p,h}$ (mm/yr) at stand age $h=t-s$;
-$\omega$ is the share of transpiration demand met. Parameters are those of Model 1 ($r=0.547$, $d=0.107$, $K=38.08\%$, $k=0$).
+$\omega$ is the share of transpiration demand met. Parameters are those of Model 1 ($r=0.547$, $d=0.107$, $K=38.08\%$). Model 1 has no wind-damage term (removed 2026-11-11; it was $k=0$ in every Model 2 run, so no Model 2 number changes).
 
 \subsection{Ecology objective}
 \begin{equation}\label{eq:H}
@@ -268,7 +268,7 @@ PV cleaning water $w_c$ & 0.02 m$^3$/(kW$\cdot$yr) & assumption\\
 PV capacity $P^{\max}$ & 10,000 kW & scenario grid limit\\
 Discount rate & 5\%/yr (real) & scenario\\
 Ecological target $\varphi$ & 0.60 of $H_{\max}$ & policy choice for the demonstration\\
-Model 1 inputs & $r=0.547$, $d=0.107$, $K=38.08\%$, $k=0$, $\eta=1$, $C=75$ mm & from Model 1\\
+Model 1 inputs & $r=0.547$, $d=0.107$, $K=38.08\%$, $C=75$ mm & from Model 1\\
 \bottomrule
 \end{tabularx}
 \caption{Model 2 parameters. The problem gives no numbers for budget, prices or caps, so all of these are stated assumptions.}

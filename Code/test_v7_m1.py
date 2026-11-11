@@ -28,7 +28,7 @@ class WaterTests(unittest.TestCase):
         end,w,_ = water_year(20.,75.,0.,self.forcing,self.p)
         self.assertGreater(w,0)
         self.assertLess(end,75.)
-        self.assertAlmostEqual(vegetation_step(20,40,0,1,.6,.1),18.)
+        self.assertAlmostEqual(vegetation_step(20,40,0,.6,.1),18.)
 
     def test_zero_cover_is_absorbing_without_planting(self):
         a,_=trajectory(0.,37.5,5,40,.6,.1,self.forcing,1000,self.p)
@@ -36,9 +36,9 @@ class WaterTests(unittest.TestCase):
 
     def test_invalid_input_not_silently_clipped(self):
         with self.assertRaises(ValueError):
-            vegetation_step(41,40,1,1,.6,.1)
+            vegetation_step(41,40,1,.6,.1)
         with self.assertRaises(ValueError):
-            vegetation_step(20,40,1,3,.6,.9,.1)
+            vegetation_step(20,40,1,.6,1.2)
         with self.assertRaises(ValueError):
             water_year(20,20,-1,self.forcing)
 
@@ -65,7 +65,7 @@ class DataTests(unittest.TestCase):
     def test_free_cohort_parameters_are_degenerate(self):
         v=np.array([2.,10.,20.])
         # Same r-d and r/K => exactly the same dynamics, despite different r,d,K.
-        np.testing.assert_allclose(model.step(v,40,1,1,.6,.1),model.step(v,60,1,1,.9,.4))
+        np.testing.assert_allclose(model.step(v,40,1,.6,.1),model.step(v,60,1,.9,.4))
 
     def test_future_observations_do_not_change_fit(self):
         _,a=model.yearly_table()
@@ -76,6 +76,37 @@ class DataTests(unittest.TestCase):
         fit2,th2,_=model.fit_stations(b)
         np.testing.assert_allclose(th,th2,rtol=0,atol=1e-12)
         self.assertEqual(fit['baselines']['eligible_sites'],fit2['baselines']['eligible_sites'])
+
+class WindTests(unittest.TestCase):
+    def test_average_wind_term_is_indistinguishable_from_growth(self):
+        # Old term at E = 1, eta = 1: k (1 - V/K) V.  It only shifts r, so (r, k) and
+        # (r - k, 0) give identical dynamics: k cannot be estimated without E.
+        v, K, r, d, k = np.array([2., 10., 20., 35.]), 40., .6, .1, .15
+        old = v + r*v*(1-v/K) - d*v - k*(1-v/K)*v
+        np.testing.assert_allclose(old, model.step(v, K, 1., r-k, d))
+
+    def test_more_wind_raises_demand_and_cannot_raise_cover(self):
+        from v7_m1_wind import wind_demand_factors
+        factors, check = wind_demand_factors((0.8, 1.0, 1.2))
+        self.assertTrue((factors[0.8] < 1).all() and (factors[1.2] > 1).all())
+        np.testing.assert_allclose(factors[1.0], 1.)
+        self.assertGreater(check["penman_monteith_vs_provider_monthly_r"], 0.95)
+        base = np.array([[30., 0., 100.]]*12)
+        p = WaterParameters(rain_fraction=0.)
+        cover = []
+        for scale in (0.8, 1.0, 1.2):
+            f = base.copy(); f[:, 2] *= factors[scale].to_numpy()
+            cover.append(equilibrium(2, 37.5, 40, .6, .1, f, 300, p)["V_pct"])
+        self.assertTrue(cover[0] > cover[1] > cover[2])
+
+    def test_sand_exposure_is_an_output_only(self):
+        _, a = model.yearly_table()
+        q = a.dropna(subset=["V"])
+        np.testing.assert_allclose(q.sand_exposure, q.E*(1-(q.V/q.K).clip(0, 1)))
+        b = a.copy(); b["E"] *= 3.          # changing the wind index must not change the fit
+        _, th, _ = model.fit_stations(a); _, th2, _ = model.fit_stations(b)
+        np.testing.assert_allclose(th, th2, rtol=0, atol=0)
+
 
 if __name__ == '__main__':
     unittest.main()

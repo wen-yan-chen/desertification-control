@@ -4,6 +4,12 @@
 Current contract: Docs/20261110_m1_audit_and_implementation.md.
 Run python Code/v7_model1.py. Exports CSV/JSON only, no figures.
 The annual vegetation equation is retained; v7_m1_water supplies dynamic storage.
+
+2026-11-11: the wind-damage term k*E*(1 - eta*V/K)*V was removed from the cover
+equation. The data do not support it (Results/v7/model1/wind_term_test.csv) and,
+at average wind, it has the same shape as the growth term, so it cannot be told
+apart from r. Wind now acts where it can be computed: through evaporative demand
+(ET0) and through the sand-exposure output. See Code/v7_m1_wind.py.
 """
 import os
 import sys
@@ -40,12 +46,14 @@ def f_temp(t):
     return np.clip((np.asarray(t, float) - 5.0) / 20.0, 0.0, 1.0)
 
 
-def step(v, K, W, E, r, d, k=0.0, eta=1.0):
-    """One year of the v7 state equation.  v, K in the same unit; W, E dimensionless.
+def step(v, K, W, r, d):
+    """One year of the cover equation: logistic growth scaled by water, minus decay.
+    v, K in the same unit; W dimensionless in [0, 1].  No wind term (see module note):
+    r and d are fitted on stations under real wind, so average wind loss is inside them.
     f(T) is absorbed into the fitted annual rate (a scale convention, not proof
     that temperature has no interannual variation)."""
     x = v / K
-    return np.maximum(v + r * v * (1 - x) * W - d * v - k * E * (1 - eta * x) * v, 0.0)
+    return np.maximum(v + r * v * (1 - x) * W - d * v, 0.0)
 
 
 def r2(obs, sim):
@@ -82,6 +90,9 @@ def yearly_table():
     tr = a[a.year <= TRAIN_END]
     a["K"] = a.site.map(1.15 * tr.groupby("site").V.quantile(0.95))          # v7 Eq. K, unchanged
     a["E"] = a.E_raw / a.site.map(tr.groupby("site").E_raw.mean())           # station-normalised
+    # Output only (cover -> sand): wind index times the unsheltered share of the surface.
+    # E is NOT an input of the cover equation.
+    a["sand_exposure"] = a.E * (1 - (a.V / a.K).clip(0, 1))
     a["V_next"] = a.groupby("site").V.shift(-1)
     a["n_obs_next"] = a.groupby("site").n_obs.shift(-1)
     a["target_year"] = a.year + 1
@@ -107,40 +118,32 @@ def fit_stations(a):
     t = a[a.site.isin(eligible)].dropna(subset=["V", "V_next"])
     tr, te = t[t.year < TRAIN_END], t[t.year >= TRAIN_END]       # target year <= 2022 / >= 2023
     x, x1 = lambda q: (q.V / q.K).values, lambda q: (q.V_next / q.K).values
-    specs = {"M0 (r,d)": (2, lambda th: (th[0], th[1], 0.0, 1.0)),
-             "M1 (r,d,k | eta=1)": (3, lambda th: (th[0], th[1], th[2], 1.0)),
-             "M2 (r,d,k,eta)": (4, lambda th: (th[0], th[1], th[2], th[3]))}
-    res, best = {}, None
-    for name, (n, unpack) in specs.items():
-        pred = lambda th, q: step(x(q), 1.0, 1.0, q.E.values, *unpack(th))     # W = 1: irrigated oases
-        fit = least_squares(lambda th: pred(th, tr) - x1(tr), [0.5, 0.1, 0.05, 0.5][:n],
-                            bounds=([0] * n, [3, 1, 1, 1][:n]))
-        J = fit.jac
-        dof = len(tr) - n
-        cov = np.linalg.pinv(J.T @ J) * 2 * fit.cost / dof
-        sse = 2 * fit.cost
-        res[name] = dict(theta=[round(float(v), 4) for v in fit.x],
-                         sd=[round(float(v), 4) for v in np.sqrt(np.diag(cov))],
-                         cond=float(np.linalg.cond(J.T @ J)),
-                         aic=round(float(len(tr) * np.log(sse / len(tr)) + 2 * n), 2),
-                         rmse_train=round(rmse(x1(tr), pred(fit.x, tr)), 4),
-                         rmse_test=round(rmse(x1(te), pred(fit.x, te)), 4),
-                         r2_test=round(r2(x1(te), pred(fit.x, te)), 3))
-        if name.startswith("M0"):
-            best = fit.x
+    pred = lambda th, q: step(x(q), 1.0, 1.0, th[0], th[1])                     # W = 1: irrigated oases
+    fit = least_squares(lambda th: pred(th, tr) - x1(tr), [0.5, 0.1], bounds=([0, 0], [3, 1]))
+    J = fit.jac
+    cov = np.linalg.pinv(J.T @ J) * 2 * fit.cost / (len(tr) - 2)
+    sse = 2 * fit.cost
+    best = fit.x
+    res = {"pooled_r_d": dict(theta=[round(float(v), 4) for v in fit.x],
+                              sd=[round(float(v), 4) for v in np.sqrt(np.diag(cov))],
+                              cond=float(np.linalg.cond(J.T @ J)),
+                              aic=round(float(len(tr) * np.log(sse / len(tr)) + 4), 2),
+                              rmse_train=round(rmse(x1(tr), pred(fit.x, tr)), 4),
+                              rmse_test=round(rmse(x1(te), pred(fit.x, te)), 4),
+                              r2_test=round(r2(x1(te), pred(fit.x, te)), 3))}
     res["baselines"] = dict(
         persistence_rmse_train=round(rmse(x1(tr), x(tr)), 4), persistence_rmse_test=round(rmse(x1(te), x(te)), 4),
         site_mean_rmse_test=round(rmse(x1(te), te.site.map((a[a.year <= TRAIN_END].V / a[a.year <= TRAIN_END].K).groupby(a[a.year <= TRAIN_END].site).mean()).values), 4),
         n_train=int(len(tr)), n_test=int(len(te)), eligible_sites=sorted(t.site.unique()))
-    # leave-one-station-out for the adopted model M0
+    # leave-one-station-out
     loso = {}
     for s in sorted(t.site.unique()):
         q, o = tr[tr.site != s], t[t.site == s]
-        f = least_squares(lambda th: step(x(q), 1.0, 1.0, 1.0, th[0], th[1]) - x1(q), [0.5, 0.1], bounds=([0, 0], [3, 1]))
+        f = least_squares(lambda th: step(x(q), 1.0, 1.0, th[0], th[1]) - x1(q), [0.5, 0.1], bounds=([0, 0], [3, 1]))
         loso[s] = dict(r=round(float(f.x[0]), 3), d=round(float(f.x[1]), 3),
-                       rmse=round(rmse(x1(o), step(x(o), 1.0, 1.0, 1.0, *f.x)), 4),
+                       rmse=round(rmse(x1(o), step(x(o), 1.0, 1.0, *f.x)), 4),
                        persistence=round(rmse(x1(o), x(o)), 4))
-    res["leave_one_station_out_M0"] = loso
+    res["leave_one_station_out"] = loso
     return res, best, (tr, te)
 
 
@@ -154,7 +157,7 @@ def cohort_check(coh, r, d):
         values, v = [], float(v0)
         for _ in range(int(taus.max()) + 1):
             values.append(v)
-            v = float(step(v, K, 1., 1., rr, dd))
+            v = float(step(v, K, 1., rr, dd))
         V = np.asarray(values)
         return V[taus.values]
 

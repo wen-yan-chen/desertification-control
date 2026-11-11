@@ -10,6 +10,7 @@ import scipy
 from scipy.optimize import least_squares
 import v7_model1 as model
 from v7_m1_water import WaterParameters, trajectory, equilibrium
+from v7_m1_wind import wind_term_test, wind_demand_factors
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "Results/v7/model1"
@@ -24,7 +25,7 @@ def prediction_pairs(a, th):
         q = data[["site", "year", "target_year", "V", "V_next", "K", "n_obs", "n_obs_next"]].copy()
         q["split"] = split
         q["observed_x"] = q.V_next/q.K
-        q["predicted_x"] = model.step(q.V/q.K, 1., 1., 1., *th)
+        q["predicted_x"] = model.step(q.V/q.K, 1., 1., *th)
         q["persistence_x"] = q.V/q.K
         records.append(q)
     return pd.concat(records, ignore_index=True)
@@ -37,7 +38,7 @@ def bootstrap(train, repetitions=300):
         selected = rng.choice(sites, len(sites), replace=True)
         q = pd.concat([train[train.site == site] for site in selected])
         x, y = (q.V/q.K).to_numpy(), (q.V_next/q.K).to_numpy()
-        fit = least_squares(lambda th: model.step(x, 1., 1., 1., *th)-y,
+        fit = least_squares(lambda th: model.step(x, 1., 1., *th)-y,
                             [0.5, 0.1], bounds=([0, 0], [3, 1]))
         rows.append(dict(replicate=i, r=fit.x[0], d=fit.x[1]))
     return pd.DataFrame(rows)
@@ -83,7 +84,7 @@ def main():
         q = annual[annual.site == site].set_index("year")
         v, ceiling = float(q.loc[2022, "V"]), float(q.loc[2022, "K"])
         for year in (2023, 2024, 2025):
-            v = float(model.step(v, ceiling, 1., 1., r, d))
+            v = float(model.step(v, ceiling, 1., r, d))
             free.append(dict(site=site, year=year, predicted_pct=v, observed_pct=q.loc[year, "V"],
                              persistence_2022_pct=q.loc[2022, "V"]))
     save(pd.DataFrame(free), "free_running_holdout.csv")
@@ -113,9 +114,20 @@ def main():
                 z = equilibrium(2., min(37.5, replace(pars, **{key:value}).capacity_mm), K, r, d,
                     forcing, quota, replace(pars, **{key:value}))
                 sensitivity.append(dict(parameter=key, value=value, irrigation_mm_yr=quota, **z))
-    for wind_k in (0.,0.02,0.05,0.10):
-        z = equilibrium(2.,37.5,K,r,d,forcing,300,pars,k=wind_k)
-        sensitivity.append(dict(parameter="k_scenario", value=wind_k, irrigation_mm_yr=300, **z))
+    # Wind acts through evaporative demand: scale wind speed, recompute ET0 month by month
+    # (Penman-Monteith ratio), feed the bucket. No wind term in the cover equation.
+    factors, wind_check = wind_demand_factors()
+    wind_rows = []
+    for scale in [c for c in factors.columns if c != "month"]:
+        g = forcing.copy()
+        g[:, 2] *= factors[scale].to_numpy()
+        for quota in (300, 600):
+            z = equilibrium(2., 37.5, K, r, d, g, quota, pars)
+            sensitivity.append(dict(parameter="wind_speed_scale", value=float(scale), irrigation_mm_yr=quota, **z))
+            wind_rows.append(dict(wind_speed_scale=float(scale), irrigation_mm_yr=quota,
+                ET0g_mm_yr=float(g[:, 2].sum()), ET0g_change=float(g[:, 2].sum()/forcing[:, 2].sum()-1),
+                V_steady_pct=z["V_pct"], W=z["W"], sand_exposure_index=1-z["V_pct"]/K))
+    wind_test, wind_summary = wind_term_test(annual, fits["baselines"]["eligible_sites"])
     qa75 = panel.copy()
     qa75["V_pct"] = qa75.V_pct_qa75
     qa75["year"] = qa75.date.dt.year
@@ -129,13 +141,20 @@ def main():
     fit75, _, _ = model.fit_stations(alternate)
     inputs = [ROOT/"Data/v7/m1_audited/panel_m1.csv", ROOT/"Data/v7/m1_audited/replay_manifest.json",
               ROOT/"Data/v7/section_modis/cohort_converted.csv", ROOT/"Data/v7/m1_audited/section_definition.json",
-              ROOT/"Data/v7/section_modis/endmembers.json"]
+              ROOT/"Data/v7/section_modis/endmembers.json",
+              ROOT/"Data/v7/processed/panel_monthly_clean.csv"]
     out = dict(status="implemented; scenario-ready; NOT field-calibrated water or erosion forecast",
         formal_model_ready=False, station_fit=fits,
         uncertainty=dict(method="local least-squares sd is conditional IID approximation; cluster bootstrap separately",
             cluster_count=int(train.site.nunique()), bootstrap_seed=20261110,
             bootstrap_percentiles=boot[["r","d"]].quantile([.025,.5,.975]).to_dict()),
-        adopted_parameters=dict(r=r,d=d,K_section_pct=K,k=0.,eta=1.,water=asdict(pars)),
+        adopted_parameters=dict(r=r,d=d,K_section_pct=K,water=asdict(pars)),
+        wind=dict(cover_equation="no wind term; V[t+1] = V + r V (1 - V/K) W - d V",
+            removed_term_test=wind_summary,
+            channel_A="wind speed -> Penman-Monteith ET0 -> daily demand -> W -> cover (wind_channel.csv)",
+            channel_A_check=wind_check,
+            channel_B="output S = E (1 - V/K): wind index times unsheltered share (yearly_table.sand_exposure; "
+                      "scenarios use E = 1, column relative_erosion_scenario)"),
         qa75_sensitivity=fit75, cohort_transfer=cohort_result,
         water=dict(forcing="2015-2022 YT/MF Open-Meteo archive monthly climatology; provider model unspecified",
             annual_rain_mm=float(forcing[:,1].sum()),annual_ET0g_mm=float(forcing[:,2].sum()),
@@ -146,7 +165,10 @@ def main():
             "no field water-storage/irrigation pairs; bucket parameters are scenarios",
             "selected cohort is retrospective, not independent prospective validation",
             "site windows are not an engineering belt polygon; no verified section area",
-            "wind index from daily maximum is a proxy, not actual erosion or hazard counts"],
+            "wind index from daily maximum is a proxy, not actual erosion or hazard counts",
+            "no wind term in the cover equation: 18 tests on oasis stations found no detectable annual effect; "
+            "this does not rule out damage to young stands on open dunes or in single storms (Task 3)",
+            "sand exposure S = E (1 - V/K) assumes shelter proportional to cover; it is an index, not a sand flux"],
         input_text_sha256_lf={str(p.relative_to(ROOT)).replace('\\','/'):hashlib.sha256(p.read_bytes().replace(b'\r\n',b'\n')).hexdigest() for p in inputs},
         input_hash_convention="Text inputs normalized to LF before SHA256, independent of Git checkout newlines; raw-response hashes remain byte-exact",
         runtime=dict(python=platform.python_version(),numpy=np.__version__,pandas=pd.__version__,scipy=scipy.__version__))
@@ -156,8 +178,11 @@ def main():
     save(pd.concat(yearly, ignore_index=True), "scenario_annual.csv")
     save(pd.concat(monthly, ignore_index=True), "scenario_monthly_water.csv")
     save(pd.DataFrame(sensitivity), "sensitivity.csv")
+    save(pd.DataFrame(wind_rows), "wind_channel.csv")
+    save(wind_test, "wind_term_test.csv")
     (OUT/"model1_results.json").write_text(json.dumps(out, ensure_ascii=False, indent=2, allow_nan=False),encoding="utf-8")
-    print(json.dumps(dict(station=fits["M0 (r,d)"],baselines=fits["baselines"],water=out["water"]),indent=2))
+    print(json.dumps(dict(station=fits["pooled_r_d"],baselines=fits["baselines"],water=out["water"],
+                          wind_test=wind_summary),indent=2))
 
 if __name__ == "__main__":
     main()

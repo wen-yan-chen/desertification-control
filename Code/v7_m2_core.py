@@ -69,7 +69,7 @@ def policy_library(T):
 def simulate_policy(c, m, forcing, quotas):
     return trajectory(c["initial_V_pct"], c["initial_M_mm"], len(quotas),
         m["K_section_pct"], m["r"], m["d"], forcing, quotas,
-        WaterParameters(**m["water"]), k=m["k"], eta=m["eta"])
+        WaterParameters(**m["water"]))
 
 
 @dataclass

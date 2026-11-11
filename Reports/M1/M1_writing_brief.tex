@@ -57,10 +57,10 @@ State variables $V$ and $M$ &
 $V$: growing-season NDVI cover proxy; $M$: plant-available water above wilting point (mm) &
 Section~\ref{sec:eq} \\
 Use data; find influencing factors &
-MODIS NDVI 2015--2025 at 7 stations, daily wind, monthly $P$, ET$_0$, $T$; influence of irrigation, rain, demand, efficiency, wind quantified &
+MODIS NDVI 2015--2025 at 7 stations, daily wind, monthly $P$, ET$_0$, $T$; influence of irrigation, rain, demand, efficiency, wind speed quantified &
 Tables~\ref{tab:curve}, \ref{tab:sens} \\
 Water--vegetation--sand feedback &
-Water $\to$ growth ($\Wb$); cover $\to$ water demand; cover $\to$ wind shading; wind $\to$ cover loss &
+Water $\to$ growth ($\Wb$); cover $\to$ water demand; wind $\to$ evaporative demand $\to$ $\Wb$; cover $\to$ sand exposure $S$ &
 Fig.~\ref{fig:struct} \\
 \bottomrule
 \end{tabularx}
@@ -97,17 +97,17 @@ with end-members NDVI $0.05$ (bare) and $0.85$ (full): $V=100\,\mathrm{clip}\big
 \paragraph{Order of computation in each year.}
 (1) Hold $V_t$ fixed; (2) run the storage bucket over every day of the year with that year's rain,
 ET$_0$ and irrigation; (3) sum transpiration into the met-demand ratio $\Wb_t$;
-(4) update $V_{t+1}$ with $\Wb_t$ and the wind index $E_t$; (5) carry the year-end storage to next year.
+(4) update $V_{t+1}$ with $\Wb_t$; (5) carry the year-end storage to next year; (6) report the sand-exposure index $S_t$.
 
-\paragraph{Three processes in the vegetation equation.}
-Logistic growth limited by water and a local ceiling $K$; first-order natural decay; wind damage that
-weakens as cover increases (shading).
+\paragraph{Two processes in the vegetation equation.}
+Logistic growth limited by water and a local ceiling $K$; first-order natural decay. There is no
+wind term in the vegetation equation (changed 2026-11-11, Section~\ref{sec:wind}).
 
 \paragraph{Four feedback links.}
 water $\to$ vegetation (growth is multiplied by $\Wb$);
 vegetation $\to$ water (more cover means more transpiration demand, so lower $\Wb$);
-vegetation $\to$ sand (shading factor $1-\eta V/K$);
-sand $\to$ vegetation (wind damage $kE_{\mathrm{eff}}V$).
+wind $\to$ water $\to$ vegetation (wind speed raises ET$_0$, hence demand, hence lowers $\Wb$);
+vegetation $\to$ sand (exposure index $S=E(1-V/K)$, an output).
 
 \say{Present Fig.~\ref{fig:struct} first, then the vegetation equation, then the bucket. Stress
 that $\Wb$ is a transpiration ratio, not soil moisture; $M$ is the soil-water state.}
@@ -119,16 +119,15 @@ that $\Wb$ is a transpiration ratio, not soil moisture; $M$ is the soil-water st
 \begin{equation}\label{eq:veg}
 V_{t+1}=V_t+\underbrace{rV_t\Big(1-\frac{V_t}{K}\Big)\Wb_t}_{\text{growth}}
 -\underbrace{dV_t}_{\text{natural decay}}
--\underbrace{kE_t\Big(1-\eta\frac{V_t}{K}\Big)V_t}_{\text{wind damage}}
 \end{equation}
 \begin{itemize}
 \item \textbf{Growth.} $rV$ is exponential growth; $(1-V/K)$ stops growth at the local ceiling $K$;
 $\Wb_t\in[0,1]$ scales growth by how much of the plants' water demand was met. Temperature is
 already inside $r$ (one yearly growth season), so no extra temperature factor is multiplied here.
-\item \textbf{Decay.} A fixed share $d$ of cover dies each year. With no water and no wind,
+\item \textbf{Decay.} A fixed share $d$ of cover dies each year. With no water,
 $V_{t+1}=(1-d)V_t$, so the half-life is $\ln(1/2)/\ln(1-d)$ years.
-\item \textbf{Wind damage.} Loss proportional to cover and to the wind index $E_t$; the factor
-$(1-\eta V/K)$ means denser cover shelters itself ($\eta=1$: full shelter at $V=K$).
+\item \textbf{No wind term.} $r$ and $d$ are fitted on stations standing in real wind, so the average
+wind loss is already inside them. Wind acts through the water demand and the sand output (Section~\ref{sec:wind}).
 \item $V=0$ stays at 0: water alone cannot create plants; new stands need a planted initial cover.
 \end{itemize}
 
@@ -166,21 +165,53 @@ K&=1.15\times Q_{0.95}(V_{\text{train}}) &&\text{local ceiling from the 95th per
 The wind proxy is computed on each day and averaged afterwards; averaging the wind first would
 hide most gusts above the 5 m/s threshold and make $E$ almost zero.
 
+\subsection{Where wind enters}\label{sec:wind}
+Wind is in the model twice, and neither place is the vegetation equation.
+\begin{enumerate}
+\item \textbf{Wind $\to$ water $\to$ cover.} ET$_0$ in the demand $D_j$ is FAO-56 Penman--Monteith:
+\begin{equation}\label{eq:pm}
+\mathrm{ET}_0=\frac{0.408\,\Delta\,(R_n-G)+\gamma\,\dfrac{900}{T+273}\,u_2\,(e_s-e_a)}{\Delta+\gamma\,(1+0.34\,u_2)},
+\end{equation}
+with $u_2$ the 2 m wind speed. On the section the wind-driven second term is 61\% of annual ET$_0$.
+More wind $\Rightarrow$ more demand $\Rightarrow$ lower $\Wb$ $\Rightarrow$ less cover. To quantify it we scale $u_2$,
+recompute ET$_0$ month by month and multiply the model's ET$_0$ forcing by the ratio (our Penman--Monteith
+from POWER inputs matches the provider ET$_0$: monthly $r=0.990$, 1,683 vs 1,686 mm/yr).
+\item \textbf{Cover $\to$ sand.} Output only:
+\begin{equation}\label{eq:sand}
+S_t=E_t\Big(1-\frac{V_t}{K}\Big),
+\end{equation}
+wind index times the unsheltered share of the surface ($S=1$: bare sand under average wind). Scenario
+tables use $E=1$.
+\end{enumerate}
+\textbf{Why the old term $-kE_t(1-\eta V_t/K)V_t$ was removed.}
+(i) \emph{Data.} Nine wind indicators, each with and without the shelter factor (18 fits), were added to the
+pooled $(r,d)$ fit (\texttt{wind\_term\_test.csv}). With the index $E_t$: $k=0.25\pm0.43$, $p=0.57$,
+bootstrap 95\% $[-0.44,\,0.89]$, AIC worse by 1.6, hold-out RMSE 0.0657 against 0.0635 without wind.
+One of 18 fits has $p<0.05$ (days with wind $\ge8$ m/s, $p=0.036$), which is what chance gives, and it raises
+the hold-out RMSE to 0.077. Within stations, the wind index is unrelated to next year's cover change ($r=0.03$, $p=0.81$, $n=70$).
+(ii) \emph{Structure.} At average wind ($E=1$, $\eta=1$) the term is $k(1-V/K)V$, the same shape as growth:
+only $r-k$ can be estimated, so a constant-wind term adds a parameter and no information.
+(iii) \emph{Scope.} The stations are irrigated oases; the test cannot rule out damage to young stands on
+open dunes or in single storms. Those belong to the shocks of Task 3.
+
+\say{Say that wind is in the model through evaporative demand and through the sand-exposure output, and that
+a direct damage term was tested and dropped. Do not say that wind has no effect on plants.}
+
 \subsection{Long-run state and the closed form}
-With $x=V/K$ and $\Wb$, $E$ held fixed, the non-zero steady state is
+With $x=V/K$ and $\Wb$ held fixed, the non-zero steady state is
 \begin{equation}\label{eq:xstar}
-x^*=\frac{r\Wb-d-kE}{r\Wb-kE\eta},\qquad\text{exists if } r\Wb>d+kE.
+x^*=1-\frac{d}{r\Wb},\qquad\text{exists if } r\Wb>d.
 \end{equation}
 Because $\Wb$ itself depends on $V$, the real long-run state is the fixed point of the yearly map
 $(V,M)\mapsto(V',M')$, found by iterating from a low and a high start until both agree
-(residual $<10^{-7}$). With ample water ($\Wb=1$) and $k=0$: $x^*=1-d/r=0.804$, i.e.\ $V^*=30.6\%$
+(residual $<10^{-7}$). With ample water ($\Wb=1$): $x^*=1-d/r=0.804$, i.e.\ $V^*=30.6\%$
 at $K=38.08\%$, which is exactly the saturation value found numerically.
 
 \subsection{Calibration and checks}
 \begin{equation}\label{eq:obj}
 \min_{r,d}\ \frac1N\sum_{(s,t)\in\text{train}}\Big(\tilde x_{s,t}\big[1+r(1-\tilde x_{s,t})-d\big]-\tilde x_{s,t+1}\Big)^2
 \end{equation}
-One-step transitions at 7 irrigated oasis stations, pooled, assuming $\Wb=1$ and $k=0$ there;
+One-step transitions at 7 irrigated oasis stations, pooled, assuming $\Wb=1$ there;
 training = target year $\le2022$ (49 transitions), hold-out = 2023--2025 (21 transitions).
 The residual is linear in $(r,d)$, so the least-squares solution is unique.
 Uncertainty: local covariance, leave-one-station-out, and 300 whole-station bootstrap resamples.
@@ -213,7 +244,7 @@ Thresholds and settings are listed in Section~\ref{sec:par}; the algorithms show
 \begin{algorithmic}[1]
 \Require training pairs from Alg.~\ref{alg:prep}
 \Ensure $\hat r,\hat d$ and their uncertainty
-\State \textbf{Linearise.} With $\Wb=1$, $k=0$, Eq.~\eqref{eq:veg} becomes
+\State \textbf{Linearise.} With $\Wb=1$, Eq.~\eqref{eq:veg} becomes
 $\underbrace{x_{t+1}-x_t}_{y}=r\,\underbrace{x_t(1-x_t)}_{z_1}-d\,\underbrace{x_t}_{z_2}$
 \State Stack all stations' pairs: $\bm y$ and $\bm Z=[\bm z_1,\ -\bm z_2]$
 \State \textbf{Solve} $(\hat r,\hat d)^\top=(\bm Z^\top\bm Z)^{-1}\bm Z^\top\bm y$ \Comment{unique; Eq.~\eqref{eq:obj}}
@@ -291,8 +322,6 @@ Symbol & Value (range tested) & Unit & Meaning and status \\
 $r$ & 0.547 (bootstrap 95\%: 0.335--1.168) & yr$^{-1}$ & intrinsic growth rate; fitted \\
 $d$ & 0.107 (bootstrap 95\%: 0.077--0.202) & yr$^{-1}$ & natural decay rate; fitted \\
 $K$ & 38.08 (section); per station $1.15Q_{0.95}$ & \% & cover ceiling; rule from data \\
-$k$ & 0 (0, 0.02, 0.05, 0.10) & -- & wind damage; scenario (fit not identifiable) \\
-$\eta$ & 1 & -- & shading strength; scenario \\
 $C$ & 75 (30--150) & mm & storage capacity; scenario \\
 $p$ & 0.5 (0.3--0.7) & -- & stress-free share of storage (FAO-56); scenario \\
 $c$ & 1.0 (0.7--1.2) & -- & transpiration coefficient; scenario \\
@@ -300,7 +329,8 @@ $\eta_w$ & 0.75 (0.65--0.85) & -- & share of gross irrigation that reaches roots
 $\alpha_P$ & 0.25 (0--1) & -- & share of rain that reaches roots; scenario \\
 $G$ & 0 & mm/yr & groundwater supply; scenario \\
 $V_{\mathrm{full}}$ & 66.59 (64.85--69.40) & \% & full-cover end-member (local oasis NDVI 0.5827) \\
-$u_T$ & 5 & m/s & wind threshold for sand drift \\
+$u_T$ & 5 & m/s & wind threshold in the index $E$ (used in the output $S$ only) \\
+wind scale & 1.0 (0.8--1.2) & -- & multiplier on wind speed $u_2$ in ET$_0$; scenario \\
 $V_0$, $M_0$ & 2, 37.5 & \%, mm & initial state of a new stand in scenarios \\
 \bottomrule
 \end{tabularx}
@@ -327,16 +357,15 @@ rain 52.2 mm/yr, ET$_0$ 1,685.6 mm/yr, temperature-weighted ET$_0$ 1,190.8 mm/yr
 \toprule
 Model & Parameters & Cond.\ number & AIC & RMSE train & RMSE hold-out & $R^2$ hold-out\\
 \midrule
-M0 $(r,d)$ \textbf{adopted} & $r=0.547\pm0.174$, $d=0.107\pm0.033$ & 375 & $-286.48$ & 0.0516 & 0.0635 & 0.463\\
-M1 $(+k)$ & $r=0.778$, $d=0.105$, $k=0.249\pm0.431$ & 4,406 & $-284.83$ & 0.0514 & 0.0657 & 0.424\\
-M2 $(+k,\eta)$ & same, $\eta=1.0$ at bound & 94,351 & $-282.83$ & 0.0514 & 0.0657 & 0.424\\
+$(r,d)$ \textbf{adopted} & $r=0.547\pm0.174$, $d=0.107\pm0.033$ & 375 & $-286.48$ & 0.0516 & 0.0635 & 0.463\\
+$(r,d)$ + wind term, tested and dropped & $r=0.778$, $d=0.105$, $k=0.250\pm0.433$ & 4,406 & $-284.83$ & 0.0514 & 0.0657 & 0.424\\
 \midrule
 Persistence & $\hat x_{t+1}=x_t$ & -- & -- & 0.0572 & \textbf{0.0536} & --\\
 Station mean & training mean & -- & -- & -- & 0.0737 & --\\
 \bottomrule
 \end{tabular}}
-\caption{Nested fits (units of $x=V/K$). Adding wind damage worsens AIC and hold-out error and the
-uncertainty of $k$ exceeds its value, so $k$ is kept as a scenario parameter.}
+\caption{Fits in units of $x=V/K$. Adding the wind-damage term worsens AIC and hold-out error and the
+uncertainty of $k$ exceeds its value, so the term was removed (Section~\ref{sec:wind}; all 18 tests in \texttt{wind\_term\_test.csv}).}
 \label{tab:fit}
 \end{table}
 \begin{itemize}
@@ -355,7 +384,7 @@ uncertainty of $k$ exceeds its value, so $k$ is kept as a scenario parameter.}
 \begin{table}[H]\centering\small
 \begin{tabular}{@{}rrrrrr@{}}
 \toprule
-Irrigation (mm/yr) & m$^3$/ha/yr & $V^*$ (\%) & $M^*$ end of year (mm) & $\Wb^*$ & Relative erosion $1-\eta V^*/K$\\
+Irrigation (mm/yr) & m$^3$/ha/yr & $V^*$ (\%) & $M^*$ end of year (mm) & $\Wb^*$ & Sand exposure $S^*=1-V^*/K$\\
 \midrule
 0 & 0 & 1.77 & 7.1 & 0.21 & 0.95\\
 50 & 500 & 6.05 & 8.3 & 0.23 & 0.84\\
@@ -372,7 +401,7 @@ Irrigation (mm/yr) & m$^3$/ha/yr & $V^*$ (\%) & $M^*$ end of year (mm) & $\Wb^*$
 2,000 & 20,000 & 30.60 & 74.4 & 1.00 & 0.20\\
 \bottomrule
 \end{tabular}
-\caption{Long-run state for constant irrigation (fixed point, converged from both starts). The last column is the shading factor, not a measured erosion reduction.}
+\caption{Long-run state for constant irrigation (fixed point, converged from both starts). The last column is the exposure index at average wind ($E=1$), not a measured erosion reduction.}
 \label{tab:curve}
 \end{table}
 \begin{itemize}
@@ -422,7 +451,7 @@ Full-cover end-member $V_{\mathrm{full}}$ & 64.85 / 69.40 & 17.68 & 18.33 & 23.9
 Storage capacity $C$ & 30 / 150 mm & 17.94 & 17.94 & 24.14 & 24.14\\
 Stress share $p$ & 0.3 / 0.7 & 17.94 & 17.94 & 24.14 & 24.14\\
 \midrule
-Wind damage $k$ (300 mm/yr) & 0 / 0.02 / 0.05 / 0.10 & \multicolumn{4}{l}{17.94 / 17.01 / 15.66 / 13.62}\\
+Wind speed (through ET$_0$) & $\times0.8$ / $\times1.2$ & 18.76 & 17.24 & 24.89 & 23.48\\
 \bottomrule
 \end{tabular}
 \caption{Long-run cover under one-at-a-time changes.}
@@ -433,7 +462,8 @@ Wind damage $k$ (300 mm/yr) & 0 / 0.02 / 0.05 / 0.10 & \multicolumn{4}{l}{17.94 
 \item Storage capacity and $p$ do not change the long-run cover (they change $M$ only). Reason: in a repeating year without
 overflow, storage returns to the same value, so yearly transpiration equals yearly effective inflow and
 $\Wb$ depends only on inflow and demand. Capacity matters for the timing within the year and for the start-up phase.
-\item Wind damage is the largest single uncertainty: $k=0.10$ removes 24\% of the cover at 300 mm/yr.
+\item Wind speed acts through evaporative demand: $\pm20\%$ wind changes ET$_0$ by $-8.3\%$/$+7.7\%$ (growing-season weighted) and long-run cover at 300 mm/yr
+by $+0.8$/$-0.7$ points; the exposure index $S^*$ moves from 0.53 to 0.51/0.55 (\texttt{wind\_channel.csv}).
 \end{itemize}
 
 % =====================================================================
@@ -448,8 +478,8 @@ Growth and decay rates with honest, wide uncertainty. &
 That the model beats persistence for one-year forecasts (it does not). \\
 Irrigation has strongly diminishing returns; establishment needs little water; stopping water causes collapse within $\sim$15 yr. &
 Measured ground cover: $V$ is an NDVI proxy; 1 km width and 128 km length are a study scenario, not an engineering boundary. \\
-Wind damage could remove up to a quarter of the cover (scenario). &
-Erosion reduction in tonnes or percent; CON4 as an independent validation (pixels were selected using later greening). \\
+Wind lowers cover through evaporative demand (about 0.7 points for $+20\%$ wind at 300 mm/yr); denser cover leaves less sand exposed. &
+That wind does not damage plants: the test covers irrigated oasis stations at a yearly step only. Erosion reduction in tonnes or percent; CON4 as an independent validation (pixels were selected using later greening). \\
 \bottomrule
 \end{tabularx}
 
@@ -465,10 +495,10 @@ File (\texttt{Figures/M1/}) & What it shows / caption point\\
 \texttt{m1\_f03\_parameter\_bootstrap} & $r$--$d$ cloud from bootstrap, leave-one-out points, pooled fit\\
 \texttt{m1\_f04\_cohort\_diagnostic} & Planted pixels CON1--4 vs transferred curve (retrospective only)\\
 \texttt{m1\_f05\_forcing\_climatology} & Monthly rain, ET$_0$, temperature-weighted ET$_0$, wind index\\
-\texttt{m1\_f06\_water\_cover\_curve} & Irrigation vs long-run $V$, $\Wb$, $M$, relative erosion\\
+\texttt{m1\_f06\_water\_cover\_curve} & Irrigation vs long-run $V$, $\Wb$, $M$, sand exposure $S$\\
 \texttt{m1\_f07\_scenario\_trajectories} & 2026--2050 paths for constant quotas and the stop-after-10 case\\
 \texttt{m1\_f08\_monthly\_water\_balance} & Monthly inflow, transpiration, drainage and storage\\
-\texttt{m1\_f09\_sensitivity} & Tornado chart of water parameters; wind damage scenarios\\
+\texttt{m1\_f09\_sensitivity} & Tornado chart of water parameters; cover against wind speed (through ET$_0$)\\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -491,7 +521,7 @@ File (\texttt{Figures/M1/}) & What it shows / caption point\\
 \item Algorithms: data preparation (Alg.~\ref{alg:prep}), calibration as linear regression (Alg.~\ref{alg:cal}), one model year (Alg.~\ref{alg:year}), long-run state (Alg.~\ref{alg:scen}).
 \item Parameters (Table~\ref{tab:par}); calibration result Table~\ref{tab:fit}, honest skill statement, bootstrap.
 \item Results: irrigation--cover curve (Table~\ref{tab:curve}), scenario paths (Table~\ref{tab:scen}).
-\item Influencing factors: sensitivity (Table~\ref{tab:sens}), wind damage scenarios.
+\item Influencing factors: sensitivity (Table~\ref{tab:sens}), wind through evaporative demand, sand exposure.
 \item Limits and the hand-over to Model 2: each planted cohort carries its own $(V,M)$.
 \end{enumerate}
 

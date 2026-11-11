@@ -173,7 +173,7 @@ margin, our objectives are to:
   \newline \textbf{Justifications:} The belt is narrower than a reanalysis grid, so
   within-grid gradients cannot be resolved. 
 
-  \item \textbf{Assumptions:} \textbf{Vegetation is annual refreshed, water is daily.} Cover updates
+  \item \textbf{Assumptions:} \textbf{Vegetation is annual; water is daily.} Cover updates
   yearly from the June--September growing season, soil water updates daily and carries
   across years, and the base climate repeats 2015--2022.
   \newline \textbf{Justifications:} Decisions are annual and 16-day NDVI cannot support
@@ -191,13 +191,18 @@ margin, our objectives are to:
   one 75\,mm root-zone bucket; growth depends on the share of transpiration demand met.
   \newline \textbf{Justifications:} A simple supply/demand ratio has no memory and cannot
   separate transpiration from drainage. Water parameters are scenarios because none is
-  could be measured, ignoring salinity makes the response optimistic.
+  measured; ignoring salinity makes the response optimistic.
 
-  \item \textbf{Assumptions:} \textbf{Calibration assumes irrigated oases and proportional
-  wind damage.} \mbox{$r$ and $d$} are fitted at seven irrigated oasis stations ($\overline W\approx1$,
-  $k=0$); wind loss is proportional to $V$ and $E$, with $k$ varied from 0 to 0.10.
-  \newline \textbf{Justifications:} Irrigated oases separate growth and decay from water
-  and wind limitation. Transfer to the section is an extrapolation. This is to limit parameter numbers in formula to ensure a concrete equation.
+  \item \textbf{Assumptions:} \textbf{Calibration at irrigated oases; wind is absorbed in
+  $r$ and $d$.} \mbox{$r$ and $d$} are fitted at seven irrigated oasis stations
+  ($\overline W\approx1$). No separate wind-damage term is retained: the cover-shelter
+  factor is bounded between 0 and 1 (1 at bare ground, 0 at full cover), and after
+  calculation the extra term is not supported, so wind effects are already contained in
+  the fitted net rates.
+  \newline \textbf{Justifications:} At irrigated oases, water is ample, so $r$ and $d$
+  capture net growth and decay under the local wind regime. A separate shelter term is
+  not identifiable and would add a parameter without evidence. Transfer to the section
+  is an extrapolation, not a validation.
 \end{enumerate}
 \endgroup
 
@@ -247,7 +252,7 @@ SoilGrids queries returned & 62/81 \\ \bottomrule
 
 \item \emph{Climate.} Temperature, precipitation and daily maximum wind come from NASA POWER (MERRA-2); ET$_0$ and soil moisture come from the Open-Meteo archive (ERA5/ERA5-Land \cite{REF15,EN10}). POWER precipitation is a daily mean, so monthly totals are value $\times$ days. Wetness indices are not treated as plant-available water. XT and TZ share one MERRA-2 cell, leaving eight independent weather series.
 
-\item \emph{Wind index.} Sand transport rises steeply once wind exceeds a threshold speed ($u_T=5$\,m/s), so a nonlinear transport proxy is applied to each \emph{day's} maximum wind first and averaged afterwards; averaging wind first would hide almost every gust above the threshold. The result is divided by each station's 2015--2022 mean, so $E=1$ is the training-period average. The index $E$ is a relative forcing used in Model~1, not a measured sand flux.
+\item \emph{Wind index.} Sand transport rises steeply once wind exceeds a threshold speed ($u_T=5$\,m/s), so a nonlinear transport proxy is applied to each \emph{day's} maximum wind first and averaged afterwards; averaging wind first would hide almost every gust above the threshold. The result is divided by each station's 2015--2022 mean, so $E=1$ is the training-period average. $E$ is a relative forcing, not a measured sand flux. A separate cover-shelter term was tested but lies between 0 and 1, and after calculation it is not supported; wind effects are therefore absorbed in the fitted $r$ and $d$, and $E$ does not drive cover in Model~1. Its extremes are left to the disaster shocks of Model~3.
 
 \item \emph{Coverage.} For each station we take a $9\times9$ MOD13Q1 window, drop pixels with reliability flag above 1, keep a composite only if $\ge$50\% of pixels remain (75\% as a sensitivity check), and take the monthly maximum. NDVI becomes fractional cover by the dimidiate pixel model,
 \begin{equation}

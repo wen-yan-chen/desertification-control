@@ -30,15 +30,14 @@ class WaterParameters:
         if not 0 <= self.eta_w <= 1 or not 0 <= self.rain_fraction <= 1 or self.groundwater_mm_yr < 0:
             raise ValueError("Invalid water supply coefficient")
 
-def vegetation_step(v, K, w, E, r, d, k=0., eta=1.):
-    values = [v, K, w, E, r, d, k, eta]
+def vegetation_step(v, K, w, r, d):
+    """Annual cover step. No wind term: wind acts through the forcing (ET0 demand)."""
+    values = [v, K, w, r, d]
     if not all(math.isfinite(x) for x in values) or K <= 0 or not 0 <= v <= K:
         raise ValueError("Invalid cover state")
-    if not (0 <= w <= 1 and E >= 0 and 0 <= r <= 1 and d >= 0 and k >= 0 and 0 <= eta <= 1):
+    if not (0 <= w <= 1 and 0 <= r <= 1 and 0 <= d <= 1):
         raise ValueError("Parameters outside supported invariant annual-step domain")
-    if d + k * E > 1:
-        raise ValueError("Annual loss exceeds one; use a smaller time step, not clipping")
-    result = v + r*v*(1-v/K)*w - d*v - k*E*(1-eta*v/K)*v
+    result = v + r*v*(1-v/K)*w - d*v
     if not -1e-10 <= result <= K + 1e-10:
         raise ArithmeticError("State domain violation")
     return min(K, max(0., result))
@@ -85,26 +84,27 @@ def water_year(v, m0, irrigation, forcing, params=WaterParameters(), record=True
     w = total_transp / total_demand if total_demand > 0 else 0.
     return m, min(1., max(0., w)), rows
 
-def trajectory(v0, m0, years, K, r, d, forcing, irrigation, params=WaterParameters(), k=0., eta=1., E=1., record=True):
+def trajectory(v0, m0, years, K, r, d, forcing, irrigation, params=WaterParameters(), record=True):
     if years < 1:
         raise ValueError("years must be positive")
     quotas = np.broadcast_to(np.asarray(irrigation, float), (years,))
     v, m, annual, monthly = float(v0), float(m0), [], []
     for t, quota in enumerate(quotas):
         mend, w, rows = water_year(v, m, float(quota), forcing, params, record)
-        vnext = vegetation_step(v, K, w, E, r, d, k, eta)
+        vnext = vegetation_step(v, K, w, r, d)
         annual.append(dict(year=t+1, V_start_pct=v, V_end_pct=vnext, M_start_mm=m,
             M_end_mm=mend, W=w, irrigation_mm_yr=float(quota), irrigation_m3_ha_yr=10*float(quota),
-            relative_erosion_scenario=max(0., 1-eta*v/K)))
+            # Output: sand exposure at average wind (E = 1), the unsheltered share 1 - V/K.
+            relative_erosion_scenario=max(0., 1-v/K)))
         monthly.extend(dict(year=t+1, V_pct=v, **row) for row in rows)
         v, m = vnext, mend
     return pd.DataFrame(annual), pd.DataFrame(monthly)
 
-def equilibrium(v0, m0, K, r, d, forcing, irrigation, params=WaterParameters(), k=0., eta=1., E=1., max_years=500, tol=1e-7):
+def equilibrium(v0, m0, K, r, d, forcing, irrigation, params=WaterParameters(), max_years=500, tol=1e-7):
     v, m = float(v0), float(m0)
     for year in range(1, max_years+1):
         mend, w, _ = water_year(v, m, irrigation, forcing, params, False)
-        vend = vegetation_step(v, K, w, E, r, d, k, eta)
+        vend = vegetation_step(v, K, w, r, d)
         error = max(abs(vend-v), abs(mend-m))
         v, m = vend, mend
         if error < tol:

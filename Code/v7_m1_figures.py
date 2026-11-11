@@ -117,7 +117,7 @@ def fig_station_series(t, tall=False):
 # --------------------------------------------------------------------------- 2
 def fig_holdout_skill(t):
     pp, hs, js = t["prediction_pairs"], t["holdout_by_site"], t["json"]
-    fit, base = js["station_fit"]["M0 (r,d)"], js["station_fit"]["baselines"]
+    fit, base = js["station_fit"]["pooled_r_d"], js["station_fit"]["baselines"]
     fig, (a, b) = plt.subplots(1, 2, figsize=(FULL_W, 2.9), gridspec_kw={"width_ratios": [1, 1.15]})
 
     lim = (0.55, 1.0)
@@ -163,9 +163,9 @@ def fig_holdout_skill(t):
 # --------------------------------------------------------------------------- 3
 def fig_bootstrap(t):
     bs, js = t["parameter_cluster_bootstrap"], t["json"]
-    th = js["station_fit"]["M0 (r,d)"]["theta"]
+    th = js["station_fit"]["pooled_r_d"]["theta"]
     pct = js["uncertainty"]["bootstrap_percentiles"]
-    loso = js["station_fit"]["leave_one_station_out_M0"]
+    loso = js["station_fit"]["leave_one_station_out"]
     fig = plt.figure(figsize=(HALF_W * 1.35, HALF_W * 1.35))
     gs = fig.add_gridspec(2, 2, width_ratios=[4, 1], height_ratios=[1, 4], hspace=0.05, wspace=0.05)
     ax = fig.add_subplot(gs[1, 0])
@@ -286,7 +286,7 @@ def fig_water_cover(t, half=False):
     c.set(title="(c) Year-end store $M$" if half else "(c) Available storage $M$ at year end",
           ylabel="mm", ylim=(0, 85))
     d.plot(I, w.relative_erosion_scenario, color=BLUE, marker="o", ms=3.5)
-    d.set(title="(d) Relative erosion" if half else "(d) Relative erosion (shelter function)",
+    d.set(title="(d) Sand exposure $S$" if half else "(d) Sand exposure $S=1-V/K$ (average wind)",
           ylabel="relative to bare", ylim=(0, 1.02))
     if half:  # no secondary m3/ha axis at this size (1 mm on the treated area = 10 m3/ha)
         for ax in (c, d):
@@ -453,14 +453,15 @@ def fig_sensitivity(t, tall=False):
                    bbox_to_anchor=(0.5, 1.0))
     else:
         fig.legend(handles=bars, loc="lower center", ncol=2, fontsize=7.2, bbox_to_anchor=(0.4, -0.05))
-    k = s[s.parameter == "k_scenario"].sort_values("value")
+    # (c) Wind acts through evaporative demand: wind speed scaled, ET0 recomputed, bucket re-run.
+    k = s[(s.parameter == "wind_speed_scale") & (s.irrigation_mm_yr == 300)].sort_values("value")
     c = axes[2]
-    c.plot(k.value, k.V_pct, color=BLUE, marker="o", ms=4)
+    c.plot(100 * (k.value - 1), k.V_pct, color=BLUE, marker="o", ms=4)
     for _, r in k.iterrows():
-        c.annotate(f"{r.V_pct:.1f}", (r.value, r.V_pct), xytext=(3, 3), textcoords="offset points",
+        c.annotate(f"{r.V_pct:.1f}", (100 * (r.value - 1), r.V_pct), xytext=(3, 3), textcoords="offset points",
                    fontsize=7, color=INK2)
-    c.set(title="(c) Wind damage k, 300 mm/yr", xlabel="Wind-damage coefficient k", ylabel=V_LABEL,
-          ylim=(12, 19.5), xlim=(-0.01, 0.12))
+    c.set(title="(c) Wind speed, 300 mm/yr", xlabel="Change in wind speed (%)", ylabel=V_LABEL,
+          ylim=(16.5, 19.5), xlim=(-24, 27), xticks=[-20, -10, 0, 10, 20])
     if tall:
         fig.tight_layout(h_pad=0.8, rect=(0, 0, 1, 0.96))
         save(fig, "m1_f09_sensitivity_tall")
