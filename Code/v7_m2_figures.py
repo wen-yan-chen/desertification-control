@@ -90,14 +90,14 @@ def fig_build(t):
 
     a.bar(y, a_.new_area_ha, w, color=C_BUILD, label="New area (flow)")
     a.plot(y, a_.eco_area_ha, color=C_KEEP, marker="o", ms=3, label="Managed area (stock)")
-    a.set(title="(a) Shelter area", ylabel="ha", ylim=(0, 345))
+    a.set(title="(a) Shelter area", ylabel="ha", ylim=(0, a_.eco_area_ha.max() * 1.15))
     a.legend(loc="center right", fontsize=7.2)
 
     b.bar(y, a_.new_pv_kw / 1e3, w, color=C_PV, label="New capacity (flow)")
     b.plot(y, a_.pv_installed_kw / 1e3, color=INK, marker="o", ms=3, label="Installed (stock)")
     b.plot(y, a_.pv_operating_kw / 1e3, color=MUTED, marker="s", ms=2.8, ls=DASH,
            label="Operating (from next year)")
-    b.set(title="(b) PV capacity", ylabel="MW", ylim=(0, 10.9))
+    b.set(title="(b) PV capacity", ylabel="MW", ylim=(0, max(a_.pv_installed_kw.max() / 1e3 * 1.15, 1)))
     b.legend(loc="center right", fontsize=7.2)
 
     parts = [("construction_cny", C_BUILD, "Shelter construction"),
@@ -133,58 +133,66 @@ def fig_build(t):
 # --------------------------------------------------------------------------- 2
 def fig_cohorts(t):
     """Cover, irrigation and storage per planting batch, and the area-weighted contribution."""
-    co, K = t["cohorts"], t["json"]["m1_parameters"]["K_section_pct"]
-    order = ["eco_y1_100_to_300_after_3", "eco_y1_ramp_100_300_600", "eco_y2_100_to_300_after_3"]
-    meta = {order[0]: (RAMP[0], "Year 1, 100 ha: 100 then 300 mm"),
-            order[1]: (RAMP[2], "Year 1, 50 ha: 100, 300 then 600 mm"),
-            order[2]: (RAMP[4], "Year 2, 150 ha: 100 then 300 mm")}
-    missing = set(co.cohort_id) ^ set(order)
-    if missing:
-        raise SystemExit(f"cohort set changed, update fig_cohorts: {sorted(missing)}")
+    co, cfg = t["cohorts"], t["json"]["config"]
+    K = t["json"]["m1_parameters"]["K_section_pct"]
+    vmin, age = cfg.get("min_cover_pct", 0.), cfg.get("min_cover_by_age_year", 1)
+    order = list(co.sort_values(["year", "cohort_id"]).cohort_id.unique())
+    if not 1 <= len(order) <= len(RAMP):
+        raise SystemExit(f"fig_cohorts draws 1-{len(RAMP)} batches, got {len(order)}")
+    colors = [RAMP[k] for k in np.linspace(0, len(RAMP) - 1, len(order)).round().astype(int)]
+    meta = {}
+    for cid, color in zip(order, colors):
+        s = co[co.cohort_id == cid].sort_values("year")
+        steps = [f"{q:g}" for q in s.irrigation_mm_yr[s.irrigation_mm_yr.diff().fillna(1) != 0]]
+        path = steps[0] if len(steps) == 1 else ", ".join(steps[:-1]) + " then " + steps[-1]
+        meta[cid] = (color, f"Year {s.year.iloc[0]}, {s.area_ha.iloc[0]:g} ha: {path} mm",
+                     bool(s.counts_toward_score.iloc[0]))
     fig, axes = plt.subplots(2, 2, figsize=(FULL_W, 4.5), sharex=True)
     (a, b), (c, d) = axes
-
-    def series(cid, col):
-        s = co[co.cohort_id == cid].sort_values("year")
-        if cid == order[1]:
-            # Same path as the 100 ha batch until its irrigation steps up, so draw from there.
-            ref = co[co.cohort_id == order[0]].set_index("year")
-            same = np.isclose(s[col].values, ref.loc[s.year, col].values)
-            first = int(np.argmin(same)) if not same.all() else len(s)
-            s = s.iloc[max(first - 1, 0):]
-        return s
-
     for cid in order:
-        color, lab = meta[cid]
-        s = series(cid, "V_start_pct")
+        color, lab, _ = meta[cid]
+        s = co[co.cohort_id == cid].sort_values("year")
         a.plot(s.year, s.V_start_pct, color=color, label=lab)
-        s = series(cid, "irrigation_mm_yr")
+        if vmin > 0 and len(s) > age:  # cover at the end of the check age = start of the next year
+            a.scatter(s.year.iloc[age], s.V_start_pct.iloc[age], s=26, color=color, edgecolor=INK,
+                      linewidth=0.8, zorder=4)
         b.plot(s.year, s.irrigation_mm_yr, color=color, drawstyle="steps-mid")
-        s = series(cid, "M_end_mm")
         c.plot(s.year, s.M_end_mm, color=color)
     a.axhline(K, **LIMIT)
     a.text(0.6, K - 0.8, f"section K = {K:.1f}%", fontsize=7, color=INK2, va="top")
+    if vmin > 0:
+        a.axhline(vmin, **LIMIT)
+        a.text(0.6, vmin + 0.7, f"minimum cover {vmin:g}% by age {age}", fontsize=7, color=INK2)
+        a.scatter([], [], s=26, color=SURFACE, edgecolor=INK, linewidth=0.8, label=f"Cover at age {age}")
     a.set(title="(a) Cover proxy at start of year", ylabel="$V_{start}$ (%)", ylim=(0, 41))
     b.set(title="(b) Irrigation on the batch area", ylabel="mm/yr  (1 mm = 10 m$^3$/ha)",
-          ylim=(0, 660))
-    b.set_yticks([0, 100, 300, 600])
+          ylim=(0, max(660, co.irrigation_mm_yr.max() * 1.1)))
+    b.set_yticks(sorted(set([0]) | set(co.irrigation_mm_yr.unique())))
     cap = t["json"]["m1_parameters"]["water"]["capacity_mm"]
     c.axhline(cap, **LIMIT)
     c.text(15.6, cap - 2, "storage capacity", fontsize=7, color=INK2, ha="right", va="top")
     c.set(title="(c) Available storage $M$ at year end", ylabel="mm", ylim=(0, 82))
 
-    bottom = np.zeros(15)
+    bottom, counted = np.zeros(15), np.zeros(15)
     yrs = np.arange(1, 16)
     for cid in order:
         s = co[co.cohort_id == cid].set_index("year").reindex(yrs)
         v = (s.area_ha * s.V_start_pct / K).fillna(0).values
-        d.bar(yrs, v, 0.66, bottom=bottom, color=meta[cid][0], edgecolor=SURFACE, lw=0.5)
+        if meta[cid][2]:
+            d.bar(yrs, v, 0.66, bottom=bottom, color=meta[cid][0], edgecolor=SURFACE, lw=0.5)
+            counted += v
+        else:  # below the minimum-cover rule: drawn, but hollow, because it scores nothing
+            d.bar(yrs, v, 0.66, bottom=bottom, facecolor=SURFACE, edgecolor=meta[cid][0], lw=0.8)
         bottom += v
-    check = np.abs(bottom - t["annual"].set_index("year").effective_ha.reindex(yrs).values).max()
-    assert check < 1e-6, f"cohort contributions do not add to annual.effective_ha ({check})"
-    d.set(title=r"(d) Effective area, area $\times$ $V_{start}/K$", ylabel="effective ha")
-    d.text(0.03, 0.95, f"15-year sum {bottom.sum():.0f} effective ha-yr", transform=d.transAxes,
-           fontsize=7.2, color=INK2, va="top")
+    ann = t["annual"].set_index("year").reindex(yrs)
+    assert np.abs(bottom - ann.effective_ha.values).max() < 1e-6, "batches do not add to annual.effective_ha"
+    assert np.abs(counted - ann.counted_effective_ha.values).max() < 1e-6, "counted batches do not add up"
+    d.set(title=r"(d) Effective area, area $\times$ $V_{start}/K$", ylabel="effective ha",
+          ylim=(0, bottom.max() * 1.22))
+    note = f"15-year score {counted.sum():.0f} effective ha-yr"
+    if bottom.sum() - counted.sum() > 1e-6:
+        note += f"\nhollow: below minimum cover, not scored ({bottom.sum() - counted.sum():.0f})"
+    d.text(0.03, 0.96, note, transform=d.transAxes, fontsize=7.2, color=INK2, va="top")
     for ax in (c, d):
         year_axis(ax)
     for ax in (a, b):
@@ -296,7 +304,8 @@ def fig_frontier(t):
                    ha="left" if right else "right", va="center" if right else "bottom",
                    fontsize=7, color=INK2, linespacing=1.15)
     a.set(xlabel="Ecological score over 15 years (effective ha-yr)",
-          ylabel="Net present cost (million CNY)", xlim=(-420, 2260), ylim=(-12, 78))
+          ylabel="Net present cost (million CNY)", xlim=(-0.2 * x.max(), 1.08 * x.max()),
+          ylim=(yv.min() - 0.1 * (yv.max() - yv.min()) - 2, yv.max() + 0.22 * (yv.max() - yv.min())))
     a.set_title("(a) Solved points: cost against ecology")
     a.text(0.97, 0.04, "lower cost is better\npoints are separate solves", transform=a.transAxes,
            ha="right", va="bottom", fontsize=7, color=MUTED, linespacing=1.3)
@@ -304,7 +313,7 @@ def fig_frontier(t):
     xs = f.frac.values * 100
     b.bar(xs, f.new_area_total_ha, 11, color=C_BUILD)
     b.set_title("(b) Shelter area built (ha)", fontsize=8.5)
-    b.set_ylim(0, 1000)
+    b.set_ylim(0, max(f.new_area_total_ha.max() * 1.12, 1))
     c.bar(xs, f.pv_installed_final_kw / 1e3, 11, color=C_PV)
     c.set_title("(c) PV installed by year 15 (MW)", fontsize=8.5)
     c.set_ylim(0, 11.5)
@@ -330,7 +339,7 @@ def case_rows(t, cases):
     rows = []
     for case, label in cases:
         r = s.loc[case]
-        spend = sa[sa.case == case][["construction_cny", "om_cny", "pv_facilities_cny"]].sum() / 1e6
+        spend = sa[sa.case == case][["construction_cny", "om_cny", "pv_facilities_cny"]].sum(min_count=1) / 1e6
         rows.append(dict(case=case, label=label, npc=r.net_present_cost_cny / 1e6,
                          area=r.new_area_total_ha, pv=r.pv_installed_final_kw / 1e3,
                          build=spend.construction_cny, keep=spend.om_cny, pvcap=spend.pv_facilities_cny))
@@ -368,9 +377,11 @@ def fig_investment(t):
     a.hlines(ypos, base.npc, r.npc, color=AXIS, lw=1.4, zorder=1)
     a.scatter(r.npc, ypos, s=22, color=INK2, zorder=3)
     for yy, val in zip(ypos, r.npc):
-        ha, dx = ("left", 0.7) if val >= base.npc else ("right", -0.7)
-        a.text(val + dx, yy, f"{val:.1f}", ha=ha, va="center", fontsize=7, color=INK2)
-    a.set(xlim=(9, 34), xlabel="million CNY")
+        ha, dx = ("left", 5) if val >= base.npc else ("right", -5)
+        a.annotate(f"{val:.1f}".replace("-", "\u2212"), (val, yy), xytext=(dx, 0), textcoords="offset points",
+                   ha=ha, va="center", fontsize=7, color=INK2)
+    pad = 0.3 * (r.npc.max() - r.npc.min()) + 1
+    a.set(xlim=(r.npc.min() - pad, r.npc.max() + pad), xlabel="million CNY")
     a.set_title("(a) Net present cost")
     a.set_yticks(ypos, r.label)
     a.set_ylim(-0.6, len(r) - 0.4)
@@ -386,7 +397,7 @@ def fig_investment(t):
                             ("pvcap", C_PV, "PV capital")):
         c.barh(ypos, r[col], 0.6, left=left, color=color, label=lab, edgecolor=SURFACE, lw=0.5)
         left += r[col].values
-    c.set(xlim=(0, 82), xlabel="million CNY, undiscounted")
+    c.set(xlim=(0, left.max() * 1.1), xlabel="million CNY, undiscounted")
     c.set_title("(c) 15-year spending")
     for ax in axes:
         ax.grid(axis="y", visible=False)
@@ -414,6 +425,10 @@ def fig_assumptions(t):
         ("budget_low", f"Total budget {v('budget_low', 'total_budget_cny') / b0['total_budget_cny'] - 1:+.0%}".replace("-", "\u2212")),
         ("labor_low",
          f"Labour cap {v('labor_low', 'annual_labor_cap_person_days') / b0['annual_labor_cap_person_days'] - 1:+.0%}".replace("-", "\u2212")),
+        ("min_cover_off", "No minimum-cover rule"),
+        ("min_cover_15pct", f"Minimum cover {v('min_cover_15pct', 'min_cover_pct'):g}%"),
+        ("min_cover_25pct", f"Minimum cover {v('min_cover_25pct', 'min_cover_pct'):g}%"),
+        ("min_cover_by_age_12", f"Minimum cover by age {v('min_cover_by_age_12', 'min_cover_by_age_year')}"),
         ("finer_area_grid", f"Area block {v('finer_area_grid', 'area_block_ha'):g} ha"),
         ("constant_irrigation_only", "Constant irrigation only"),
     ]
@@ -422,7 +437,7 @@ def fig_assumptions(t):
     r["dpct"] = (r.npc / base.npc - 1) * 100
     tol = t["json"]["config"]["solver_relative_gap"] * 100
     ypos = np.arange(len(r))[::-1]
-    fig, axes = plt.subplots(1, 3, figsize=(FULL_W, 3.5), sharey=True,
+    fig, axes = plt.subplots(1, 3, figsize=(FULL_W, 4.4), sharey=True,
                              gridspec_kw={"width_ratios": [1.7, 0.75, 0.75]})
     a, b, c = axes
     # Symmetric log axis (linear inside +/-1%): changes of 0.2% and 29% are both readable.
@@ -430,9 +445,15 @@ def fig_assumptions(t):
     for edge in (-tol, tol):
         a.axvline(edge, **LIMIT)
     a.axvline(0, color=INK2, lw=0.8, zorder=2)
-    a.hlines(ypos[1:], 0, r.dpct[1:], color=AXIS, lw=1.4, zorder=2)
-    a.scatter(r.dpct[1:], ypos[1:], s=22, color=INK2, zorder=3)
+    ok = r.dpct.notna().values
+    ok[0] = False
+    a.hlines(ypos[ok], 0, r.dpct[ok], color=AXIS, lw=1.4, zorder=2)
+    a.scatter(r.dpct[ok], ypos[ok], s=22, color=INK2, zorder=3)
     for yy, val in zip(ypos[1:], r.dpct[1:]):
+        if np.isnan(val):  # no feasible plan reaches the target: nothing to plot, say so
+            a.text(tol * 2.3, yy, "infeasible at this target", ha="left", va="center", fontsize=7,
+                   color=INK2, style="italic")
+            continue
         txt = (f"{val:+.2f}%" if abs(val) < 1 else f"{val:+.1f}%").replace("-", "\u2212")
         if abs(val) < 0.005:
             a.text(tol * 2.3, yy, "0 (same plan)", ha="left", va="center", fontsize=7, color=INK2)
@@ -440,7 +461,7 @@ def fig_assumptions(t):
             a.annotate(txt, (val, yy), xytext=(5 if val > 0 else -5, 0), textcoords="offset points",
                        ha="left" if val > 0 else "right", va="center", fontsize=7, color=INK2)
     a.text(tol * 2.3, ypos[0], f"{base.npc:.1f} million CNY", va="center", fontsize=7, color=MUTED)
-    a.set_xlim(-400, 400)
+    a.set_xlim(-900, 500)
     a.set_xticks([-100, -10, -1, 0, 1, 10, 100],
                  ["\u2212100", "\u221210", "\u22121", "0", "1", "10", "100"])
     a.minorticks_off()
@@ -450,10 +471,12 @@ def fig_assumptions(t):
     a.set_ylim(-0.6, len(r) - 0.4)
 
     for ax, col, color, unit, title, xmax in (
-            (b, "area", C_BUILD, "shelter area, ha", "(b) Area built", 520),
+            (b, "area", C_BUILD, "shelter area, ha", "(b) Area built", r.area.max() * 1.45),
             (c, "pv", C_PV, "MW", "(c) PV by year 15", 13)):
-        ax.barh(ypos, r[col], 0.6, color=color, zorder=2)
+        ax.barh(ypos, r[col].fillna(0), 0.6, color=color, zorder=2)
         for yy, val in zip(ypos, r[col]):
+            if np.isnan(val):
+                continue
             ax.text(val + xmax * 0.02, yy, f"{val:g}", va="center", fontsize=7, color=INK2)
         ax.set(xlim=(0, xmax), xlabel=unit)
         ax.set_title(title)

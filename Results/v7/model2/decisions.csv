@@ -1,8 +1,7 @@
 cohort_id,start_year,policy,kind,blocks,area_ha,capacity_kw
-eco_y1_100_to_300_after_3,1,100_to_300_after_3,eco,2,100,0
-eco_y1_ramp_100_300_600,1,ramp_100_300_600,eco,1,50,0
-pv_y1_pv,1,pv,pv,12,0,1200
-eco_y2_100_to_300_after_3,2,100_to_300_after_3,eco,3,150,0
-pv_y2_pv,2,pv,pv,11,0,1100
+eco_y1_300_to_600_after_5,1,300_to_600_after_5,eco,1,50,0
+pv_y1_pv,1,pv,pv,30,0,3000
+eco_y2_300_to_600_after_5,2,300_to_600_after_5,eco,1,50,0
+pv_y2_pv,2,pv,pv,29,0,2900
 pv_y3_pv,3,pv,pv,37,0,3700
-pv_y4_pv,4,pv,pv,35,0,3500
+pv_y4_pv,4,pv,pv,4,0,400

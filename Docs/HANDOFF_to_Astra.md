@@ -1,3 +1,27 @@
+# Handoff to Astra — 2026-11-11: M2 minimum-cover rule, tables and figures regenerated
+
+Written by Claude, at the request of the user's colleague.
+
+**Changed**
+- `Code/v7_m2_core.py`: new `meets_min_cover`. A batch scores ecological ha-years only if its irrigation path brings the cover proxy to `min_cover_pct` by the end of age `min_cover_by_age_year` (judged on the full-horizon path; cost and water are always charged). New array `counted_effective_ha` is the score; `effective_ha` is unchanged. Threshold 0 reproduces the old model.
+- `Data/v7/m2_inputs/scenario.json`: `min_cover_pct=20`, `min_cover_by_age_year=10`, scenario id `illustrative_15y_v2_min_cover`. Both values are assumptions; no site-verified protection threshold exists in the repo.
+- `Code/v7_model2.py`: four `group=threshold` runs (rule off, 15%, 25%, age 12); `policy_library.csv` gains `meets_min_cover`, `cohorts.csv` gains `counts_toward_score`.
+- `Code/test_v7_m2.py`: 8 tests (new one for the rule; the exhaustive-enumeration test switches the rule off because it uses a 100 mm library).
+- `Results/v7/model2/*` and `Figures/M2/*` regenerated. `Code/v7_m2_figures.py` no longer hard-codes the cohort set or axis ranges, draws the threshold in f02, and marks infeasible cases in f06.
+- Docs: update section at the top of `Docs/20261111_m2_audit_and_implementation.md` (old vs new table), `Data/v7/m2_inputs/README.md`, `Results/v7/model2/README.md`, `Figures/M2/README.md`.
+
+**State (verified by running)**
+- Base: 100 ha (50 ha in years 1 and 2, 300 then 600 mm), 10 MW PV, net present cost 7.04 M CNY, score 529.1 against target 522.5; maximum-ecology reference 870.9 (was 2097.0). 33 runs, 32 feasible; `initial_cover_low` is infeasible at the fixed target. M1+M2 tests pass (17).
+- Read before writing about it: the old base plan re-scored under the rule gets 259 of its 1265 ha-years; the cost drop comes from the smaller "60% of reference" target, so old and new costs are not comparable; and with the rule switched off at the new target the plan is identical, so the rule binds the reference and the high-target end, not the base plan.
+
+**Not done**
+- `Reports/M2/` (writing brief, structure) and `Reports/model_v7` still quote the old M2 numbers and the linear score.
+
+**Next**
+1. Update the M2 text and brief in `Reports/` with the rule and the new numbers.
+2. Find a literature or field value for the protection threshold; 20% at age 10 is a placeholder and the 25% case costs 63% more.
+3. `finer_area_grid` now changes the plan (−3.2%): consider 25 ha blocks as the base grid.
+
 # Handoff to Astra — 2026-11-11: M1 and M2 writing briefs
 
 Written by Claude.

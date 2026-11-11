@@ -42,7 +42,8 @@ python -m unittest discover -s Code -p test_v7_m2.py -v
 
 `v7_m2_core.py` 按建植批次调用 M1 的 `(V,M)` 轨迹，将有限灌溉路径、面积块及PV资产
 组成混合整数优化；`v7_model2.py` 导出基准、成本生态前沿、投资结构与资源敏感性，
-并逐批回放检查；`test_v7_m2.py` 包括水量/现金流/预算/劳动及穷举对照测试。
+并逐批回放检查；`test_v7_m2.py` 包括水量/现金流/预算/劳动、最低覆盖规则及穷举对照测试。
+生态积分只统计补水路径在林龄 `min_cover_by_age_year` 末达到 `min_cover_pct` 的批次（`meets_min_cover`）。
 
 输入和假设见 [m2_inputs](../Data/v7/m2_inputs/README.md)，
 数表见 [model2](../Results/v7/model2/README.md)，

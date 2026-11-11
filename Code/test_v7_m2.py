@@ -43,7 +43,8 @@ class M2Tests(unittest.TestCase):
 
     def test_small_milp_matches_exhaustive_feasible_enumeration(self):
         c = {**self.c,"years":3,"land_cap_ha":100.,"annual_new_area_cap_ha":50.,
-             "pv_capacity_cap_kw":100.,"total_budget_cny":6000000.,"solver_relative_gap":0.}
+             "pv_capacity_cap_kw":100.,"total_budget_cny":6000000.,"solver_relative_gap":0.,
+             "min_cover_pct":0.}  # solver check only; the protection rule has its own test
         p = build_problem(c,self.m,self.f,{"constant_100":np.full(3,100.)})
         target=5.
         candidates=[]
@@ -80,9 +81,31 @@ class M2Tests(unittest.TestCase):
         self.assertEqual(a.labor_person_days.iloc[0],50*(30+3))
         self.assertEqual(a.gross_spending_cny.iloc[0],50*(52500+1500+100*10))
 
+    def test_min_cover_rule_zeroes_score_but_keeps_cost_and_water(self):
+        rule = dict(min_cover_pct=20.,min_cover_by_age_year=10)
+        on, off = self.problem(**rule), self.problem(min_cover_pct=0.)
+        self.assertEqual([c["policy"] for c in on.columns],[c["policy"] for c in off.columns])
+        np.testing.assert_allclose(off.eco,off.arrays["effective_ha"].sum(axis=0))
+        np.testing.assert_allclose(on.net_cost,off.net_cost)
+        np.testing.assert_allclose(on.arrays["water_m3"],off.arrays["water_m3"])
+        col = lambda name: next(i for i,v in enumerate(on.columns) if v["start"]==0 and v["policy"]==name)
+        low, high, late = col("constant_300"), col("constant_600"), next(
+            i for i,v in enumerate(on.columns) if v["start"]==12 and v["policy"]=="constant_600")
+        self.assertEqual(on.eco[low],0.)                 # 15.5% at age 10: below 20%
+        self.assertGreater(off.eco[low],0.)
+        self.assertAlmostEqual(on.eco[high],off.eco[high])  # 21.5% at age 10: counted in full
+        self.assertAlmostEqual(on.eco[late],off.eco[late])  # late batch on a qualifying path still scores
+        x = np.zeros(len(on.columns)); x[low]=1; x[high]=2
+        tab,_ = replay(on,x)
+        a, cohorts = tab["annual"], tab["cohorts"]
+        self.assertAlmostEqual(a.counted_effective_ha.sum(),on.eco@x)
+        self.assertGreater(a.effective_ha.sum(),a.counted_effective_ha.sum())
+        self.assertEqual(set(cohorts[cohorts.counts_toward_score].cohort_id),{"eco_y1_constant_600"})
+
     def test_invalid_inputs_rejected(self):
         for changes in ({"monthly_water_caps_m3":[1]*11},{"initial_M_mm":1000.},
-                        {"pv_degradation_fraction_year":1.},{"pv_capex_share_min":1.1}):
+                        {"pv_degradation_fraction_year":1.},{"pv_capex_share_min":1.1},
+                        {"min_cover_pct":99.},{"min_cover_by_age_year":0}):
             with self.assertRaises(ValueError):
                 self.problem(**changes)
 

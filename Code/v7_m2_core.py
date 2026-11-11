@@ -43,6 +43,11 @@ def validate_config(c, m):
         raise ValueError("Invalid fraction")
     if not 0 <= c["pv_capex_share_min"] <= c["pv_capex_share_max"] <= 1:
         raise ValueError("Invalid PV investment-share limits")
+    if not 0 <= c.get("min_cover_pct", 0.) <= m["K_section_pct"]:
+        raise ValueError("Minimum cover threshold outside M1 domain")
+    age = c.get("min_cover_by_age_year", 1)
+    if not isinstance(age, int) or age < 1:
+        raise ValueError("min_cover_by_age_year must be a positive integer")
     caps = np.asarray(c["monthly_water_caps_m3"], float)
     if caps.shape != (12,) or not np.isfinite(caps).all() or (caps < 0).any():
         raise ValueError("Need 12 nonnegative monthly water caps")
@@ -64,6 +69,19 @@ def policy_library(T):
             unique[name] = quotas
             seen.add(tuple(quotas))
     return unique
+
+
+def meets_min_cover(c, ann):
+    """Protection rule: a batch scores only if its policy brings the cover proxy to
+    min_cover_pct by the end of age min_cover_by_age_year. It is a property of the
+    irrigation path, judged on the full-horizon M1 trajectory `ann`, so a late batch
+    on a qualifying path still scores for the years it has. If the horizon is shorter
+    than that age, the last simulated year is used. Threshold 0 switches the rule off."""
+    threshold = c.get("min_cover_pct", 0.)
+    if threshold <= 0:
+        return True
+    age = min(c.get("min_cover_by_age_year", 1), len(ann))
+    return bool(ann.iloc[age-1].V_end_pct >= threshold-1e-9)
 
 
 def simulate_policy(c, m, forcing, quotas):
@@ -107,7 +125,7 @@ def build_problem(c, m, forcing, policies=None):
     n = len(columns)
     keys = ["new_area_ha", "eco_area_ha", "new_pv_kw", "pv_installed_kw", "pv_operating_kw",
             "land_ha", "construction_cny", "om_cny", "pv_facilities_cny", "revenue_cny",
-            "water_m3", "labor_person_days", "effective_ha", "energy_kwh"]
+            "water_m3", "labor_person_days", "effective_ha", "counted_effective_ha", "energy_kwh"]
     arrays = {key: np.zeros((T, n)) for key in keys}
     arrays["monthly_water_m3"] = np.zeros((T, 12, n))
     ub = np.empty(n)
@@ -115,6 +133,7 @@ def build_problem(c, m, forcing, policies=None):
         s = col["start"]
         if col["kind"] == "eco":
             ann, mon = cache[col["policy"]]
+            counted = meets_min_cover(c, ann)
             ub[j] = np.floor(min(c["annual_new_area_cap_ha"], c["land_cap_ha"]) / block)
             arrays["new_area_ha"][s,j] = block
             arrays["construction_cny"][s,j] = block*c["eco_capex_cny_ha"]
@@ -129,6 +148,8 @@ def build_problem(c, m, forcing, policies=None):
                 arrays["labor_person_days"][t,j] += block*c["eco_om_person_days_ha_year"]
                 # Within each M1 year cover is V_start, not the newly updated V_end.
                 arrays["effective_ha"][t,j] = block*ann.iloc[age].V_start_pct/m["K_section_pct"]
+                # Batches on a path that never reaches the protection threshold score nothing.
+                arrays["counted_effective_ha"][t,j] = arrays["effective_ha"][t,j] if counted else 0.
         else:
             ub[j] = np.floor(c["pv_capacity_cap_kw"]/pvblock)
             arrays["new_pv_kw"][s,j] = pvblock
@@ -151,7 +172,7 @@ def build_problem(c, m, forcing, policies=None):
     start_disc = (1+c["discount_rate"])**(-np.arange(T, dtype=float))
     end_disc = start_disc/(1+c["discount_rate"])
     net = start_disc@(arrays["construction_cny"]+arrays["pv_facilities_cny"]) + end_disc@(arrays["om_cny"]-arrays["revenue_cny"])
-    eco = arrays["effective_ha"].sum(axis=0)  # physical ha-years, not cash/discounted
+    eco = arrays["counted_effective_ha"].sum(axis=0)  # physical ha-years, not cash/discounted
     rows, limits, names = [], [], []
     def add(name, values, cap, scale=1.):
         rows.append(values/scale); limits.append(cap/scale); names.append(name)
@@ -228,6 +249,8 @@ def replay(p, x):
         if col["kind"] == "eco":
             area = count*c["area_block_ha"]
             ann, mon = simulate_policy(c, m, p.forcing, p.policies[col["policy"]][:T-start])
+            # Judge the rule on the full-horizon path, exactly as build_problem does.
+            counted = meets_min_cover(c, simulate_policy(c, m, p.forcing, p.policies[col["policy"]])[0])
             annual.loc[start,"new_area_ha"] += area
             annual.loc[start,"construction_cny"] += area*c["eco_capex_cny_ha"]
             annual.loc[start,"labor_person_days"] += area*c["eco_build_person_days_ha"]
@@ -240,7 +263,10 @@ def replay(p, x):
                 annual.loc[t,"om_cny"] += area*c["eco_om_cny_ha_year"]+water*c["water_cny_m3"]
                 annual.loc[t,"labor_person_days"] += area*c["eco_om_person_days_ha_year"]
                 annual.loc[t,"effective_ha"] += area*a["V_start_pct"]/m["K_section_pct"]
-                cohort_rows.append(dict(cohort_id=cid, area_ha=area, age_year=int(a["year"]), **{**a,"year":t+1}))
+                if counted:
+                    annual.loc[t,"counted_effective_ha"] += area*a["V_start_pct"]/m["K_section_pct"]
+                cohort_rows.append(dict(cohort_id=cid, area_ha=area, age_year=int(a["year"]),
+                    counts_toward_score=counted, **{**a,"year":t+1}))
             for a in mon.to_dict("records"):
                 t = start+int(a["year"])-1
                 mw[t,int(a["month"])-1] += area*10*a["gross_irrigation_mm"]
