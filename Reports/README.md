@@ -2,8 +2,7 @@
 
 | 文件 | 内容与使用入口 |
 |---|---|
-| [model_v7.pdf](model_v7.pdf) / [model_v7.tex](model_v7.tex) | 建模公式、参数与约束；任务一采用末尾复核更正，任务二采用原章节位置的新批次动态模型 |
-| [m1_correction.tex](m1_correction.tex) | 当前 M1 有效储水、植被更新和证据边界的更正正文 |
+| [model_v7.pdf](model_v7.pdf) / [model_v7.tex](model_v7.tex) | 建模公式、参数与约束；任务一已并入复核更正（年度植被＋年内有效储水），任务二采用原章节位置的新批次动态模型 |
 | [m2_correction.tex](m2_correction.tex) | M2 批次状态、三类资金、总预算/月水量/劳动约束与条件最优性范围 |
 | [preprocess_v7.pdf](preprocess_v7.pdf) / [preprocess_v7.tex](preprocess_v7.tex) | 预处理和方法对比，阅读时结合文中的更正提示 |
 | `M1/model1_v7_zh.*`、`M1/model1_v7_en.*` | 带历史提示的早期重建稿，参数口径按当前 M1 审计说明核对 |

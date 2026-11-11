@@ -50,6 +50,19 @@ python -m unittest discover -s Code -p test_v7_m2.py -v
 快速检查可运行 `python Code/v7_model2.py --base-only --output tmp/m2_smoke`。
 `formal_model_ready=false`，最优界只适用于给定网格与策略库。
 
+## M1/M2 出图
+
+```sh
+python Code/v7_m1_figures.py
+python Code/v7_m2_figures.py
+```
+
+两个脚本只读 `Results/v7/model1/`、`Results/v7/model2/` 的数表，不重跑模型，分别写入
+`Figures/M1/`、`Figures/M2/`（PDF 与 PNG）。需要 Matplotlib（未列入 `requirements-m1.txt`）。
+`v7_m2_figures.py` 复用 M1 脚本的字体与配色设置，并在出图前核对 `model2_results.json`
+记录的输入哈希；改动 M2 输入或源码后须先重跑 `v7_model2.py`。图注须写入的限制见
+[Figures/M2](../Figures/M2/README.md)。
+
 ## 预处理与对比工具
 
 下列程序支撑 v7 面板预处理、诊断和方法对比。窗口 QA、ET0 温差口径及插值方式的适用限制

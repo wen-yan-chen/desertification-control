@@ -53,8 +53,8 @@
 \begin{document}
 \maketitle
 \begin{quote}\small\bfseries
-复核状态（2026-11-11）：任务一以本文末尾“复核更正”节为准；任务二采用本轮批次动态更正。
-前文任务一外生水分定义、月/年混用和静态接口以更正节为准；任务二已完成情景实现核验，任务三尚未核验。
+复核状态（2026-11-11）：任务一已并入 2026-11-10 复核更正（年度植被＋年内有效储水）；
+任务二采用本轮批次动态更正，已完成情景实现核验；任务三尚未核验。
 本建模文档只管理公式、参数和约束，不规定编程交付物。
 \end{quote}
 
@@ -90,9 +90,9 @@
 \midrule
 任务一 & 选一段代表性区域，建立植被覆盖度与土壤有效含水量的\textbf{耦合动力学}模型，
 研究状态变量变化及其影响因素 &
-状态向量 $\bm{x}_t=(V_t,W_t)$ 的\textbf{确定性差分方程}
-$\bm{x}_{t+1}=\bm{F}(\bm{x}_t;\bm{\theta})$，外加一个\textbf{参数标定问题}
-$\min_{\bm{\theta}}\sum_t\|\bm{F}^t(\bm{x}_0;\bm{\theta})-\tilde{\bm{x}}_t\|^2$ \\
+年度覆盖 $V_t$ 与年内有效储水 $M_j$ 的\textbf{耦合差分系统}
+$(V_{t+1},M_{t+1,0})=\Phi(V_t,M_{t,0};\bm{\theta})$，外加一个\textbf{参数标定问题}
+（一步转移合并最小二乘） \\
 \addlinespace
 任务二 & 把建设过程视为\textbf{最优控制或动态优化}；决策含新增面积、生态补水、
 投资结构（含光伏）、劳动力；目标权衡生态效益与经济成本 &
@@ -116,7 +116,7 @@ $\min_{\bm{\theta}}\sum_t\|\bm{F}^t(\bm{x}_0;\bm{\theta})-\tilde{\bm{x}}_t\|^2$ 
 \item \textbf{任务一 $\to$ 任务二}：任务二目标函数中的"生态效益"不能凭空设定，
 必须由任务一逐批动态状态 $(V,M)$ 提供，不能将新植面积赋为稳态。
 给定灌溉策略后预计算单位面积逐龄轨迹，再进行面积与资产配置优化。
-\item \textbf{任务一 $\to$ 任务三}：任务三的"漂移项"就是任务一的右端向量场 $\bm{F}$；
+\item \textbf{任务一 $\to$ 任务三}：任务三的"漂移项"就是任务一的年映射 $\Phi$（含储水状态）；
 两处必须用\textbf{同一组}参数，否则任务三的结论无法回溯到任务一。
 \item \textbf{任务二 $\to$ 任务三}：任务二的\textbf{建设路径} $\{A_t\}$ 决定了暴露在灾害下的资产规模，
 任务三的退化概率应作为"该路径是否稳健"的检验，而不是另起一套。
@@ -127,7 +127,7 @@ $\min_{\bm{\theta}}\sum_t\|\bm{F}^t(\bm{x}_0;\bm{\theta})-\tilde{\bm{x}}_t\|^2$ 
 每条假设都给出理由与"若被违反会怎样"，以便在检验章节逐条检查。
 
 \begin{assumption}[年尺度]\label{as:year}
-状态变量按年递推，年内过程（生长季、风季）已聚合成年值。
+植被按年递推（取生长季均值）；有效储水在年内数值子步上计算并跨年携带，年内结果聚合为年蒸腾满足率。
 \emph{理由}：题目给的规划期限是 10--20 年，决策按年做；且公开气象/遥感产品的年际可比性最好。
 \emph{代价}：年尺度会把"一场沙尘暴"抹成"一个月均值"，风蚀项的边际贡献容易被降水与灌溉淹没，
 参数 $k$ 因而可能弱可识别（第~\ref{sec:diag} 节给出可识别性判据）。
@@ -153,8 +153,10 @@ $K$ 不是自由参数，而由覆盖度观测的高分位放大一个安全系�
 \end{assumption}
 
 \begin{assumption}[补水通过有效储水影响生长]\label{as:water}
-生态补水先进入有效储水质量平衡，再通过实际/潜在蒸腾比影响年际生长；
-保留前期储水记忆，参数与状态定义按末尾任务一复核更正节。
+生态补水先进入有效储水质量平衡（式~\eqref{eq:m1bal}），再通过年实际/潜在蒸腾比 $\overline W$ 影响年际生长；
+储水跨年携带，保留前期记忆。
+\emph{理由}：代数供需比没有储水记忆，也无法区分“被蒸腾的水”和“排掉的水”。
+\emph{代价}：储水容量、灌溉效率与有效降水比例缺现场数据，只能作情景参数（表~\ref{tab:t1par}）。
 \end{assumption}
 
 \begin{assumption}[灾害为泊松到达、幅度独立同分布]\label{as:poisson}
@@ -179,11 +181,11 @@ $K$ 不是自由参数，而由覆盖度观测的高分位放大一个安全系�
 \toprule
 类别 & 含义 & 是否需要数据字段 \\
 \midrule
-观测 & 可直接测量的量（气温、NDVI、土壤湿度） & 需要 \\
-派生 & 由观测经确定性公式算出（$E$、$V$、$V^*$、$K_s$） & 需要其上游观测 \\
-标定 & 由观测与模型反演的参数（$r,d,k,\eta$） & 需要观测做目标函数 \\
+观测 & 可直接测量的量（气温、NDVI、降水、参考蒸散、风速） & 需要 \\
+派生 & 由观测经确定性公式算出（$E$、$V$、$M$、$\overline W$、$K_s$） & 需要其上游观测 \\
+标定 & 由观测与模型反演的参数（$r,d$） & 需要观测做目标函数 \\
 决策 & 由优化决定的量（$a_t,I_t,s_t$） & 不需要 \\
-情景 & 由政策/文献设定的量（单价、$\lambda$、$u$ 分布） & 不需要（但需区间） \\
+情景 & 由政策/文献设定的量（单价、$\lambda$、$u$ 分布、$k,\eta$、水分参数 $C,p,c,\eta_w,\alpha_P$） & 不需要（但需区间） \\
 \bottomrule
 \end{tabularx}
 \caption{符号的五种类型}\label{tab:five}
@@ -201,13 +203,13 @@ $K$ 不是自由参数，而由覆盖度观测的高分位放大一个安全系�
 符号 & 所需字段（含单位） & 时间分辨率 & 空间分辨率 & 最小充分性说明 \\
 \midrule
 $V_t$ & 归一化植被指数 NDVI（无量纲，$[-0.2,1]$），或直接给覆盖度（\%）
-& 16 天合成 & 250 m & 由像元二分反演 $V$；16 天是产品固有周期，需聚合到月 \\
-$W_t$ & 根区土壤湿度 $W\in[0,1]$（饱和度）或体积含水量 $\theta$（m$^3$/m$^3$）
-& 月 & 0.1\textdegree--0.5\textdegree & 若只有 $\theta$，须再用土壤孔隙度 $\phi$ 换算 $W=\theta/\phi$ \\
+& 16 天合成 & 250 m & 逐像元 QA 后由像元二分反演 $V$，只取 6--9 月；16 天是产品固有周期，需聚合到月 \\
+$P,ET_0$ & 月降水 $P$（mm）、参考蒸散 $ET_0$（mm），同源历史归档
+& 月 & 0.1\textdegree--0.5\textdegree & 驱动储水收支式~\eqref{eq:m1bal}；$M$ 本身无观测，再分析根区湿度只作交叉核验 \\
 $E_t$ & 10 m 风速 $u_{10}$（m/s），\textbf{日最大值} & 日 & 0.1\textdegree--0.5\textdegree
-& 只需风速，$E$ 由 Lettau 公式派生；用日均值会系统性低估（见 \S\ref{sec:t1} 的说明） \\
-$T_t$ & 2 m 气温 $T$、日最高 $T^{\max}$、日最低 $T^{\min}$（\textdegree C）
-& 月/日 & 0.1\textdegree--0.5\textdegree & $T$ 进温度响应 $f(T)$，$T^{\max}-T^{\min}$ 进 ET$_0$ \\
+& 只需风速，$E$ 由 Lettau 型代理逐日派生；先月均再代入会系统性低估（见 \S\ref{sec:t1} 的说明） \\
+$T_t$ & 2 m 月均气温 $T$；平均日最高/最低温（\textdegree C，非月极值）
+& 月 & 0.1\textdegree--0.5\textdegree & $T$ 进温度响应 $f(T)$；平均日温差只在重算 ET$_0$ 时使用 \\
 $K$ & 不需要外部字段 & — & — & 由 $V$ 的训练期 95\% 分位 $\times$ 安全系数确定 \\
 $\lambda$ & 10 m 日最大风速序列（同上） & 日 & 0.1\textdegree--0.5\textdegree
 & 由超阈频率估计，不单独采集 \\
@@ -221,26 +223,27 @@ $c_p,c_{pm},p_e,e_0$ & 光伏合同成本、净结算价与净上网电量 & 年
 
 \noindent\textbf{最小充分集}（缺一不可）：
 \[
-\mathcal{D}_{\min}=\Big\{\ \mathrm{NDVI},\ T,\ T^{\max},\ T^{\min},\ u_{10}^{\max},\ W\ \Big\},
+\mathcal{D}_{\min}=\Big\{\ \mathrm{NDVI}\ (\text{含逐像元 QA}),\ T,\ P,\ ET_0,\ u_{10}^{\max}\ (\text{日})\ \Big\},
 \]
-\textbf{可选增强集}：$\{\,P,\ R_s,\ \mathrm{RH},\ u_{10}^{\mathrm{mean}}\,\}$。可选集不进入状态方程，
-只用于\emph{交叉核验}（例如用 $P/ET_0$ 构造干燥度指数，检验水分状态是否合理）
+\textbf{可选增强集}：$\{\,T^{\max}_{\rm avg},\ T^{\min}_{\rm avg},\ R_s,\ \mathrm{RH},\ \text{再分析根区湿度}\,\}$。可选集不进入状态方程，
+只用于\emph{交叉核验}（例如比较再分析根区湿度与 $M/C$ 的年际排序，检验储水状态是否合理）
 与\emph{敏感性分析}。这一区分很重要：把可选字段硬塞进模型，只会增加共线性与不可解释的自由度。
 
 \subsection{为什么必须是月尺度，而不是年尺度}
 
-年尺度模型只需要年值，但\textbf{参数标定}需要月尺度，理由是可识别性。
+植被方程只需要年值，但水分子模型与风指数必须在月（及日）尺度上构造，理由是储水记忆与可识别性。
+下面把 $\overline W_t$ 视为给定，分析年度方程的参数灵敏度；完整耦合时还需计入 $\overline W$ 对 $V$ 的依赖。
 
 设第 $i$ 个参数为 $\theta_p$，定义灵敏度 $s_t^{(p)}=\partial V_t^{\mathrm{mod}}/\partial\theta_p$。
 对任务一的状态方程逐项求导，得\textbf{前向灵敏度递推}
 \begin{equation}\label{eq:sens}
 s_{t+1}^{(p)}=A_t\,s_t^{(p)}+b_t^{(p)},\qquad
-A_t=1+r\Big(1-\tfrac{2V_t}{K}\Big)W_tf(T_t)-d-kE_t\Big(1-\tfrac{2\eta V_t}{K}\Big),
+A_t=1+r\Big(1-\tfrac{2V_t}{K}\Big)\overline W_t-d-kE_t\Big(1-\tfrac{2\eta V_t}{K}\Big),
 \end{equation}
 \begin{equation}\label{eq:sensb}
 \bm{b}_t=
 \begin{pmatrix}
-V_t\big(1-V_t/K\big)W_tf(T_t)\\[2pt]
+V_t\big(1-V_t/K\big)\overline W_t\\[2pt]
 -V_t\\[2pt]
 -E_t\big(1-\eta V_t/K\big)V_t\\[2pt]
 kE_tV_t^{2}/K
@@ -256,11 +259,11 @@ $\partial E_{\mathrm{eff}}/\partial\eta=-E_tV_t/K$，故对 $\eta$ 的导数带�
 \end{equation}
 经验阈值 $\kappa>10^{6}$ 视为弱可识别。
 
-\textbf{结论（为什么需要月尺度）}：$A_t$ 中的 $W_t f(T_t)$ 在年尺度上被平均成接近常数的因子，
-使 $\bm{b}_t$ 的前两个分量与 $k,\eta$ 的分量高度相关，$\kappa$ 迅速增大；
-月尺度保留了"春季大风、夏季生长"的相位差，$\bm{S}$ 的列才可能张成四维空间。
-同理，要单独识别 $k$，必须让 $E_t$ 在年内有足够变差——这就是为什么 $E$ 必须用\textbf{日最大风速}构造，
-而不是月均风速（见 \S\ref{sec:t1}）。
+\textbf{结论（为什么需要月尺度）}：$\overline W_t$ 由年内储水过程给出，降水、蒸散与灌溉的季节相位
+决定储水何时耗尽、多少水成为排水。若只用年总量，储水记忆与排水被抹掉，$\overline W$ 退化为供需比的代数函数，
+$\bm{b}_t$ 的第一分量随之失去年际变差。同理，要单独识别 $k$，必须让 $E_t$ 有足够变差——
+这就是为什么 $E$ 必须先在\textbf{日最大风速}上计算再聚合（见 \S\ref{sec:t1}）。
+即便如此，$k$ 与 $\eta$ 在现有数据上仍弱可识别，只作情景（第~\ref{sec:diag} 节）。
 
 \subsection{字段的质量门槛（作为数据约束）}
 
@@ -272,8 +275,10 @@ $\partial E_{\mathrm{eff}}/\partial\eta=-E_tV_t/K$，故对 $\eta$ 的导数带�
 \toprule
 字段 & 取值域约束 & 质量门槛 \\
 \midrule
-$V$ & $0\le V\le 100$ & 单站训练期缺失率 $\le 20\%$；否则该站不参与标定 \\
-$W$ & $0\le W\le 1$ & 缺失率 $\le 10\%$；且与第二来源的秩相关 $\ge 0.3$ \\
+$V$ & $0\le V\le 100$ & 逐像元 QA 0/1；合成期有效像元 $\ge50\%$（75\% 作敏感性）；年度 $\ge2$ 个有效生长季月；
+单站训练期缺失率 $\le 20\%$，否则不参与标定；不插补 \\
+$P,ET_0$ & $P\ge0$，$ET_0\ge0$ & 12 个完整月；同源；不插补 \\
+$M$ & $0\le M\le C$ & 模拟量；每子步水量平衡残差为数值零 \\
 $T,T^{\max},T^{\min}$ & $-40\le T\le 50$，且 $T^{\min}\le T\le T^{\max}$
 & 物理一致性违反数 $=0$；与第二来源偏差 $|\Delta T|\le 3$\textdegree C \\
 $E$ & $E\ge0$，且 $\mathrm{median}(E)>0$ & 若 $>50\%$ 的月份 $E=0$，说明口径把信号抹平，须重算 \\
@@ -287,28 +292,44 @@ $\lambda$ & $0<\lambda<1$ & 事件数 $\ge 10$，否则只能给区间不能给�
 \section{任务一：植被—水分—风沙耦合动力学}\label{sec:t1}
 % =============================================================================
 
-\subsection{建模思路：把一年的变化拆成三个可解释的过程}
+\paragraph{复核更正（2026-11-10）。}
+原稿把水分写成逐年外生的代数供需比，不携带储水记忆；年平均温度因子与有效增长率重复计入；
+风指数先取月值再套非线性公式；半衰期误用连续时间式；稳态直接取给定水分下的解析式。
+现改为“年度植被＋年内有效储水”两个状态的耦合模型，参数按一步转移合并标定，
+未经现场标定的水分与风损伤参数明确列为情景。本节只规定模型、参数和约束，计算结果另文报告。
+题目并未给定数值权重、灌溉定额或工程预算；本节的情景值均不冒充题干常数。
 
-题目要求"植被覆盖度与土壤有效含水量耦合"，背景又强调风沙。若直接把覆盖度写成时间的函数，
-就只剩拟合而没有机理。因此把一年的变化拆成三块，每块都有独立物理含义，再用两个耦合通道连起来：
+\subsection{建模思路：两个状态、两种时间尺度}
 
+题目要求“植被覆盖度与土壤有效含水量耦合”，背景又强调风沙。若直接把覆盖度写成时间的函数，
+就只剩拟合而没有机理。因此设两个状态：
+\begin{itemize}
+\item $V_t$：第 $t$ 年生长季（6--9 月）NDVI 派生的覆盖指标，沿用端元 $0.05/0.85$，按年更新。
+它\textbf{不是}直接测量的地面覆盖率，也不是年末覆盖率。
+\item $M_j$：根区高于凋萎点的可利用储水量（mm），$0\le M_j\le C$，在年内数值子步 $j$ 上更新，并跨年携带；
+$M_j/C$ 是有效水分比例。
+\end{itemize}
+一年的植被变化拆成三块，每块都有独立物理含义：
 \begin{enumerate}
-\item \textbf{生长}：水分充足、温度适宜时覆盖度上升，但受资源上限约束（Logistic 型）；
+\item \textbf{生长}：蒸腾需求得到满足时覆盖度上升，但受资源上限约束（Logistic 型）；
 \item \textbf{衰亡}：自然枯死，与现存覆盖度成正比（一阶衰减）；
 \item \textbf{风蚀损伤}：风沙打磨与埋压使覆盖度下降；而植被越密、地表越粗糙，风蚀越弱。
 \end{enumerate}
 
-\textbf{两个耦合通道}：水分 $W$ 进入生长项（水限制生长）；覆盖度 $V$ 进入风蚀项（植被削弱风蚀），
-风蚀再反过来削减植被。这样"植被—水分—风沙"两两有反馈，且没有引入无法标定的额外状态。
+\textbf{三个耦合通道}：(i) 储水经年实际/潜在蒸腾比 $\overline W_t$ 进入生长项（水限制生长）；
+(ii) 覆盖度经覆盖代理 $f_{c,t}$ 决定潜在蒸腾（植被越多耗水越多）；
+(iii) 覆盖度进入风蚀遮蔽因子，风蚀再反过来削减植被。
+\textbf{计算次序}：年内固定 $V_t$，逐子步更新 $M_j$ 并累计 $\overline W_t$；年末由 $\overline W_t$ 更新植被，
+年末储水作为下一年初值。记 $\mathcal J_t$ 为第 $t$ 年的子步集合。
 
-\subsection{状态方程与逐项解释}
+\subsection{植被年更新方程与逐项解释}
 
 \begin{equation}\label{eq:t1}
 \boxed{\;
 V_{t+1}=V_t
-+\underbrace{r\,V_t\Big(1-\frac{V_t}{K}\Big)W_t\,f(T_t)}_{\text{生长项 }G}
--\underbrace{d\,V_t}_{\text{衰亡项 }L}
--\underbrace{k\,E_{\mathrm{eff},t}\,V_t}_{\text{风蚀项 }D}
++\underbrace{r\,V_t\Big(1-\frac{V_t}{K}\Big)\overline W_t}_{\text{生长项}}
+-\underbrace{d\,V_t}_{\text{衰亡项}}
+-\underbrace{k\,E_{\mathrm{eff},t}\,V_t}_{\text{风蚀项}}
 \;}
 \end{equation}
 
@@ -317,40 +338,81 @@ V_{t+1}=V_t
 \toprule
 符号 & 含义 & 单位 & 类型 \\
 \midrule
-$V_t$ & 第 $t$ 年末植被覆盖度（状态变量） & \% & 观测/派生 \\
-$W_t$ & 根区水分胁迫（0 全干，1 不受限） & — & 观测/归一 \\
-$T_t$ & 年平均气温 & \textdegree C & 观测 \\
+$V_t$ & 第 $t$ 年生长季 NDVI 派生覆盖指标（状态变量） & \% & 观测/派生 \\
+$M_j$ & 子步 $j$ 的根区可利用储水（状态变量），$0\le M_j\le C$ & mm & 模拟 \\
+$\overline W_t$ & 年实际/潜在蒸腾比（0 全干，1 不受限），不是 $M$ 的别名 & — & 派生 \\
 $E_{\mathrm{eff},t}$ & 有效侵蚀强度（经植被遮蔽修正） & — & 派生 \\
 $K$ & 局地承载上限（覆盖度上限） & \% & 由 $V$ 定 \\
-$r$ & 内在增长率 & a$^{-1}$ & 标定 \\
+$r$ & 有效增长率（已含年尺度温度影响） & a$^{-1}$ & 标定 \\
 $d$ & 自然衰亡率 & a$^{-1}$ & 标定 \\
-$k$ & 风蚀损伤系数 & — & 标定 \\
-$\eta$ & 植被遮蔽系数（0 无遮蔽，1 完全遮蔽） & — & 标定 \\
-$f(T)$ & 温度响应因子，$f\in[0,1]$ & — & 设定 \\
+$k$ & 风蚀损伤系数 & — & 情景 \\
+$\eta$ & 植被遮蔽系数（0 无遮蔽，1 完全遮蔽） & — & 情景 \\
+$f(T)$ & 温度响应因子，仅用于潜在蒸腾的季节分配 & — & 设定 \\
 \bottomrule
 \end{tabularx}
-\caption{任务一的状态、参数与单位}\label{tab:t1sym}
+\caption{任务一植被方程的状态、参数与单位（水分参数见表~\ref{tab:t1par}）}\label{tab:t1sym}
 \end{table}
 
 \paragraph{逐项解释。}
 \begin{itemize}
-\item \textbf{生长项} $G=rV(1-V/K)Wf(T)$：$rV$ 是"每株每年能长多少"（指数增长）；
+\item \textbf{生长项} $rV(1-V/K)\overline W$：$rV$ 是“每株每年能长多少”（指数增长）；
 $(1-V/K)$ 是\textbf{资源饱和因子}——$V\to K$ 时它趋于 0，保证覆盖度不会无限增长；
-再乘 $W$（水不够就长不动）与 $f(T)$（太冷不长）。三项相乘意味着\textbf{三个条件必须同时满足}才生长，
-这是连乘而不是相加的原因：水、热、资源是"与"关系，不是"或"关系。
-\item \textbf{衰亡项} $L=dV$：每年固定比例枯死，对应一阶线性衰减，半衰期 $\ln2/d$。
-\item \textbf{风蚀项} $D=kE_{\mathrm{eff}}V$：$V$ 是可被损伤的植被量，$kE_{\mathrm{eff}}$ 是单位植被的\textbf{相对}损伤率。
+再乘 $\overline W$（蒸腾需求得不到满足就长不动）。资源与水分是“与”关系，故连乘而不相加。
+年尺度温度影响并入有效增长率 $r$，\textbf{不得再将年平均温度因子乘入生长项}，否则温度被重复计入；
+$f(T)$ 只在式~\eqref{eq:m1demand} 中分配潜在蒸腾的季节。这是一种简化假设，不是温度恒定的实证结论。
+\item \textbf{衰亡项} $dV$：每年固定比例枯死。无水且 $k=0$ 时 $V_{t+1}=(1-d)V_t$，
+\textbf{离散半衰期}为 $\log(1/2)/\log(1-d)$，不是连续时间的 $\ln2/d$。
+\item \textbf{风蚀项} $kE_{\mathrm{eff}}V$：$V$ 是可被损伤的植被量，$kE_{\mathrm{eff}}$ 是单位植被的\textbf{相对}损伤率。
 $k\ge0$ 是物理约束（风蚀只会减少植被）。
+\item \textbf{零植被是吸收态}：$V_t=0$ 时右端恒为 0。水本身不凭空产生植株，新植区必须给出显式建植初值。
 \end{itemize}
 
-\subsection{辅助关系：遮蔽、温度响应、侵蚀强度、承载上限}
+\subsection{有效储水的年内收支}
+
+每个月的降水 $P$、参考蒸散 $ET_0$ 及分配到该月的灌溉均匀分到当月各天，构成数值子步 $j$。
+这是数值离散假设，\textbf{不能称为真实逐日天气}。子步 $j$ 的潜在蒸腾为
+\begin{equation}\label{eq:m1demand}
+D_j=c\,\min(1,2f_{c,t})\,f(T_j)\,ET_{0,j},\qquad
+f_{c,t}=\clip{V_t/V_{\rm full},\,0,\,1},\qquad j\in\mathcal J_t .
+\end{equation}
+$f_c$ 只是采用局地端元的覆盖代理，$V_{\rm full}$ 由局地绿洲 NDVI 端元换算；
+遥感绿洲高分位不证明真实冠层完全闭合。年毛灌溉 $I_t$（mm/年）按各月 $f(T)ET_0$ 的占比分到月，
+再均分到日，得子步毛灌溉 $I_j$。
+
+设有效降水比例 $\alpha_P$、净可蒸腾灌溉比例 $\eta_w$、地下补给 $G_j$，则
+\begin{align}
+B_j&=M_j+\alpha_PP_j+\eta_wI_j+G_j,\label{eq:m1bal}\\
+Q_j&=\max(B_j-C,0),\qquad B'_j=B_j-Q_j,\notag\\
+K_{s,j}&=\min\Big\{1,\ \frac{B'_j}{(1-p)C}\Big\},\qquad
+T_{a,j}=\min(B'_j,\ K_{s,j}D_j),\notag\\
+M_{j+1}&=B'_j-T_{a,j},\notag\\
+\overline W_t&=\frac{\sum_{j\in\mathcal J_t}T_{a,j}}{\sum_{j\in\mathcal J_t}D_j}
+\quad(\text{分母为零时取 }\overline W_t=0).\label{eq:m1W}
+\end{align}
+每一步严格满足水量平衡
+\begin{equation}\label{eq:m1cons}
+M_{j+1}-M_j=\alpha_PP_j+\eta_wI_j+G_j-T_{a,j}-Q_j .
+\end{equation}
+
+\paragraph{每一式的含义。}
+\begin{itemize}
+\item $B_j$ 是当步可用水，$Q_j$ 是超出容量 $C$ 的深层排水：储水满了再灌水只会流失，不会提高 $\overline W$。
+\item $K_{s,j}$ 是 FAO-56 型胁迫系数：储水高于 $(1-p)C$ 时不受胁迫，低于此值线性下降；
+$T_{a,j}$ 不能超过可用水。
+\item 截留、土壤蒸发和无效灌溉损失已包含在 $\alpha_P$、$\eta_w$ 中，\textbf{不再重复扣除}。
+\item 储水与胁迫的结构参考 FAO-56 第 8 章；具体离散化和系数是本队情景设定，不是 FAO 给出的当地实测值。
+\item 初始储水 $M_0$ 是情景条件；若初始储水需人工灌入，必须计入供水账。
+水量按 mm 和每公顷输出，$1$ mm $=10$ m$^3$/ha。
+\end{itemize}
+
+\subsection{辅助关系：遮蔽、温度响应、风指数、承载上限}
 
 \begin{align}
 E_{\mathrm{eff},t}&=E_t\Big(1-\eta\frac{V_t}{K}\Big),\label{eq:eeff}\\
-f(T_t)&=\min\Big\{1,\ \max\Big\{0,\ \frac{T_t-5}{20}\Big\}\Big\},\label{eq:fT}\\
-E_t&=\frac{q_t}{\overline{q}},\qquad
-q_t=C\frac{\rho}{g}u_{*t}^{2}\big(u_{*t}-u_{*T}\big),\qquad
-u_{*t}=\frac{\kappa\,u_{10,t}^{\max}}{\ln(10/z_0)},\label{eq:lettau}\\
+f(T)&=\min\Big\{1,\ \max\Big\{0,\ \frac{T-5}{20}\Big\}\Big\},\label{eq:fT}\\
+q_i&=u_i^{2}\max(u_i-u_T,0),\qquad
+\tilde E_t=\frac{1}{n_t}\sum_{i\in t}\frac{q_i}{\bar q},\qquad
+E_t=\frac{\tilde E_t}{\operatorname{mean}_{\tau\in\mathcal T_{\rm train}}\tilde E_\tau},\label{eq:lettau}\\
 K&=1.15\times Q_{0.95}\big(\{V_t\}_{t\in\mathcal{T}_{\mathrm{train}}}\big).\label{eq:K}
 \end{align}
 
@@ -359,45 +421,45 @@ K&=1.15\times Q_{0.95}\big(\{V_t\}_{t\in\mathcal{T}_{\mathrm{train}}}\big).\labe
 \item 式~\eqref{eq:eeff}：遮蔽因子 $(1-\eta V/K)$ 随覆盖度线性下降，$\eta=0$ 表示植被完全不挡风，
 $\eta=1$ 表示覆盖度达到上限时风蚀被完全屏蔽。线性形式是可标定的最简形式；
 若用指数形式 $\exp(-\eta V/K)$，参数含义不变但多一处非线性，年尺度数据不足以区分两者。
-\item 式~\eqref{eq:fT}：梯形温度响应。低于 5\textdegree C 不生长（避免冬季虚假增长），
-5--25\textdegree C 线性上升，高于 25\textdegree C 不再额外促进（避免高温月份高估）。
-\item 式~\eqref{eq:lettau}：Lettau 输沙公式给出\textbf{单位宽度}质量通量 $q$（kg\,m$^{-1}$s$^{-1}$）。
-其中 $\kappa=0.40$ 为卡门常数，$z_0$ 为粗糙度长度，$u_{*}$ 为摩擦速度，$u_{*T}$ 为起沙阈值对应的摩擦速度，
-$C,\rho,g$ 为经验系数、空气密度与重力加速度。
-\textbf{为什么要归一成无量纲指数}：$q$ 要变成"某区段每年多少吨"必须再知道区段宽度、面积与时间，
-而题目没给；强行换算会造成量纲不闭合。因此只用站内归一 $E_t=q_t/\overline q$，
-它表达"相对风蚀强度"（1 表示与多年平均相当），不承担绝对输沙量的解释。
-\item 式~\eqref{eq:K}：$Q_{0.95}$ 是训练期 $V$ 的 95\% 分位，乘 1.15 作为安全系数。
+\item 式~\eqref{eq:fT}：梯形温度响应，$T$ 取月均气温。低于 5\textdegree C 不蒸腾，
+5--25\textdegree C 线性上升，高于 25\textdegree C 不再额外增加。它只决定潜在蒸腾和灌溉在年内的分配。
+\item 式~\eqref{eq:lettau}：$u_i$ 为第 $i$ 日 10 m 日最大风速，$u_T$ 为起沙阈值（基准 5 m/s，情景值）。
+$q_i$ 是 Lettau 型非线性代理 $q\propto u^2(u-u_T)_+$，比例常数在归一中消去。
+\textbf{先对日值计算非线性代理，再聚合}：日代理以站内训练期日均值 $\bar q$ 归一，
+对第 $t$ 年的 $n_t$ 天取均值得 $\tilde E_t$，再以训练期年均归一，使训练期 $E$ 均值为 1。
+$E_t$ 是相对风蚀强度，\textbf{不是实测输沙通量或沙尘暴发生次数}；
+换算成“每年多少吨”须知道区段宽度、面积与时间，而题目没给。
+\item 式~\eqref{eq:K}：$Q_{0.95}$ 是该站训练期 $V$ 的 95\% 分位，乘 1.15 作为安全系数。
 用分位而非最大值，是为了避免单年异常（如灌溉绿洲）把上限抬高。
 \end{itemize}
 
-\begin{remark}[为什么用日最大风速构造 $E$]
-若用月均风速 $u_{10}$ 代入式~\eqref{eq:lettau}，在干旱区月均风速常低于起沙阈值，
-$q$ 在多数月份被截断为 0，$E$ 退化成一列零，$k$ 必然标定为 0。
-这不是"风蚀不重要"，而是"口径把信号抹掉了"。沙粒起动由阵风控制，
-因此必须用\textbf{日最大风速}（或其月内均值）作为 $u_{10}^{\max}$。
+\begin{remark}[为什么用日最大风速、且先算后聚合]
+若用月均风速代入非线性代理，干旱区月均风速常低于起沙阈值，$q$ 在多数月份被截断为 0，
+$E$ 退化成一列零，$k$ 必然标定为 0。这不是“风蚀不重要”，而是“口径把信号抹掉了”。
+同理，月产品中的“日最大风速月均”先平均后代入，也会因非线性低估强风日的贡献。
+沙粒起动由阵风控制，因此必须对\textbf{日最大风速}逐日计算后再聚合。
 \end{remark}
 
-\subsection{无量纲化与稳态解}
+\subsection{无量纲化、条件稳态与耦合不动点}
 
 令 $x_t=V_t/K\in[0,1]$ 为\textbf{相对覆盖度}，代入式~\eqref{eq:t1} 并两边除以 $K$：
 \begin{equation}\label{eq:x}
-x_{t+1}=x_t\Big[1+r(1-x_t)W_tf(T_t)-d-kE_t(1-\eta x_t)\Big].
+x_{t+1}=x_t\Big[1+r(1-x_t)\overline W_t-d-kE_t(1-\eta x_t)\Big].
 \end{equation}
-稳态要求 $x_{t+1}=x_t=x^*$。若 $x^*>0$，两边约去 $x^*$：
+若\textbf{给定} $\overline W$ 与 $E$ 不变，稳态要求 $x_{t+1}=x_t=x^*$。若 $x^*>0$，两边约去 $x^*$：
 \begin{equation}\label{eq:steady0}
-r(1-x^*)Wf(T)-d-kE(1-\eta x^*)=0,
+r(1-x^*)\overline W-d-kE(1-\eta x^*)=0,
 \end{equation}
-整理得\textbf{稳态相对覆盖度}
+整理得\textbf{给定水分下的条件稳态}
 \begin{equation}\label{eq:xstar}
-\boxed{\;x^*=\frac{r\,Wf(T)-d-kE}{r\,Wf(T)-kE\eta}\;}
+\boxed{\;x^*=\frac{r\overline W-d-kE}{r\overline W-kE\eta}\;}
 \qquad\Longrightarrow\qquad
 V^*=K\,x^*.
 \end{equation}
 
-\begin{proposition}[稳态的可行性与单调性]\label{prop:steady}
-记 $R:=rWf(T)$ 为"有效增长率"。若 $R>d+kE$，则
-(i) $x^*\in(0,1)$ 且唯一；(ii) $\partial x^*/\partial R>0$；
+\begin{proposition}[条件稳态的可行性与单调性]\label{prop:steady}
+记 $R:=r\overline W$ 为“有效增长率”，$\overline W$ 视为给定。若 $R>d+kE$，则
+(i) $x^*\in(0,1]$ 且唯一；(ii) $\partial x^*/\partial R>0$；
 (iii) $\partial x^*/\partial(kE)<0$（当 $\eta<1$）。
 \end{proposition}
 \begin{proof}
@@ -417,12 +479,24 @@ $1-x^*=\dfrac{(R-kE\eta)-(R-d-kE)}{R-kE\eta}=\dfrac{d+kE(1-\eta)}{R-kE\eta}\ge0$
 \]
 \end{proof}
 
-\paragraph{这个命题的用处。}
-(i) 给出\textbf{系统不退化的充分条件} $R>d+kE$：有效生长必须超过自然衰亡与风蚀损失之和。
-(ii) 说明\textbf{补水一定有效}：补水提高 $W$，从而提高 $R$，$x^*$ 单调上升——
-这正是任务二把"补水 $I_t$"当作决策变量的合法性来源。
-(iii) 说明\textbf{风蚀一定有害}，且 $\eta$ 越接近 1（遮蔽越强）危害越小，
-这为"沙障＋植被"的组合措施提供了理论依据。
+\paragraph{耦合不动点。}
+$\overline W_t$ 依赖 $V_t$（经式~\eqref{eq:m1demand}）和年初储水，因此式~\eqref{eq:xstar} 只是\textbf{条件关系}，
+不能直接当作长期状态。给定月气候态与灌溉定额 $I$，记年映射
+$\Phi:(V_t,M_{t,0})\mapsto(V_{t+1},M_{t+1,0})$，长期状态取周期不动点
+\begin{equation}\label{eq:fixed}
+(V^*,M^*)=\Phi(V^*,M^*;\,I,\text{气候态}),\qquad
+\max\{|V_{n+1}-V_n|,\ |M_{n+1}-M_n|\}<\varepsilon .
+\end{equation}
+迭代须从低、高两个初值出发核对是否收敛到同一点；达到最大迭代次数仍未收敛的必须显式标记，
+不能把最后一次迭代值当作稳态。
+
+\paragraph{这些结论的用处与边界。}
+(i) 给出\textbf{给定水分下不退化的条件} $R>d+kE$：有效生长必须超过自然衰亡与风蚀损失之和。
+(ii) 补水只有在储水胁迫起作用（$K_s<1$）时才提高 $\overline W$；储水已满时多灌的水成为排水 $Q$。
+同时覆盖增加会提高潜在蒸腾、压低 $\overline W$，形成负反馈。因此补水效果须由式~\eqref{eq:fixed} 计算，
+且在水分参数未经现场标定前只是情景结论。
+(iii) 风蚀有害，且 $\eta$ 越接近 1（遮蔽越强）危害越小，这为“沙障＋植被”组合提供了定性依据；
+$k$ 尚无实测，不能据此报告减蚀百分比。
 
 \subsection{参数、约束与标定}
 
@@ -431,96 +505,130 @@ $1-x^*=\dfrac{(R-kE\eta)-(R-d-kE)}{R-kE\eta}=\dfrac{d+kE(1-\eta)}{R-kE\eta}\ge0$
 \begin{table}[H]\centering\small
 \begin{tabularx}{\textwidth}{|c|c|X|X|}
 \toprule
-参数 & 处理方式 & 理由 & 取值域（约束） \\
+参数 & 处理方式 & 理由 & 基准值与范围（约束） \\
 \midrule
-$K$ & 固定（式~\eqref{eq:K}） & 自由拟合必顶到边界，不可识别 & $K>0$ \\
-$r,d,k,\eta$ & 标定 & 决定动态快慢与风蚀强度 & $r\in[0.02,1.5]$，$d\in[0,0.3]$，
-$k\in[0,0.5]$，$\eta\in[0,0.95]$ \\
-$f(T)$ 形式 & 固定 & 常规温度响应，避免过拟合 & — \\
-$W_t,E_t,T_t$ & 直接用观测/派生 & 不另造状态，避免量纲问题 & 见表~\ref{tab:quality} \\
-$u_{*T},z_0,C$ & 取文献常用值 & 无法逐站校准 & — \\
+$K$ & 固定（式~\eqref{eq:K}） & 自由拟合不可识别 & 各站训练期 $1.15Q_{0.95}(V)$ \\
+$r,d$ & 合并标定 & 训练目标年不晚于 2022 年的站点转移；灌溉绿洲假定 $\overline W=1$ & 见式~\eqref{eq:box}、\eqref{eq:nonneg} \\
+$k,\eta$ & 情景 & 风损伤与输沙缺测 & 基准 $k=0,\ \eta=1$；$k\in[0,0.10]$ \\
+$C$ & 情景 & 无当地土壤水力与根深实测 & $75$ mm（$30$--$150$） \\
+$p$ & 情景 & FAO-56 型易耗水比例（与任务二策略下标 $p$ 无关） & $0.5$（$0.3$--$0.7$） \\
+$c$ & 情景 & 蒸腾系数 & $1$（$0.7$--$1.2$） \\
+$\eta_w$ & 情景 & 净可蒸腾灌溉比例，含灌溉损失 & $0.75$（$0.65$--$0.85$） \\
+$\alpha_P$ & 情景 & 有效降水比例，含截留与土壤蒸发 & $0.25$（$0$--$1$） \\
+$G$ & 情景 & 地下补给缺测 & $0$ \\
+$V_{\rm full}$ & 设定 & 局地绿洲 NDVI 端元换算 & 作端元敏感性 \\
+$f(T)$ 形式、$u_T$ & 固定 & 常规温度响应与起沙阈值 & — \\
 \bottomrule
 \end{tabularx}
 \caption{任务一的参数处理}\label{tab:t1par}
 \end{table}
 
+水分参数没有由不完整的 SoilGrids 数据拟合，\textbf{不得宣称水分响应已获现场标定}。
+灌溉绿洲标定时假定 $\overline W=1$，尚无灌溉实测验证这一假定。
+$k=0,\eta=1$ 是基准情景，不能把零估计解释为风蚀不存在。
+
 \subsubsection{约束条件}
 
-标定问题必须满足三类约束，缺一不可：
-
 \begin{align}
-&\text{（盒约束）} && \theta=(r,d,k,\eta)\in\Theta=[0.02,1.5]\times[0,0.3]\times[0,0.5]\times[0,0.95],\label{eq:box}\\
-&\text{（非负性）} && d+kE_{\max}\le 1,\quad\text{保证 }V_{t+1}\ge V_t(1-d-kE_{\mathrm{eff}})\ge0,\label{eq:nonneg}\\
-&\text{（物理符号）} && k\ge0,\quad \eta\ge0,\quad r>0,\quad d\ge0.\label{eq:sign}
+&\text{（年步长安全域）} && 0\le r\le1,\quad 0\le\eta\le1,\quad 0\le V_t\le K,\label{eq:box}\\
+&\text{（非负性）} && d+kE_t\le 1,\quad\text{保证 }V_{t+1}\ge V_t(1-d-kE_{\mathrm{eff},t})\ge0,\label{eq:nonneg}\\
+&\text{（物理符号）} && k\ge0,\quad d\ge0,\quad 0\le\overline W_t\le1,\label{eq:sign}\\
+&\text{（水分）} && 0\le M_j\le C,\ C>0,\ c>0,\ 0\le p<1,\ 0\le\alpha_P,\eta_w\le1,\ G_j\ge0,\ I_t\ge0.\label{eq:m1box}
 \end{align}
-式~\eqref{eq:nonneg} 常被忽略：若 $d+kE$ 超过 1，模型会给出负覆盖度，
-后续所有对数、比值与马尔可夫链都会失效。
+$r\le1$ 时 $g(V)=V+rV(1-V/K)$ 在 $[0,K]$ 上单调且 $g(K)=K$，保证 $V_t\le K\Rightarrow V_{t+1}\le K$，
+不出现离散 Logistic 的过冲振荡。若 $d+kE$ 超过 1，模型会给出负覆盖度，后续比值与马尔可夫链都会失效。
+\textbf{域外参数应缩短时间步长并重新标定，不能用截断掩盖问题}；
+重采样中超出安全域的参数只报告，不直接投入水分情景。
 
 \subsubsection{标定问题}
 
+只用不受水限制（$\overline W=1$）且 $k=0$ 的灌溉绿洲站点，以\textbf{一步转移}为目标、各站\textbf{合并}标定 $(r,d)$：
 \begin{equation}\label{eq:obj}
-\min_{\theta\in\Theta}\ J(\theta)=\frac{1}{N}\sum_{t=1}^{N}\Big(V_t^{\mathrm{mod}}(\theta)-\tilde V_t\Big)^2
+\min_{(r,d)}\ J(r,d)=\frac{1}{N}\sum_{(s,t)\in\mathcal T_{\rm train}}
+\Big(\tilde x_{s,t}\big[1+r(1-\tilde x_{s,t})-d\big]-\tilde x_{s,t+1}\Big)^2,
 \end{equation}
-其中 $V_t^{\mathrm{mod}}(\theta)$ 由式~\eqref{eq:t1} 从初始观测 $\tilde V_0$ 逐年递推得到，$N$ 为训练年数。
+其中 $\tilde x_{s,t}=\tilde V_{s,t}/K_s$ 为站 $s$ 的观测相对覆盖，$\mathcal T_{\rm train}$ 为目标年 $t+1\le2022$、
+两端均有不少于两个有效生长季月份的转移，$N=|\mathcal T_{\rm train}|$。
+每一步都以上一年\textbf{实测值}为起点，而不是从初值自由递推多年。
 
-\paragraph{为什么不用梯度法（Newton/Levenberg--Marquardt）作为主算法。}
-目标函数通过逐年递推定义，梯度需靠式~\eqref{eq:sens} 的灵敏度递推得到；理论上可算，
-但 $J(\theta)$ 在边界处不可微（$k=0$ 被截断），且只有 4 个参数，二阶方法的实现与调参成本高于收益。
-
-\paragraph{为什么用坐标下降＋多起点，而不是遗传算法/粒子群。}
-(i) 参数只有 4 个、每个都有明确物理区间，坐标下降的每步都可在区间内解释；
-(ii) 目标函数无解析梯度但有界，坐标下降不需要求导、不会因步长发散；
-(iii) 多起点（本文取 25 组）用于跳出局部极小；
-(iv) 遗传算法/粒子群引入随机性且需要调种群规模，对本问题属于"用大炮打蚊子"。
+\paragraph{为什么用有界最小二乘，而不再用坐标下降＋多起点。}
+式~\eqref{eq:obj} 的残差对 $(r,d)$ 是\textbf{线性}的，$J$ 是凸二次函数；
+设计矩阵满秩时，带界约束的最小二乘有唯一全局解，不需要多起点或随机搜索。
+参数的局部近似协方差取 $\hat\sigma^2(\bm J^\top\bm J)^{-1}$，再以\textbf{站点整簇自助法}给出区间：
+同一站的逐年转移相关，按年重采样会低估不确定性。
 
 \begin{algorithm}[H]
-\caption{任务一参数标定（坐标下降＋多起点）}\label{alg:t1}
+\caption{任务一参数标定（一步转移合并最小二乘）}\label{alg:t1}
 \begin{algorithmic}[1]
-\Require 训练期观测 $\{\tilde V_t,W_t,E_t,T_t\}_{t=1}^{N}$，上限 $K$，重复次数 $M$
-\Ensure 参数 $\hat\theta$，拟合值 $\{V_t^{\mathrm{mod}}\}$
-\State 由式~\eqref{eq:K} 计算 $K$
-\For{$m=1$ \textbf{to} $M$}
-  \State 在 $\Theta$ 内均匀随机取初值 $\theta^{(0)}$
-  \For{步长 $\Delta\in\{0.30,0.15,0.08,0.04,0.02,0.01,0.008\}$}
-    \Repeat
-      \For{每个参数 $p=1,\dots,4$}
-        \State 试探 $\theta_p\pm\Delta$（截断到区间），计算 $J$（式~\eqref{eq:obj}）
-        \State 若下降则接受，否则回退
-      \EndFor
-    \Until{本轮无改进}
-  \EndFor
-  \State 记录 $J(\theta^{(m)})$
+\Require QA 后的年覆盖 $\{\tilde V_{s,t}\}$，自助次数 $B$
+\Ensure $(\hat r,\hat d)$，局部与整簇自助区间，留出检验指标
+\State 按训练期生长季缺失比例（$\le20\%$）确定入选站点，\textbf{不用验证期成绩筛站}
+\State 各站由式~\eqref{eq:K} 计算 $K_s$（只用训练期）
+\State 构造训练转移 $\mathcal T_{\rm train}$（目标年 $\le2022$）与留出转移（目标年 2023--2025）
+\State 求解有界最小二乘式~\eqref{eq:obj}，记录 $\kappa(\bm J^\top\bm J)$ 与局部协方差
+\For{$b=1$ \textbf{to} $B$}
+  \State 有放回抽取整站，重拟合式~\eqref{eq:obj}，记录 $(r^{(b)},d^{(b)})$
 \EndFor
-\State \Return $\hat\theta=\arg\min_m J(\theta^{(m)})$ 及其轨迹
+\State 标记超出式~\eqref{eq:box}、\eqref{eq:nonneg} 的重采样参数
+\State 在留出转移上计算式~\eqref{eq:rmse}、\eqref{eq:oneyr}，并与持续性基线对照
+\State \Return $(\hat r,\hat d)$、自助分位区间与检验指标
 \end{algorithmic}
 \end{algorithm}
 
-\paragraph{复杂度与停止准则。}每次 $J$ 的计算是 $O(N)$；一次完整坐标下降约 $7\times60\times8$ 次目标函数调用；
-25 组多起点总计算量约 $10^{5}$ 次递推，单站秒级完成。
-停止准则为"步长降到 $0.008$ 且一整轮无改进"。
+\paragraph{数据约束。}
+MODIS 必须逐像元匹配 QA，仅保留可靠性为 0 或 1 的像元；合成期有效像元不少于一半，
+并用 75\% 门槛作敏感性检查。年度覆盖需至少两个有效生长季月份；插补值不用于标定和评分。
+站点准入按训练期生长季缺失比例不超过 20\% 判断。
 
 \subsubsection{可识别性诊断（对应式~\eqref{eq:cond}）}\label{sec:diag}
 
-标定完成后必须报告 $\kappa(\bm{S}^{\top}\bm{S})$ 与各参数的置信区间（可用残差自助法得到）。
+标定完成后必须报告 $\kappa(\bm J^{\top}\bm J)$（或 $\kappa(\bm S^\top\bm S)$）与各参数的整簇自助区间。
+站点簇很少时区间会很宽，应如实报告。
 若某参数的区间覆盖整个取值域，则该参数\textbf{不可识别}，只能作为情景参数进入任务二、三，
-并在正文明确写"未识别"，而不是假装估出了真值。
+并在正文明确写“未识别”，而不是假装估出了真值。
+
+\paragraph{结构不可识别的例子。}
+在不受水限制且 $k=0$ 的区段自由拟合中，式~\eqref{eq:t1} 化为
+\begin{equation}\label{eq:ident}
+V_{t+1}=(1+a)V_t-bV_t^2,\qquad a=r-d,\quad b=r/K,
+\end{equation}
+递推只含 $a,b$ 两个组合，所以自由的 $r,d,K$ \textbf{不可分别识别}；
+自由 $r,d$ 与站点标定值“一致”不能作为机理证据。区段像元按后期变绿筛选，建立年份也使用未来观测，
+因此 CON4 等区段只能作\textbf{回溯空间诊断}，不能作为独立预测验证。
 
 \subsection{检验指标}
 
 \begin{align}
-R^2&=1-\frac{\sum_t(\hat V_t-\tilde V_t)^2}{\sum_t(\tilde V_t-\bar{\tilde V})^2},\label{eq:r2}\\
-\mathrm{RMSE}&=\sqrt{\tfrac{1}{N}\sum_t(\hat V_t-\tilde V_t)^2},\label{eq:rmse}\\
-e^{\mathrm{1yr}}_t&=\big|\hat V_{t+1|t}-\tilde V_{t+1}\big|,\qquad
+R^2&=1-\frac{\sum_t(\hat x_t-\tilde x_t)^2}{\sum_t(\tilde x_t-\bar{\tilde x})^2},\label{eq:r2}\\
+\mathrm{RMSE}&=\sqrt{\tfrac{1}{N}\sum_t(\hat x_t-\tilde x_t)^2},\label{eq:rmse}\\
+e^{\mathrm{1yr}}_t&=\big|\hat x_{t+1|t}-\tilde x_{t+1}\big|,\qquad
 \text{（以上一年实测为初值，只推一年）}\label{eq:oneyr}
 \end{align}
-并设\textbf{持续性基线} $\hat V^{\mathrm{pers}}_{t+1}=\tilde V_t$：若模型的一年外推误差
-不优于"下一年等于今年"，则模型没有提供增量信息（式~\eqref{eq:oneyr} 与基线的比较是必须报告的）。
+误差均以 $V/K$ 计。必须同时报告两条基线：\textbf{持续性基线} $\hat x^{\mathrm{pers}}_{t+1}=\tilde x_t$，
+以及只用训练期的\textbf{站点均值基线}。若模型的留出一年外推误差不优于“下一年等于今年”，
+则模型没有提供增量信息；相对总体均值的 $R^2$ 不能据此宣称胜过持续性。
+从 2022 年出发连续递推 2023--2025 的结果须单独报告，不与逐年以实测为起点的一步预测混为一谈。
+水分子模型须报告各子步式~\eqref{eq:m1cons} 的最大残差。
 
 \subsection{敏感性设计（只给设计，不给结果）}
 
-固定 $(r,d,\eta)$，令 $k$ 在 $\{0,0.02,0.05,0.1\}$ 上取值，重算 $x^*$（式~\eqref{eq:xstar}），
-考察 $\Delta x^*/x^*$；同时令 $W$ 在 $\pm20\%$ 内变动，得到"风蚀 vs 水分"的相对重要性曲面。
-这是把"$k$ 不可识别"转化为"若 $k$ 取某值，结论会怎样"的标准做法。
+\begin{itemize}
+\item \textbf{风损伤}：令 $k\in\{0,0.02,0.05,0.10\}$、$\eta$ 在 $[0,1]$ 内取值，比较耦合不动点式~\eqref{eq:fixed}
+的相对变化，把“$k$ 不可识别”转化为“若 $k$ 取某值，结论会怎样”。
+\item \textbf{水分参数}：$C,p,c,\eta_w,\alpha_P$ 按表~\ref{tab:t1par} 的范围单因素变动，
+同时考察灌溉定额 $I$，得到“风蚀 vs 水分”的相对重要性。
+\item \textbf{观测口径}：QA 有效像元门槛 50\%/75\%、覆盖端元与 $V_{\rm full}$。
+\end{itemize}
+敏感性一律用耦合不动点或有限期轨迹，不用给定 $\overline W$ 的式~\eqref{eq:xstar} 代替。
+
+\subsection{研究区段、单位与后续接口}
+
+研究对象为于田--民丰南缘的既有选窗沿线；1 km 宽度仅是代表性研究情景，
+不代表已核实的工程边界或可治理面积。水量按 mm 和每公顷输出，
+不得在缺乏真实区段面积时推断全工程用水量。
+后续任务必须传递 $(V,M)$ 状态：任务二按建植批次调用式~\eqref{eq:t1}、\eqref{eq:m1bal}，
+不能将新植区立即赋予稳态覆盖，也不能仅用静态曲线代替状态转移；
+任务三的漂移项必须是同一年映射 $\Phi$ 与同一组参数。
 
 % =============================================================================
 \input{m2_correction.tex}
@@ -714,20 +822,28 @@ $T$ & 评估期限 & a & 30--50 年 \\
 符号 & 含义 & 单位 & 类型 \\
 \hline
 \endhead
-$V_t$ & 植被覆盖度（状态变量） & \% & 观测/派生 \\
-$W_t$ & 根区水分胁迫（0--1） & — & 观测/归一 \\
-$T_t$ & 年平均气温 & \textdegree C & 观测 \\
+$V_t$ & 生长季 NDVI 派生覆盖指标（状态变量） & \% & 观测/派生 \\
+$M_j$ & 根区可利用储水（状态变量，年内子步） & mm & 模拟 \\
+$\overline W_t$ & 年实际/潜在蒸腾比（0--1） & — & 派生 \\
+$T$ & 月均气温（仅用于蒸腾季节分配） & \textdegree C & 观测 \\
+$P_j,ET_{0,j}$ & 子步降水、参考蒸散 & mm & 观测 \\
+$D_j,T_{a,j},Q_j$ & 潜在蒸腾、实际蒸腾、深层排水 & mm & 派生 \\
+$I_t,I_j$ & 年/子步毛灌溉 & mm & 情景控制 \\
+$f_c,V_{\rm full}$ & 覆盖代理、局地满覆盖端元 & —；\% & 派生；设定 \\
+$C,p,c$ & 储水容量、易耗水比例、蒸腾系数 & mm；—；— & 情景 \\
+$\alpha_P,\eta_w,G_j$ & 有效降水比例、净灌溉比例、地下补给 & —；—；mm & 情景 \\
 $E_t$ & 无量纲侵蚀指数 & — & 派生 \\
 $E_{\mathrm{eff},t}$ & 遮蔽修正后的有效侵蚀强度 & — & 派生 \\
 $K$ & 承载上限 & \% & 由观测定 \\
-$K_s$ & 水分胁迫系数（补水后） & — & 派生 \\
-$r$ & 内在增长率 & a$^{-1}$ & 标定 \\
+$K_s$ & FAO-56 型水分胁迫系数 & — & 派生 \\
+$r$ & 有效增长率（含年尺度温度影响） & a$^{-1}$ & 标定 \\
 $d$ & 自然衰亡率 & a$^{-1}$ & 标定 \\
-$k$ & 风蚀损伤系数 & — & 标定 \\
-$\eta$ & 植被遮蔽系数 & — & 标定 \\
-$f(T)$ & 温度响应因子 & — & 设定 \\
+$k$ & 风蚀损伤系数 & — & 情景 \\
+$\eta$ & 植被遮蔽系数 & — & 情景 \\
+$f(T)$ & 温度响应因子（蒸腾季节分配） & — & 设定 \\
 $x_t$ & 相对覆盖度 $V_t/K$ & — & 派生 \\
-$x^*$ & 稳态相对覆盖度 & — & 解析 \\
+$x^*$ & 给定水分下的条件稳态相对覆盖度 & — & 解析 \\
+$V^*,M^*$ & 耦合周期不动点 & \%；mm & 数值 \\
 $A_t$ & 累计治理面积（状态） & hm$^2$ & 决策派生 \\
 $a_t$ & 年新增治理面积（决策） & hm$^2$ & 决策 \\
 $q_{p,h}$ & 策略库逐龄补水深度 & mm/年 & 情景控制 \\
@@ -759,11 +875,11 @@ $\kappa(\cdot)$ & 矩阵条件数 & — & 诊断 \\
 公式 & 需要的字段 & 若缺该字段的降级方案 \\
 \hline
 \endhead
-式~\eqref{eq:t1} 生长项 & $V,W,T$ & 缺 $W$：用 $P/ET_0$ 构造代理并标为情景 \\
+式~\eqref{eq:t1}、\eqref{eq:m1bal} & $V,P,ET_0,T$ & 缺 $P$ 或 $ET_0$：储水无法计算，$\overline W$ 只能作情景并声明 \\
 式~\eqref{eq:fT} & $T$ & 缺 $T$：改用纬度—日序的气候态，误差计入 $f$ \\
 式~\eqref{eq:eeff}、\eqref{eq:lettau} & $u_{10}^{\max}$（日） & 只有月均：$E$ 退化，$k$ 不可识别，须声明 \\
 式~\eqref{eq:K} & $V$ 的训练期分位 & 样本不足：改用区域文献值并做敏感性 \\
-式~\eqref{eq:obj} & 全部状态序列 & 缺失：按第~\ref{sec:data} 节的门槛剔除站点 \\
+式~\eqref{eq:obj} & QA 后年覆盖与站点 $K$ & 缺失：按第~\ref{sec:data} 节的门槛剔除站点，不插补 \\
 式~\eqref{eq:water} & 各批次定额、面积、年/月供水上限 & 缺取水批复：仅作资源情景 \\
 式~\eqref{eq:threshold} & 全部经济参数 & 缺单价：给区间，结论写成条件结论 \\
 式~\eqref{eq:P} & $\lambda$、$u$ 分布 & 缺事件记录：用风速超阈频率作代理 \\
@@ -784,10 +900,16 @@ $\kappa(\cdot)$ & 矩阵条件数 & — & 诊断 \\
 参数 & 取值域 & 来源 & 是否进入敏感性 \\
 \hline
 \endhead
-$r$ & $[0.02,1.5]$ a$^{-1}$ & 标定 & 是 \\
-$d$ & $[0,0.3]$ a$^{-1}$ & 标定 & 是 \\
-$k$ & $[0,0.5]$ & 标定 & 是（多不可识别） \\
-$\eta$ & $[0,0.95]$ & 标定 & 是 \\
+$r$ & $[0,1]$ a$^{-1}$（年步长安全域） & 标定 & 是（整簇自助） \\
+$d$ & $d\ge0$，$d+kE\le1$ & 标定 & 是（整簇自助） \\
+$k$ & $[0,0.10]$，基准 0 & 情景 & 是（不可识别） \\
+$\eta$ & $[0,1]$，基准 1 & 情景 & 是 \\
+$C$ & $[30,150]$ mm，基准 75 & 情景 & 是 \\
+$p$ & $[0.3,0.7]$，基准 0.5 & 情景 & 是 \\
+$c$ & $[0.7,1.2]$，基准 1 & 情景 & 是 \\
+$\eta_w$ & $[0.65,0.85]$，基准 0.75 & 情景 & 是 \\
+$\alpha_P$ & $[0,1]$，基准 0.25 & 情景 & 是 \\
+$G$ & 基准 0 & 情景 & 待补给证据 \\
 $K$ & $1.15\times Q_{0.95}(V)$ & 观测 & 是（系数 1.0--1.3） \\
 $\rho$（退化阈值系数） & $[0.2,0.4]$ & 情景 & 是 \\
 $\lambda$ & $[0.15,0.6]$ a$^{-1}$ & 估计/情景 & 是 \\
@@ -816,18 +938,24 @@ $T$（规划期） & $[10,20]$ a & 题目建议 & 是 \\
 \hline
 \endhead
 \eqref{eq:sens} & 灵敏度递推：参数变动如何传到覆盖度轨迹 & 一 \\
-\eqref{eq:sensb} & 右端项对 $r,d,k,\eta$ 的偏导向量 & 一 \\
+\eqref{eq:sensb} & 右端项对 $r,d,k,\eta$ 的偏导向量（给定 $\overline W$） & 一 \\
 \eqref{eq:cond} & 可识别性判据（条件数） & 一 \\
-\eqref{eq:t1} & 覆盖度逐年更新＝原覆盖度＋生长－衰亡－风蚀 & 一 \\
+\eqref{eq:t1} & 覆盖度逐年更新＝原覆盖度＋生长（乘年蒸腾满足率）－衰亡－风蚀 & 一 \\
+\eqref{eq:m1demand} & 潜在蒸腾＝蒸腾系数×覆盖代理×温度响应×$ET_0$ & 一 \\
+\eqref{eq:m1bal} & 子步储水收支：入水、排水、胁迫与实际蒸腾 & 一 \\
+\eqref{eq:m1W} & 年蒸腾满足率＝实际蒸腾和／潜在蒸腾和 & 一 \\
+\eqref{eq:m1cons} & 每子步严格水量平衡 & 一 \\
 \eqref{eq:eeff} & 有效侵蚀强度＝侵蚀指数×（1－遮蔽因子） & 一 \\
-\eqref{eq:fT} & 温度响应：低于 5\textdegree C 不生长，高于 25\textdegree C 不再促进 & 一 \\
-\eqref{eq:lettau} & 由日最大风速算无量纲侵蚀指数（站内归一） & 一 \\
+\eqref{eq:fT} & 温度响应：仅分配潜在蒸腾季节，低于 5\textdegree C 为 0，高于 25\textdegree C 为 1 & 一 \\
+\eqref{eq:lettau} & 日最大风速先算非线性代理再聚合，站内训练期归一 & 一 \\
 \eqref{eq:K} & 承载上限＝覆盖度训练期 95\% 分位×1.15 & 一 \\
 \eqref{eq:x} & 无量纲化后的相对覆盖度递推 & 一 \\
-\eqref{eq:steady0} & 稳态条件：生长＝衰亡＋风蚀 & 一 \\
-\eqref{eq:xstar} & 旧外生水分条件稳态式（非任务二动态接口） & 一 \\
-\eqref{eq:box} & 参数盒约束（含非负性与物理符号，另见式~\eqref{eq:nonneg}、\eqref{eq:sign}） & 一 \\
-\eqref{eq:obj} & 参数标定的最小二乘目标函数 & 一 \\
+\eqref{eq:steady0} & 给定水分下的稳态条件：生长＝衰亡＋风蚀 & 一 \\
+\eqref{eq:xstar} & 给定 $\overline W$ 的条件稳态式（非长期状态，非任务二接口） & 一 \\
+\eqref{eq:fixed} & 植被—储水耦合周期不动点及收敛判据 & 一 \\
+\eqref{eq:box} & 年步长安全域（另见式~\eqref{eq:nonneg}、\eqref{eq:sign}、\eqref{eq:m1box}） & 一 \\
+\eqref{eq:obj} & 一步转移合并最小二乘（$\overline W=1$，$k=0$） & 一 \\
+\eqref{eq:ident} & 自由区段拟合只识别 $r-d$ 与 $r/K$ & 一 \\
 \eqref{eq:r2} & 拟合优度 $R^2$（只作参考） & 一 \\
 \eqref{eq:rmse} & 均方根误差 & 一 \\
 \eqref{eq:oneyr} & 一年外推误差（须优于持续性基线） & 一 \\
@@ -854,5 +982,4 @@ $T$（规划期） & $[10,20]$ a & 题目建议 & 是 \\
 \end{longtable}
 
 
-\input{m1_correction.tex}
 \end{document}

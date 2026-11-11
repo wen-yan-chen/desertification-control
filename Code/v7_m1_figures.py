@@ -27,6 +27,11 @@ INK, INK2, MUTED = "#0b0b0b", "#52514e", "#898781"
 GRID, AXIS, SURFACE = "#e1e0d9", "#c3c2b7", "#ffffff"
 RAMP = ["#86b6ef", "#5598e7", "#2a78d6", "#1c5cab", "#0d366b"]  # ordinal, light -> dark
 NEUTRAL = "#a8a7a0"
+RED = "#d03b3b"  # limit lines only, never a data series
+# Limits a state is held against (capacity K, plateau, W = 1, storage capacity) share one style;
+# reference values, interval bounds and event markers stay grey. Drawn just under the data lines
+# (and above bars), so a curve that reaches its limit is not hidden by it.
+LIMIT = dict(color=RED, lw=1.2, ls=(0, (5, 2.5)), zorder=1.9)
 FULL_W, HALF_W = 6.3, 3.1  # inches, MCM text width
 
 plt.rcParams.update({
@@ -76,7 +81,7 @@ def fig_station_series(t):
         f = fr[fr.site == s].sort_values("year")
         K = y.K.iloc[0]
         ax.axvspan(2022.5, 2025.5, color="#f0efec", lw=0, zorder=0)
-        ax.axhline(K, color=MUTED, lw=0.8, ls=(0, (3, 2)))
+        ax.axhline(K, **LIMIT)
         ax.plot(y.year, y.V, color=INK, lw=1.0, marker="o", ms=3.2, zorder=3)
         ax.plot(p.target_year, p.predicted_x * p.K, color=BLUE, lw=0, marker="D", ms=3.4, zorder=4)
         ax.plot(np.r_[2022, f.year], np.r_[f.persistence_2022_pct.iloc[0], f.predicted_pct],
@@ -84,7 +89,7 @@ def fig_station_series(t):
         # Thinner line drawn on top so it stays visible where the free run is flat.
         ax.hlines(f.persistence_2022_pct.iloc[0], 2022, 2025, color=AQUA, lw=1.0, zorder=6)
         ax.set_title(f"{SITE_NAME[s]} ({s})", fontsize=8.5)
-        ax.text(2015, K, "K", fontsize=7, color=MUTED, va="bottom")
+        ax.text(2015, K, "K", fontsize=7, color=INK2, va="bottom")
         lo, hi = min(y.V.min(), f.predicted_pct.min()), max(K, y.V.max())
         ax.set_ylim(lo - 2.5, hi + 2.5)
         ax.set_xticks([2015, 2019, 2023])
@@ -96,7 +101,7 @@ def fig_station_series(t):
                Line2D([], [], color=BLUE, marker="D", ms=3.4, lw=0, label="One-step prediction"),
                Line2D([], [], color=ORANGE, lw=1.4, label="Free run from 2022"),
                Line2D([], [], color=AQUA, lw=1.2, label="Persistence (2022 value)"),
-               Line2D([], [], color=MUTED, lw=0.8, ls=(0, (3, 2)), label="Local capacity K"),
+               Line2D([], [], label="Local capacity K", **LIMIT),
                plt.Rectangle((0, 0), 1, 1, color="#f0efec", label="Hold-out 2023-2025")]
     leg.legend(handles=handles, loc="center left", fontsize=7.5, handlelength=1.8)
     fig.suptitle("Station cover proxy: calibration years and hold-out", x=0.01, ha="left",
@@ -206,7 +211,7 @@ def fig_cohort(t):
         curve = curve[curve.tau <= d.tau.max()]
         ax.plot(curve.tau, curve.predicted_transfer_pct, color=ORANGE, lw=1.6,
                 label="Station r, d transferred")
-        ax.axhline(js["plateau"], color=MUTED, lw=0.8, ls=(0, (3, 2)))
+        ax.axhline(js["plateau"], **LIMIT)
         m = js[key]
         # Stats go in empty corners: top-right in (a), top-left in (b).
         x0, ha = (0.98, "right") if split == "fit" else (0.03, "left")
@@ -215,7 +220,7 @@ def fig_cohort(t):
                 ha=ha, va="top", fontsize=7.2, color=INK2)
         ax.set_title(title)
         ax.set_xlabel(r"Years since establishment $\tau$")
-    axes[0].text(0.2, js["plateau"], "plateau", fontsize=7, color=MUTED, va="bottom")
+    axes[0].text(0.2, js["plateau"], "plateau", fontsize=7, color=INK2, va="bottom")
     axes[0].set_ylabel(V_LABEL)
     axes[0].legend(loc="upper left", fontsize=7)
     fig.tight_layout(w_pad=1.0)
@@ -261,11 +266,11 @@ def fig_water_cover(t):
     a.set(title="(a) Periodic steady cover", ylabel=V_LABEL)
     a.legend(loc="lower right", fontsize=7)
     b.plot(I, w.W, color=BLUE, marker="o", ms=3.5)
-    b.axhline(1, color=MUTED, lw=0.8, ls=(0, (3, 2)))
+    b.axhline(1, **LIMIT)
     b.set(title="(b) Transpiration ratio $W$ (actual/potential)", ylabel="$W$", ylim=(0, 1.08))
     c.plot(I, w.M_periodic_end_mm, color=BLUE, marker="o", ms=3.5)
-    c.axhline(75, color=MUTED, lw=0.8, ls=(0, (3, 2)))
-    c.text(30, 75, "capacity 75 mm", fontsize=7, color=MUTED, va="bottom")
+    c.axhline(75, **LIMIT)
+    c.text(30, 76, "capacity 75 mm", fontsize=7, color=INK2, va="bottom")
     c.set(title="(c) Available storage $M$ at year end", ylabel="mm", ylim=(0, 85))
     d.plot(I, w.relative_erosion_scenario, color=BLUE, marker="o", ms=3.5)
     d.set(title="(d) Relative erosion (shelter function)", ylabel="relative to bare", ylim=(0, 1.02))
@@ -350,10 +355,10 @@ def fig_monthly_water(t):
             s = s[(s.calendar_year >= 2036) | ((s.calendar_year == 2035) & (s.month == 12))]
         tt = s.calendar_year + (s.month - 0.5) / 12
         c.plot(tt, s.M_end_mm, color=color, lw=1.0 if sc != "stop_after_10" else 1.3, label=lab)
-    c.axhline(75, color=MUTED, lw=0.8, ls=(0, (3, 2)))
+    c.axhline(75, **LIMIT)
     c.axvline(2036, color=MUTED, lw=0.6, ls=(0, (3, 2)))
     c.text(2036.2, 60, "irrigation stops", fontsize=7, color=MUTED)
-    c.text(2050.9, 75, "capacity", fontsize=7, color=MUTED, ha="right", va="bottom")
+    c.text(2050.9, 76, "capacity", fontsize=7, color=INK2, ha="right", va="bottom")
     c.set(title="(c) Monthly available storage $M$, 2026-2050", ylabel="mm", ylim=(0, 82),
           xlim=(2026, 2051))
     c.legend(loc="center right", bbox_to_anchor=(1.0, 0.55), fontsize=7, ncol=3)
