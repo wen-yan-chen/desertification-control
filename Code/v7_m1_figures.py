@@ -71,10 +71,12 @@ def load():
 
 
 # --------------------------------------------------------------------------- 1
-def fig_station_series(t):
-    """Observed cover, one-step predictions, free run from 2022, and persistence per site."""
+def fig_station_series(t, tall=False):
+    """Observed cover, one-step predictions, free run from 2022, and persistence per site.
+    tall=True draws a 4x2 grid sized for a half-width column (paper Fig. 5a)."""
     yt, pp, fr = t["yearly_table"], t["prediction_pairs"], t["free_running_holdout"]
-    fig, axes = plt.subplots(2, 4, figsize=(FULL_W, 3.6), sharex=True)
+    shape, size = ((4, 2), (HALF_W + 0.2, 5.2)) if tall else ((2, 4), (FULL_W, 3.6))
+    fig, axes = plt.subplots(*shape, figsize=size, sharex=True)
     for ax, s in zip(axes.flat, SITES):
         y = yt[yt.site == s].sort_values("year")
         p = pp[pp.site == s].sort_values("target_year")
@@ -94,7 +96,9 @@ def fig_station_series(t):
         ax.set_ylim(lo - 2.5, hi + 2.5)
         ax.set_xticks([2015, 2019, 2023])
     for ax in axes[:, 0]:
-        ax.set_ylabel(V_LABEL)
+        ax.set_ylabel("$V$ (%)" if tall else V_LABEL)
+    if tall:  # the cell above the legend is the last visible plot in column 2
+        axes[-2, 1].tick_params(labelbottom=True)
     leg = axes.flat[-1]
     leg.axis("off")
     handles = [Line2D([], [], color=INK, marker="o", ms=3.2, lw=1.0, label="Observed (Jun-Sep)"),
@@ -103,11 +107,11 @@ def fig_station_series(t):
                Line2D([], [], color=AQUA, lw=1.2, label="Persistence (2022 value)"),
                Line2D([], [], label="Local capacity K", **LIMIT),
                plt.Rectangle((0, 0), 1, 1, color="#f0efec", label="Hold-out 2023-2025")]
-    leg.legend(handles=handles, loc="center left", fontsize=7.5, handlelength=1.8)
-    fig.suptitle("Station cover proxy: calibration years and hold-out", x=0.01, ha="left",
-                 fontweight="bold", fontsize=10)
+    leg.legend(handles=handles, loc="center left", fontsize=6.6 if tall else 7.5, handlelength=1.6,
+               borderaxespad=0.0)
+    # no suptitle: the paper's subcaption names this figure
     fig.tight_layout(h_pad=0.6, w_pad=0.6)
-    save(fig, "m1_f01_station_series")
+    save(fig, "m1_f01_station_series_tall" if tall else "m1_f01_station_series")
 
 
 # --------------------------------------------------------------------------- 2
@@ -252,28 +256,46 @@ def fig_forcing(t):
 
 
 # --------------------------------------------------------------------------- 6
-def fig_water_cover(t):
+def fig_water_cover(t, half=False):
+    """half=True draws the same four panels sized for a half-width column (paper Fig. 6)."""
     w = t["water_cover_curve"]
     I = w.irrigation_mm_yr
-    fig, axes = plt.subplots(2, 2, figsize=(FULL_W, 4.2), sharex=True)
+    fig, axes = plt.subplots(2, 2, figsize=(HALF_W + 0.3, 3.3) if half else (FULL_W, 4.2), sharex=True)
     (a, b), (c, d) = axes
-    a.plot(I, w.V_steady_pct, color=BLUE, marker="o", ms=3.5, label="Periodic steady state")
-    a.plot(I, w.V_from_planting_pct, color=ORANGE, lw=0, marker="x", ms=4, label="From planting (V=2%)")
+    a.plot(I, w.V_steady_pct, color=BLUE, marker="o", ms=3.5,
+           label="Long-run state" if half else "Periodic steady state")
+    a.plot(I, w.V_from_planting_pct, color=ORANGE, lw=0, marker="x", ms=4,
+           label="From planting" if half else "From planting (V=2%)")
     for x0 in (300, 600):
         v = w.loc[I == x0, "V_steady_pct"].item()
         a.annotate(f"{v:.1f}%", (x0, v), xytext=(4, -10), textcoords="offset points", fontsize=7.2,
                    color=INK2)
-    a.set(title="(a) Periodic steady cover", ylabel=V_LABEL)
-    a.legend(loc="lower right", fontsize=7)
+    a.set(title="(a) Long-run cover" if half else "(a) Periodic steady cover",
+          ylabel="$V$ (%)" if half else V_LABEL)
+    if half:
+        a.legend(loc="lower right", fontsize=6, handlelength=1.0, borderaxespad=0.2)
+    else:
+        a.legend(loc="lower right", fontsize=7)
     b.plot(I, w.W, color=BLUE, marker="o", ms=3.5)
     b.axhline(1, **LIMIT)
-    b.set(title="(b) Transpiration ratio $W$ (actual/potential)", ylabel="$W$", ylim=(0, 1.08))
+    b.set(title="(b) Demand met $W$" if half else "(b) Transpiration ratio $W$ (actual/potential)",
+          ylabel="$W$", ylim=(0, 1.08))
     c.plot(I, w.M_periodic_end_mm, color=BLUE, marker="o", ms=3.5)
     c.axhline(75, **LIMIT)
     c.text(30, 76, "capacity 75 mm", fontsize=7, color=INK2, va="bottom")
-    c.set(title="(c) Available storage $M$ at year end", ylabel="mm", ylim=(0, 85))
+    c.set(title="(c) Year-end store $M$" if half else "(c) Available storage $M$ at year end",
+          ylabel="mm", ylim=(0, 85))
     d.plot(I, w.relative_erosion_scenario, color=BLUE, marker="o", ms=3.5)
-    d.set(title="(d) Relative erosion (shelter function)", ylabel="relative to bare", ylim=(0, 1.02))
+    d.set(title="(d) Relative erosion" if half else "(d) Relative erosion (shelter function)",
+          ylabel="relative to bare", ylim=(0, 1.02))
+    if half:  # no secondary m3/ha axis at this size (1 mm on the treated area = 10 m3/ha)
+        for ax in (c, d):
+            ax.set_xlabel("Irrigation (mm/yr)")
+            ax.set_xticks([0, 1000, 2000])
+        c.texts[0].set_fontsize(5.8)
+        fig.tight_layout(h_pad=0.6, w_pad=0.6)
+        save(fig, "m1_f06_water_cover_curve_half")
+        return
     for ax in (c, d):
         ax.set_xlabel("Irrigation on treated area (mm/yr)")
         sec = ax.secondary_xaxis("bottom", functions=(lambda x: x * 10, lambda x: x / 10))
@@ -289,9 +311,13 @@ SCEN = [("I0", "0", NEUTRAL), ("I100", "100", RAMP[0]), ("I300", "300", RAMP[1])
         ("I600", "600", RAMP[2]), ("I1000", "1000", RAMP[3]), ("I2000", "2000", RAMP[4])]
 
 
-def fig_scenarios(t):
+def fig_scenarios(t, tall=False):
+    """tall=True stacks the three panels for a half-width column (paper Fig. 5b)."""
     a_ = t["scenario_annual"]
-    fig, axes = plt.subplots(1, 3, figsize=(FULL_W, 2.6), sharex=True)
+    if tall:
+        fig, axes = plt.subplots(3, 1, figsize=(HALF_W + 0.2, 5.2), sharex=True)
+    else:
+        fig, axes = plt.subplots(1, 3, figsize=(FULL_W, 2.6), sharex=True)
     cols = [("V_end_pct", "(a) Cover proxy $V$", "%"),
             ("M_end_mm", "(b) Storage $M$ at year end", "mm"),
             ("W", "(c) Transpiration ratio $W$", "")]
@@ -303,7 +329,7 @@ def fig_scenarios(t):
         d = a_[(a_.scenario == "stop_after_10") & (a_.calendar_year >= 2035)]
         ax.plot(d.calendar_year, d[col], color=ORANGE, lw=1.6, label="600, stop after 2035")
         ax.axvline(2035.5, color=MUTED, lw=0.6, ls=(0, (3, 2)))
-        ax.set_title(title)
+        ax.set_title(title.split(") ", 1)[1] if tall else title)  # paper subcaption owns (a)/(b)
         ax.set_ylabel(unit)
         ax.set_xticks([2026, 2034, 2042, 2050])
     axes[2].set_ylim(0, 1.05)
@@ -313,6 +339,12 @@ def fig_scenarios(t):
     axes[0].text(2050.6, end["stop_after_10"], f"{end['stop_after_10']:.0f}", fontsize=6.8,
                  color=INK2, va="center")
     h, l = axes[0].get_legend_handles_labels()
+    if tall:
+        fig.legend(h, l, loc="lower center", ncol=3, fontsize=6.6, bbox_to_anchor=(0.5, 0.0),
+                   handlelength=1.4, columnspacing=0.8)
+        fig.tight_layout(h_pad=0.5, rect=(0, 0.1, 1, 1))
+        save(fig, "m1_f07_scenario_trajectories_tall")
+        return
     fig.legend(h, l, loc="lower center", ncol=7, fontsize=7, bbox_to_anchor=(0.5, -0.07),
                handlelength=1.4, columnspacing=0.9)
     fig.tight_layout(w_pad=1.0, rect=(0, 0.04, 1, 1))
@@ -368,17 +400,22 @@ def fig_monthly_water(t):
 
 
 # --------------------------------------------------------------------------- 9
-def fig_sensitivity(t):
+def fig_sensitivity(t, tall=False):
+    """tall=True stacks the panels for a half-width column next to the text (paper Fig. 7)."""
     s, w = t["sensitivity"], t["water_cover_curve"]
     base = w.set_index("irrigation_mm_yr").V_steady_pct
     js = t["json"]["adopted_parameters"]["water"]
     labels = {"capacity_mm": ("Storage capacity", "mm", js["capacity_mm"]),
               "rain_fraction": ("Effective rain fraction", "", js["rain_fraction"]),
-              "c": ("Demand coefficient c", "", js["c"]),
+              "c": ("Transpiration coefficient c", "", js["c"]),
               "eta_w": ("Irrigation efficiency $\\eta_w$", "", js["eta_w"]),
               "depletion_fraction": ("Depletion fraction p", "", js["depletion_fraction"]),
               "v_full_pct": ("End-member $V_{full}$", "%", js["v_full_pct"])}
-    fig, axes = plt.subplots(1, 3, figsize=(FULL_W, 2.9), gridspec_kw={"width_ratios": [1, 1, 0.8]})
+    if tall:
+        fig, axes = plt.subplots(3, 1, figsize=(HALF_W + 0.3, 4.9),
+                                 gridspec_kw={"height_ratios": [1, 1, 0.85]})
+    else:
+        fig, axes = plt.subplots(1, 3, figsize=(FULL_W, 2.9), gridspec_kw={"width_ratios": [1, 1, 0.8]})
     # One row order for both panels (ranked by the 300 mm/yr swing) so labels on (a) apply to (b).
     d300 = s[s.irrigation_mm_yr == 300]
     swing = {p: (d300[d300.parameter == p].V_pct - base[300]).abs().max() for p in labels}
@@ -399,15 +436,23 @@ def fig_sensitivity(t):
             ax.text(max(dlo, dhi, 0) + 0.12, i, fmt(vhi if dhi > dlo else vlo), ha="left", va="center",
                     fontsize=6.8, color=INK2)
         ax.axvline(0, color=INK2, lw=0.8)
-        ax.set_yticks(range(len(rows)), [r[0] for r in rows] if I == 300 else [])
+        ax.set_yticks(range(len(rows)), [r[0] for r in rows] if (I == 300 or tall) else [])
         ax.set_xlim(-4.2, 4.2)
         ax.set_ylim(-0.6, len(rows) - 0.4)
-        ax.set_xlabel(f"Change in steady V (pp)\nbaseline {base[I]:.1f}%")
-        ax.set_title(title)
+        if tall:  # baseline goes in the title; one shared x label under (b)
+            ax.set_title(f"{title}, baseline {base[I]:.1f}%")
+            ax.set_xlabel("Change in long-run V (pp)" if I == 600 else "")
+        else:
+            ax.set_xlabel(f"Change in steady V (pp)\nbaseline {base[I]:.1f}%")
+            ax.set_title(title)
         ax.grid(axis="y", visible=False)
-    fig.legend(handles=[plt.Rectangle((0, 0), 1, 1, color=BLUE, label="Low tested value"),
-                        plt.Rectangle((0, 0), 1, 1, color=ORANGE, label="High tested value")],
-               loc="lower center", ncol=2, fontsize=7.2, bbox_to_anchor=(0.4, -0.05))
+    bars = [plt.Rectangle((0, 0), 1, 1, color=BLUE, label="Low tested value"),
+            plt.Rectangle((0, 0), 1, 1, color=ORANGE, label="High tested value")]
+    if tall:  # one-row legend above (a), next to the bar panels it describes
+        fig.legend(handles=bars, loc="upper center", ncol=2, fontsize=7, handlelength=1.2,
+                   bbox_to_anchor=(0.5, 1.0))
+    else:
+        fig.legend(handles=bars, loc="lower center", ncol=2, fontsize=7.2, bbox_to_anchor=(0.4, -0.05))
     k = s[s.parameter == "k_scenario"].sort_values("value")
     c = axes[2]
     c.plot(k.value, k.V_pct, color=BLUE, marker="o", ms=4)
@@ -416,6 +461,10 @@ def fig_sensitivity(t):
                    fontsize=7, color=INK2)
     c.set(title="(c) Wind damage k, 300 mm/yr", xlabel="Wind-damage coefficient k", ylabel=V_LABEL,
           ylim=(12, 19.5), xlim=(-0.01, 0.12))
+    if tall:
+        fig.tight_layout(h_pad=0.8, rect=(0, 0, 1, 0.96))
+        save(fig, "m1_f09_sensitivity_tall")
+        return
     fig.tight_layout(w_pad=0.9, rect=(0, 0.05, 1, 1))
     save(fig, "m1_f09_sensitivity")
 

@@ -12,6 +12,10 @@
 | `m1_f06_water_cover_curve` | 灌溉—稳态 V、W、M、相对侵蚀（mm/yr 与 m³/ha/yr 双刻度） | `water_cover_curve` |
 | `m1_f07_scenario_trajectories` | 2026—2050 情景 V、M、W（6 档恒定灌溉 + 600 mm 十年后停灌） | `scenario_annual` |
 | `m1_f08_monthly_water_balance` | 300 mm/yr 下 2050 年逐月收支、蒸腾供需；三情景逐月储水 | `scenario_monthly_water` |
+| `m1_f10_bucket_mechanism` | How the storage bucket works: daily step schematic, stress ramp K_s, daily storage in a long-run year at 300 and 1,500 mm/yr, demand vs transpiration at 300 mm/yr | re-runs the bucket daily from `model1_results.json` + `section_forcing_climatology`; script `Code/v7_m1_bucket_figure.py`, checked against `water_year` |
+| `m1_f10a_bucket_schematic`, `m1_f10b_stress_ramp`, `m1_f10c_year_water` | Same content as `m1_f10` split for the paper: (a) schematic alone, (b) K_s ramp alone, (c)+(d) as a two-panel row | same script `Code/v7_m1_bucket_figure.py` |
+| `m1_f01_station_series_tall`, `m1_f07_scenario_trajectories_tall` | Same content as f01 / f07 in tall layouts (4x2 grid; 3 stacked panels, no (a)-(c) letters) for the side-by-side paper Fig. 5 | `fig_station_series(t, tall=True)`, `fig_scenarios(t, tall=True)` in `Code/v7_m1_figures.py` |
+| `m1_f06_water_cover_curve_half`, `m1_f09_sensitivity_tall` | Same content as f06 / f09 sized for a half-width column next to text (paper Figs. 6 and 7): f06 2x2 compact, no m3/ha axis; f09 panels stacked, legend on top | `fig_water_cover(t, half=True)`, `fig_sensitivity(t, tall=True)` |
 | `m1_f09_sensitivity` | 300/600 mm/yr 下水分参数龙卷风图；风损伤 k 情景 | `sensitivity`, `water_cover_curve` |
 
 界限线统一为红色虚线（与 M2 图共用 `LIMIT` 样式）：各站局地 K（图 1）、迁移曲线平台值（图 4）、

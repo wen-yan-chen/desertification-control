@@ -7,7 +7,11 @@
 \usepackage{booktabs,tabularx,array,multirow}
 \usepackage{graphicx,float,caption}
 \usepackage{enumitem,xcolor}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
 \usepackage[hidelinks]{hyperref}
+\algrenewcommand\algorithmicrequire{\textbf{Input:}}
+\algrenewcommand\algorithmicensure{\textbf{Output:}}
 \setlist{itemsep=1pt,topsep=3pt}
 \captionsetup{font=small}
 \renewcommand{\arraystretch}{1.18}
@@ -19,6 +23,7 @@
 \date{2026-11-11}
 
 \begin{document}
+\sloppy
 \maketitle
 
 \noindent This brief collects what you need to write the Model 2 section: the goal, how the model is
@@ -153,6 +158,86 @@ p_e\ \ge\ p_e^{\rm BE}(s)=\frac{c_p+\sum_{t=s+1}^{T-1}\delta^{t+1-s}\,(c_{pm}+c_
 \end{equation}
 Price per kWh at which 1 kW built in year $s$ pays back its own cost within the horizon. Necessary for a standalone PV block,
 not sufficient for the whole plan (it ignores competition for budget, land and water).
+
+% =====================================================================
+\section{Algorithms}\label{sec:alg}
+
+Model 2 is solved in three stages: build the problem from Model 1 (Alg.~\ref{alg:build}),
+solve it with the two-step $\varepsilon$-constraint method (Alg.~\ref{alg:solve}), and check every
+answer by replaying it through Model 1 (Alg.~\ref{alg:replay}). Formulas refer to Section~3 and to
+Section~4 of \texttt{Reports/model\_v7/model\_v7.tex}.
+
+\begin{algorithm}[H]
+\caption{Build the cohort MILP}\label{alg:build}
+\begin{algorithmic}[1]
+\Require scenario parameters (Table~\ref{tab:par}); Model 1 $r,d,K$, bucket parameters, monthly climatology; policy library $\mathcal P$ (18 policies)
+\Ensure matrix $\bm A$, limits $\bm b$, ecology vector $\bm h$, cost vector $\bm n$, integer upper bounds
+\For{each policy $p\in\mathcal P$}
+  \State Run Model 1 (Alg.~3 of the M1 brief, year after year) for $T$ years from $V_0=2\%$, $M_0=37.5$ mm
+  \State Store per hectare and by stand age: $V_{\rm start}$, irrigation (mm), monthly gross irrigation
+\EndFor
+\For{each start year $s=1,\dots,T$}
+  \For{each policy $p$} \Comment{drop policies identical over the remaining $T-s+1$ years}
+    \State Column ``ecology $(s,p)$'' = one 50 ha block; fill year by year: new area, area in service,
+    land, planting cost, upkeep $+$ water cost, water (yearly, monthly), labour, effective ha $=50\,V_{\rm start}/K$
+  \EndFor
+  \If{$s<T$} \Comment{PV built in the last year earns nothing}
+    \State Column ``PV $s$'' = one 100 kW block: capex in year $s$; from $s+1$: energy $e_0(1-d_p)^{\rm age}$, income, O\&M, cleaning water, labour; land from $s$
+  \EndIf
+\EndFor
+\State $\bm n\gets$ discounted cost per column (capex at start of year, O\&M and income at end), Eq.~\eqref{eq:npc}
+\State $\bm h\gets$ sum over years of effective ha per column, Eq.~\eqref{eq:H}
+\State Rows of $\bm A\bm z\le\bm b$: total budget; PV share bounds; for each year: budget, water, land, new area, labour, PV capacity; for each year and month: water
+\State Integer bounds: ecology $\le\lfloor\min(200,1200)/50\rfloor$ blocks, PV $\le10{,}000/100$ blocks
+\end{algorithmic}
+\end{algorithm}
+\noindent\textit{Code:} \texttt{Code/v7\_m2\_core.py} (\texttt{policy\_library}, \texttt{simulate\_policy}, \texttt{build\_problem}).
+
+\begin{algorithm}[H]
+\caption{Two-step $\varepsilon$-constraint solution, trade-off points and sensitivity}\label{alg:solve}
+\begin{algorithmic}[1]
+\Require problem from Alg.~\ref{alg:build}; target share $\varphi=0.6$; gap 0.2\%; time limit 30 s per solve
+\Ensure base plan, $H_{\max}$, six trade-off points, 21 sensitivity plans
+\State \textbf{Step 1:} $\bm z^{\max}\gets\arg\max\ \bm h^\top\bm z$ s.t.\ $\bm A\bm z\le\bm b$, $\bm z\in\mathbb Z_{\ge0}$;\quad $H_{\max}\gets\bm h^\top\bm z^{\max}$
+\State \textbf{Step 2:} $\bm z^*\gets\arg\min\ \bm n^\top\bm z$ s.t.\ $\bm A\bm z\le\bm b$, $\bm h^\top\bm z\ge\varphi H_{\max}$ \Comment{base plan}
+\For{each solve}
+  \State Call the MILP solver (HiGHS through SciPy \texttt{milp}); record status, objective, bound and gap
+  \State If no feasible plan: report ``infeasible'' and stop for this case (no made-up answer)
+  \State Round $\bm z$ and check integrality ($10^{-4}$) and every constraint ($10^{-7}$) independently
+\EndFor
+\For{$\varphi\in\{0,0.2,0.4,0.6,0.8,1.0\}$}
+  \State Solve Step 2 with target $\varphi H_{\max}$ \Comment{Table~\ref{tab:front}}
+\EndFor
+\For{each sensitivity case (one parameter changed)}
+  \State Rebuild the problem (Alg.~\ref{alg:build}); solve Step 2 with the \emph{same} target $0.6H_{\max}=1{,}258.22$ \Comment{Table~\ref{tab:sens}}
+\EndFor
+\State For each build year $s$: compute the PV break-even price, Eq.~\eqref{eq:be}, and standalone NPV \Comment{Table~\ref{tab:pv}}
+\end{algorithmic}
+\end{algorithm}
+\noindent\textit{Code:} \texttt{Code/v7\_m2\_core.py} (\texttt{solve}), \texttt{Code/v7\_model2.py} (\texttt{run}).
+
+\begin{algorithm}[H]
+\caption{Replay check of a solved plan}\label{alg:replay}
+\begin{algorithmic}[1]
+\Require chosen block counts $\bm z^*$
+\Ensure yearly and monthly ledgers; largest difference from the MILP rows
+\For{each chosen ecology cohort $(s,p)$ with area $a$}
+  \State Re-run Model 1 for policy $p$ from year $s$ to $T$ (not the cached columns)
+  \State Add its area, water (yearly, monthly), upkeep, labour, effective ha to the yearly ledger
+\EndFor
+\For{each chosen PV block}
+  \State Add capex, energy, income, O\&M, cleaning water, land, labour by year
+\EndFor
+\State Compute fund shares $(f^b_t,f^o_t,f^p_t)$, budget left, discounted net cost
+\State Compare every ledger column with $\bm A\bm z^*$, $\bm h^\top\bm z^*$, $\bm n^\top\bm z^*$; base case largest difference $1.9\times10^{-9}$
+\end{algorithmic}
+\end{algorithm}
+\noindent\textit{Code:} \texttt{Code/v7\_m2\_core.py} (\texttt{replay}). Run: \texttt{python Code/v7\_model2.py};
+tests: \texttt{python -m unittest discover -s Code -p test\_v7\_m2.py} (7 tests, incl.\ brute-force check on a small case).
+
+\say{Explain in the paper why the problem is linear although Model 1 is not: Model 1 is run once per policy
+before optimising, and cohorts do not share soil water, so every cost, water and ecology term is the per-block
+value times the number of blocks.}
 
 % =====================================================================
 \section{Parameters}
@@ -458,6 +543,7 @@ File (\texttt{Figures/M2/}) & What it shows / caption point\\
 \item Why cohorts: link to Model 1 states; Fig.~\ref{fig:struct}.
 \item Decision variables (area, water, three fund shares, labour) and Eqs.~\eqref{eq:blocks}--\eqref{eq:pv}.
 \item Constraints \eqref{eq:budget}--\eqref{eq:lab} and the $\varepsilon$-constraint objective \eqref{eq:npc}--\eqref{eq:eps}.
+\item Algorithms: build (Alg.~\ref{alg:build}), two-step solve (Alg.~\ref{alg:solve}), replay check (Alg.~\ref{alg:replay}).
 \item Parameters (Table~\ref{tab:par}) with the note that they are scenario values.
 \item Base plan (Tables~\ref{tab:plan}--\ref{tab:yearB}) and the trade-off (Table~\ref{tab:front}).
 \item Sensitivity of the investment structure (Table~\ref{tab:sens}) and PV screening (Table~\ref{tab:pv}).

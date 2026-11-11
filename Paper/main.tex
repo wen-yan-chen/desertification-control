@@ -20,7 +20,14 @@
 \usepackage{times}
 \usepackage{indentfirst}
 \usepackage{needspace,tikz,subcaption,float,placeins}
-\usetikzlibrary{arrows.meta,positioning}
+\usepackage{booktabs}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\algrenewcommand\algorithmicrequire{\textbf{Input:}}
+\algrenewcommand\algorithmicensure{\textbf{Output:}}
+% Wrapped algorithm lines keep their indent.
+\makeatletter\newcommand{\AlgWrap}[1]{\parbox[t]{\dimexpr\linewidth-\ALG@thistlm\relax}{#1\strut}}\makeatother
+\usetikzlibrary{arrows.meta,positioning,calc}
 \usepackage{lastpage}
 % 中英文文献库：XeLaTeX + BibTeX；正文使用 \cite{REF01} 等引用键。
 \usepackage{xeCJK}
@@ -33,7 +40,7 @@
 \addbibresource{bibliography/references.bib}
 % 有 DOI 时不重复输出同一文献的网址。
 \AtEveryBibitem{\iffieldundef{doi}{}{\clearfield{url}}}
-\graphicspath{{Figure/}}
+\graphicspath{{Figure/}{../Figures/M1/}{../Reports/M1/}}
 \geometry{headheight=14pt}
 \setlength{\emergencystretch}{1.2em}
 \hypersetup{hidelinks,pdfauthor={},pdftitle={MCM/ICM Paper}}
@@ -54,6 +61,14 @@
 
 % 占位内容仅供检查排版，写作时逐一替换；不包含旧题的模型与结论。
 \newcommand{\placeholder}[1]{\par\noindent\textit{[#1]}\par}
+
+% Bold run-in paragraph headings (template prints them plain).
+\makeatletter
+\renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}{1.2ex \@plus .5ex}{-1em}{\normalfont\normalsize\bfseries}}
+\makeatother
+
+% Float pages start at the top instead of being vertically centred.
+\makeatletter\setlength{\@fptop}{0pt}\makeatother
 
 \begin{document}
 
@@ -146,11 +161,98 @@ margin, our objectives are to:
 
 \clearpage
 \section{Assumptions and Justifications}
+\begingroup
+\setlength{\topsep}{0pt}
+\setlength{\partopsep}{0pt}
+\setlength{\parsep}{0pt}
+\setlength{\itemsep}{2pt}
 \begin{enumerate}
-  \item \textbf{Assumption:} \textit{[State an assumption.]}
+  \item \textbf{Assumptions:} \textbf{The study section represents the belt.} A 127.95\,km
+  by 1\,km section of the Yutian--Minfeng margin is one homogeneous control volume; the
+  nine stations are point samples.
+  \newline \textbf{Justifications:} The belt is narrower than a reanalysis grid, so
+  within-grid gradients cannot be resolved. 
 
-  \textbf{Justification:} \textit{[Explain why it is reasonable.]}
-  % 按上述格式继续添加 \item，每条假设后给出对应解释。
+  \item \textbf{Assumptions:} \textbf{Vegetation is annual refreshed, water is daily.} Cover updates
+  yearly from the June--September growing season, soil water updates daily and carries
+  across years, and the base climate repeats 2015--2022.
+  \newline \textbf{Justifications:} Decisions are annual and 16-day NDVI cannot support
+  daily cover, but storage and seasonal water timing act within the year. A longer
+  climate trend is tested separately.
+
+  \item \textbf{Assumptions:} \textbf{Cover is an NDVI proxy, and its ceiling is observed.}
+  $V$ is an NDVI cover proxy with end-members 0.05 and 0.85, not ground cover; the ceiling
+  $K$ is fixed at 1.15 times the training 95th percentile (38.08\%).
+  \newline \textbf{Justifications:} NDVI is the only repeated wall-to-wall observation.
+  Fixing $K$ avoids the non-identifiability of free $r$, $d$ and $K$; alternative
+  end-members (64.9--69.4\% full cover) are a sensitivity range.
+
+  \item \textbf{Assumptions:} \textbf{One root-zone water bucket.} Rain and irrigation enter
+  one 75\,mm root-zone bucket; growth depends on the share of transpiration demand met.
+  \newline \textbf{Justifications:} A simple supply/demand ratio has no memory and cannot
+  separate transpiration from drainage. Water parameters are scenarios because none is
+  could be measured, ignoring salinity makes the response optimistic.
+
+  \item \textbf{Assumptions:} \textbf{Calibration assumes irrigated oases and proportional
+  wind damage.} \mbox{$r$ and $d$} are fitted at seven irrigated oasis stations ($\overline W\approx1$,
+  $k=0$); wind loss is proportional to $V$ and $E$, with $k$ varied from 0 to 0.10.
+  \newline \textbf{Justifications:} Irrigated oases separate growth and decay from water
+  and wind limitation. Transfer to the section is an extrapolation. This is to limit parameter numbers in formula to ensure a concrete equation.
+\end{enumerate}
+\endgroup
+
+\clearpage
+% here need to describe 1. what data we use, source 2. how we categorize them 3. each categorize's attribution to our work 4. standard data structure(the algorithm to process data into structure we want)
+\section{Data Collection and Preprocessing}\label{sec:data}
+Our data answer one question: how much vegetation cover the desert margin can hold under the water and wind it receives. We build a station--month panel joining climate forcing with satellite-observed cover at nine sites around the Taklamakan, January 2015--December 2025 (9 stations $\times$ 132 months $=$ 1,188 station--months). Every record is fetched by script from a public archive.
+
+\subsection{Study area and station categories}
+The Taklamakan is ringed by river-fed oases, and the sand-locking belts we model lie on the boundary between these oases and the dune field \cite{REF06,CN16}. Stations sample this boundary on every side, plus two sites inside the desert (Figure~\ref{fig:data-stations}a).1. \emph{Category~I (oasis margin)}: YT, MF, QM, RQ on the southern edge, KEL and YL on the lower Tarim River, ALE on the Aksu River; these calibrate Model~1, with YT--MF as the reference section. 2. \emph{Category~II (corridor)}: XT on the Desert Highway, whose shelterbelt survives only on saline drip irrigation \cite{REF01}. 3. \emph{Category~III (control)}: TZ in the desert centre. Categories II and III give context and are not fitted: margin sites hold 28--41\% cover, against about 1\% and 9\% (Figure~\ref{fig:data-stations}b), so pooling them would bias the fitted water--cover relation.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.88\linewidth]{data_stations.pdf}
+  \caption{Station network and observed cover. (a) Stations on Esri World Imagery. (b) Mean growing-season cover $V$ (Jun--Sep, 2015--2025), $\pm1$ SD across years.}
+  \label{fig:data-stations}
+\end{figure}
+
+\subsection{Data sources and preprocessing}
+\begin{table}[H]
+\centering\footnotesize
+\begin{minipage}[t]{0.55\linewidth}\centering
+\caption{Sources and use}\label{tab:data-src}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Source & Variables & Use \\ \midrule
+NASA POWER \cite{REF17} & $T$, $P$, wind$_{\max}$ & Forcing, $E$ \\
+Open-Meteo \cite{REF19} & ET$_0$, soil moisture & Demand \\
+MOD13Q1 \cite{REF18} & NDVI + QA, 250\,m & Cover $V$ \\
+SoilGrids \cite{EN09} & Soil profile & Screened out \\ \bottomrule
+\end{tabular}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.45\linewidth}\centering
+\caption{Panel after screening}\label{tab:data-qc}
+\begin{tabular}{@{}lr@{}}
+\toprule
+Item & Count \\ \midrule
+Station--months & 1,188 \\
+Growing-season months & 396 \\
+Valid cover values & 395 \\
+Independent weather series & 8 \\
+SoilGrids queries returned & 62/81 \\ \bottomrule
+\end{tabular}
+\end{minipage}
+\end{table}
+\begin{enumerate}
+
+\item \emph{Climate.} Temperature, precipitation and daily maximum wind come from NASA POWER (MERRA-2); ET$_0$ and soil moisture come from the Open-Meteo archive (ERA5/ERA5-Land \cite{REF15,EN10}). POWER precipitation is a daily mean, so monthly totals are value $\times$ days. Wetness indices are not treated as plant-available water. XT and TZ share one MERRA-2 cell, leaving eight independent weather series.
+
+\item \emph{Wind index.} Sand transport rises steeply once wind exceeds a threshold speed ($u_T=5$\,m/s), so a nonlinear transport proxy is applied to each \emph{day's} maximum wind first and averaged afterwards; averaging wind first would hide almost every gust above the threshold. The result is divided by each station's 2015--2022 mean, so $E=1$ is the training-period average. The index $E$ is a relative forcing used in Model~1, not a measured sand flux.
+
+\item \emph{Coverage.} For each station we take a $9\times9$ MOD13Q1 window, drop pixels with reliability flag above 1, keep a composite only if $\ge$50\% of pixels remain (75\% as a sensitivity check), and take the monthly maximum. NDVI becomes fractional cover by the dimidiate pixel model,
+\begin{equation}
+  V = \operatorname{clip}\!\left(\frac{\mathrm{NDVI}-0.05}{0.85-0.05},\,0,\,1\right)\times100\%.
+\end{equation}
 \end{enumerate}
 
 \clearpage
@@ -163,17 +265,7 @@ margin, our objectives are to:
 \subsection*{Baseline quantities}
 \modelvars{\textit{[Parameter]} & \textit{[Value, unit, and source]} \\}
 
-\clearpage
-\section{Model 1: Model formulation}\label{sec:model1}
-\subsection{Data and model preparation}
-\placeholder{Introduce data sources, preprocessing, units, variables, and parameters.}
-\subsection{Model construction}
-\placeholder{Develop the governing equations, resource balances, feedbacks,
-performance indicators, objective function, and constraints.}
-\subsection{Solution and results}
-\placeholder{Describe the solution procedure, interpret the recommended strategy
-and resource allocation, and evaluate long-term performance.}
-
+\input{Section/model1}
 % 第 4、5、6 节分别为 Model 1、Model 2、Model 3。
 \input{Section/model2}
 \input{Section/model3}

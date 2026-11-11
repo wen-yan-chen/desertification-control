@@ -7,7 +7,11 @@
 \usepackage{booktabs,tabularx,array,multirow}
 \usepackage{graphicx,float,caption}
 \usepackage{enumitem,xcolor}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
 \usepackage[hidelinks]{hyperref}
+\algrenewcommand\algorithmicrequire{\textbf{Input:}}
+\algrenewcommand\algorithmicensure{\textbf{Output:}}
 \setlist{itemsep=1pt,topsep=3pt}
 \captionsetup{font=small}
 \renewcommand{\arraystretch}{1.18}
@@ -20,6 +24,7 @@
 \date{2026-11-11}
 
 \begin{document}
+\sloppy
 \maketitle
 
 \noindent This brief collects what you need to write the Model 1 section of the paper:
@@ -185,7 +190,98 @@ Skill: RMSE in $x=V/K$, compared with persistence ($\hat x_{t+1}=x_t$) and the t
 separated from water. If you fit free $r,d,K$ on a planted section, only $r-d$ and $r/K$ are identifiable.}
 
 % =====================================================================
-\section{Parameters}
+\section{Algorithms}\label{sec:alg}
+
+Model 1 uses four algorithms: prepare the data (Alg.~\ref{alg:prep}), fit $r,d$ (Alg.~\ref{alg:cal}),
+step the coupled system through one year (Alg.~\ref{alg:year}), and find the long-run state (Alg.~\ref{alg:scen}).
+Thresholds and settings are listed in Section~\ref{sec:par}; the algorithms show only the logic.
+
+\begin{algorithm}[H]
+\caption{Data preparation}\label{alg:prep}
+\begin{algorithmic}[1]
+\Require NDVI time series with pixel quality flags, for each station
+\Ensure relative cover $x_{s,t}$; training and hold-out pairs
+\State Keep only reliable pixels; build yearly growing-season cover $V_{s,t}$ (missing years stay missing)
+\State $K_s\gets1.15\,Q_{0.95}$ of station $s$'s training-period cover \Comment{Eq.~\eqref{eq:K}}
+\State $x_{s,t}\gets V_{s,t}/K_s$
+\State Split consecutive-year pairs $(x_{s,t},x_{s,t+1})$ by target year into training and hold-out sets
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{Calibration of $r,d$: pooled linear least squares}\label{alg:cal}
+\begin{algorithmic}[1]
+\Require training pairs from Alg.~\ref{alg:prep}
+\Ensure $\hat r,\hat d$ and their uncertainty
+\State \textbf{Linearise.} With $\Wb=1$, $k=0$, Eq.~\eqref{eq:veg} becomes
+$\underbrace{x_{t+1}-x_t}_{y}=r\,\underbrace{x_t(1-x_t)}_{z_1}-d\,\underbrace{x_t}_{z_2}$
+\State Stack all stations' pairs: $\bm y$ and $\bm Z=[\bm z_1,\ -\bm z_2]$
+\State \textbf{Solve} $(\hat r,\hat d)^\top=(\bm Z^\top\bm Z)^{-1}\bm Z^\top\bm y$ \Comment{unique; Eq.~\eqref{eq:obj}}
+\State \textbf{Uncertainty:} refit on resampled \emph{whole stations} (cluster bootstrap)
+\State \textbf{Check:} one-step error on hold-out pairs vs persistence $\hat x_{t+1}=x_t$
+\end{algorithmic}
+\end{algorithm}
+\noindent\textbf{Key point.} Fixing $K$ beforehand makes the model linear in $(r,d)$, so the fit is an ordinary
+regression with one exact answer. $r$ and $d$ are told apart because growth $x(1-x)$ peaks at medium cover
+while decay $x$ keeps rising.
+
+\begin{algorithm}[H]
+\caption{One model year: water storage drives vegetation}\label{alg:year}
+\begin{algorithmic}[1]
+\Require cover $V_t$, storage $M$, irrigation $I_t$, one year of daily rain, ET$_0$, temperature
+\Ensure $V_{t+1}$, $M$ at year end, $\Wb_t$
+\State Demand $D_j$ from current cover and season \Comment{Eq.~\eqref{eq:demand}; $V_t$ held fixed}
+\For{each day $j$}
+  \State $M\gets M+$ effective rain $+$ effective irrigation
+  \State Spill $M-C$ if storage is over capacity \Comment{drainage}
+  \State Transpire $T_{a,j}=\min(M,\,K_s(M)\,D_j)$;\quad $M\gets M-T_{a,j}$ \Comment{stress when storage is low}
+\EndFor
+\State $\Wb_t\gets\sum_jT_{a,j}/\sum_jD_j$ \Comment{share of demand met}
+\State $V_{t+1}\gets$ Eq.~\eqref{eq:veg} with $\Wb_t$
+\State \Return $V_{t+1}$, $M$ (carried to next year), $\Wb_t$
+\end{algorithmic}
+\end{algorithm}
+\noindent\textbf{Key point.} Water reaches vegetation only through storage: it carries over between days and
+years, overflow is lost, and growth uses the \emph{share of demand met}, not the amount applied. Cover feeds back
+by setting the demand. Every day conserves water exactly (Eq.~\eqref{eq:store}).
+
+\noindent\textbf{Mathematical tools.} (i) An explicit daily \emph{mass-balance difference equation} (a ``bucket''
+or linear-reservoir model); (ii) \emph{piecewise-linear operators}: $\max(\cdot,0)$ for overflow, the
+FAO-56 stress ramp $K_s$, and $\min(\cdot)$ so plants never take more than is stored; (iii) a
+\emph{ratio aggregation} $\Wb=\sum T_a/\sum D$ that passes the fast (daily) water state to the slow (yearly)
+logistic map. The two time scales are nested: $V$ is frozen within the year, $M$ is updated every day.
+
+\begin{figure}[H]\centering
+\includegraphics[width=\textwidth]{../../Figures/M1/m1_f10_bucket_mechanism.pdf}
+\caption{How Alg.~\ref{alg:year} works. (a) One daily step. (b) The stress ramp: below $(1-p)C=37.5$ mm transpiration
+is cut in proportion to storage. (c) Daily storage in a long-run year: at 300 mm/yr storage stays near 13 mm, so plants
+are stressed all year; at 1,500 mm/yr storage stays near capacity and 43.5 mm/yr overflows. (d) At 300 mm/yr only 37\%
+of demand is met ($\Wb=0.37$), which is what limits cover to 17.9\%.}
+\label{fig:bucket}
+\end{figure}
+
+\begin{algorithm}[H]
+\caption{Long-run state for a given irrigation level}\label{alg:scen}
+\begin{algorithmic}[1]
+\Require irrigation $I$; a repeated typical climate year
+\Ensure long-run $(V^*,M^*,\Wb^*)$
+\For{a low and a high starting cover}
+  \Repeat\ apply Alg.~\ref{alg:year}
+  \Until{$V$ and $M$ stop changing}
+\EndFor
+\State Accept only if both starts reach the same point
+\end{algorithmic}
+\end{algorithm}
+\noindent\textbf{Key point.} Because $\Wb$ depends on $V$, the closed form Eq.~\eqref{eq:xstar} is only conditional;
+the long-run state is the fixed point of the coupled yearly map. Repeating Alg.~\ref{alg:year} over many years
+from a planted start gives the scenario paths; varying one parameter gives the sensitivity table.
+
+\noindent\textit{Code:} Alg.~\ref{alg:prep}--\ref{alg:cal}: \texttt{Code/v7\_model1.py} (\texttt{yearly\_table},
+\texttt{fit\_stations}), \texttt{Code/v7\_m1\_run.py} (\texttt{bootstrap});
+Alg.~\ref{alg:year}--\ref{alg:scen}: \texttt{Code/v7\_m1\_water.py} (\texttt{water\_year}, \texttt{equilibrium}, \texttt{trajectory}).
+
+% =====================================================================
+\section{Parameters}\label{sec:par}
 
 \begin{table}[H]\centering\small
 \begin{tabularx}{\textwidth}{@{}l l l Y@{}}
@@ -392,7 +488,8 @@ File (\texttt{Figures/M1/}) & What it shows / caption point\\
 \item Section choice and data (Yutian--Minfeng, 127.95 km $\times$ 1 km scenario; stations; QA rules).
 \item Model structure (Fig.~\ref{fig:struct}) and the four feedback links.
 \item Equations \eqref{eq:veg}--\eqref{eq:wbar} with one line each on meaning.
-\item Calibration (Eq.~\eqref{eq:obj}), Table~\ref{tab:fit}, honest skill statement, bootstrap.
+\item Algorithms: data preparation (Alg.~\ref{alg:prep}), calibration as linear regression (Alg.~\ref{alg:cal}), one model year (Alg.~\ref{alg:year}), long-run state (Alg.~\ref{alg:scen}).
+\item Parameters (Table~\ref{tab:par}); calibration result Table~\ref{tab:fit}, honest skill statement, bootstrap.
 \item Results: irrigation--cover curve (Table~\ref{tab:curve}), scenario paths (Table~\ref{tab:scen}).
 \item Influencing factors: sensitivity (Table~\ref{tab:sens}), wind damage scenarios.
 \item Limits and the hand-over to Model 2: each planted cohort carries its own $(V,M)$.

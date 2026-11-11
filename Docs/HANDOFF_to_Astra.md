@@ -5,6 +5,8 @@ Written by Claude.
 **Added**
 - `Reports/M1/M1_writing_brief.{tex,pdf}` (9 pp) and `Reports/M2/M2_writing_brief.{tex,pdf}` (11 pp), in English for writing the paper: goal vs problem requirements, structure diagram, every formula with its meaning, parameter table with values and status, results tables, decision rules (M2), can/cannot-claim lists, figure list, suggested section outline.
 - `Reports/M1/m1_structure.{tex,pdf}`, `Reports/M2/m2_structure.{tex,pdf}` — model structure diagrams drawn with the TikZ kit in `FigureAndFlowworkStyle/WorkFlowStyle/`; usable in the paper.
+- Later the same day: an "Algorithms" section was added to both briefs, before Parameters (M1: calibration, one model year, scenarios/fixed point; M2: build MILP, two-step ε-constraint solve, replay check). Each algorithm names the matching functions in `Code/v7_model1.py`, `v7_m1_run.py`, `v7_m1_water.py`, `v7_m2_core.py`, `v7_model2.py`. M1 brief now 11 pp, M2 12 pp.
+- Added `Code/v7_m1_bucket_figure.py` → `Figures/M1/m1_f10_bucket_mechanism.{pdf,png}` (bucket schematic, K_s ramp, daily storage at 300 and 1,500 mm/yr, demand vs transpiration). It re-runs the bucket day by day with the adopted M1 parameters and asserts that monthly totals and W match `water_year`. Inserted in the M1 brief after Algorithm 3 (brief now 12 pp); M1 algorithms were also simplified (data preparation split out, calibration written as linear regression).
 - Build: `pdflatex` twice in each folder. All numbers were copied from `Results/v7/model1/` and `Results/v7/model2/`; no model was re-run.
 
 **Moved**
@@ -140,3 +142,41 @@ Not verified, do not present as fact:
 ## Rules kept
 
 Fit on training data only; report hold-out next to persistence and mean baselines; keep unfavourable scores; every parameter is fitted with an s.d., taken from the v7 rule, or a named assumption with a range.
+
+## 2026-11-11 — Section 3 outline + station map
+- `Paper/main.tex` §3 rewritten as prose in two subsections (Study area and station categories; Data sources and preprocessing), with dimidiate-pixel cover equation and citations REF01, REF06, CN16, REF15, EN10 added.
+- New `Code/v7_data_stations_figure.py` regenerates `Paper/Figure/data_stations.{pdf,png}` on an Esri World Imagery basemap (tiles cached in `Data/v7/raw/basemap_tiles`). Run with `.venv/bin/python`.
+
+## 2026-11-11 — Model 1 sketch in the paper
+- New `Paper/Section/model1.tex` (input from `main.tex`, replaces the Model 1 placeholders): logic chain + structure figure, cover equation, daily bucket, W-bar link, calibration as linear regression, Algorithm 1 (one model year), results with figs f02, f06, f07, f10.
+- `main.tex`: added `algorithm`/`algpseudocode`; `\graphicspath` now also reads `../Figures/M1/` and `../Reports/M1/` (for `m1_structure.pdf`).
+- No parameter table on purpose; numbers in text come from `Reports/M1/M1_writing_brief.tex`.
+
+## 2026-11-11 — Model 1: W-bar explanation + two-clocks figure
+- `Section/model1.tex`: new "What W-bar means" paragraph (meaning, 0/0.37/1 examples, 4 reader questions; cites FAO-56 REF11). "Two states on two clocks" rewritten as bold-labelled bullets.
+- New figure `Paper/Figure/m1_two_clocks.{tex,pdf}` (standalone TikZ; build with pdflatex in `Paper/Figure`): outer year dial (cover V), inner day dial (bucket M), handoff arrows D_j and W-bar, colour-matched equation panel.
+- `main.tex`: `\paragraph` headings now bold (template printed them plain).
+- (later) Removed the "What W-bar means" paragraph and its 4 reader questions. W-bar's physical meaning (=1 / between / =0) now sits right after the cover equation, linked to the up-arrow in the two-clocks figure.
+- (later) W-bar meaning merged into "The link between the two clocks" as paper-style prose (no bullets); cover-equation paragraph rewritten as prose and points to Eq. (4).
+- (later) Bucket figure split for the paper: Fig. 4 schematic (`m1_f10a_bucket_schematic`), Fig. 5 K_s ramp (`m1_f10b_stress_ramp`), Fig. 6 year storage + demand (`m1_f10c_year_water`). Script refactored into panel functions; combined `m1_f10` still written.
+- (later) Two-clocks figure redrawn: inner dial = day clock with months (one turn = one year), outer ring = years t-2..t+3 with V_t->V_{t+1} arc at 12 o clock; handoffs numbered (1) D_j down, (2) W-bar up, same numbers in the text list and equation panel. Caption shortened.
+- (later) "Two clocks talk" bullets replaced by Algorithm 1 (nested year/day loops, handoffs (1)/(2)); old "One model year" algorithm in Solution approach removed, Steps 2-3 now point to Algorithm 1.
+- (later) Algorithm 1 rewritten in plain words (no equations except W-bar); `\AlgWrap` helper added in main.tex so wrapped algorithm lines keep their indent.
+- (later) "How the two clocks are coupled" rewritten as a one-year timeline: (1) 1 Jan V_t frozen sets D_j; day clock runs alone; (2) 31 Dec W-bar updates V; M carries over. Step 1 now "calibration by least squares": Eq. 5 regression form with y, z1, z2; Eq. 6 LS objective; Eq. 7 normal equations + closed form; why unique, why K is fixed, cluster bootstrap, hold-out.
+- (later) Reverted the "two clocks coupled" timeline back to the short two-bullet version (1 Down / 2 Up + carry-over line). Least-squares Step 1 kept.
+- (later) Model 1 intro: "chain of four links" is now an inline TikZ arrow chain (Water arrives -> Root-zone store -> Demand met -> Cover changes, solid feedback arrow 4 back to the store), followed by a numbered sentence; added tikz `calc` library in main.tex.
+- (later) Four-link chain simplified: boxes show symbols only (P,I -> M_j -> W-bar_t -> V_t), arrows lettered a-d (letters avoid clash with clock badges 1/2); sentence below explains a-d.
+- (later) Bucket schematic (Fig. 4) redrawn in TikZ: `Paper/Figure/m1_bucket.{tex,pdf}` (blue water, green plant/transpiration, red dashed capacity and threshold, braces for stressed / no-stress zones). Replaces m1_f10a in the paper; the matplotlib m1_f10a file is still generated but unused.
+- (later) Least-squares stacking / normal equations / closed form moved into Algorithm 1 "Least-squares calibration of r and d" (also bootstrap + hold-out); Eq. 7 removed. The one-model-year algorithm is now Algorithm 2.
+- (later) Fig. 4 bucket: added gross input (rain + irrigation), grey branch "evaporation & losses (1-alpha_P)P+(1-eta_w)I", "effective inflow" label; outflow relabelled "plant transpiration (root uptake only)". Text after Eq. 3 now says evaporation is removed at the inflow and T_a is transpiration only. User-edited caption left as is.
+- (later) Moved the year-water figure (now Fig. 8) and its 37% paragraph from "link between two clocks" into Results as "Why the curve flattens" (right after the water-cover curve). Removed the Model 1 "Wind index" paragraph; its daily-first-then-average rationale merged into the Section 3 wind-index item in main.tex; cover equation now points to Section 3 for E_t.
+- (later) Model 1 Results rewritten as "Results: answering Task 1": trust check -> how V and M change (3 phases + stop case + within-year) -> drivers (1) water supply, (2) demand/delivery/wind with new sensitivity figure f09 -> boxed "Answer to Task 1" incl. implication for Model 2. Numbers from Reports/M1/M1_writing_brief.tex. Model 1 now ~10 pages (pp. 8-17).
+- (later) Model 1 Results reworded in academic register (no new content): headings Model reliability / Evolution of the state variables / Controlling factors: water supply / Controlling factors: demand, delivery and wind; bullets turned into prose; box renamed "Summary of findings for Task 1".
+- (later) Results language simplified; phases, irrigation returns and factor groups now numbered lists. No content change.
+- (later) Added Model 1 parameter table (Table "Model 1 parameters", label tab:m1-par) at end of 5.2 Solution approach: fitted (r, d with bootstrap 95%), data rules (K, V_full), assumed scenario values with tested ranges. Values from Reports/M1/M1_writing_brief.tex sec:par.
+- (later) Model 1 trimmed to pp. 8-14: removed K_s ramp figure, calibration-check figure, year-water figure, summary box; figure captions and figure descriptions shortened; short "Summary" paragraph at the end. Figures/tables now float (!htb), lists compacted, no large page gaps.
+- (later) Added demand + stress formulas (new Eq. 4): D_j = c min(1, 2V_t/V_full) f(T_j) ET0_j, K_s = min{1, M_j/((1-p)C)}, f(T) = min{1, max{0,(T-5)/20}}. c is called "transpiration coefficient" everywhere (table, text, and f09 label via Code/v7_m1_figures.py; f09 regenerated). Removed G row from parameter table (G = 0, not in the paper equations); Section 3 wind index now states u_T = 5 m/s.
+- (later) Parameter table rebuilt: columns Symbol | Meaning | Value | Range tested | Unit, three groups (fitted / data rule / assumed), dagger = bootstrap 95% interval; V0 and M0 split into two rows. Table and Algorithm 2 pinned with [H] so the order is Alg 2 -> Parameter values + Table 4 -> 5.3 Results. Fig 7 pinned after its list, Summary last; Model 1 still ends p. 14.
+- (later) Station series figure (m1_f01, suptitle removed in Code/v7_m1_figures.py and regenerated) combined with the scenario-path figure as Fig. 5 (a) observed 2015-2025, (b) scenarios 2026-2050 (subfigures, labels fig:m1-obs / fig:m1-scen). Model reliability now cites 5a (free run misses the 2023-2025 greening). Float pages top-aligned via \@fptop=0pt in main.tex. Model 1 now pp. 8-15.
+- (later) Fig. 5 now side by side: (a) m1_f01_station_series_tall (4x2), (b) m1_f07_scenario_trajectories_tall (3 stacked panels, titles without letters). New tall=True options in Code/v7_m1_figures.py; wide originals unchanged. Fig. 5 placed [!t] so text fills below it. Model 1 = pp. 8-15. Note: Table 4 caption was shortened outside this session; the dagger on r, d ranges is no longer explained.
+- (later) Controlling factors now two-column (text left, figure right via minipage + 
