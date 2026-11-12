@@ -20,6 +20,7 @@ here = fileparts(mfilename('fullpath'));
 S.root = fullfile(here, '..', '..');
 S.out  = fullfile(S.root, 'Paper', 'Figure');
 S.res  = fullfile(S.root, 'Results', 'v7', 'model1');
+S.res2 = fullfile(S.root, 'Results', 'v7', 'model2');
 S.data = fullfile(S.root, 'Data', 'v7');
 
 S.font  = 'Times New Roman';   % embeds in the PDF; matches the TeX Gyre Termes body text
@@ -43,6 +44,7 @@ c.vegLight   = h('E3F3E8');
 c.sand       = h('8F7159');
 c.sandLight  = h('FFEACE');
 c.accent     = h('F49431');
+c.pvDark     = h('D47216');
 c.plum       = h('7A437F');
 c.limit      = h('D03B3B');
 c.ink        = h('1F2B33');

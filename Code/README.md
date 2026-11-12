@@ -67,13 +67,14 @@ python Code/v7_m2_figures.py
 
 ```sh
 cd Code/figures_matlab && matlab -batch make_paper_figures
-cd Paper/Figure && for f in m1_structure m1_two_clocks m1_bucket; do pdflatex $f.tex; done
+cd Paper/Figure && for f in m1_structure m1_two_clocks m1_bucket m2_structure m2_restrictions m2_cohort_concept; do pdflatex $f.tex; done
 ```
 
-`Code/figures_matlab/` 只读 `Data/v7/` 与 `Results/v7/model1/`，把论文用数据图（`data_stations`、
-`m1_cover_series`、`m1_scenarios`、`m1_water_curve`、`m1_sensitivity`）写入 `Paper/Figure/`（矢量 PDF + 400 dpi PNG）。
+`Code/figures_matlab/` 只读 `Data/v7/`、`Results/v7/model1/` 与 `Results/v7/model2/`，把论文用数据图（`data_stations`、
+`m1_stress_season`、`m1_cover_series`、`m1_scenarios`、`m1_water_curve`、`m1_sensitivity`、
+`m2_plan`、`m2_cohorts`、`m2_water`、`m2_tradeoff`、`m2_sensitivity`、`m2_pv_screen`）写入 `Paper/Figure/`（矢量 PDF + 400 dpi PNG）。
 配色取自 mycolor.space（基色 #1E5F74），坐标轴按知乎专栏“阿昆的科研日常”的 MATLAB 模板，见 `paper_style.m`。
-TikZ 示意图共用 `Paper/Figure/paper_palette.tex`，颜色角色与 `paper_style.m` 相同：水＝青蓝，植被＝绿，风沙＝棕，突出＝橙，界限＝红色虚线。
+TikZ 示意图共用 `Paper/Figure/paper_palette.tex`，颜色角色与 `paper_style.m` 相同：水＝青蓝，植被＝绿，运维/成本＝紫，风沙＝棕，光伏/突出＝橙，界限＝红色虚线。
 
 ## 预处理与对比工具
 

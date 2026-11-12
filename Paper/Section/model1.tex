@@ -71,7 +71,7 @@ Only shares $\alpha_P$ of rain and $\eta_w$ of irrigation reach the roots, and w
 D_j=c\,\min\!\Big(1,\frac{2V_t}{V_{\mathrm{full}}}\Big)\,f(T_j)\,\mathrm{ET}_{0,j},\qquad
 K_s=\min\Big\{1,\ \frac{M_j}{(1-p)C}\Big\}.
 \end{equation}
-The transpiration coefficient $c$ scales reference evapotranspiration $\mathrm{ET}_0$ to the demand of a full stand. Demand grows with cover until $V_t$ reaches half of the full-cover value $V_{\mathrm{full}}$, which is where cover feeds back on water, and $f(T)=\min\{1,\max\{0,(T-5)/20\}\}$ switches it on with the season. Below the stress threshold $(1-p)C$, the FAO-56 coefficient $K_s$ \cite{REF11} cuts transpiration in proportion to what is left (Figure~\ref{fig:m1-bucket}). Each daily step conserves water exactly.
+The transpiration coefficient $c$ scales reference evapotranspiration $\mathrm{ET}_0$ to the demand of a full stand. Demand grows with cover until $V_t$ reaches half of the full-cover value $V_{\mathrm{full}}$, which is where cover feeds back on water, and $f(T)=\min\{1,\max\{0,(T-5)/20\}\}$ switches it on with the season. Below the stress threshold $(1-p)C$, the FAO-56 coefficient $K_s$ \cite{REF11} cuts transpiration in proportion to what is left (Figures~\ref{fig:m1-bucket} and \ref{fig:m1-switch}a). Each daily step conserves water exactly.
 
 \begin{figure}[!htb]
   \centering
@@ -94,6 +94,15 @@ where $u_2$ is the wind speed at 2\,m, $R_n-G$ the available energy, $e_s-e_a$ t
 
 Cover shelters the sand, and the shelter factor $1-V_t/K$ lies between 0 and 1 (1 at bare ground, 0 at full cover). A separate shelter or damage term was tested but is not supported after calculation: under average wind it only changes $r$ into $r-k$, so the fitted $r$ and $d$ already contain the average wind effect. The 95\% upper bound is $k\le0.89$, equivalent to $8.5$ percentage points of cover loss per year at $V=K/2$, i.e.\ 4--8 times the observed inter-annual variability; the data therefore exclude strong wind erosion but not weak effects ($k<0.5$). We therefore keep no separate wind term in the calibrated equation\footnote{Revised 2026-11-12: the symbol $k$ is retained in the model form of Section~3 as a scenario parameter (baseline $k=0$) so that the disaster analysis of Task~3 keeps a physical entry point; its detectable bound is reported here.}, and the wind index $E_t$ remains a relative forcing rather than a driver of cover.
 
+Figure~\ref{fig:m1-switch} shows the two switches that shape the daily demand. Water stress $K_s$ (a) acts only once the store falls below $(1-p)C=37.5$\,mm; at the long-run state with 300 or 600\,mm/yr the year-end store lies deep in the stressed zone. The season switch $f(T)$ (b) keeps demand off from December to February (under 1\,mm in November) and at full strength in July, so the model uses 1,191 of the 1,686\,mm/yr of reference $\mathrm{ET}_0$ (c).
+
+\begin{figure}[!htb]
+  \centering
+  \includegraphics[width=\linewidth]{m1_stress_season.pdf}
+  \caption{The two switches on daily demand. (a) Stress coefficient $K_s(M)$ for $p=0.5$ (grey: $p=0.3$, $0.7$); dots are the long-run year-end stores. (b) $f(T)$ with the section's monthly mean temperature (YT, MF, 2015--2022). (c) Monthly $\mathrm{ET}_0$ and the demand $f(T)\,\mathrm{ET}_0$ used by the model.}
+  \label{fig:m1-switch}
+\end{figure}
+
 \subsection{Solution approach}
 We fit growth and decay from data, step the coupled system through a year, and repeat the year to reach a long-run state or a scenario path.
 
@@ -106,23 +115,21 @@ where $s$ indexes stations and $\varepsilon_{s,t}$ is the one-step error. The mo
 (\hat r,\hat d)=\arg\min_{r,d}\ \sum_{(s,t)\in\mathcal T}\big(y_{s,t}-r\,z_{1,s,t}+d\,z_{2,s,t}\big)^2 .
 \end{equation}
 Because the objective is quadratic in $(r,d)$, its minimiser has a closed form; Algorithm~\ref{alg:m1-ls} gives the procedure.
-
 \begin{algorithm}[!htb]
 \caption{Least-squares calibration of $r$ and $d$}\label{alg:m1-ls}
 \begin{algorithmic}[1]
 \Require training pairs $(x_{s,t},\,x_{s,t+1})$, $(s,t)\in\mathcal T$, with $N=|\mathcal T|$
 \Ensure estimates $\hat r,\hat d$ and their bootstrap spread
-\For{each pair $(s,t)\in\mathcal T$}
-  \State $y_{s,t}\gets x_{s,t+1}-x_{s,t}$;\quad $z_{1,s,t}\gets x_{s,t}(1-x_{s,t})$;\quad $z_{2,s,t}\gets x_{s,t}$ \Comment{Eq.~\eqref{eq:m1-reg}}
+\For{each pair $(s,t)\in\mathcal T$}: 
+\State $y_{s,t}\gets x_{s,t+1}-x_{s,t}$;\quad $z_{1,s,t}\gets x_{s,t}(1-x_{s,t})$;\quad $z_{2,s,t}\gets x_{s,t}$ \Comment{Eq.~\eqref{eq:m1-reg}}
 \EndFor
 \State Stack the pairs: $\bm y\in\mathbb R^{N}$ and design matrix $\bm Z=[\,\bm z_1,\ -\bm z_2\,]\in\mathbb R^{N\times2}$
-\State Set the gradient of Eq.~\eqref{eq:m1-ls} to zero $\Rightarrow$ normal equations $\bm Z^\top\bm Z\,(\hat r,\hat d)^\top=\bm Z^\top\bm y$
 \State Solve: $(\hat r,\hat d)^\top\gets\big(\bm Z^\top\bm Z\big)^{-1}\bm Z^\top\bm y$ \Comment{the matrix solution of \textbf{Least-quare} calibration}
 \For{$b=1,\dots,B$} \Comment{residual error}
   \State Resample \emph{whole stations} with replacement; repeat lines 1--5 $\Rightarrow(\hat r^{(b)},\hat d^{(b)})$
 \EndFor
 \State Report $(\hat r,\hat d)$ with the spread of $\{(\hat r^{(b)},\hat d^{(b)})\}$
-\State Check one-step error on hold-out pairs (2023--2025) against persistence $\hat x_{t+1}=x_t$
+\State Calculate the final residual error for any $(\hat r,\hat d)$
 \end{algorithmic}
 \end{algorithm}
 
@@ -196,7 +203,7 @@ $M_0$ & initial store of a new stand & 37.5 & -- & mm \\
 \end{figure}
 
 \paragraph{Model reliability.} An unwatered stand loses half its cover in about six years. On hold-out years the one-step forecast does not beat persistence overall (RMSE 0.064 vs 0.054 in $V/K$), but it does at Minfeng and Yutian, the two stations in our section. Figure~\ref{fig:m1-obs} shows why. Observed growing-season cover (black) varies between about 24\% and 44\% and stays below each station's ceiling $K$ (red dashed). The one-step predictions (teal diamonds) follow the level of each series but not its year-to-year spikes. In the hold-out years (shaded band), cover rose sharply at Qiemo, Ruoqiang and Alar; the free run from 2022 (orange) stays near the 2022 value and misses this greening, for example 33.0\% against 38.4\% observed at Ruoqiang in 2025. At Yutian and Minfeng the free run follows the observed values more closely. Model~1 is therefore used to compare strategies, not to predict single years.
-\newpage
+
 \paragraph{Evolution of the state variables.} From a planted cover of 2\%, cover and soil water pass through three phases (Figure~\ref{fig:m1-scen}):
 \begin{enumerate}\setlength{\itemsep}{1pt}\setlength{\parsep}{0pt}
   \item \textbf{Establishment: growth, not water, limits cover.} Young plants use little water, so with 300\,mm/yr or more the store stays full ($\overline W=1$) and the surplus drains. All such quotas give the same 9.9\% cover by 2030, so water above about 300\,mm/yr is wasted in this phase.
@@ -207,35 +214,35 @@ The plateau lasts only while water is supplied. If irrigation stops after ten ye
 
 \paragraph{Controlling factors: water supply.} Water supply is the main control.Specifically calculated in desert we set \textbf{Rain} alone (52\,mm/yr against about 1,700\,mm/yr of evaporative demand) holds only 1.8\% cover.
 
-\noindent\begin{minipage}[t]{0.47\linewidth}
+\noindent\begin{minipage}[t]{0.50\linewidth}
 \vspace{0pt}
 Irrigation raises long-run cover quickly at first, then with strongly diminishing returns (Figure~\ref{fig:m1-curve}a):
-\begin{enumerate}\setlength{\itemsep}{1pt}\setlength{\parsep}{0pt}
+\begin{enumerate}\setlength{\topsep}{1pt}\setlength{\itemsep}{0pt}\setlength{\parsep}{0pt}
   \item the first 100\,mm/yr adds 7.7 percentage points;
   \item going from 500 to 600\,mm/yr adds only 1.6;
   \item above about 1,500\,mm/yr, cover stops at a ceiling of 30.6\%.
 \end{enumerate}
 The bucket explains this shape: at 300\,mm/yr only 37\% of demand is met (Figure~\ref{fig:m1-curve}b), so the deficit, not the ceiling $K$, keeps cover at 18\%; above 1,500\,mm/yr extra water only overflows.
 \end{minipage}\hfill
-\begin{minipage}[t]{0.5\linewidth}
+\begin{minipage}[t]{0.47\linewidth}
 \vspace{0pt}\centering
-\includegraphics[width=\linewidth]{m1_water_curve.pdf}
+\includegraphics[width=0.92\linewidth]{m1_water_curve.pdf}
 \captionof{figure}{Long-run state against irrigation. Red dashed lines are limits.}
 \label{fig:m1-curve}
 \end{minipage}
 
-\noindent\begin{minipage}[t]{0.47\linewidth}
+\noindent\begin{minipage}[t]{0.54\linewidth}
 \vspace{0pt}
 \paragraph{Controlling factors: demand, delivery and wind.} With water supply fixed, we varied the other factors one at a time (Figure~\ref{fig:m1-sens}). They fall into three groups:
-\begin{enumerate}\setlength{\itemsep}{1pt}\setlength{\parsep}{0pt}
+\begin{enumerate}\setlength{\topsep}{1pt}\setlength{\itemsep}{0pt}\setlength{\parsep}{0pt}
   \item \textbf{Factors that shift long-run cover by 1--3 points:} the transpiration coefficient $c$ ($-1.7$ to $+3.4$ points at 300\,mm/yr), irrigation efficiency ($\pm1.2$) and the effective rain fraction ($-0.5$ to $+1.4$). All three act through $\overline W$, the supply-to-demand ratio.
   \item \textbf{Factors that change soil water but not long-run cover:} storage capacity and the stress threshold. Without overflow, all inflow is eventually transpired, so $\overline W$ depends only on inflow and demand; these factors change only the storage level and its timing.
   \item \textbf{Wind, through evaporative demand.} Scaling wind speed in Eq.~\eqref{eq:m1-pm} by $+20\%$ raises demand by 8\% and lowers long-run cover at 300\,mm/yr from 17.9\% to 17.2\%; $-20\%$ raises it to 18.8\% (Figure~\ref{fig:m1-sens}c). Less cover leaves more sand exposed: $S$ moves from 0.53 to 0.55.
 \end{enumerate}
 \end{minipage}\hfill
-\begin{minipage}[t]{0.5\linewidth}
-\vspace{0pt}\centering
-\includegraphics[width=\linewidth]{m1_sensitivity.pdf}
+\begin{minipage}[t]{0.44\linewidth}
+\vspace{0pt}\raggedleft
+\includegraphics[width=0.95\linewidth]{m1_sensitivity.pdf}
 \captionof{figure}{Sensitivity of long-run cover to one-at-a-time changes and to wind speed.}
 \label{fig:m1-sens}
 \end{minipage}
