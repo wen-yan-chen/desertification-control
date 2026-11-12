@@ -1,4 +1,4 @@
-﻿% !TEX program = xelatex
+% !TEX program = xelatex
 % =====================================================================================
 %  2026 CQU_MCM  B 题《治沙是一项精细活》
 %  模型检验报告 —— 检验对象：M1 / M2 已提交的数值结果（Results/v7/model1|model2）
@@ -437,7 +437,10 @@ $\kappa(S^{\top}S)=375$，远小于 $10^{6}$ 的经验阈值 \ok。
 期望假阳性数 & $18\times0.05=0.9$ & — \\
 “至少 1 组显著”的二项概率 & $P=0.60$ & 不能拒绝“全是噪声” \\
 主检验（原风蚀项）的 $k$ 标准误 & 0.433 & — \\
-最小可检测效应（MDE $=1.96\times$SE） & $k=0.85$ & 只能排除“$k>0.85$” \\
+MDE（双侧 5\%，50\% 功效，$1.96\,$SE） & $k=0.85$ & 只能排除“$k>0.85$” \\
+MDE（80\% 功效，$2.80\,$SE） & $k=1.21$ & 审稿人更认的口径 \\
+单侧 95\% 上界（自助 97.5\% 分位） & $k\le0.89$ & \textbf{推荐写进论文的那一个} \\
+折算到 $\bar V=K/2$ 的年损失 & $8.5$ pp\,a$^{-1}$ & 观测年际波动的 4--8 倍 \\
 主检验 $k$ 的自助区间宽度 & 9.06（跨 $-0.44$ 到 0.89） & 极宽 \\
 站内“风指数—次年覆盖变化”相关 & $r=0.030$，$p=0.81$，$n=70$ & 无信号 \\
 \bottomrule
@@ -453,9 +456,18 @@ $\kappa(S^{\top}S)=375$，远小于 $10^{6}$ 的经验阈值 \ok。
 
 \begin{keybox}[改法（措辞层面，不需要重算）]
 把“风蚀对覆盖度无显著影响”改成“在 7 个站点、年尺度、现有风指数变异（年际 CV 13\%）下，
-风蚀项的可检测下限为 $k\approx0.85$，故未能检出；风蚀的作用通过另一条通道
-（风速 $\to$ ET$_0\to$ 水分 $\to$ 覆盖度）保留在模型中”。
+风蚀系数的单侧 95\% 上界为 $k\le0.89$，折算到 $\bar V=K/2$ 处相当于每年 $8.5$ 个百分点的覆盖度损失，
+约为观测年际波动的 4--8 倍；因此可以排除强风蚀，但不能排除 $k<0.5$ 的弱风蚀。
+风蚀的作用通过另一条通道（风速 $\to$ ET$_0\to$ 水分 $\to$ 覆盖度）保留在模型中”。
 这也与队友自己在 \texttt{wind\_channel.csv} 里做的通道 A 分析一致。
+
+\smallskip
+\textbf{（2026-11-12 已落地）}上述措辞已写入四处：
+\texttt{Reports/model\_v7/model\_v7.tex} 的注 \texttt{rem:wind}（结构性共线、统计证据、上界、M3 情景用法，
+并把 $k$ 的情景域由 $[0,0.10]$ 扩到 $[0,0.90]$）；
+\texttt{Reports/M1/M1\_writing\_brief.tex} 的 “Detectable-effect bound” 段；
+\texttt{Paper/Section/model1.tex} 风蚀段的脚注；
+\texttt{Results/v7/model1/README.md} 的口径说明。\texttt{model1\_results.json} 未改动（M2 记录其哈希）。
 \end{keybox}
 
 \subsubsection{残差诊断}
@@ -794,7 +806,9 @@ M3 收敛 & $n\ge400$ 才能 $<1\%$ & 同上 \\
 \hline
 \endhead
 D1 & \texttt{model1\_results.json} 写 “wind term removed”，
-     易被读成“风蚀无影响” & 改为“年尺度未检出（MDE $k\approx0.85$），风蚀通过 ET$_0$ 通道保留” \\
+     易被读成“风蚀无影响” & \textbf{已于 2026-11-12 处理}：\texttt{model\_v7.tex} 增注 \texttt{rem:wind}（基线 $k=0$、上界 $0.89$、M3 情景用法）；
+     \texttt{M1\_writing\_brief.tex} 与 \texttt{Paper/Section/model1.tex} 补入上界；
+     json 未改（M2 记录其哈希），措辞在 \texttt{Results/v7/model1/README.md} 更正 \\
 D2 & M1 的 $R^2$ 在 $V$ 尺度、RMSE 在 $x$ 尺度报告 & 统一说明两个尺度的换算（$\times K$）\\
 D3 & M2 的“三类资金比例”在 0 支出年留空 & 论文中注明“比例只在支出年定义”，避免读者误判为缺失 \\
 D4 & M2 的 $dual\_bound\_scaled$ 单位随目标变（百万元 / 千 ha·年） & 表注中写明单位 \\
@@ -803,6 +817,8 @@ D5 & M3 尚未实现 & 若最终不实现，正文应写“给出可实现的公
 \end{longtable}
 
 \end{document}
+
+
 
 
 

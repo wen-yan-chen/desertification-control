@@ -1,4 +1,4 @@
-% Model 1 sketch: logic chain, formulas, algorithm, results. Figures from Figures/M1 and Reports/M1.
+﻿% Model 1 sketch: logic chain, formulas, algorithm, results. Figures from Figures/M1 and Reports/M1.
 \clearpage
 \section{Model 1: Coupled Vegetation--Water--Sand Dynamics}\label{sec:model1}
 Task~1 asks how cover and soil water on a desert-margin section evolve together, and what drives them. Our answer is a chain of four links:
@@ -92,7 +92,7 @@ the share of the plants' water demand actually met in year $t$. $\overline W_t=1
 \end{equation}
 where $u_2$ is the wind speed at 2\,m, $R_n-G$ the available energy, $e_s-e_a$ the dryness of the air, and $\Delta$, $\gamma$ thermodynamic coefficients. On our section the wind-driven second term supplies 61\% of annual $\mathrm{ET}_0$. A windier climate therefore raises the demand $D_j$, lowers $\overline W_t$ and slows growth.
 
-Cover shelters the sand, and the shelter factor $1-V_t/K$ lies between 0 and 1 (1 at bare ground, 0 at full cover). A separate shelter or damage term was tested but is not supported after calculation: under average wind it only changes $r$ into $r-k$, so the fitted $r$ and $d$ already contain the average wind effect. We therefore keep no separate wind term, and the wind index $E_t$ remains a relative forcing rather than a driver of cover.
+Cover shelters the sand, and the shelter factor $1-V_t/K$ lies between 0 and 1 (1 at bare ground, 0 at full cover). A separate shelter or damage term was tested but is not supported after calculation: under average wind it only changes $r$ into $r-k$, so the fitted $r$ and $d$ already contain the average wind effect. The 95\% upper bound is $k\le0.89$, equivalent to $8.5$ percentage points of cover loss per year at $V=K/2$, i.e.\ 4--8 times the observed inter-annual variability; the data therefore exclude strong wind erosion but not weak effects ($k<0.5$). We therefore keep no separate wind term in the calibrated equation\footnote{Revised 2026-11-12: the symbol $k$ is retained in the model form of Section~3 as a scenario parameter (baseline $k=0$) so that the disaster analysis of Task~3 keeps a physical entry point; its detectable bound is reported here.}, and the wind index $E_t$ remains a relative forcing rather than a driver of cover.
 
 \subsection{Solution approach}
 We fit growth and decay from data, step the coupled system through a year, and repeat the year to reach a long-run state or a scenario path.
@@ -240,3 +240,4 @@ The bucket explains this shape: at 300\,mm/yr only 37\% of demand is met (Figure
 \label{fig:m1-sens}
 \end{minipage}
 \paragraph{Summary.} Cover and soil water rise together, settle at a level set by the water supply, and decline once water stops. Water supply is the main control, with sharply diminishing returns. Wind acts through the water demand: 20\% more wind costs about 0.7 points of cover, and cover in turn decides how much sand stays exposed.
+
