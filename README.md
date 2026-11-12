@@ -1,4 +1,4 @@
-# Desertification Control
+﻿# Desertification Control
 
 2026 CQU_MCM Problem B — Sand Control is Meticulous Work，团队数学建模练习项目。
 
@@ -15,6 +15,7 @@
 | M2 情景输入与数表 | [参数登记](Data/v7/m2_inputs/README.md) / [结果说明](Results/v7/model2/README.md) |
 | M2 制图交接 | [给 Claude 的数表说明](Docs/20261111_m2_figure_handoff.md) |
 | M2 图 | [Figures/M2/](Figures/M2/README.md) |
+| **M1/M2 模型检验（2026-11-12）** | **[检验报告](Reports/model_validation_m1m2.tex)** / [检验结果](Results/v7_validation/validation_m1m2.json) / [检验代码](Code/validate_m1m2.py) |
 | 代码与运行方法 | [Code/](Code/README.md) |
 | 建模与预处理报告 | [Reports/](Reports/README.md) |
 | 文献与来源 | [Reference/](Reference/00_阅读导航与资料清单.md) |
@@ -31,6 +32,12 @@ M1 已实现条件合并标定、有效储水动态、逐像元 QA、水量闭�
 可用水量、成本和劳动力约束仍待补充。M2 已完成批次动态优化、预算/水量/劳动约束、
 光伏资产现金流、成本—生态权衡及敏感性数表，仅作条件情景；7 张图已由数表生成，见 `Figures/M2/`。
 任务三的韧性计算尚待实现验证。
+
+**2026-11-12 新增模型检验**：不改动 M1/M2 的任何实现，只读 `Results/v7/model1|model2` 的结果表，
+重算指标、约束余量、目标值与有效面积，并检查 MIP 对偶界、水量闭合、留站泛化与风蚀项统计依据。
+25 项检验结论为 **17 通过 / 3 需改进 / 5 未通过**：M2 全部通过（目标值相对差 6e-11、约束零违反、
+MIP gap 0.2%），M1 数值可复现、水量账闭合，但留出期预测不如持续性基线（21 点赢 7 点，
+留站 5/7 为负）。详见 [检验报告](Reports/model_validation_m1m2.tex)。
 
 在仓库根目录运行。
 
@@ -70,6 +77,7 @@ MODIS MOD13Q1、Open-Meteo 历史归档和 SoilGrids。原始请求与哈希保�
 | `Code/` | M1/M2 实现、输入重建、预处理与对比工具 |
 | `Data/v7/` | 请求清单、面板和经复核输入 |
 | `Results/v7/` | 审计、对比材料及 M1/M2 数值结果 |
+| `Results/v7_validation/` | 模型检验输出（`validation_m1m2.json`、`scorecard_m1m2.csv` 等） |
 | `Figures/M1/` | 当前 M1 数表生成的图片 |
 | `Figures/M2/` | 当前 M2 数表生成的图片（`python Code/v7_m2_figures.py`） |
 | `Figures/v7_init_test/` | 初版预处理与模型图，使用时核对对应数据版本 |
@@ -80,3 +88,4 @@ MODIS MOD13Q1、Open-Meteo 历史归档和 SoilGrids。原始请求与哈希保�
 
 开始工作前按 [协作说明](Docs/协作同步.md) 同步仓库。完成修改后选择实际文件提交、推送。
 原始响应、个人环境和编译缓存按 `.gitignore` 管理。
+

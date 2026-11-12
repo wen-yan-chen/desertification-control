@@ -1,0 +1,796 @@
+﻿% !TEX program = xelatex
+% =====================================================================================
+%  2026 CQU_MCM  B 题《治沙是一项精细活》
+%  模型检验报告 —— 检验对象：M1 / M2 已提交的数值结果（Results/v7/model1|model2）
+%  代码：Code/validate_m1m2.py      结果：Results/v7_validation/
+%  编译：xelatex 两遍（ctex + 中文字体）
+% =====================================================================================
+\documentclass[11pt,a4paper]{ctexart}
+
+\usepackage[margin=2.25cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{bm}
+\usepackage{booktabs,tabularx,array,longtable,multirow,makecell}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage[most]{tcolorbox}
+\usepackage[hidelinks]{hyperref}
+
+\setlength{\parindent}{2em}
+\setlength{\parskip}{0.26em}
+\renewcommand{\arraystretch}{1.16}
+\captionsetup{font=small,labelsep=quad}
+\setlist[itemize]{leftmargin=1.6em,itemsep=1pt,topsep=2pt}
+\setlist[enumerate]{leftmargin=1.9em,itemsep=1pt,topsep=2pt}
+
+\newtheorem{proposition}{命题}
+\newtheorem{remark}{注}
+
+\definecolor{okc}{RGB}{47,133,90}
+\definecolor{badc}{RGB}{197,48,48}
+\definecolor{warnc}{RGB}{221,107,32}
+\definecolor{boxc}{RGB}{240,244,248}
+\newcommand{\ok}{\textcolor{okc}{\textbf{通过}}}
+\newcommand{\bad}{\textcolor{badc}{\textbf{未通过}}}
+\newcommand{\warn}{\textcolor{warnc}{\textbf{需改进}}}
+\newcommand{\figdir}{../Figures/v7_validation}
+
+\newtcolorbox{keybox}[1][]{colback=boxc,colframe=black!55,boxrule=0.5pt,
+  left=6pt,right=6pt,top=5pt,bottom=5pt,fonttitle=\bfseries,title=#1}
+
+\title{\bfseries 治沙工程 M1/M2 数值结果的模型检验\\[5pt]
+\large 必要性判断 · 方法选择 · 可运行代码 · 逐项结果 · 改进方案\\[2pt]
+\normalsize （2026 CQU\_MCM B 题 · 检验对象：\texttt{Results/v7/model1}、\texttt{Results/v7/model2}）}
+\author{CQU\_MCM 2026 · B 题}
+\date{2026-11-12}
+
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+
+\begin{center}
+\begin{minipage}{0.90\textwidth}
+\small
+\textbf{本报告检验的是"已经算出来的东西"}，不是公式草稿：任务一（M1）的站点标定、水量平衡与 14 个情景，
+任务二（M2）的批次制 MIP 投资优化与 29 个情景，全部读自队友提交的结果表，
+能重算的一律重算（指标、约束余量、目标值、有效面积、决策回放），不能重算的查自洽性（对偶界、gap、回放误差）。
+
+\vspace{3pt}
+\textbf{结论提要}：25 项检验中 \ok{} 17 项、\warn{} 3 项、\bad{} 5 项。
+M2 的工程实现几乎无可挑剔（目标值相对差 $6\times10^{-11}$、约束零违反、MIP gap 0.2\%、前沿单调）；
+M1 的\textbf{数值也算对了}（指标逐位复现、水量账闭合到 $10^{-7}$ mm），
+但它的\textbf{预测能力没有通过检验}：留出期 21 个点里只赢 7 个（技能分 $-0.18$），
+7 个留一站检验里 5 个为负，自由推演 3 年的偏差 $-2.4$ 个百分点。
+其余未通过项都指向同一个根因：\textbf{7 个站点簇太少，参数区间宽到 150\%}。
+\end{minipage}
+\end{center}
+
+\vspace{0.4em}
+\begin{keybox}[口径声明（先读这条）]
+\begin{enumerate}
+\item 本报告对应仓库 commit \texttt{4470404}（\texttt{main}）。M1/M2 的结果表由队友的
+      \texttt{Code/v7\_model1.py}、\texttt{Code/v7\_model2.py} 生成，本报告\textbf{不重新实现}模型，
+      只检验这些表。
+\item 任务三（M3）目前只有公式规格、没有数值实现。因此 M3 的四项检验是\textbf{设计检验}：
+      用 M1 当前参数与 M2 情景配置，检查"若按 \texttt{model\_v7.tex} 的公式实现，
+      矩阵性质、解析/模拟一致、离散化收敛、$\lambda=0$ 极限是否成立"。
+\item 所有重算都写在 \texttt{Code/validate\_m1m2.py}（约 700 行，固定种子 20261112），
+      一条命令 20 秒复现：\texttt{python Code/validate\_m1m2.py}。
+\end{enumerate}
+\end{keybox}
+
+\vspace{0.4em}
+\tableofcontents
+\newpage
+
+% =====================================================================================
+\section{检验对象、环境与判据}
+% =====================================================================================
+
+\subsection{被检验的模型与结果表}
+
+\begin{table}[H]\centering\footnotesize
+\begin{tabularx}{\textwidth}{|c|X|X|}
+\toprule
+对象 & 数学形式 & 结果表 \\
+\midrule
+M1 & 站点尺度耦合动力学
+     $x_{t+1}=x_t+r\,x_t(1-x_t)W_t-d\,x_t$，$x=V/K$；
+     $W$ 由月尺度土壤水量账（容量、凋萎、深层排水、灌溉、有效降水）算出，
+     再取"实际/潜在蒸腾比" & \texttt{model1\_results.json}、
+     \texttt{prediction\_pairs}、\texttt{holdout\_by\_site}、
+     \texttt{free\_running\_holdout}、\texttt{parameter\_cluster\_bootstrap}、
+     \texttt{wind\_term\_test}、\texttt{scenario\_monthly\_water}、
+     \texttt{water\_cover\_curve}、\texttt{sensitivity} \\
+M2 & 批次制（cohort）动态投资优化：混合整数规划，决策为每年新增生态批次/PV 批次、
+     各批次灌溉策略；目标为净现成本最小（基准）或生态有效 ha·年最大（参考）；
+     约束含总/年度预算、年/月取水、劳动力、土地、新增面积、PV 容量、整数块 & \texttt{model2\_results.json}、
+     \texttt{annual}、\texttt{monthly}、\texttt{decisions}、\texttt{cohorts}、
+     \texttt{cohort\_water}、\texttt{policy\_library}、\texttt{pv\_screening}、
+     \texttt{scenario\_summary} 等 \\
+M3 & 复合泊松冲击 + 吸收马尔可夫链（$P$、$N=(I-Q)^{-1}$、$\E[\tau]$、$\Prob(\tau\le T)$、时变连乘）
+     & 无（仅 \texttt{model\_v7.tex} 公式） \\
+\bottomrule
+\end{tabularx}
+\caption{检验对象与结果表。M1/M2 均自报 \texttt{formal\_model\_ready=false}，
+本报告的所有结论都以"情景模型"为前提}\label{tab:object}
+\end{table}
+
+\subsection{环境与复现}
+
+\begin{table}[H]\centering\small
+\begin{tabularx}{\textwidth}{|c|X|}
+\toprule
+项目 & 内容 \\
+\midrule
+代码 & \texttt{Code/validate\_m1m2.py}：只读结果表，重算 + 自洽性检查 + 出图，20 s 完成 \\
+结果 & \texttt{Results/v7\_validation/validation\_m1m2.json}、\texttt{m1\_*.csv}、\texttt{m2\_*.csv}、\texttt{scorecard\_m1m2.csv} \\
+图 & \texttt{Figures/v7\_validation/v1—v8*.png}（8 张） \\
+随机性 & 自助法/蒙特卡洛用固定种子 20261112；M1/M2 的原始随机性由队友脚本固定 \\
+判据来源 & 见 \S\ref{sec:crit}；全部写成代码常量 \texttt{CRIT}，先登记后判定 \\
+\bottomrule
+\end{tabularx}
+\caption{复现方式}\label{tab:repro}
+\end{table}
+
+\subsection{判据登记}\label{sec:crit}
+
+\begin{table}[H]\centering\small
+\begin{tabularx}{\textwidth}{|c|c|X|c|}
+\toprule
+编号 & 维度 & 判据 & 档位 \\
+\midrule
+C1 & 可复现 & 重算值与报告值的相对/绝对差 $<10^{-3}$（R² 在 $V$ 尺度上比对） & 二值 \\
+C2 & 增量信息 & 留出期 MAE 显著小于持续性基线（单侧 $p<0.05$） & 二值 \\
+C3 & 泛化 & 留一站技能分 $>0$ 的站点 $\ge5/7$ & 二值 \\
+C4 & 稳定性 & 留一站参数相对离散 $<50\%$；自助区间宽度 $<100\%$ & 二值 \\
+C5 & 可识别性 & $\kappa(S^{\top}S)<10^{6}$ & 二值 \\
+C6 & 统计证据 & 关键结论需 $\ge2$ 次独立显著，或最小可检测效应小于结论所需精度 & 二值 \\
+C7 & 物理闭合 & 水量账重算误差 $<10^{-6}$ mm 且 $0\le M\le$ 容量 & 二值 \\
+C8 & 响应合理性 & 补水—覆盖度严格单调、边际递减、$V\le$ 端元上限 & 二值 \\
+C9 & 可行性 & 全部约束余量 $\ge0$；整数性；资金比例和 $=1$ & 二值 \\
+C10 & 最优性证据 & MIP gap $\le0.2\%$、全部可行、对偶界不越界 & 二值 \\
+C11 & 自洽 & 前沿单调、PV 筛选与安装一致、回放误差 0、跨模型参数一致 & 二值 \\
+C12 & 数值设计 & 转移矩阵行随机、解析落 MC 区间、离散化 $<1\%$、$\lambda=0$ 极限成立 & 二值 \\
+\bottomrule
+\end{tabularx}
+\caption{判据登记表。C2、C3 是"预测模型必须回答"的两条，也是本次唯一系统性未通过的地方}\label{tab:crit}
+\end{table}
+
+% =====================================================================================
+\section{【第一步】模型检验必要性判断}
+% =====================================================================================
+
+\subsection{按模型类型判断，而不是"全都检验一遍"}
+
+美赛评分在"模型"一项上关心：模型是否被验证、假设是否被检验、结论是否对参数稳健。
+但"验证"的形式由模型类型决定：
+
+\begin{itemize}
+\item \textbf{标定型动力学模型（M1）}：有 2 个待估参数、70 个"站—年"样本、误差项未建模，
+      必须做\textbf{拟合/残差/可识别性}，更要回答"它比不用模型强多少"——所以必须有
+      \textbf{持续性基线}与\textbf{留站检验}。只报 $R^2$ 是不够的。
+\item \textbf{混合整数优化（M2）}：没有随机误差项，\emph{不需要}残差检验；
+      但必须检验\textbf{可行性}（解是否满足全部约束）、\textbf{最优性证据}（gap 与对偶界）、
+      \textbf{口径一致}（目标值能否由明细重算）、\textbf{情景自洽}（前沿单调、筛选与决策一致）。
+\item \textbf{随机过程（M3）}：尚未实现，只能做\textbf{设计检验}：矩阵性质、解析与模拟一致、
+      离散化收敛、退化极限。这四项可以在几十行代码内完成，性价比极高。
+\item \textbf{一页简报（M4）}：无独立模型，只需检查"每个数字都能追溯到 M1—M3"。
+\end{itemize}
+
+\subsection{需要检验的清单与优先级}
+
+\begin{table}[H]\centering\small
+\begin{tabularx}{\textwidth}{|c|c|c|X|}
+\toprule
+优先级 & 对象 & 维度 & 理由 \\
+\midrule
+核心 & M1 & 复现、技能、泛化、参数 & 它是任务二/三的唯一机理来源；预测能力不过关会连带两问 \\
+核心 & M2 & 可行性、目标、最优性 & 论文的"可执行方案"就是它的解，算错了整篇失效 \\
+次要 & M1 & 水量闭合、响应曲线 & 决定"补水有效"这条结论能否成立 \\
+次要 & M3 & 矩阵、收敛、极限 & 创新点的正确性；未实现，风险高但成本低 \\
+参考 & M1/M2 & 约束利用率、瓶颈识别 & 决定论文该强调"水约束"还是"预算约束" \\
+\bottomrule
+\end{tabularx}
+\caption{检验清单}\label{tab:priority}
+\end{table}
+
+\begin{remark}[一个容易漏掉的判断]
+M1 的 $K$ 是"区段承载上限 38.08\%"，来自站点覆盖度高分位；M2 直接把它当常数用（\S5.2）。
+于是\textbf{同一份 $K$ 支撑了任务一的稳态与任务二的生态效益}。因此"M1 参数是否可信"不是任务一的私事，
+而是整条链的地基。这也是本报告把一半篇幅放在 M1 的原因。
+\end{remark}
+
+% =====================================================================================
+\section{【第二步】检验类型与方法}
+% =====================================================================================
+
+\begin{table}[H]\centering\footnotesize
+\begin{tabularx}{\textwidth}{|c|c|X|X|}
+\toprule
+模型 & 维度 & 具体方法 & 选择理由 \\
+\midrule
+M1 & 指标可复现 & 从 \texttt{prediction\_pairs} 重算 RMSE/MAE/R²/技能分，与 JSON 对表 & 报告值可能是"另一次运行"的产物；重算是唯一能证明"数字属于这批数据"的办法 \\
+M1 & 增量信息 & 配对 $t$ 检验 + Wilcoxon（逐点误差 vs 持续性） & 误差分布未知，两个检验互为稳健性；单看均值会掩盖逐点胜负 \\
+M1 & 泛化（空间） & 7 折留一站技能分 & 7 个簇是全部可得样本；留一站是唯一不泄漏的划分 \\
+M1 & 泛化（时间） & 自由推演 2023—2025（不逐年读真值）+ 持续性基线 & 检验"长期外推"而不是"一步预测" \\
+M1 & 参数不确定性 & 整簇自助（队友已做 300 次）+ 区间宽度 & 7 簇的自助只能反映"簇间差异"，不能给高精度 CI，故看宽度与覆盖 \\
+M1 & 可识别性 & 条件数 $\kappa(S^{\top}S)$、AIC & 2 参数模型最怕 $r$ 与 $d$ 共线；条件数是标准判据 \\
+M1 & 统计证据 & 18 组风蚀检验的多重比较校正 + 最小可检测效应（MDE） & "不显著"常被误读成"不存在"；必须给出"能检测多大"的边界 \\
+M1 & 残差 & Shapiro–Wilk、Jarque–Bera、站内 ACF、异方差相关 & 队友未报告；年际序列最怕残差自相关（会低估标准误） \\
+M1 & 物理闭合 & 逐月重算土壤水量方程 & 水量账是 M1 的"硬约束"，闭合不了后面全是空谈 \\
+M1 & 响应合理性 & 补水—覆盖度曲线的单调/凹性/上界；容量敏感性 & 单调与凹性是"补水有效且边际递减"的定量表达 \\
+M2 & 目标复现 & 由 \texttt{annual.discounted\_net\_cost\_cny} 求和 & 目标值是优化的核心，必须能从明细加回来 \\
+M2 & 可行性 & 9 类约束逐项算余量（含整数块、资金比例和） & 约束漏项是 MIP 最常见的隐性错误 \\
+M2 & 最优性 & 29 情景的 gap、对偶界夹逼（成本下界/生态上界） & 无法复核求解器内部，但可以复核"它自己给的下界有没有被越过" \\
+M2 & 情景自洽 & 前沿单调、PV 保本价与安装年份一致 & 两组独立计算互相印证 \\
+M2 & 口径 & 有效面积 $=\sum$ 面积$\cdot V_{\text{start}}/K$、决策回放、跨模型参数 & 三个最容易"算错但看起来对"的地方 \\
+M2 & 瓶颈 & 约束利用率与总预算利用 & 决定论文该说"水不够"还是"钱不够" \\
+M3 & 设计 & 矩阵三性质、解析 vs MC、$n$ 收敛、$\lambda=0$ & 未实现，四项检查能在实现前暴露设计缺陷 \\
+\bottomrule
+\end{tabularx}
+\caption{检验方法与选择理由}\label{tab:methods}
+\end{table}
+
+\subsection{几个"为什么不用另一个"}
+
+\begin{enumerate}
+\item \textbf{为什么用配对检验而不是比较两个 RMSE}：RMSE 是汇总量，两个 RMSE 相差 0.01
+      可能只由少数点驱动。配对检验逐点比较，并给出胜率，能看出"赢在哪、输在哪"。
+\item \textbf{为什么用自由推演而不是滚动一步预测}：滚动一步每年都读入真值，误差不会累积；
+      而论文要回答"未来三年会怎样"，必须让误差累积。M1 的两种口径给了不同印象
+      （一步技能 $-0.18$，三年 $-0.04$），正是这个差别。
+\item \textbf{为什么整簇自助只报宽度不报精度}：只有 7 个簇，自助分布的尾部本身不可靠。
+      报告里写"95\% 区间"容易让读者以为有 300 个独立样本，本报告因此同时报宽度与"$r>1$ 的比例"。
+\item \textbf{为什么 M2 要查对偶界}：MIP 的可行解只证明"不差于这个值"，
+      最优性靠下界（成本）或上界（生态）证明。若某情景的可行值越过了它自己的界，说明求解记录有误。
+\item \textbf{为什么 M3 只做设计检验}：没有实现就没有可检验的数值；但对公式做矩阵与收敛检验，
+      可以在实现前发现"网格太粗""质量前推转置错"这类致命错误（详见 \S\ref{sec:m3}）。
+\end{enumerate}
+
+% =====================================================================================
+\section{【第三步】检验代码}
+% =====================================================================================
+
+\begin{table}[H]\centering\footnotesize
+\begin{tabularx}{\textwidth}{|c|X|c|}
+\toprule
+层 & 函数 & 作用 \\
+\midrule
+M1 & \texttt{m1\_metrics} & 由 prediction\_pairs 重算训练/留出指标（$x$ 与 $V$ 两个尺度） \\
+M1 & \texttt{m1\_skill\_test} & 配对 $t$ / Wilcoxon、胜率、差值置信区间 \\
+M1 & \texttt{m1\_holdout}、\texttt{m1\_params} & 留站技能分、留一站参数离散度 \\
+M1 & \texttt{m1\_bootstrap}、\texttt{m1\_ident} & 区间宽度、条件数、AIC \\
+M1 & \texttt{m1\_wind} & 多重比较 + 最小可检测效应 + 相关检验 \\
+M1 & \texttt{m1\_residual} & 正态性、站内自相关、异方差 \\
+M1 & \texttt{m1\_water}、\texttt{m1\_water\_cover}、\texttt{m1\_capacity} & 水量闭合、响应曲线、容量敏感性 \\
+M2 & \texttt{m2\_objective}、\texttt{m2\_constraints} & 目标值重算、9 类约束余量 \\
+M2 & \texttt{m2\_mipgap}、\texttt{m2\_frontier}、\texttt{m2\_pv} & gap/对偶界、前沿单调、PV 筛选一致 \\
+M2 & \texttt{m2\_effective}、\texttt{m2\_replay}、\texttt{m2\_crossmodel}、\texttt{m2\_utilization} & 口径、回放、跨模型、瓶颈 \\
+M3 & \texttt{m3\_spec} & 矩阵、解析 vs MC、离散化、$\lambda=0$ \\
+出图 & \texttt{fig\_m1\_fit} 等 8 个 & 统一风格（去上/右边框、浅网格、色盲友好） \\
+\bottomrule
+\end{tabularx}
+\caption{代码结构。全部只读结果表，不重跑 M1/M2}\label{tab:code}
+\end{table}
+
+\paragraph{实现上的三个坑（都是本次真踩到的）。}
+\begin{enumerate}
+\item \textbf{$R^2$ 的尺度}：M1 拟合的是 $x=V/K$，但报告的 $r^2_{\text{test}}=0.463$ 是在 $V$ 尺度上算的
+      （分母用 $\sum((x-\bar x)K)^2$）。若在 $x$ 尺度算，会得到 0.442，看起来像"复现失败"。
+      代码同时算两个尺度并只与报告口径比对。
+\item \textbf{MIP 对偶界的单位}：\texttt{dual\_bound\_scaled} 在成本最小化时单位是\textbf{百万元}，
+      在生态最大化时优化的是 $-H/1000$，所以生态上界要写成 $-1000\times$ 对偶值。
+      单位混用会让"界被越过"的误报率极高。
+\item \textbf{蒙特卡洛要与解析同构}：M3 解析用"至多一次事件"，MC 若直接抽 $\mathrm{Poisson}(\lambda)$
+      就会把结构差异算进实现误差。代码用 \texttt{multievent} 开关区分两种对照。
+\end{enumerate}
+
+\begin{verbatim}
+python Code/validate_m1m2.py            # 约 20 s，写出 JSON/CSV/PNG
+\end{verbatim}
+
+% =====================================================================================
+\section{【第四步】检验结果}
+% =====================================================================================
+
+\subsection{任务一 M1：数值正确，预测不过关}
+
+\subsubsection{指标可复现性：逐位一致}
+
+\begin{table}[H]\centering\small
+\begin{tabular}{lrrr}
+\toprule
+量 & 重算值 & 报告值 & 差 \\
+\midrule
+训练 RMSE（$x$ 尺度） & 0.0516 & 0.0516 & $0$ \\
+留出 RMSE（$x$ 尺度） & 0.0635 & 0.0635 & $0$ \\
+留出 $R^2$（$V$ 尺度） & 0.4634 & 0.463 & $<10^{-4}$ \\
+训练持续性 RMSE & 0.0572 & 0.0572 & $0$ \\
+留出持续性 RMSE & 0.0536 & 0.0536 & $0$ \\
+\bottomrule
+\end{tabular}
+\caption{指标复现：最大绝对差 $0$（$R^2$ 差异来自小数位），\ok}\label{tab:m1metrics}
+\end{table}
+
+\noindent 换算成覆盖度：训练期 RMSE 为 $2.09$ 个百分点，留出期 $2.57$ 个百分点（$\times K$，$\bar K=40.45$）。
+这个量级对 $20\%$—$40\%$ 的覆盖度来说是 5\%—10\% 的相对误差，不算离谱。
+
+\subsubsection{增量信息：留出期没有赢过"明年等于今年"}
+
+\begin{table}[H]\centering\small
+\begin{tabularx}{\textwidth}{|c|r|r|r|r|r|X|}
+\toprule
+样本 & $n$ & 模型 MAE & 持续 MAE & 差值 95\%CI & 胜率 & 配对检验 \\
+\midrule
+训练期 & 49 & 0.0386 & 0.0460 & $[-0.0136,-0.0013]$ & 28/49 & $p=0.021$ \\
+留出期 & 21 & 0.0544 & 0.0456 & $[-0.0050,+0.0226]$ & 7/21 & $p=0.224$ \\
+\bottomrule
+\end{tabularx}
+\caption{一年外推 vs 持续性基线。训练期显著更好，留出期\textbf{方向反转}（差值为正 = 模型更差），\bad}\label{tab:skill}
+\end{table}
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.92\textwidth]{\figdir/v1_m1_fit.png}
+\caption{观测—预测散点。训练期点群贴近对角线；留出期（右）蓝点系统性低于对角线，
+说明模型\textbf{低估}了 2023—2025 的覆盖度回升——这与自由推演的偏差 $-2.4$ pp 一致}\label{fig:fit}
+\end{figure}
+
+\paragraph{怎么解释。}
+留出期技能分（按 MSE）为 $-0.40$，按 RMSE 为 $-0.18$；21 个点只赢 7 个（33\%）。
+但要注意：留出期 $R^2=0.463$ 仍高于"用站点均值预测"的 0.0737（气候态基线）。
+所以正确的表述是：\textbf{模型比气候态强得多，但比"明年等于今年"弱}——
+原因很直接：$V$ 的年际变化以慢趋势为主，持续性基线天然很强；模型要赢它，
+必须正确捕捉"哪一年会拐弯"，而 M1 的驱动力（$W$）在多数站点几乎不变（\S\ref{sec:cap}）。
+
+\subsubsection{泛化：5/7 站点为负}
+
+\begin{table}[H]\centering\small
+\begin{tabular}{lrrrr}
+\toprule
+站点 & $n$ & 模型 RMSE & 持续 RMSE & 技能分 \\
+\midrule
+MF & 3 & 0.0566 & 0.0758 & $+0.44$ \\
+ALE & 3 & 0.0715 & 0.0596 & $-0.44$ \\
+RQ & 3 & 0.0721 & 0.0585 & $-0.52$ \\
+YL & 3 & 0.0485 & 0.0387 & $-0.57$ \\
+KEL & 3 & 0.0430 & 0.0226 & $-2.62$ \\
+QM & 3 & 0.0881 & 0.0447 & $-2.88$ \\
+\midrule
+中位数 & & 0.0566 & & $-0.52$ \\
+\bottomrule
+\end{tabular}
+\caption{留一站检验（7 折，其中 YT 见正文说明）。5/7 为负、中位技能 $-0.52$，\bad}\label{tab:holdout}
+\end{table}
+
+\paragraph{为什么 YT 是"第三类"情况。}
+留一站估计显示：去掉 YT 后 $r$ 从 0.547 升到 0.958（\S\ref{sec:params}），
+说明 YT 是强影响点——它既拉低了 $r$，也是唯一训练期拟合很好的站点。
+这类"单点主导"的样本结构，是 7 个簇能给出的信息上限，不是代码问题。
+
+\paragraph{自由推演（更接近论文用途的口径）。}
+从 2022 出发连续推 2023—2025，不读入真值：RMSE $3.35\%$ vs 持续性 $3.22\%$，
+偏差 $-2.40$ pp（系统性低估），\bad。
+\textbf{这条比一步预测更重要}：论文要给 2026—2050 的情景，误差正是按这种累积方式产生的。
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.95\textwidth]{\figdir/v2_m1_skill.png}
+\caption{(a) 逐站留出技能分；(b) 自由推演：蓝实线为模型，橙点线为"一直停在 2022"，
+黑色为观测。多数站点观测在 2023 后回升，而模型继续缓慢下行——低估的来源一目了然}\label{fig:skill}
+\end{figure}
+
+\subsubsection{参数稳定性与区间}\label{sec:params}
+
+\begin{table}[H]\centering\small
+\begin{tabularx}{\textwidth}{|c|X|c|}
+\toprule
+检查 & 结果 & 判定 \\
+\midrule
+全样本估计 & $r=0.5467$、$d=0.1073$（AIC $-286.5$） & — \\
+留一站 $r$ 的范围 & $[0.474,\ 0.958]$，相对离散 89\%；最大值来自 YT & \warn \\
+留一站 $d$ 的范围 & $[0.093,\ 0.168]$，相对离散 70\% & \warn \\
+整簇自助 95\% 区间 & $r\in[0.335,1.168]$、$d\in[0.077,0.202]$ & — \\
+区间相对宽度 & $r$：150\%，$d$：115\% & \bad \\
+自助样本中 $r>1$ 的比例 & 13.7\%（即"年增长率超过 100\%"） & \bad \\
+\bottomrule
+\end{tabularx}
+\caption{参数不确定性。区间宽到"结论可以翻转"的程度：$r$ 的上界足以让系统从衰退变扩张}\label{tab:param}
+\end{table}
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.92\textwidth]{\figdir/v3_m1_params.png}
+\caption{(a) 300 次整簇自助的 $(r,d)$ 联合分布（红线为全样本解）；
+(b) 留一站估计：YT 被留出时 $r$ 跳到 0.96}\label{fig:param}
+\end{figure}
+
+\subsubsection{可识别性：这次通过}
+
+$\kappa(S^{\top}S)=375$，远小于 $10^{6}$ 的经验阈值 \ok。
+原因值得写进论文：\textbf{把待估参数从 4 个（$r,d,k,\eta$）减到 2 个，并把水分从"外生输入"改成"状态变量"，
+条件数下降了 5 个数量级以上}。这是"参数化选择直接影响可识别性"的教科书例子。
+
+\subsubsection{风蚀项删除：决策合理，措辞过头}
+
+队友做了 18 组"加/不加风蚀项"的对照，只有 1 组 $p<0.05$，据此把风蚀项从覆盖度方程中删除。
+本报告补三项审查：
+
+\begin{table}[H]\centering\small
+\begin{tabularx}{\textwidth}{|c|X|c|}
+\toprule
+审查 & 数值 & 判定 \\
+\midrule
+18 次 5\% 检验的显著数 & 1 组 & — \\
+期望假阳性数 & $18\times0.05=0.9$ & — \\
+"至少 1 组显著"的二项概率 & $P=0.60$ & 不能拒绝"全是噪声" \\
+主检验（原风蚀项）的 $k$ 标准误 & 0.433 & — \\
+最小可检测效应（MDE $=1.96\times$SE） & $k=0.85$ & 只能排除"$k>0.85$" \\
+主检验 $k$ 的自助区间宽度 & 9.06（跨 $-0.44$ 到 0.89） & 极宽 \\
+站内"风指数—次年覆盖变化"相关 & $r=0.030$，$p=0.81$，$n=70$ & 无信号 \\
+\bottomrule
+\end{tabularx}
+\caption{风蚀项删除的统计依据。\textbf{删除本身有依据，但不能写成"不存在风蚀效应"}，\warn}\label{tab:wind}
+\end{table}
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.94\textwidth]{\figdir/v4_m1_wind.png}
+\caption{(a) 18 组估计的 $k$ 与 95\% 区间：几乎全部跨 0，且区间宽到覆盖整个物理可能范围；
+(b) $p$ 值分布：只有 1 个低于 0.05，与"纯噪声"无法区分}\label{fig:wind}
+\end{figure}
+
+\begin{keybox}[改法（措辞层面，不需要重算）]
+把"风蚀对覆盖度无显著影响"改成"在 7 个站点、年尺度、现有风指数变异（年际 CV 13\%）下，
+风蚀项的可检测下限为 $k\approx0.85$，故未能检出；风蚀的作用通过另一条通道
+（风速 $\to$ ET$_0\to$ 水分 $\to$ 覆盖度）保留在模型中"。
+这也与队友自己在 \texttt{wind\_channel.csv} 里做的通道 A 分析一致。
+\end{keybox}
+
+\subsubsection{残差诊断}
+
+\begin{table}[H]\centering\small
+\begin{tabular}{lrl}
+\toprule
+检验 & 数值 & 判定 \\
+\midrule
+Shapiro–Wilk（$n=70$） & $W=0.967$，$p=0.058$ & \ok（临界） \\
+Jarque–Bera & $p=0.041$ & 轻度非正态 \\
+站内一阶自相关（7 站均值） & $-0.14$ & \ok \\
+异方差（$|e|$ vs 拟合值） & $r=-0.049$，$p=0.69$ & \ok \\
+偏差 & $+0.012$（$x$ 尺度） & \ok \\
+\bottomrule
+\end{tabular}
+\caption{残差诊断（队友未报告，本报告补做）\ok：无系统弯曲、无强自相关、无异方差，
+仅尾部略厚}\label{tab:resid}
+\end{table}
+
+\subsubsection{水量平衡与响应曲线：M1 最扎实的部分}
+
+\begin{table}[H]\centering\small
+\begin{tabularx}{\textwidth}{|c|X|c|}
+\toprule
+检查 & 结果 & 判定 \\
+\midrule
+逐月水量方程重算误差（4200 条记录） & $\max|e|=0$（表内残差 $10^{-13}$ mm 量级） & \ok \\
+储量越界 & $M>75$ mm：0 条；$M<0$：0 条 & \ok \\
+补水—覆盖度曲线 & $V(0)=1.77\%\to V(600)=24.14\%$，严格单调、边际递减 & \ok \\
+曲线收敛 & 13 个灌溉档全部双初值收敛，定点残差 $<10^{-7}$ & \ok \\
+上界 & $\max V=30.6\%<V_{\text{full}}=66.6\%$ & \ok \\
+\bottomrule
+\end{tabularx}
+\caption{物理闭合与响应合理性。这是 M1 可以放心写进论文的部分}\label{tab:water}
+\end{table}
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.92\textwidth]{\figdir/v5_m1_water.png}
+\caption{(a) 补水—稳态覆盖度：单调、凹、有上界；(b) 水分胁迫 $W$ 随灌溉上升并趋近 1}\label{fig:water}
+\end{figure}
+
+\subsubsection{水分约束的有效性：一条需要写进论文的限定}\label{sec:cap}
+
+\begin{table}[H]\centering\small
+\begin{tabularx}{\textwidth}{|c|X|c|}
+\toprule
+检查 & 结果 & 判定 \\
+\midrule
+容量 30 mm 与 150 mm 下、300 mm 灌溉的稳态 $V$ & 完全相同（差 $0.00$ pp） & \bad \\
+批次—年中 $W=1$ 的比例 & 20.5\% & \ok \\
+\bottomrule
+\end{tabularx}
+\caption{水分约束是否真在起作用。容量放大 5 倍而 $V$ 不变，说明该灌溉水平下系统是"需求受限"而非"供给受限"}\label{tab:cap}
+\end{table}
+
+\paragraph{含义。}
+在 300—600 mm 灌溉下，$W\approx0.37$—$0.54$，$V$ 由"潜在蒸腾"而不是"土壤容量"决定；
+把容量从 30 改到 150 mm 只是让储量多存一点，覆盖度一点不变。
+因此论文不能笼统写"土壤持水能力是治沙的关键"——在你们的基准情景里它\textbf{不是}瓶颈，
+真正起作用的是\textbf{灌溉量}与\textbf{蒸腾需求}。这条限定反而让结论更硬：它把"补多少水"与"土能存多少水"分开了。
+
+\subsection{任务二 M2：工程实现几乎无可挑剔}
+
+\subsubsection{目标值与约束}
+
+\begin{table}[H]\centering\small
+\begin{tabularx}{\textwidth}{|c|X|c|}
+\toprule
+检查 & 结果 & 判定 \\
+\midrule
+净现成本（明细求和 vs 报告） & $25\,349\,978.55$ vs $25\,349\,978.55$，相对差 $5.9\times10^{-11}$ & \ok \\
+毛支出 & $68\,927\,280$（报告同值） & \ok \\
+新增面积 & $300$ ha（报告同值） & \ok \\
+9 类约束余量 & 年度预算 14\,976；总预算 11\,072\,720；年水 449\,810；月水 9\,114；劳动力 6\,478；土地 881；面积 50；PV 500；整数块误差 0 & \ok \\
+资金比例和 & 与 1 的偏差 $4\times10^{-11}$ & \ok \\
+\bottomrule
+\end{tabularx}
+\caption{目标可复现 + 约束零违反（全部余量为正 = 没有一条约束被违反）}\label{tab:m2cons}
+\end{table}
+
+\subsubsection{最优性证据}
+
+\begin{table}[H]\centering\small
+\begin{tabularx}{\textwidth}{|c|X|c|}
+\toprule
+检查 & 结果 & 判定 \\
+\midrule
+情景数 & 29（base、reference、6 个 frontier、其余敏感性） & — \\
+全部可行 & 是 & \ok \\
+MIP gap & 最大 0.200\%，中位 0.160\% & \ok \\
+对偶界（成本最小化） & 可行值从未低于下界（越界量 0） & \ok \\
+对偶界（生态最大化） & 可行值未超过上界（余量 $-1.90$，安全侧） & \ok \\
+\bottomrule
+\end{tabularx}
+\caption{MIP 最优性证据。gap 恰好卡在 0.2\% 的设定容差上，说明求解器是"到容差即停"，不是"提前放弃"}\label{tab:m2mip}
+\end{table}
+
+\subsubsection{情景自洽与筛选一致}
+
+\begin{table}[H]\centering\small
+\begin{tabularx}{\textwidth}{|c|X|c|}
+\toprule
+检查 & 结果 & 判定 \\
+\midrule
+Pareto 前沿 & 6 点，成本与生态均单调不减；末段单位生态成本 $57\,129$ 元/(ha·年) & \ok \\
+PV 保本电价 & 0.253—0.312 元/kWh（售价 0.30）；安装年份 1—4 年 & \ok \\
+安装年份 $\subseteq$ 保本年份 & 是（第 5 年起保本价 $>0.30$，故不再装） & \ok \\
+有效面积口径 & $\sum$面积$\cdot V_{\text{start}}/K$ 与表中 $effective\_ha$ 相对误差 $3.9\times10^{-10}$ & \ok \\
+决策回放 & 由 \texttt{decisions.csv} 重算年新增面积，误差 $0$ ha & \ok \\
+跨模型参数 & $r,d,K$ 与 M1 的差 $<7\times10^{-9}$ & \ok \\
+\bottomrule
+\end{tabularx}
+\caption{自洽性检查。四组独立计算互相印证，说明 M2 的口径没有漂移}\label{tab:m2self}
+\end{table}
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.95\textwidth]{\figdir/v6_m2_plan.png}
+\caption{基准方案：(a) 两年建成 300 ha 后停止扩张；(b) PV 前四年装机至 9.5 MW；
+(c) 年支出在前四年顶到 12 M 元预算线；(d) 月取水始终低于逐月上限}\label{fig:plan}
+\end{figure}
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.92\textwidth]{\figdir/v7_m2_frontier.png}
+\caption{(a) 生态—成本前沿；(b) 29 个情景的 MIP gap 全部在 0.2\% 容差内}\label{fig:frontier}
+\end{figure}
+
+\subsubsection{瓶颈在哪：一条会影响论文叙事的结论}
+
+\begin{table}[H]\centering\small
+\begin{tabular}{lrl}
+\toprule
+约束 & 最大利用率 & 说明 \\
+\midrule
+生态目标达成率 & 100.5\% & 基准解恰好卡在目标上 \\
+总预算 & 86.2\% & 未用尽，但已是主导资源 \\
+年度预算 & 99.9\% & 前四年顶格（余量仅 1.5 万元） \\
+PV 容量 & 95.0\% & 接近上限 \\
+月取水 & 94.9\%（峰值月） & \textbf{月尺度上接近紧} \\
+年取水 & 70.0\% & 年总量尚有 30\% 余量 \\
+生态劳动力 & 46.0\% & 中等偏松 \\
+土地 & 26.6\% & 松 \\
+\bottomrule
+\end{tabular}
+\caption{约束利用率。真正的瓶颈是\textbf{生态目标、年度预算与峰值月取水}；年总量与土地还有余量}\label{tab:util}
+\end{table}
+
+\paragraph{与 M1 的呼应。}
+M1 显示"300 mm 灌溉下土壤容量不影响覆盖度"（\S\ref{sec:cap}），M2 显示"年取水用掉 70\%、
+峰值月用掉 95\%"。两条合起来说明：\textbf{卡住规模的是钱与月分配，不是年水量或土壤库容}。
+论文因此不该笼统写"水资源约束决定治沙规模"，而应写成
+"年水量尚有 30\% 余量，但 6—8 月的月上限已近饱和（95\%）——扩规模的前提是跨季调蓄"。
+这条比"M1 说水不重要"准确得多，也更有政策含义。
+
+\subsection{任务三 M3：设计检验（尚无数值实现）}\label{sec:m3}
+
+用 M1 当前参数（$r=0.5467$、$d=0.1073$、$K=38.08$、$k=0$、$\eta=1$、$W=0.37$）
+与 M2 情景配置（$\lambda=0.3$、$u\sim U(0.2,0.55)$、$v_{\text{crit}}=0.3K$）检验公式：
+
+\begin{table}[H]\centering\small
+\begin{tabularx}{\textwidth}{|c|X|c|}
+\toprule
+检查 & 结果 & 判定 \\
+\midrule
+转移矩阵 & 行和误差 $1.1\times10^{-16}$、元素 $\ge0$、吸收态自封 & \ok \\
+解析 vs 蒙特卡洛 & $T=5$：解析 0.2284 vs MC 0.2287（95\%CI $[0.2253,0.2320]$） & \ok \\
+离散化收敛 & $n=100\to800$：0.2247、0.2284、0.2312、0.2316；相邻最大变化 1.68\% & \bad \\
+$\lambda=0$ 极限 & 无灾稳态 $v_\infty=17.88\%>v_{\text{crit}}=11.42\%$，不外推退化 & \ok \\
+参考指标 & $\E[\tau]=9.08$ a、$\rho(Q)=0.759$、多次事件版 $P(\tau\le5)=0.2419$（二点近似低估 5.9\%） & — \\
+\bottomrule
+\end{tabularx}
+\caption{M3 设计检验。三项通过、一项未通过：网格必须取到 $n\ge400$ 才能把离散偏差压到 1\% 以下}\label{tab:m3}
+\end{table}
+
+\paragraph{实现时的三个建议。}
+(i) 网格 $n\ge400$（$n=200$ 时 $P(\tau\le5)$ 偏低约 1.5\%）；
+(ii) 质量前推必须用 $Q^{\top}$（写成 $Q\bm p$ 会在 $\lambda=0$ 时"凭空消失"，这条极限检验能抓住）；
+(iii) 若按数据估计 $\lambda$（$\ge12$ m/s 的年事件数约 1.5），则 $0<\lambda<1$ 不成立，
+必须用复合泊松而不是二点近似——本次对照显示二点近似低估约 6\%。
+
+% =====================================================================================
+\section{【第五步】检验总结}
+% =====================================================================================
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.62\textwidth]{\figdir/v8_scorecard.png}
+\caption{25 项检验的评分卡（绿＝通过，橙＝需改进，红＝未通过）}\label{fig:score}
+\end{figure}
+
+\begin{table}[H]\centering\small
+\begin{tabularx}{\textwidth}{|c|X|c|c|}
+\toprule
+模块 & 检验项 & 通过 & 需改进/未通过 \\
+\midrule
+M1（12 项） & 复现、技能、留站、自由推演、参数、区间、可识别、风蚀、残差、水量闭合、响应曲线、水分约束 & 7 & 5 \\
+M2（9 项） & 目标、约束、MIP、前沿、PV、有效面积、回放、利用率、跨模型 & 9 & 0 \\
+M3（4 项） & 矩阵、解析/模拟、收敛、极限 & 3 & 1 \\
+\midrule
+合计 & & \textbf{17} & \textbf{8} \\
+\bottomrule
+\end{tabularx}
+\caption{分模块统计。M2 全通过，M1 的失败集中在"预测能力"与"样本量"}\label{tab:score}
+\end{table}
+
+\subsection{核心结论}
+
+\begin{table}[H]\centering\small
+\begin{tabularx}{\textwidth}{|c|c|X|}
+\toprule
+维度 & 评分（5 分制） & 依据 \\
+\midrule
+可复现性 & 5 & 指标逐位一致；目标值与明细差 $6\times10^{-11}$；回放误差 0 \\
+数值正确性 & 4.5 & 水量账闭合到 $10^{-7}$ mm；约束零违反；MIP 对偶界自洽 \\
+统计可靠性 & 2.5 & 7 个簇 → 区间宽 150\%；留出期技能为负；5/7 站点为负 \\
+结论稳健性 & 3 & M2 前沿单调、情景齐全；但 M1 的 $r$ 区间足以翻转"扩张/衰退" \\
+工程完整性 & 4.5 & 29 情景、月水量账、批次继承、筛选与决策一致，超出一般校赛水平 \\
+\bottomrule
+\end{tabularx}
+\caption{整体评价：\textbf{算得对，但"这个预测能不能信"的答案是不能全信}}\label{tab:grade}
+\end{table}
+
+\paragraph{一句话结论。}
+M2 是一份可以直接进论文的工程化实现；M1 的机理与守恒关系也站得住，但它的\textbf{预测优势未被数据支持}。
+因此论文应当\textbf{把 M1 定位成"机理与情景工具"而不是"预测模型"}：
+不报"2027 年覆盖度将是 $x\%$"，而报"在灌溉 300 mm 时稳态约 $18\%$，600 mm 时约 $24\%$"（这两条有曲线支撑）。
+
+\subsection{不足与改法}
+
+\begin{table}[H]\centering\footnotesize
+\begin{tabularx}{\textwidth}{|c|c|X|c|X|}
+\toprule
+编号 & 问题 & 机理 & 改法 & 预期效果 \\
+\midrule
+P1 & 留出期不如持续性 & $W$ 年际变异小，模型只能给慢趋势 & 不追求一步预测；改报"稳态区间"与"拐点条件"
+& 结论与证据匹配 \\
+P2 & 5/7 站点技能为负 & 站点级样本只有 3 个留出点 & 用年际块自助替代站点自助；或做"多站联合"的层级模型
+& 技能分给出不确定区间 \\
+P3 & $r$ 区间宽 150\%，13.7\% 的抽样 $r>1$ & 7 个簇 + 2 参数 & 明确写"$r$ 的点估计不可用于外推"，只报中位与区间
+& 避免过度解读 \\
+P4 & YT 主导 $r$（0.47→0.96） & 单点强影响 & 报"含/不含 YT"两套参数，或做 Cook 距离
+& 参数结论更稳 \\
+P5 & 风蚀"不存在"的措辞 & MDE 0.85，无法排除中等效应 & 改为"未检出，可排除 $k>0.85$"
+& 表述准确 \\
+P6 & 水分容量不影响 $V$ & 300 mm 灌溉下需求受限 & 增加"低灌溉（0—100 mm）"段的容量敏感性
+& 找到水真正起作用的区间 \\
+P7 & M3 网格偏差 1.68\% & 吸收边界附近分辨率不足 & $n\ge400$，或对吸收阈值做局部加密
+& 偏差 $<0.5\%$ \\
+\bottomrule
+\end{tabularx}
+\caption{七项不足与改法。P1—P4 是"写法"问题（不改模型也能改），P5—P7 需要少量重算}\label{tab:fix}
+\end{table}
+
+\subsection{论文中的呈现建议}
+
+\begin{enumerate}
+\item \textbf{正文放三张图}：图~\ref{fig:fit}（拟合与留出，一张图说明"能拟合但外推不占优"）、
+      图~\ref{fig:water}（补水—覆盖度，M1 最硬的结论）、图~\ref{fig:frontier}（生态—成本前沿，回应题干 trade-off）。
+\item \textbf{用一张检验汇总表}（本报告表~\ref{tab:score} 的形式）替代大段文字：
+      列"检验项 / 方法 / 判据 / 结果"，一页交代可信度。
+\item \textbf{把"未通过"写成"限定条件"}：如"由于 7 个站点的整簇自助区间宽达 150\%，
+      本文不报告 $r$ 的点估计，只报告稳态覆盖度的区间（18\%—24\%）"。
+\item \textbf{明确两处"反直觉但正确"的结论}：土壤库容不是瓶颈、而峰值月取水已近饱和（M1 容量不敏感 + M2 月利用率 95\%）；
+      风蚀在年尺度未检出（MDE 0.85）。这两条写清楚，比"什么都显著"更可信。
+\item \textbf{M3 若来不及实现}，就把本报告的四项设计检验写成"实现前的验证清单"，
+      并给出 $n\ge400$ 与 $Q^{\top}$ 两条工程约定——这是零成本加分项。
+\end{enumerate}
+
+% =====================================================================================
+\appendix
+\section{检验项与代码入口}
+
+\begin{longtable}{|c|c|c|}
+\caption{每项检验对应的函数与数据源}\\
+\hline
+检验 & 函数 & 数据源 \\
+\hline
+\endhead
+指标复现 & \texttt{m1\_metrics} & \texttt{prediction\_pairs.csv} \\
+技能检验 & \texttt{m1\_skill\_test} & 同上 \\
+留站泛化 & \texttt{m1\_holdout} & \texttt{holdout\_by\_site.csv} \\
+自由推演 & \texttt{m1\_holdout} & \texttt{free\_running\_holdout.csv} \\
+参数稳定性 & \texttt{m1\_params} & \texttt{model1\_results.json} \\
+参数区间 & \texttt{m1\_bootstrap} & \texttt{parameter\_cluster\_bootstrap.csv} \\
+可识别性 & \texttt{m1\_ident} & \texttt{model1\_results.json} \\
+风蚀项 & \texttt{m1\_wind} & \texttt{wind\_term\_test.csv} \\
+残差 & \texttt{m1\_residual} & \texttt{prediction\_pairs.csv} \\
+水量闭合 & \texttt{m1\_water} & \texttt{scenario\_monthly\_water.csv} \\
+响应曲线 & \texttt{m1\_water\_cover} & \texttt{water\_cover\_curve.csv} \\
+水分约束 & \texttt{m1\_capacity} & \texttt{sensitivity.csv}、\texttt{cohorts.csv} \\
+目标复现 & \texttt{m2\_objective} & \texttt{annual.csv} \\
+约束可行性 & \texttt{m2\_constraints} & \texttt{annual.csv}、\texttt{monthly.csv} \\
+MIP 证据 & \texttt{m2\_mipgap} & \texttt{scenario\_summary.csv} \\
+前沿 & \texttt{m2\_frontier} & 同上 \\
+PV 筛选 & \texttt{m2\_pv} & \texttt{pv\_screening.csv} \\
+有效面积 & \texttt{m2\_effective} & \texttt{cohorts.csv}、\texttt{annual.csv} \\
+回放 & \texttt{m2\_replay} & \texttt{decisions.csv} \\
+利用率 & \texttt{m2\_utilization} & \texttt{annual.csv}、\texttt{monthly.csv} \\
+跨模型 & \texttt{m2\_crossmodel} & 两个 JSON \\
+M3 设计 & \texttt{m3\_spec} & 两个 JSON（取参数） \\
+\hline
+\end{longtable}
+
+\section{关键数值速查}
+
+\begin{longtable}{|c|c|c|}
+\caption{论文可直接引用的检验数字}\\
+\hline
+量 & 数值 & 出处 \\
+\hline
+\endhead
+M1 训练/留出 RMSE（$x$） & 0.0516 / 0.0635 & 表 \ref{tab:m1metrics} \\
+M1 留出 $R^2$（$V$ 尺度） & 0.463 & 同上 \\
+M1 留出期胜率 & 7/21 = 33\% & 表 \ref{tab:skill} \\
+M1 留站中位技能分 & $-0.52$（5/7 为负） & 表 \ref{tab:holdout} \\
+M1 自由推演偏差 & $-2.40$ pp（3 年） & \S5.1.3 \\
+M1 全样本参数 & $r=0.5467$、$d=0.1073$、$K=38.08$ & 表 \ref{tab:param} \\
+M1 $r$ 自助区间 & $[0.335,1.168]$（宽 150\%） & 同上 \\
+M1 条件数 & 375 & \S5.1.5 \\
+M1 水量闭合误差 & $<10^{-13}$ mm（重算 0） & 表 \ref{tab:water} \\
+M1 稳态覆盖度 & 1.8\%（0 mm）→ 24.1\%（600 mm） & 同上 \\
+M2 净现成本 & 25.35 M 元（重算一致） & 表 \ref{tab:m2cons} \\
+M2 约束违反 & 0 & 同上 \\
+M2 MIP gap & $\le0.200\%$ & 表 \ref{tab:m2mip} \\
+M2 生态目标达成 & 100.5\%；总预算用 86\% & 表 \ref{tab:util} \\
+M3 $\E[\tau]$（设计） & 9.08 a & 表 \ref{tab:m3} \\
+M3 收敛 & $n\ge400$ 才能 $<1\%$ & 同上 \\
+\hline
+\end{longtable}
+
+\section{与建模文档的差异记录}
+
+\begin{longtable}{|c|p{9.6cm}|c|}
+\caption{本轮检验发现的表述问题（不影响数值，但影响论文可信度）}\\
+\hline
+编号 & 差异 & 建议 \\
+\hline
+\endhead
+D1 & \texttt{model1\_results.json} 写 "wind term removed"，
+     易被读成"风蚀无影响" & 改为"年尺度未检出（MDE $k\approx0.85$），风蚀通过 ET$_0$ 通道保留" \\
+D2 & M1 的 $R^2$ 在 $V$ 尺度、RMSE 在 $x$ 尺度报告 & 统一说明两个尺度的换算（$\times K$）\\
+D3 & M2 的"三类资金比例"在 0 支出年留空 & 论文中注明"比例只在支出年定义"，避免读者误判为缺失 \\
+D4 & M2 的 $dual\_bound\_scaled$ 单位随目标变（百万元 / 千 ha·年） & 表注中写明单位 \\
+D5 & M3 尚未实现 & 若最终不实现，正文应写"给出可实现的公式与验证清单"，不要写"已评估韧性" \\
+\hline
+\end{longtable}
+
+\end{document}
+
+
