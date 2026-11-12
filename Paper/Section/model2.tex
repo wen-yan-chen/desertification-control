@@ -36,14 +36,21 @@ Task~2 turns Model~1 into a 15-year dynamic decision problem: how much belt to p
 \end{figure}
 
 \subsection{Model construction}
-\paragraph{Cohort idea and ecological benefit.} Tracking only total area $A_t$ cannot distinguish a newly planted shrub ($V_0=2\%$, low water demand) from an older stand ($>12\%$ cover, high summer demand). Instead, we define a \textbf{cohort} $(s,p)$ by its planting year $s\in\{1,\dots,T\}$ and lifetime watering schedule $p\in\mathcal P$ ($18$ schedules: constant $0\text{--}1{,}000$\,mm/yr, step-up or step-down after age $3$ or $5$, and a $100\to300\to600$\,mm/yr ramp). Belt land is chosen in integer blocks $a_{s,p}=\Delta_A n_{s,p}$ ($\Delta_A=50$\,ha) and PV in blocks $y_s=\Delta_P z_s$ ($\Delta_P=100$\,kW), giving active belt stock $A_t=\sum_{s\le t,p}a_{s,p}$, installed PV $P_t^{\mathrm{inst}}=\sum_{s\le t}y_s$, and operating PV $P_t^{\mathrm{op}}=\sum_{s<t}y_s$ (panels built in year $s$ generate from year $s+1$).
+\paragraph{Cohort idea and ecological benefit.} Tracking only total area $A_t$ cannot distinguish a newly planted shrub ($V_0=2\%$, low water demand) from an older stand ($>12\%$ cover, high summer demand). Instead, we bind each planting year $s\in\{1,\dots,T\}$ and lifetime watering recipe $p\in\mathcal P$ into a \textbf{cohort block} $(s,p)$ ($18$ recipes: constant $0\text{--}1{,}000$\,mm/yr, step-up or step-down after age $3$ or $5$, and a $100\to300\to600$\,mm/yr ramp; Figure~\ref{fig:m2-idea}). Because field engineering is deployed in discrete lots rather than arbitrary square metres, belt area and PV capacity are added in integer multiples of minimum step thresholds $\Delta_A$ and $\Delta_P$: $a_{s,p}=\Delta_A n_{s,p}$ and $y_s=\Delta_P z_s$, giving active belt stock $A_t=\sum_{s\le t,p}a_{s,p}$, installed PV $P_t^{\mathrm{inst}}=\sum_{s\le t}y_s$, and operating PV $P_t^{\mathrm{op}}=\sum_{s<t}y_s$ (panels built in year $s$ generate from year $s+1$).
+
+\begin{figure}[!htb]
+  \centering
+  \includegraphics[width=\linewidth]{m2_cohort_idea.pdf}
+  \caption{Cohort tracking in Model~2: \textcircled{\scriptsize 1} bind build year $s$ and lifetime watering $p$ into one unit parcel $\Delta_A$, then \textcircled{\scriptsize 2} place staggered blocks along calendar years $t$ so younger and older stands follow age-matched rules.}
+  \label{fig:m2-idea}
+\end{figure}
 
 Each cohort runs Model~1's daily water bucket $\mathcal W$ (Algorithm~\ref{alg:m1}) under its age-specific quota $q_{p,t-s}$ and updates cover via Eq.~\eqref{eq:m1-veg}. Summing start-of-year cover relative to the local ceiling $K$ across all active cohorts defines the 15-year ecological benefit:
 \begin{equation}\label{eq:m2-eco}
 H=\sum_{t=1}^{T}\sum_{s\le t,\,p\in\mathcal P}\underbrace{a_{s,p}\,\frac{V_{s,p,t}}{K}}_{\text{effective ha in year }t},\qquad
 (M_{s,p,t+1},\,\overline W_{s,p,t})=\mathcal W\!\big(V_{s,p,t},\,M_{s,p,t},\,q_{p,t-s}\big).
 \end{equation}
-One hectare at $V=K$ for one year scores $1\text{ effective ha}\cdot\text{yr}$. Using start-of-year cover $V_{s,p,t}$ avoids crediting growth before it happens and naturally rewards early planting because desert shrubs take a decade to mature. Because separate strips do not share soil water, running Model~1 \emph{once per schedule} beforehand fixes $V_{s,p,t}$ per hectare, making $H$ strictly linear in $n_{s,p}$.
+One hectare at $V=K$ for one year scores $1\text{ effective ha}\cdot\text{yr}$. Using start-of-year cover $V_{s,p,t}$ avoids crediting growth before it happens and naturally rewards early planting because desert shrubs take a decade to mature.
 
 \paragraph{Investment allocation ratios and PV revenue.} In year $t$, gross spending $D_t$ splits across Task~2's three required uses---construction, O\&M (including water delivery $Q_t$), and PV capital---while operating panels earn electricity revenue $R_t$:
 \begin{equation}\label{eq:m2-cash}
@@ -62,7 +69,7 @@ where Step~1 maximises $H$ under the same caps to find the physical ceiling $H_{
 \begin{figure}[!htb]
   \centering
   \includegraphics[width=\linewidth]{m2_restrictions.pdf}
-  \caption{Resource restrictions and accounting rules of Model~2 across funding, water, land/grid and labour.}
+  \caption{Resource restrictions and accounting rules across funding, water, land/grid and labour.}
   \label{fig:m2-caps}
 \end{figure}
 
@@ -81,14 +88,14 @@ Pre-simulating the 18 schedules in Model~1 converts Eq.~\eqref{eq:m2-eps} into a
 \end{algorithmic}
 \end{algorithm}
 
-\begin{table}[!htb]
+\begin{table}[H]
 \centering\small
 \renewcommand{\arraystretch}{1.06}
 \begin{tabularx}{\linewidth}{@{}l X r c l@{}}
 \toprule
 Symbol & Meaning & Base value & Tested / note & Unit \\
 \midrule
-$T;\ \Delta_A,\Delta_P$ & horizon; belt block and PV block ($V_0=2\%$, $M_0=37.5$\,mm) & $15;\ 50,\ 100$ & $V_0$: 1--4\% & yr; ha, kW \\
+$T;\ \Delta_A,\Delta_P$ & horizon; min.\ lot thresholds ($\Delta_A=25$\,ha tested; $V_0=2\%$) & $15;\ 50,\ 100$ & $V_0$: 1--4\% & yr; ha, kW \\
 $c_b,\ c_m,\ c_w$ & planting capex \cite{REF20}, belt O\&M, water unit cost & $52{,}500,\ 1{,}500,\ 1.0$ & $c_b\pm25\%$, $c_m\pm50\%$ & CNY (ha, m$^3$) \\
 $c_p,\ c_{pm}$ & PV turnkey capex and annual O\&M rate & $3{,}000,\ 50$ & $c_p\pm25\%$ & CNY/kW \\
 $e_0,\ p_e,\ d_p$ & 1st-yr PV yield, tariff, degradation \cite{EN06} ($w_c=0.02$\,m$^3$/kW) & $1{,}500,\ 0.30,\ 0.5\%$ & $p_e$: 0.15--0.40 & kWh, CNY, /yr \\
@@ -101,52 +108,45 @@ $i_d;\ \varphi$ & real discount rate; baseline ecological target share & $5\%;\ 
 \end{table}
 
 \subsection{Results}
-\paragraph{Optimal 15-year trajectory and ecology--cost trade-off.} Putting all resources into vegetation gives $H_{\max}=2{,}097.0\text{ effective ha}\cdot\text{yr}$ ($900$\,ha planted, $0$\,MW PV, $N=64.42$\,M\,CNY). At the $\varphi=60\%$ target ($1{,}258.2\text{ effective ha}\cdot\text{yr}$), the optimal schedule (Figure~\ref{fig:m2-plan}) plants $300$\,ha in years 1--2 ($150$\,ha/yr: $250$\,ha on $100\to300$\,mm/yr after age~3, $50$\,ha on $100\to300\to600$\,mm/yr) and installs $9.5$\,MW of PV across years 1--4 ($1.2,1.1,3.7,3.5$\,MW), reaching $H=1{,}264.8\text{ effective ha}\cdot\text{yr}$ at net present cost $N=25.35$\,M\,CNY (MIP gap $0.20\%$).
-
-Three mechanisms shape the four decision trajectories in Figure~\ref{fig:m2-plan}. First, \textbf{front-loading}: years 1--4 use virtually the entire $12$\,M/yr cap, shifting allocation ratios from $66\%$ planting / $30\%$ PV in year~1 to $\sim90\%$ PV in years 3--4 and $100\%$ O\&M thereafter; from year~5, PV revenue ($4.05\text{--}4.25$\,M/yr) covers more than twice annual O\&M and water ($1.83\text{--}1.98$\,M/yr), saving $2.49$\,M ($9.0\%$) over the best no-PV plan ($27.84$\,M). Second, \textbf{age-stepped watering}: giving young seedlings $100$\,mm/yr in ages 1--3 avoids overflowing Model~1's root bucket ($6.6\%$ cheaper than constant quotas), before stepping up as canopy demand grows. Third, \textbf{seasonal bottleneck}: annual water peaks at $1.05\text{ M m}^3\text{/yr}$ ($70\%$ of the annual cap) and labour at $5{,}522$\,p-d ($46\%$), yet \textbf{May water use hits $95\%$ of the monthly cap} in years 8--15---showing that spring delivery, not annual volume, is the true physical constraint.
-
-\begin{figure}[!htb]
-  \centering
-  \includegraphics[width=\linewidth]{m2_plan.pdf}
-  \caption{Optimal 15-year trajectories of Task~2's four decision groups ($\varphi=60\%$ scenario): (a) newly treated area and operating PV, (b) ecological water and labour scheduling, (c) spending streams vs.\ PV revenue, (d) annual investment allocation ratios.}
-  \label{fig:m2-plan}
-\end{figure}
-
-Sweeping $\varphi$ from $0\%$ to $100\%$ across six separate MILP solves reveals a sharp cost bend (Figure~\ref{fig:m2-tradeoff}). Up to $\varphi=60\%$, each extra effective $\text{ha}\cdot\text{yr}$ costs $22.6\text{--}26.3$\,k\,CNY while PV stays at $9.5\text{--}10$\,MW. Above $60\%$, marginal cost more than doubles to $36.7$\,k ($80\%$) and $57.1$\,k\,CNY ($100\%$) because higher cover pushes stands into Model~1's diminishing-returns regime and crowds PV out of the $80$\,M gross budget ($10\to5.3\to0$\,MW).
-
-\begin{figure}[!htb]
-  \centering
-  \includegraphics[width=\linewidth]{m2_tradeoff.pdf}
-  \caption{Explicit ecology--cost trade-off across six discrete MILP solves (unconnected scenario points; MIP gap $\le0.20\%$).}
-  \label{fig:m2-tradeoff}
-\end{figure}
-
-\paragraph{Sensitivity of the investment structure.} Holding the ecological requirement fixed at $H\ge1{,}258.2\text{ effective ha}\cdot\text{yr}$ isolates how prices, O\&M and physical assumptions reshape the investment mix (Figure~\ref{fig:m2-sensitivity}):
-\begin{enumerate}\setlength{\itemsep}{1pt}\setlength{\parsep}{0pt}
-  \item \textbf{PV is all-or-nothing on tariff and capex.} At $0.15$\,CNY/kWh or $3{,}750$\,CNY/kW capex, optimal PV drops to $0$\,MW ($N=27.8$\,M, $+9.8\%$); at $0.40$\,CNY/kWh or $2{,}250$/kW capex, PV hits the $10$\,MW cap and cuts net cost by $30\text{--}44\%$. Forcing PV share $\ge30\%$ has zero effect in the baseline ($41.3\%$ PV share already), showing PV should follow price rather than a fixed quota.
-  \item \textbf{O\&M and planting costs shift PV headroom.} Raising O\&M unit rates by $+50\%$ increases $N$ by $+14.8\%$ and squeezes PV down to $5.6$\,MW to preserve maintenance funds; $\pm25\%$ planting capex shifts $N$ by $\pm18\%$.
-  \item \textbf{Initial survival $V_0$ outweighs secondary parameters.} Dropping initial cover from $2\%$ to $1\%$ forces $400$\,ha of planting and raises cost $+29.1\%$ ($32.7$\,M), whereas $V_0=4\%$ needs $200$\,ha ($-19.5\%$). Cutting water caps by $20\%$ raises cost $+9.7\%$ ($350$\,ha), while halving labour or refining blocks to $25$\,ha ($-0.22\%$) lies within solver tolerance.
+\paragraph{Optimal 15-year trajectory.} If every yuan and cubic metre of water goes into planting, the section can reach an ecological ceiling of $H_{\max}=2{,}097\text{ effective ha}\cdot\text{yr}$ by planting $900$\,ha with no PV, at a net present cost of $64.4$\,M\,CNY. Requiring $60\%$ of that ceiling ($1{,}258\text{ effective ha}\cdot\text{yr}$) cuts the net present cost to $25.35$\,M\,CNY while delivering $1{,}265\text{ effective ha}\cdot\text{yr}$. Rather than spreading effort evenly across the 15 years, the optimiser coordinates Task~2's four decisions in distinct phases (Figure~\ref{fig:m2-plan}):
+\begin{enumerate}\setlength{\itemsep}{2pt}\setlength{\parsep}{0pt}
+  \item \textbf{Newly treated area --- plant early.} All $300$\,ha of shelterbelt are planted in years 1 and 2 at $150$\,ha/yr (Figure~\ref{fig:m2-plan}a). Desert shrubs need roughly a decade to approach their cover plateau, so planting upfront gives every stand the longest possible growing window to accumulate cover.
+  \item \textbf{Water replenishment --- ramp with stand age, and watch May.} Young seedlings have shallow roots and low demand, so the plan gives them just $100$\,mm/yr for their first three years instead of wasting water as deep drainage, then steps up to $300$\,mm/yr at age~4 and $600$\,mm/yr at age~8 on a $50$\,ha core strip. This age-matched schedule saves $6.6\%$ over fixed annual quotas. Across the whole belt, annual water rises to $1.05\text{ M m}^3\text{/yr}$, or $70\%$ of the annual cap, yet \textbf{May demand hits $95\%$ of its monthly cap} from year~8 onward (Figure~\ref{fig:m2-plan}b): spring delivery capacity, not total annual water, is what limits expansion.
+  \item \textbf{Investment allocation --- build PV early so power funds upkeep.} Years 1--4 spend almost the full $12$\,M/yr budget cap to install $9.5$\,MW of PV alongside the belt, shifting the allocation ratio from $66\%$ planting and $30\%$ PV in year~1 to about $90\%$ PV in years 3--4, and $100\%$ O\&M from year~5 onward (Figure~\ref{fig:m2-plan}c,d). Once online, PV earns $4.1\text{--}4.3$\,M\,CNY/yr---more than twice the $1.8\text{--}2.0$\,M\,CNY/yr needed for belt upkeep and water---trimming net present cost by $9\%$ compared with the best PV-free plan.
+  \item \textbf{Labour input --- surge for construction, steady for upkeep.} Workforce demand peaks at $5{,}522$ person-days in year~2 while planting and panel installation overlap, then settles at $995$ person-days/yr from year~5 onward to maintain the $300$\,ha belt and $9.5$\,MW array, well within the $12{,}000$ person-day cap (Figure~\ref{fig:m2-plan}b).
 \end{enumerate}
 
 \begin{figure}[!htb]
   \centering
-  \includegraphics[width=0.95\linewidth]{m2_sensitivity.pdf}
+  \includegraphics[width=0.9\linewidth]{m2_plan.pdf}
+  \caption{Optimal 15-year schedule across Task~2's four decisions at the $60\%$ ecological target: (a) newly treated area and operating PV, (b) water replenishment and labour input, (c) spending streams vs.\ PV revenue, (d) annual investment allocation ratios.}
+  \label{fig:m2-plan}
+\end{figure}
+
+\paragraph{Balancing ecology against cost.} Repeating the solve from $0\%$ to $100\%$ of $H_{\max}$ explains why $60\%$ sits near a natural knee. Up to $60\%$, each additional effective $\text{ha}\cdot\text{yr}$ costs a steady $23\text{--}26$\,k\,CNY because $9.5\text{--}10$\,MW of PV still fits inside the $80$\,M gross budget and subsidises upkeep. Pushing the target to $80\%$ and $100\%$ crowds PV down to $5.3$\,MW and then zero, while forcing stands onto the flat diminishing-returns tail of Model~1's water curve, more than doubling the unit cost to $57$\,k\,CNY per effective $\text{ha}\cdot\text{yr}$.
+
+\paragraph{Sensitivity of the investment structure.} Fixing the ecological target at $1{,}258\text{ effective ha}\cdot\text{yr}$ and varying one assumption at a time shows what truly reshapes the portfolio (Figure~\ref{fig:m2-sensitivity}):
+\begin{enumerate}\setlength{\itemsep}{2pt}\setlength{\parsep}{0pt}
+  \item \textbf{PV is an all-or-nothing choice driven by price.} If the tariff drops to $0.15$\,CNY/kWh or panel capex rises to $3{,}750$\,CNY/kW, the optimiser builds zero PV and net cost rises $9.8\%$ to $27.8$\,M\,CNY. Conversely, a $0.40$\,CNY/kWh tariff or $2{,}250$\,CNY/kW capex maxes out the $10$\,MW grid cap and cuts net cost by $30\text{--}44\%$. Imposing a $\ge30\%$ PV spending floor changes nothing in the baseline because PV already accounts for $41\%$, showing that PV should follow tariff economics rather than a rigid quota.
+  \item \textbf{Higher upkeep squeezes PV headroom.} Raising O\&M unit rates by $50\%$ lifts net cost by $15\%$ and trims PV from $9.5$\,MW to $5.6$\,MW so enough gross budget remains for 15 years of stand maintenance, whereas $\pm25\%$ shifts in planting cost move net cost by $\pm18\%$.
+  \item \textbf{Early seedling survival dominates physical risk.} Halving initial planted cover $V_0$ from $2\%$ to $1\%$ forces the plan to plant $400$\,ha instead of $300$\,ha and raises net cost by $29\%$, while doubling $V_0$ to $4\%$ needs only $200$\,ha and saves $20\%$. Tightening water caps by $20\%$ adds $9.7\%$ to cost, whereas halving the labour cap or refining blocks to $25$\,ha shifts cost by less than the $0.2\%$ solver tolerance.
+\end{enumerate}
+
+\begin{figure}[!htb]
+  \centering
+  \includegraphics[width=0.9\linewidth]{m2_sensitivity.pdf}
   \caption{Sensitivity of net cost, PV scale and 15-year investment structure at fixed ecological target ($1{,}258.2\text{ effective ha}\cdot\text{yr}$).}
   \label{fig:m2-sensitivity}
 \end{figure}
 
-\paragraph{Actionable process criterion.} A standalone $1$\,kW PV unit built in year $s<T$ pays back its capex, O\&M and washing water within the horizon if and only if the tariff exceeds the break-even threshold
-\begin{equation}\label{eq:m2-be}
-p_e\ge p_e^{\mathrm{BE}}(s)=\frac{c_p+\sum_{t=s+1}^{T}\delta^{t-s+1}\,(c_{pm}+c_w w_c)}{\sum_{t=s+1}^{T}\delta^{t-s+1}\,e_0(1-d_p)^{t-s-1}}.
-\end{equation}
+\paragraph{PV process criterion.} A standalone $1$\,kW PV unit built in year $s<T$ pays back its capex, O\&M and washing water within the horizon if and only if the tariff exceeds the break-even threshold
 \noindent\begin{minipage}[t]{0.54\linewidth}
 \vspace{0pt}
-In the baseline, $p_e^{\mathrm{BE}}(s)$ rises from $0.253$\,CNY/kWh in year~1 to $0.293$ in year~4 and crosses $0.30$ in year~5 ($0.312$, Figure~\ref{fig:m2-pv}a), matching the MILP's exact build window (years 1--4). This gives four field rules:
+In the baseline, $p_e^{\mathrm{BE}}(s)=\frac{c_p+\sum_{t=s+1}^{T}\delta^{t-s+1}\,(c_{pm}+c_w w_c)}{\sum_{t=s+1}^{T}\delta^{t-s+1}\,e_0(1-d_p)^{t-s-1}}$ rises from $0.253$\,CNY/kWh in year~1 to $0.293$ in year~4 and crosses $0.30$ in year~5 ($0.312$, Figure~\ref{fig:m2-pv}a), matching the MILP's exact build window (years 1--4). This gives three field rules:
 \begin{enumerate}\setlength{\topsep}{2pt}\setlength{\itemsep}{0pt}\setlength{\parsep}{0pt}
   \item \textbf{Two-gate PV rule:} install PV in year $s$ only if $p_e\ge p_e^{\mathrm{BE}}(s)$ \emph{and} budget slack remains after planting.
   \item \textbf{Plant in years 1--2:} front-load belt construction so shrubs accrue cover across the full horizon.
   \item \textbf{Ramp water by stand age:} supply $100$\,mm/yr in ages 1--3, step to $300$\,mm/yr at age~4, and $600$\,mm/yr (age $8+$) on core strips.
-  \item \textbf{Size for May \& audit $V_0$:} dispatch against May--July water caps, secure $V_0\ge2\%$ via pilot plots, and target the $40\text{--}60\%$ cost knee.
 \end{enumerate}
 \end{minipage}\hfill
 \begin{minipage}[t]{0.43\linewidth}

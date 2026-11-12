@@ -67,7 +67,7 @@ python Code/v7_m2_figures.py
 
 ```sh
 cd Code/figures_matlab && matlab -batch make_paper_figures
-cd Paper/Figure && for f in m1_structure m1_two_clocks m1_bucket m2_structure m2_restrictions m2_cohort_concept; do pdflatex $f.tex; done
+cd Paper/Figure && for f in m1_structure m1_two_clocks m1_bucket m2_structure m2_cohort_idea m2_restrictions; do pdflatex $f.tex; done
 ```
 
 `Code/figures_matlab/` 只读 `Data/v7/`、`Results/v7/model1/` 与 `Results/v7/model2/`，把论文用数据图（`data_stations`、

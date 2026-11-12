@@ -193,16 +193,6 @@ margin, our objectives are to:
   separate transpiration from drainage. Water parameters are scenarios because none is
   measured; ignoring salinity makes the response optimistic.
 
-  \item \textbf{Assumptions:} \textbf{Calibration at irrigated oases; wind is absorbed in
-  $r$ and $d$.} \mbox{$r$ and $d$} are fitted at seven irrigated oasis stations
-  ($\overline W\approx1$). No separate wind-damage term is retained: the cover-shelter
-  factor is bounded between 0 and 1 (1 at bare ground, 0 at full cover), and after
-  calculation the extra term is not supported, so wind effects are already contained in
-  the fitted net rates.
-  \newline \textbf{Justifications:} At irrigated oases, water is ample, so $r$ and $d$
-  capture net growth and decay under the local wind regime. A separate shelter term is
-  not identifiable and would add a parameter without evidence. Transfer to the section
-  is an extrapolation, not a validation.
 \end{enumerate}
 \endgroup
 
@@ -261,13 +251,20 @@ SoilGrids queries returned & 62/81 \\ \bottomrule
 \end{enumerate}
 
 \section{Notations}
-\placeholder{State the units and numerical conventions used throughout the paper.}
-\subsection*{Sets and indices}
-\modelvars{\textit{[Index]} & \textit{[Definition]} \\}
-\subsection*{Variables and derived quantities}
-\modelvars{\textit{[Variable]} & \textit{[Meaning and unit]} \\}
-\subsection*{Baseline quantities}
-\modelvars{\textit{[Parameter]} & \textit{[Value, unit, and source]} \\}
+Area is in ha ($1\,\text{mm}\times1\,\text{ha}=10\,\text{m}^3$), money in constant CNY, and labour in person-days (p-d). Model parameters and scenario constants are listed separately in Tables~\ref{tab:m1-par} and \ref{tab:m2-par}.
+\modelvars{%
+  $t,\ m,\ j$ & Year ($t=1,\dots,T$), month ($m=1,\dots,12$), and day ($j=1,\dots,365$) \\
+  \shade $(s,\,p)$ & Cohort planted in year $s$ under lifetime irrigation policy $p\in\mathcal P$ \\
+  $V_t,\ M_j$ & Growing-season vegetation cover proxy (\%) and root-zone soil water (mm) \\
+  \shade $D_j,\ T_{a,j},\ \overline W_t$ & Daily water demand, actual transpiration (mm/d), and annual demand-met ratio \\
+  $E_t,\ S_t$ & Relative wind-transport index and sand-exposure index $E_t(1-V_t/K)$ \\
+  \shade $n_{s,p},\ z_s$ & Integer counts of shelterbelt parcels ($\Delta_A$) and PV units ($\Delta_P$) \\
+  $a_t,\ A_t$ & Newly treated belt area (flow) and active belt area in service (stock, ha) \\
+  \shade $y_t,\ P_t^{\mathrm{inst}},\ P_t^{\mathrm{op}}$ & Newly built, cumulative installed, and operating PV capacity (kW or MW) \\
+  $Q_t,\ Q_{t,m};\ L_t$ & Annual and monthly gross water withdrawal ($\text{m}^3$); annual labour (p-d) \\
+  \shade $D_t,\ (f_t^b,f_t^o,f_t^p),\ R_t$ & Gross spending (CNY), allocation ratios (build / O\&M / PV), and PV income \\
+  $H,\ N$ & Cumulative ecological score ($\text{effective ha}\cdot\text{yr}$) and net present cost (CNY) \\
+}
 
 \input{Section/model1}
 % 第 4、5、6 节分别为 Model 1、Model 2、Model 3。
