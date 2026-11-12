@@ -1,4 +1,4 @@
-# v7 代码入口
+﻿# v7 代码入口
 
 ## M1 计算
 
@@ -91,8 +91,21 @@ TikZ 示意图共用 `Paper/Figure/paper_palette.tex`，颜色角色与 `paper_s
 | `preprocess_v7.py` | Python 逐步预处理和校验 | CSV、XLSX、JSON |
 | `preprocess_v7.m` | MATLAB 预处理实现 | MATLAB 面板 CSV |
 
+## 模型检验（2026-11-12）
+
+| 文件 | 用途 | 主要产物 |
+|---|---|---|
+| `validate_m1m2.py` | **模型检验**：只读 `Results/v7/model1|model2` 的结果表，重算指标/约束/目标/有效面积，并检查 MIP 对偶界、水量闭合、留站泛化、风蚀项统计依据；含 M3 四项设计检验 | `Results/v7_validation/*.json,csv`、`Figures/v7_validation/v1—v8*.png` |
+
+```sh
+python Code/validate_m1m2.py     # 约 20 s；固定种子 20261112
+```
+
+不改动 M1/M2 的任何代码或结果表；结论与判据见 [检验报告](../Reports/model_validation_m1m2.tex)。
+
 这些工具使用 NumPy、Pandas、SciPy、Matplotlib、OpenPyXL。
 `v7_ablation.py` 内历史 `task2_npv` 不是当前 M2 求解器，存在水量单位和静态收益口径问题；
 只保留作旧消融对照，不应用其 Task2 数值出论文图或结论。
 MATLAB 程序面向 R2020b 及以上，执行结果仍需在 MATLAB 环境验证。
 原始响应与缓存通过请求清单重建，数据范围见 [Data/v7](../Data/v7/README.md)。
+

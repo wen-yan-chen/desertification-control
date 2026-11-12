@@ -126,8 +126,14 @@ $\Wb_t\in[0,1]$ scales growth by how much of the plants' water demand was met. T
 already inside $r$ (one yearly growth season), so no extra temperature factor is multiplied here.
 \item \textbf{Decay.} A fixed share $d$ of cover dies each year. With no water,
 $V_{t+1}=(1-d)V_t$, so the half-life is $\ln(1/2)/\ln(1-d)$ years.
-\item \textbf{No wind term.} $r$ and $d$ are fitted on stations standing in real wind, so the average
-wind loss is already inside them. Wind acts through the water demand and the sand output (Section~\ref{sec:wind}).
+\item \textbf{No explicit wind term in the calibrated equation (rev.\ 2026-11-12).}
+The wind term $kE_{\mathrm{eff}}V$ is \emph{kept in the model form} so that the third channel stays visible and
+Task~3 keeps a physical entry point, but $k$ is \textbf{not estimated}: the baseline is $k=0$, $\eta=1$.
+Two reasons. (i) \emph{Structure:} at $E=1,\eta=1$ the term equals $k(1-V/K)V$, the same shape as growth
+$r(1-V/K)V\Wb$, so with $\Wb$ and $E$ both close to constant only $r-k$ is identified.
+(ii) \emph{Evidence:} the pooled fit gives $\hat k=0.25\pm0.43$ ($p=0.57$), bootstrap 95\% $[-0.44,0.89]$,
+AIC worse by 1.6, and within stations the wind index is unrelated to next year's cover change
+($r=0.03$, $p=0.81$, $n=70$). Wind still acts through the water demand and the sand output (Section~\ref{sec:wind}).
 \item $V=0$ stays at 0: water alone cannot create plants; new stands need a planted initial cover.
 \end{itemize}
 
@@ -194,8 +200,16 @@ only $r-k$ can be estimated, so a constant-wind term adds a parameter and no inf
 (iii) \emph{Scope.} The stations are irrigated oases; the test cannot rule out damage to young stands on
 open dunes or in single storms. Those belong to the shocks of Task 3.
 
+\emph{Detectable-effect bound (added 2026-11-12).} With $\mathrm{SE}=0.43$, the minimum detectable effect at
+80\% power ($\alpha=0.05$) is $2.80\,\mathrm{SE}\approx1.21$, and the one-sided 95\% upper bound is $k\le0.89$.
+Converted at $\bar V=K/2$ this is $8.5$~pp/yr of cover loss, i.e.\ 4--8 times the observed inter-annual
+variability. The data therefore \emph{exclude strong} wind erosion but \emph{cannot exclude} weak effects
+($k<0.5$): write ``not detected'', never ``no effect''. Task 3 re-uses $k$ as a scenario lever anchored at
+this bound ($k_0\le0.89$, amplified by $\kappa_t\in\{2,5\}$ in shock years).
+
 \say{Say that wind is in the model through evaporative demand and through the sand-exposure output, and that
-a direct damage term was tested and dropped. Do not say that wind has no effect on plants.}
+a direct damage term was tested and not detected (95\% upper bound $k\le0.89$). Do not say that wind has no
+effect on plants.}
 
 \subsection{Long-run state and the closed form}
 With $x=V/K$ and $\Wb$ held fixed, the non-zero steady state is

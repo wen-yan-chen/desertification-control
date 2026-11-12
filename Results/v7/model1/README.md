@@ -1,4 +1,4 @@
-# 当前 M1 数值结果（无新图片）
+﻿# 当前 M1 数值结果（无新图片）
 
 入口：`python Code/v7_model1.py`。输入为 `Data/v7/m1_audited/`。
 
@@ -26,3 +26,17 @@
 基准年度气象重复用于未来情景，不是未来天气预报。14 个情景包括 13 档恒定灌溉，以及前 10 年 600 mm/年、随后停灌。实际储水和灌溉数据不足，`formal_model_ready=false`。
 
 原 `Figures/v7/m1_fig*.png` 与 `archive/model1_v7_drafts/model1_v7_*` 的旧数字已失效；本轮不重绘，Claude 应从以上新表制作图片。
+
+## 风蚀项的口径（2026-11-12）
+
+`model1_results.json` 的 `wind.decision` 记为"wind term removed"，指的是**覆盖度标定方程中不含风蚀项**，
+不等于"风蚀无影响"。准确的表述是：
+
+- 风蚀在模型形式中保留（$kE_{\mathrm{eff}}V$），但 $k$ 未被数据识别，**基线取 $k=0$**；
+- 统计证据：$\hat k=0.25\pm0.43$（$p=0.57$），整簇自助 95\% 区间 $[-0.44,\,0.89]$，AIC 差 1.6；
+- 可检测下限：80\% 功效下 MDE $=2.80\,\mathrm{SE}\approx1.21$，单侧 95\% 上界 $k\le0.89$，
+  折算到 $\bar V=K/2$ 处约 $8.5$ pp\,a$^{-1}$（观测年际波动的 4—8 倍）；
+- 用途：任务三把 $k$ 作为**情景旋钮**（$k_0\le0.89$，灾年放大 $\kappa_t\in\{2,5\}$）。
+
+详见 `Reports/model_validation_m1m2.pdf` §5.1.6 与 `Reports/model_v7/model_v7.tex` 注 `rem:wind`。
+**本文件只改措辞，`model1_results.json` 未改动**（M2 记录了它的 sha256，改动会使 M2 输入哈希校验失败）。
