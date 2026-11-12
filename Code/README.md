@@ -63,6 +63,18 @@ python Code/v7_m2_figures.py
 记录的输入哈希；改动 M2 输入或源码后须先重跑 `v7_model2.py`。图注须写入的限制见
 [Figures/M2](../Figures/M2/README.md)。
 
+### 论文图（MATLAB）
+
+```sh
+cd Code/figures_matlab && matlab -batch make_paper_figures
+cd Paper/Figure && for f in m1_structure m1_two_clocks m1_bucket; do pdflatex $f.tex; done
+```
+
+`Code/figures_matlab/` 只读 `Data/v7/` 与 `Results/v7/model1/`，把论文用数据图（`data_stations`、
+`m1_cover_series`、`m1_scenarios`、`m1_water_curve`、`m1_sensitivity`）写入 `Paper/Figure/`（矢量 PDF + 400 dpi PNG）。
+配色取自 mycolor.space（基色 #1E5F74），坐标轴按知乎专栏“阿昆的科研日常”的 MATLAB 模板，见 `paper_style.m`。
+TikZ 示意图共用 `Paper/Figure/paper_palette.tex`，颜色角色与 `paper_style.m` 相同：水＝青蓝，植被＝绿，风沙＝棕，突出＝橙，界限＝红色虚线。
+
 ## 预处理与对比工具
 
 下列程序支撑 v7 面板预处理、诊断和方法对比。窗口 QA、ET0 温差口径及插值方式的适用限制

@@ -1,4 +1,4 @@
-% Model 1 sketch: logic chain, formulas, algorithm, results. Figures from Figures/M1 and Reports/M1.
+% Model 1 sketch: logic chain, formulas, algorithm, results. Figures in Paper/Figure (MATLAB: Code/figures_matlab; TikZ: *.tex there).
 \clearpage
 \section{Model 1: Coupled Vegetation--Water--Sand Dynamics}\label{sec:model1}
 Task~1 asks how cover and soil water on a desert-margin section evolve together, and what drives them. Our answer is a chain of four links:
@@ -10,7 +10,7 @@ Task~1 asks how cover and soil water on a desert-margin section evolve together,
   veg/.style={chainbox, draw=wfyr, fill=wfyr!8, text=wfyr},
   lk/.style={-{Stealth[length=6pt]}, line width=1pt},
   num/.style={circle, fill=white, draw, inner sep=0.5pt, font=\scriptsize\bfseries, minimum size=12pt}]
-\definecolor{wfdy}{HTML}{2B6CB0}\definecolor{wfyr}{HTML}{18473C}
+\definecolor{wfdy}{HTML}{1E5F74}\definecolor{wfyr}{HTML}{2B633C}
 \node[wat] (a) {$P,\ I$};
 \node[wat, right=1.5cm of a] (b) {$M_j$};
 \node[wat, right=1.5cm of b] (c) {$\overline W_t$};
@@ -181,13 +181,13 @@ $M_0$ & initial store of a new stand & 37.5 & -- & mm \\
   \centering
   \begin{subfigure}[t]{0.49\linewidth}
     \centering
-    \includegraphics[width=\linewidth]{m1_f01_station_series_tall.pdf}
+    \includegraphics[width=\linewidth]{m1_cover_series.pdf}
     \caption{Observed cover at the seven stations, 2015--2025.}
     \label{fig:m1-obs}
   \end{subfigure}\hfill
   \begin{subfigure}[t]{0.49\linewidth}
     \centering
-    \includegraphics[width=\linewidth]{m1_f07_scenario_trajectories_tall.pdf}
+    \includegraphics[width=\linewidth]{m1_scenarios.pdf}
     \caption{Scenario paths on the section, 2026--2050.}
     \label{fig:m1-scen}
   \end{subfigure}
@@ -195,7 +195,7 @@ $M_0$ & initial store of a new stand & 37.5 & -- & mm \\
   \label{fig:m1-paths}
 \end{figure}
 
-\paragraph{Model reliability.} An unwatered stand loses half its cover in about six years. On hold-out years the one-step forecast does not beat persistence overall (RMSE 0.064 vs 0.054 in $V/K$), but it does at Minfeng and Yutian, the two stations in our section. Figure~\ref{fig:m1-obs} shows why. Observed growing-season cover (black) varies between about 24\% and 44\% and stays below each station's ceiling $K$ (red dashed). The one-step predictions (blue) follow the level of each series but not its year-to-year spikes. In the hold-out years (grey band), cover rose sharply at Qiemo, Ruoqiang and Alar; the free run from 2022 (orange) stays near the 2022 value and misses this greening, for example 33.0\% against 38.4\% observed at Ruoqiang in 2025. At Yutian and Minfeng the free run follows the observed values more closely. Model~1 is therefore used to compare strategies, not to predict single years.
+\paragraph{Model reliability.} An unwatered stand loses half its cover in about six years. On hold-out years the one-step forecast does not beat persistence overall (RMSE 0.064 vs 0.054 in $V/K$), but it does at Minfeng and Yutian, the two stations in our section. Figure~\ref{fig:m1-obs} shows why. Observed growing-season cover (black) varies between about 24\% and 44\% and stays below each station's ceiling $K$ (red dashed). The one-step predictions (teal diamonds) follow the level of each series but not its year-to-year spikes. In the hold-out years (shaded band), cover rose sharply at Qiemo, Ruoqiang and Alar; the free run from 2022 (orange) stays near the 2022 value and misses this greening, for example 33.0\% against 38.4\% observed at Ruoqiang in 2025. At Yutian and Minfeng the free run follows the observed values more closely. Model~1 is therefore used to compare strategies, not to predict single years.
 \newpage
 \paragraph{Evolution of the state variables.} From a planted cover of 2\%, cover and soil water pass through three phases (Figure~\ref{fig:m1-scen}):
 \begin{enumerate}\setlength{\itemsep}{1pt}\setlength{\parsep}{0pt}
@@ -207,7 +207,7 @@ The plateau lasts only while water is supplied. If irrigation stops after ten ye
 
 \paragraph{Controlling factors: water supply.} Water supply is the main control.Specifically calculated in desert we set \textbf{Rain} alone (52\,mm/yr against about 1,700\,mm/yr of evaporative demand) holds only 1.8\% cover.
 
-\noindent\begin{minipage}[t]{0.5\linewidth}
+\noindent\begin{minipage}[t]{0.47\linewidth}
 \vspace{0pt}
 Irrigation raises long-run cover quickly at first, then with strongly diminishing returns (Figure~\ref{fig:m1-curve}a):
 \begin{enumerate}\setlength{\itemsep}{1pt}\setlength{\parsep}{0pt}
@@ -219,12 +219,12 @@ The bucket explains this shape: at 300\,mm/yr only 37\% of demand is met (Figure
 \end{minipage}\hfill
 \begin{minipage}[t]{0.5\linewidth}
 \vspace{0pt}\centering
-\includegraphics[width=\linewidth]{m1_f06_water_cover_curve_half.pdf}
+\includegraphics[width=\linewidth]{m1_water_curve.pdf}
 \captionof{figure}{Long-run state against irrigation. Red dashed lines are limits.}
 \label{fig:m1-curve}
 \end{minipage}
 
-\noindent\begin{minipage}[t]{0.5\linewidth}
+\noindent\begin{minipage}[t]{0.47\linewidth}
 \vspace{0pt}
 \paragraph{Controlling factors: demand, delivery and wind.} With water supply fixed, we varied the other factors one at a time (Figure~\ref{fig:m1-sens}). They fall into three groups:
 \begin{enumerate}\setlength{\itemsep}{1pt}\setlength{\parsep}{0pt}
@@ -235,7 +235,7 @@ The bucket explains this shape: at 300\,mm/yr only 37\% of demand is met (Figure
 \end{minipage}\hfill
 \begin{minipage}[t]{0.5\linewidth}
 \vspace{0pt}\centering
-\includegraphics[width=\linewidth]{m1_f09_sensitivity_tall.pdf}
+\includegraphics[width=\linewidth]{m1_sensitivity.pdf}
 \captionof{figure}{Sensitivity of long-run cover to one-at-a-time changes and to wind speed.}
 \label{fig:m1-sens}
 \end{minipage}

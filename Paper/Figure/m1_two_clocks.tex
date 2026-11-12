@@ -5,11 +5,12 @@
 \usepackage{newtxtext,newtxmath}
 \usepackage{amsmath}
 \usetikzlibrary{arrows.meta,calc}
-\definecolor{yr}{HTML}{18473C}      % year clock (dark green)
-\definecolor{yrBg}{HTML}{E3F4EE}
-\definecolor{dy}{HTML}{2B6CB0}      % day clock (water blue)
-\definecolor{dyBg}{HTML}{E6F0FA}
-\definecolor{gs}{HTML}{F3D9A4}      % growing season
+\input{paper_palette}
+\colorlet{yr}{pVeg}                 % year clock (vegetation green)
+\colorlet{yrBg}{pVegLight}
+\colorlet{dy}{pWater}               % day clock (water teal)
+\colorlet{dyBg}{pWaterLight}
+\colorlet{gs}{pAccent!35}           % growing season
 \tikzset{badge/.style={circle, draw=#1, fill=white, line width=0.8pt, inner sep=0.5pt,
   font=\scriptsize\bfseries, text=#1, minimum size=10pt, solid}}
 \begin{document}
