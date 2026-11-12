@@ -15,7 +15,7 @@
 | M2 情景输入与数表 | [参数登记](Data/v7/m2_inputs/README.md) / [结果说明](Results/v7/model2/README.md) |
 | M2 制图交接 | [给 Claude 的数表说明](Docs/20261111_m2_figure_handoff.md) |
 | M2 图 | [Figures/M2/](Figures/M2/README.md) |
-| **M1/M2 模型检验（2026-11-12）** | **[检验报告](Reports/model_validation_m1m2.tex)** / [检验结果](Results/v7_validation/validation_m1m2.json) / [检验代码](Code/validate_m1m2.py) |
+| **M1/M2 模型检验（2026-11-12）** | **[检验报告 PDF](Reports/model_validation_m1m2.pdf)**（[tex](Reports/model_validation_m1m2.tex)） / [检验结果](Results/v7_validation/validation_m1m2.json) / [检验代码](Code/validate_m1m2.py) |
 | 代码与运行方法 | [Code/](Code/README.md) |
 | 建模与预处理报告 | [Reports/](Reports/README.md) |
 | 文献与来源 | [Reference/](Reference/00_阅读导航与资料清单.md) |
@@ -88,4 +88,5 @@ MODIS MOD13Q1、Open-Meteo 历史归档和 SoilGrids。原始请求与哈希保�
 
 开始工作前按 [协作说明](Docs/协作同步.md) 同步仓库。完成修改后选择实际文件提交、推送。
 原始响应、个人环境和编译缓存按 `.gitignore` 管理。
+
 
