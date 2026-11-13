@@ -1,5 +1,7 @@
 # Handoff — 2026-11-13: M3 implementation ready for Claude
 
+补充：M3已按M1/M2形式整理到[Reports/M3](../Reports/M3/README.md)，含英文写作PDF、公式与算法、自动提取的结果表、验证结论和绘图计划。Claude先读该目录，再按下方字段交接绘图；本轮尚未生成M3图片。
+
 M3已完成27组条件情景、逐月资源账、首达/恢复/删失统计及二维平稳链校验。本轮未生成图片；M1/M2代码、数表、论文及图片保持原样。
 
 - 当前复核：[M3审计](20261113_m3_audit_and_implementation.md)；更新公式已并入 `Reports/model_v7/model_v7.{tex,pdf}`。

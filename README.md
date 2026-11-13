@@ -18,6 +18,7 @@
 | M3 复核与实现 | [M3 审计说明](Docs/20261113_m3_audit_and_implementation.md) |
 | M3 情景与数表 | [参数证据](Data/v7/m3_inputs/README.md) / [结果说明](Results/v7/model3/README.md) |
 | M3 制图交接 | [给 Claude 的数表说明](Docs/20261113_m3_figure_handoff.md)（本轮不出图） |
+| M3 成果与写作简报 | [Reports/M3 中文导航](Reports/M3/README.md) / [英文报告 PDF](Reports/M3/M3_writing_brief.pdf) |
 | **M1/M2 模型检验（2026-11-12）** | **[检验报告 PDF](Reports/model_validation_m1m2.pdf)**（[tex](Reports/model_validation_m1m2.tex)） / [检验结果](Results/v7_validation/validation_m1m2.json) / [检验代码](Code/validate_m1m2.py) |
 | 代码与运行方法 | [Code/](Code/README.md) |
 | 建模与预处理报告 | [Reports/](Reports/README.md) |
