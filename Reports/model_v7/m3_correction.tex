@@ -1,0 +1,156 @@
+\section{任务三：随机灾害下的韧性}\label{sec:t3}
+
+\paragraph{复核更正（2026-11-13）。}
+旧稿的泊松事件与至多一次事件的转移式不一致，单变量覆盖网格遗漏了任务一的储水记忆，
+行随机矩阵与列向量的乘法方向也不一致。本节统一更正。
+任务一最终实现不含直接风损伤项，任务三不重新引入或放大未识别的 $k$，
+尤其不能把旧系数区间的上端点当作强风灾害的校准系数。
+背景气候经任务一的需水映射作用；突发性风沙损伤单独作为状态冲击。
+灾害参数与趋势为条件情景，模型可实现不等于具有本地预测精度。
+
+\subsection{初态、时钟与灾害口径}
+评估从任务二建设期结束开始，继承各批次真实导出的 $(V_{j,0},M_{j,0})$、面积 $a_j$ 和末年补水申请。
+后评估第1年对应项目第 $T_2+1$ 年，不能将全部批次重新设为 $V=K$。
+年内使用任务一水量更新，年度植被映射记为 $\Phi$；原始物理状态为 $(V,M)$，
+退化与否还需记忆是否曾越过阈值。
+
+同一年区域干旱指示 $D_t\sim\mathrm{Bernoulli}(p_{D,t})$；
+条件风沙事件数 $N_t\mid D_t\sim\mathrm{Poisson}(\lambda_t\gamma^{D_t})$。
+单次损失比例 $U_{tq}\sim U(u_{\rm lo},u_{\rm hi})$，保留率
+$R_t=\prod_{q=1}^{N_t}(1-U_{tq})$，无事件时 $R_t=1$。
+\begin{equation}\label{eq:compound}
+\E[R_t\mid D_t]=\exp\{-\lambda_t\gamma^{D_t}\E[U]\}.
+\end{equation}
+式~\eqref{eq:compound} 对独立同分布事件标记是\textbf{精确关系}，不是小损失近似。
+条件对数保留率均值另为
+\[\E[\log R_t\mid D_t]=\lambda_t\gamma^{D_t}\E[\log(1-U)].\]
+两种均值不可混写。
+只看平均保留率不能区分频率和平均幅度；不能扩大成“任何年数据都绝不可能分别识别”。
+风险还受幅度分布影响，必须检验频率--幅度联合情景及同均值不同分布。
+
+\paragraph{四类灾害的对应。}
+风沙事件的覆盖削减合并表达沙尘暴、风蚀磨蚀与沙埋，不把同一过程拆成三次独立损失。
+极端干旱通过当年降雨减少、蒸散需求提高及外部供水能力下降进入水分状态。
+基准各批次共享同一年旱情与同一风沙冲击，用于表达区域共同暴露；另以独立批次冲击作对照。
+没有逐日灾害清单或灾前后覆盖观测时，以上概率与损失不能称为已估计参数。
+
+\subsection{物理更新、供水与事件次序}\label{sec:shock}
+基准为先水分与生长、后风沙冲击：
+\[
+(\widetilde V_{j,t+1},M_{j,t+1})=\Phi(V_{j,t},M_{j,t};P_t,ET_{0g,t},I_{j,t,m}),
+\qquad V_{j,t+1}=R_t\widetilde V_{j,t+1}.
+\]
+年初冲击对照改为先 $V_{j,t}\gets R_tV_{j,t}$ 再应用 $\Phi$，两者均在完整年末观测。
+这种年度口径可能遗漏年内短暂退化后恢复，不能解释为逐日连续监测。
+
+月补水申请按任务一需水季节比例分配，随后受任务二年/月供水能力约束。
+先预留光伏清洗，再按各批次申请量比例分配剩余月供水，最后保证年总额。
+旱年供水上限同时缩减；所有已建批次继续计入取水。
+各月土壤储水仍满足 $M_{\rm end}=M_{\rm start}+P_{\rm eff}+I_{\rm net}+G-T_a-D_{\rm drain}$。
+不得只减少外生“湿润系数”而跳过水量账。
+后期养护服务、清洗需求和供水能力的延续是情景假设，未证明未来融资可持续，
+不从本模型虚构光伏50年发电收入或更换成本。
+
+\subsection{非平稳气候情景}
+\begin{equation}\label{eq:trend}
+s_{u,t}=e^{\alpha_u t},\qquad P_{t,m}=P_{0,m}e^{\alpha_Rt},\qquad
+\lambda_t=\lambda_0e^{\alpha_\lambda t},\quad p_{D,t}=p_{D,0}+b_Dt.
+\end{equation}
+输入必须满足 $0\le p_{D,t}\le1$，否则报错，不靠截断掩盖不合理趋势。
+降雨趋势系数 $\alpha_R$ 不同于任务一有效降雨比例 $\alpha_P$。
+泊松强度 $\lambda_t\ge0$ 不要求小于1。
+风速比 $s_{u,t}$ 通过任务一既有的 Penman--Monteith 月响应比调整 $ET_{0g}$；
+降雨与需水量的改变共同影响干湿背景，可用全年 $\sum P/\sum ET_{0g}$ 描述水热代理，
+但它不是实测空气相对湿度，也不能替代内生储水 $M$。
+当前趋势是压力测试参数，非本地区确定趋势或某个 SSP 的降尺度结果。
+
+\subsection{首达、恢复与项目尺度}
+取情景退化界限 $v_{\rm crit}=\rho K$，定义
+$\tau_j=\inf\{t\ge0:V_{j,t}<v_{\rm crit}\}$；初始已低于阈值时 $\tau_j=0$。
+这是“首次越界”统计，不代表物理植被不可恢复。蒙特卡洛中物理状态继续更新，
+分别报告曾退化概率和当前低覆盖概率。
+
+项目事件定义为任一年度同时低于阈值的面积比例达到 $\beta$：
+\[
+\tau_{\rm proj}=\inf\left\{t:\frac{\sum_ja_j\ind{V_{j,t}<\rho K}}{\sum_ja_j}\ge\beta\right\}.
+\]
+共享灾害时不能将各批次存活概率相乘当作项目存活概率；项目事件用联合路径估计。
+不把“曾退化的累计批次面积”和“同一时点退化面积”混为一谈。
+
+\subsection{二维转移核与平稳校验}
+\textbf{平稳、年末冲击对照}可建立二维吸收链。暂态网格覆盖
+$[v_{\rm crit},K]\times[0,C]$，不是 $[0,1.5K]$；越界先在连续状态判定，再作双线性投影。
+设 $B_j(x)$ 为二维投影权重，$x=(V,M)$，$\Phi_d(x)=(\widetilde V_d,M_d')$：
+\begin{equation}\label{eq:P}
+Q_{ij}=\sum_{d=0}^{1}\Pr(D=d)
+\sum_{n=0}^{\infty}\frac{e^{-\lambda\gamma^d}(\lambda\gamma^d)^n}{n!}
+\E\left[B_j(R_n\widetilde V_d,M_d')\ind{R_n\widetilde V_d\ge v_{\rm crit}}\right].
+\end{equation}
+$Q$ 为暂态次随机矩阵，$Q_{ij}\ge0$、$Q\bm1\le\bm1$；
+补一吸收态后 $P=\left[\begin{smallmatrix}Q&\bm1-Q\bm1\\0&1\end{smallmatrix}\right]$ 为行随机矩阵。
+真实泊松无灾概率是 $e^{-\lambda}$，不是 $1-\lambda$。
+数值上保留无事件原子，正事件保留率用复合对数损失卷积与分位节点积分；
+极小泊松尾质量、冲击积分和状态网格误差分别记录与检验，不能宣称无近似误差。
+
+若从暂态几乎必然吸收且均值有限，则
+\begin{equation}\label{eq:N}
+\bm N=(\bm I-\bm Q)^{-1}=\sum_{k\ge0}\bm Q^k.
+\end{equation}
+对各网格起点，
+\begin{align}
+\bm t&=\bm N\bm1,\label{eq:etime}\\
+\bm s&=(2\bm N-\bm I)\bm t,\qquad
+\mathrm{Var}(\tau\mid i)=s_i-t_i^2.\label{eq:var}
+\end{align}
+计算时解线性系统而非显式求逆。对初始行分布 $\bm p_0$，均值为 $\bm p_0\bm t$，
+方差为 $\bm p_0\bm s-(\bm p_0\bm t)^2$；初始已失败的质量在0时刻吸收。
+\begin{equation}\label{eq:ptau}
+\Pr(\tau\le H)=1-\bm p_0\bm Q^{\,H}\bm1.
+\end{equation}
+若不存在有限基本矩阵，不输出虚假的期望寿命；尤其 $\lambda=0$ 时，
+也可能因停水而确定退化，不能一律断言退化概率零、期望寿命无穷。
+
+非平稳核的正确行向量次序为
+\begin{equation}\label{eq:tv}
+\Pr(\tau>H)=\bm p_0\bm Q_0\bm Q_1\cdots\bm Q_{H-1}\bm1.
+\end{equation}
+本轮非平稳主结果采用直接物理蒙特卡洛；二维链只校验平稳子情景，
+不将平稳无限期寿命混入非平稳50年结果。
+
+\subsection{蒙特卡洛、删失与长期效益}\label{sec:mc}
+每条路径逐年抽完整泊松次数及每次幅度，抽共同旱情，更新各批次水分与覆盖，
+记录年度首次越界。概率估计为
+\begin{equation}\label{eq:mc}
+\widehat p_H=\frac1B\sum_{b=1}^B\ind{\tau^{(b)}\le H}.
+\end{equation}
+二项概率用 Wilson 95\% 区间，避免0次/全数越界时出现零宽Wald区间。
+截至 $H$ 年未越界者为右删失，报告
+\[
+\mathrm{RMST}(H)=\E[\min(\tau,H)]=\sum_{t=0}^{H-1}\Pr(\tau>t),
+\]
+而非只平均已失败路径的年份冒充无条件期望寿命。
+长期生态量沿用任务二覆盖代理积分
+$H_{\rm eco}=\sum_t\sum_ja_jV_{j,t}/K$（年初冲击方案在冲击后计当年覆盖），
+输出分布和均值，不货币化、不转为实测减蚀吨数。
+路径5--95\%分位带、均值标准误和概率置信区间的含义必须区分。
+
+\subsection{参数与验证边界}
+\begin{table}[H]\centering\small
+\begin{tabularx}{\textwidth}{lXl}
+\toprule 参数 & 含义与取值限制 & 证据类别\\\midrule
+$\lambda,U,\gamma$ & 非负事件强度；$0\le u_{\rm lo}\le u_{\rm hi}<1$；旱年强度倍数 & 未校准情景\\
+$p_{D,t}$ & 年度旱年概率，在整个评估期均须位于$[0,1]$ & 未校准情景\\
+$\rho,\beta$ & 相对K的退化阈值、项目低覆盖面积触发比例 & 管理诊断假设\\
+$\alpha_u,\alpha_R,\alpha_\lambda,b_D$ & 风、雨、灾害和旱年的基线趋势 & 压力测试，非预测\\
+$V_{j,0},M_{j,0},a_j,I_j$ & 任务二末态、批次面积、末年供水申请 & 继承已存结果\\
+$r,d,K,C,\eta_w,\ldots$ & 任务一最终参数与有效储水口径 & 继承M1及其局限\\
+\bottomrule
+\end{tabularx}
+\caption{任务三参数的约束与来源}\label{tab:t3par}
+\end{table}
+
+验证包括向量化水量模块逐点对照原M1、全部年/月资源上限、完整泊松矩、
+初始退化和无灾停水极限、矩阵性质、平稳链与独立物理模拟对照、
+固定冲击积分精度时的状态网格加密及固定网格时的积分加密。
+这些是数值一致性验证，不替代本地灾害频率、损伤率和未来气候的经验验证。
+M1背景衰亡与额外灾害损失是否重叠仍需灾害清单和灾前后观测检验。

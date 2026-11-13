@@ -15,6 +15,9 @@
 | M2 情景输入与数表 | [参数登记](Data/v7/m2_inputs/README.md) / [结果说明](Results/v7/model2/README.md) |
 | M2 制图交接 | [给 Claude 的数表说明](Docs/20261111_m2_figure_handoff.md) |
 | M2 图 | [Figures/M2/](Figures/M2/README.md) |
+| M3 复核与实现 | [M3 审计说明](Docs/20261113_m3_audit_and_implementation.md) |
+| M3 情景与数表 | [参数证据](Data/v7/m3_inputs/README.md) / [结果说明](Results/v7/model3/README.md) |
+| M3 制图交接 | [给 Claude 的数表说明](Docs/20261113_m3_figure_handoff.md)（本轮不出图） |
 | **M1/M2 模型检验（2026-11-12）** | **[检验报告 PDF](Reports/model_validation_m1m2.pdf)**（[tex](Reports/model_validation_m1m2.tex)） / [检验结果](Results/v7_validation/validation_m1m2.json) / [检验代码](Code/validate_m1m2.py) |
 | 代码与运行方法 | [Code/](Code/README.md) |
 | 建模与预处理报告 | [Reports/](Reports/README.md) |
@@ -31,7 +34,8 @@ M1 已实现条件合并标定、有效储水动态、逐像元 QA、水量闭�
 当前结果保留 `formal_model_ready=false`。水分和风损伤参数仍需现场证据，区段工程边界、
 可用水量、成本和劳动力约束仍待补充。M2 已完成批次动态优化、预算/水量/劳动约束、
 光伏资产现金流、成本—生态权衡及敏感性数表，仅作条件情景；7 张图已由数表生成，见 `Figures/M2/`。
-任务三的韧性计算尚待实现验证。
+M3 已完成复合风沙、干旱与非平稳气候下的27组情景、二维平稳链核验及数表交付，图交由Claude完成。
+M3继承M2各批次末态；灾害参数、未来趋势及退化阈值未本地标定，结果为压力测试，不是工程寿命预测。
 
 **2026-11-12 新增模型检验**：不改动 M1/M2 的任何实现，只读 `Results/v7/model1|model2` 的结果表，
 重算指标、约束余量、目标值与有效面积，并检查 MIP 对偶界、水量闭合、留站泛化与风蚀项统计依据。
@@ -47,6 +51,10 @@ python Code/v7_model1.py
 python -m unittest discover -s Code -p test_v7_m1.py -v
 python Code/v7_model2.py
 python -m unittest discover -s Code -p test_v7_m2.py -v
+python -m pip install -r Code/requirements-m3.txt
+python Code/v7_model3.py
+python Code/v7_m3_grid_check.py
+python -m unittest discover -s Code -p test_v7_m3.py -v
 python Tools/check_references.py
 ```
 
@@ -74,9 +82,9 @@ MODIS MOD13Q1、Open-Meteo 历史归档和 SoilGrids。原始请求与哈希保�
 | `Reference/` | 文献、网页存档、题录与来源核验 |
 | `Docs/` | 读题、当前模型审计、文献接口与协作说明 |
 | `Plan/` | 计划与分工 |
-| `Code/` | M1/M2 实现、输入重建、预处理与对比工具 |
+| `Code/` | M1/M2/M3 实现、输入重建、预处理与对比工具 |
 | `Data/v7/` | 请求清单、面板和经复核输入 |
-| `Results/v7/` | 审计、对比材料及 M1/M2 数值结果 |
+| `Results/v7/` | 审计、对比材料及 M1/M2/M3 数值结果 |
 | `Results/v7_validation/` | 模型检验输出（`validation_m1m2.json`、`scorecard_m1m2.csv` 等） |
 | `Figures/M1/` | 当前 M1 数表生成的图片 |
 | `Figures/M2/` | 当前 M2 数表生成的图片（`python Code/v7_m2_figures.py`） |

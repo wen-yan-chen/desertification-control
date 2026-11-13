@@ -1,3 +1,15 @@
+# Handoff — 2026-11-13: M3 implementation ready for Claude
+
+M3已完成27组条件情景、逐月资源账、首达/恢复/删失统计及二维平稳链校验。本轮未生成图片；M1/M2代码、数表、论文及图片保持原样。
+
+- 当前复核：[M3审计](20261113_m3_audit_and_implementation.md)；更新公式已并入 `Reports/model_v7/model_v7.{tex,pdf}`。
+- 输入与证据：[m3_inputs](../Data/v7/m3_inputs/README.md)；数表与字段：[model3](../Results/v7/model3/README.md)。
+- 下一步给Claude：[绘图交接](20261113_m3_figure_handoff.md)，先核验结果记录的输入哈希，再只读数表绘图。
+- 28项M1/M2/M3测试通过。最细二维网格9个概率核验点均在MC区间内；这验证数值一致性，不是实地灾害预测准确率。
+- 风沙频率、幅度、未来气候与退化阈值仍是情景参数；`formal_model_ready=false`。50年RMST不是工程寿命，0.30K不是30%绝对覆盖，曾退化不等于永久失效。
+
+以下为历史交接，旧条目中的“M3待实现”已被本次交付替代。
+
 # Handoff to Astra — 2026-11-11: M1 and M2 writing briefs
 
 Written by Claude.
@@ -179,4 +191,4 @@ Fit on training data only; report hold-out next to persistence and mean baseline
 - (later) Parameter table rebuilt: columns Symbol | Meaning | Value | Range tested | Unit, three groups (fitted / data rule / assumed), dagger = bootstrap 95% interval; V0 and M0 split into two rows. Table and Algorithm 2 pinned with [H] so the order is Alg 2 -> Parameter values + Table 4 -> 5.3 Results. Fig 7 pinned after its list, Summary last; Model 1 still ends p. 14.
 - (later) Station series figure (m1_f01, suptitle removed in Code/v7_m1_figures.py and regenerated) combined with the scenario-path figure as Fig. 5 (a) observed 2015-2025, (b) scenarios 2026-2050 (subfigures, labels fig:m1-obs / fig:m1-scen). Model reliability now cites 5a (free run misses the 2023-2025 greening). Float pages top-aligned via \@fptop=0pt in main.tex. Model 1 now pp. 8-15.
 - (later) Fig. 5 now side by side: (a) m1_f01_station_series_tall (4x2), (b) m1_f07_scenario_trajectories_tall (3 stacked panels, titles without letters). New tall=True options in Code/v7_m1_figures.py; wide originals unchanged. Fig. 5 placed [!t] so text fills below it. Model 1 = pp. 8-15. Note: Table 4 caption was shortened outside this session; the dagger on r, d ranges is no longer explained.
-- (later) Controlling factors now two-column (text left, figure right via minipage + 
+- (later) Controlling factors now two-column (text left, figure right via minipage +

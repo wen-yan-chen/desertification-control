@@ -1,0 +1,53 @@
+{
+  "state_and_quadrature_checks": [
+    {
+      "cohort_id": "eco_y1_100_to_300_after_3",
+      "comparison": "state_grid",
+      "max_absolute_probability_difference": 0.00038044528930275545,
+      "p50_absolute_difference": 3.041863854136295e-07,
+      "below_one_percentage_point": true
+    },
+    {
+      "cohort_id": "eco_y1_100_to_300_after_3",
+      "comparison": "shock_quadrature",
+      "max_absolute_probability_difference": 0.0017031790116882883,
+      "p50_absolute_difference": 6.699913614571784e-06,
+      "below_one_percentage_point": true
+    },
+    {
+      "cohort_id": "eco_y1_ramp_100_300_600",
+      "comparison": "state_grid",
+      "max_absolute_probability_difference": 0.00015301847298077043,
+      "p50_absolute_difference": 8.641771961237499e-05,
+      "below_one_percentage_point": true
+    },
+    {
+      "cohort_id": "eco_y1_ramp_100_300_600",
+      "comparison": "shock_quadrature",
+      "max_absolute_probability_difference": 0.0020238039017020926,
+      "p50_absolute_difference": 0.0012162710196124138,
+      "below_one_percentage_point": true
+    },
+    {
+      "cohort_id": "eco_y2_100_to_300_after_3",
+      "comparison": "state_grid",
+      "max_absolute_probability_difference": 0.00023629094667365624,
+      "p50_absolute_difference": 3.5464161607379197e-07,
+      "below_one_percentage_point": true
+    },
+    {
+      "cohort_id": "eco_y2_100_to_300_after_3",
+      "comparison": "shock_quadrature",
+      "max_absolute_probability_difference": 0.0012600095466736572,
+      "p50_absolute_difference": 6.521758383892795e-06,
+      "below_one_percentage_point": true
+    }
+  ],
+  "finest_markov_vs_mc_points": 9,
+  "finest_points_inside_mc_ci95": 9,
+  "max_markov_mc_absolute_difference": 0.01054992186,
+  "min_exported_monthly_water_slack_m3": -4.365574569e-11,
+  "first_passage_monotone": true,
+  "note": "Numerical agreement is not empirical validation. A 95% MC interval need not contain every approximation in repeated comparisons.",
+  "checker_sha256_lf": "bbabb49eb91e918cdee54669c8c6ab30356dfacf7ac65121b5ac26fccac55ac7"
+}

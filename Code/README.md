@@ -50,6 +50,27 @@ python -m unittest discover -s Code -p test_v7_m2.py -v
 快速检查可运行 `python Code/v7_model2.py --base-only --output tmp/m2_smoke`。
 `formal_model_ready=false`，最优界只适用于给定网格与策略库。
 
+## M3 计算（图片交给 Claude）
+
+在仓库根目录运行；本轮用Python 3.13及下列固定版本验证，无需重跑M1/M2。
+
+```sh
+python -m pip install -r Code/requirements-m3.txt
+python -m unittest discover -s Code -p test_v7_m3.py -v
+python Code/v7_model3.py
+python Code/v7_m3_grid_check.py
+```
+
+`v7_m3_core.py`复现M1逐日水量更新并添加完整复合Poisson事件、共同旱情、月供水配给、
+年度首达与物理恢复；`v7_model3.py`导出27情景及平稳二维链数表；`v7_m3_grid_check.py`
+在确认主结果哈希后，以交叉网格分开检验状态离散和冲击积分误差。9项M3测试与M1/M2共28项通过。
+全套计算包括较大的稀疏线性系统；快速检查可运行
+`python Code/v7_model3.py --base-only --output tmp/m3_smoke`，不能用该子集覆盖完整成果目录。
+
+[输入与证据](../Data/v7/m3_inputs/README.md) · [模型复核](../Docs/20261113_m3_audit_and_implementation.md) ·
+[输出字段](../Results/v7/model3/README.md) · [Claude制图交接](../Docs/20261113_m3_figure_handoff.md)。
+`formal_model_ready=false`；首达、当前低覆盖、删失和RMST口径不得混用。
+
 ## M1/M2 出图
 
 ```sh

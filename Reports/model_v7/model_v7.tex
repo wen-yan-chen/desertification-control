@@ -48,17 +48,17 @@
 \large 建模说明：题目解读、公式、参数与约束\\[2pt]
 \normalsize （2026 CQU\_MCM B 题 · 只含建模部分，不含数据结果）}
 \author{CQU\_MCM 2026 · B 题}
-\date{2026-11-11}
+\date{2026-11-13}
 
 \begin{document}
 \maketitle
 \begin{quote}\small\bfseries
-复核状态（2026-11-11）：任务一已并入 2026-11-10 复核更正（年度植被＋年内有效储水）；
-任务二采用本轮批次动态更正，已完成情景实现核验；任务三尚未核验。
+当前状态（2026-11-13）：任务一已并入 2026-11-10 复核更正（年度植被＋年内有效储水）；
+任务二采用批次动态更正；任务三采用2026-11-13复核后的复合灾害与储水状态模型，已完成情景实现。
 
-复核状态（2026-11-12）：任务一的 $k$ 由"情景参数"进一步明确为"\textbf{基线 0 的情景参数}"，
-补入注~\ref{rem:wind}（结构性共线、统计证据、可检测下限 $k\le0.89$）与任务三的"冲激 / 系数放大"两种用法；
-$k$ 的情景域由 $[0,0.10]$ 扩到 $[0,0.90]$。\textbf{本次只改文档与参数域，不改任何数据、结果与代码}。
+历史说明（2026-11-12）：注~\ref{rem:wind}及附录保留过直接风损伤系数的统计讨论。
+当前M1实现已移除该项；M3采用独立状态冲击，不恢复或放大历史 $k$ 区间，
+也不将该区间解释为灾害损失标定结果。
 本建模文档只管理公式、参数和约束，不规定编程交付物。
 \end{quote}
 
@@ -103,8 +103,8 @@ $(V_{t+1},M_{t+1,0})=\Phi(V_t,M_{t,0};\bm{\theta})$，外加一个\textbf{参数
 \textbf{有限期动态优化}：各建植批次的 $(V,M)$、光伏资产与剩余预算；决策含面积、补水、三类资金分配及劳动，以有限策略库混合整数优化权衡生态积分与净现成本 \\
 \addlinespace
 任务三 & 在任务一、二基础上引入\textbf{随机灾害过程}与\textbf{长期预测} &
-\textbf{复合泊松冲击}驱动的\textbf{吸收马尔可夫链}：状态为覆盖度网格，
-吸收态为退化，输出退化概率与期望首达时间 \\
+\textbf{复合泊松冲击与干旱}驱动的二维状态过程：状态为覆盖度与有效储水，
+首达标记吸收、物理状态可恢复；输出退化概率及受限平均首达时间 \\
 \addlinespace
 任务四 & 一页简报 & 由前三问的输出派生（本文不展开） \\
 \bottomrule
@@ -661,164 +661,7 @@ e^{\mathrm{1yr}}_t&=\big|\hat x_{t+1|t}-\tilde x_{t+1}\big|,\qquad
 \input{m2_correction.tex}
 
 % =============================================================================
-\section{任务三：随机灾害下的韧性}\label{sec:t3}
-% =============================================================================
-
-\subsection{灾害过程：复合泊松}
-
-设第 $t$ 年灾害发生次数 $N_t\sim\mathrm{Poisson}(\lambda)$，各次独立；
-第 $q$ 次事件的损失比例 $u_q\sim F_u$（取 $U(u_{\mathrm{lo}},u_{\mathrm{hi}})$）。
-一年内的总冲击（对数尺度）为 $\sum_{q=1}^{N_t}\ln(1-u_q)$，其期望为
-\begin{equation}\label{eq:compound}
-\E\Big[\prod_{q=1}^{N_t}(1-u_q)\Big]
-=\exp\Big\{-\lambda\,\E[u]\Big\}\quad(\text{小 }u\text{ 近似}),
-\end{equation}
-即"事件频率 $\lambda$"与"单次幅度 $\E[u]$"以乘积形式进入，二者在年尺度上\textbf{不可分别识别}——
-这是任务三最重要的建模限制，因此敏感性必须做 $(\lambda,\E[u])$ 的\textbf{等值线}，而不是各自单因素。
-
-\subsection{灾害冲激的两种实现（2026-11-12 补）}\label{sec:shock}
-
-风蚀在任务一中"保留形式、基线取 0"（注~\ref{rem:wind}），到任务三有两条实现路径，二者\textbf{必须分开声明}：
-
-\begin{enumerate}
-\item \textbf{非迭代冲激（主用）。}把灾害写成对状态的乘性削减 $V\gets V(1-u_q)$，再走一次年映射
-      $F(\cdot)$——即式~\eqref{eq:P} 已采用的形式。它\textbf{不改变覆盖度的迭代函数}，
-      只改变进入迭代的初值，因此与任务一的标定互不干扰。
-\item \textbf{系数放大（敏感性）。}把风蚀系数写成 $k_t=\kappa_t k_0$（$\kappa_t\ge1$ 为灾害期放大倍数），
-      考察"若风蚀强度在灾年升高"对退化概率的影响。由于 $k$ 未被数据识别，
-      $\kappa_tk_0$ 只能作为\textbf{情景}给出：以 $k_0\le0.89$（注~\ref{rem:wind} 的单侧上界）
-      作为"未超出数据可排除范围"的锚点，取 $\kappa_t\in\{2,5\}$ 对应"强/极端风沙年"。
-\end{enumerate}
-
-两条路径给出的 $P$ 不同（前者改变冲击幅度、后者改变漂移强度），敏感性中应\textbf{并列报告}，
-避免结论依赖未声明的约定。任务三的参数与取值域见表~\ref{tab:t3par}。
-
-\subsection{状态离散与转移矩阵}
-
-把覆盖度离散为 $n$ 个状态 $v_j=j\Delta_v$，$j=0,\dots,n-1$，$\Delta_v=v_{\max}/(n-1)$，$v_{\max}=1.5K$。
-吸收态集合 $\mathcal{S}_0=\{v_j: v_j<v_{\mathrm{crit}}\}$，$v_{\mathrm{crit}}=\rho K$（退化阈值）。
-设 $\pi(\cdot)$ 为"把连续值投影到最近网格点"的算子，则一步转移矩阵
-\begin{equation}\label{eq:P}
-P_{ij}=(1-\lambda)\,\ind{\pi\big(F(v_i)\big)=j}
-+\lambda\cdot\frac{1}{n_u}\sum_{q=1}^{n_u}\ind{\pi\big(F(v_i(1-u_q))\big)=j},
-\end{equation}
-其中 $F(\cdot)$ 是任务一的右端映射（式~\eqref{eq:t1}），$n_u$ 为 $u$ 的分位点个数（数值积分）。
-式~\eqref{eq:P} 的第一项是"本年无灾害、按动力学演化"，第二项是"发生一次灾害、按比例削减后再演化"。
-
-\begin{remark}[冲击与生长的次序]
-式~\eqref{eq:P} 取"先冲击、后生长"。若把灾害视为年末一次性事件，则应写成 $F(v_i)(1-u_q)$，
-两种次序给出不同的 $P$。本文固定一种，并在敏感性中对照另一种，避免"结论依赖未声明的约定"。
-\end{remark}
-
-\paragraph{矩阵性质（可作为实现的验收条件）。}
-$P$ 必须满足：(i) $P_{ij}\ge0$；(ii) $\sum_jP_{ij}=1$（行随机）；
-(iii) 对 $v_i\in\mathcal{S}_0$，$P_{ii}=1$（吸收态自封）。
-数值实现后应逐行检查这三条，否则 $(I-Q)^{-1}$ 会给出负数或发散的期望时间。
-
-\subsection{吸收马尔可夫链的两个闭式指标}
-
-把非吸收状态抽出，得到子矩阵 $Q$（$|Q|=n-|\mathcal{S}_0|$）。基本矩阵
-\begin{equation}\label{eq:N}
-\bm{N}=(\bm{I}-\bm{Q})^{-1}=\sum_{k=0}^{\infty}\bm{Q}^{k},
-\end{equation}
-其元素 $N_{ij}$ 是"从状态 $i$ 出发、被吸收前在状态 $j$ 的平均停留年数"。由此
-\begin{align}
-\E[\tau]&=\bm{N}\bm{1}, \label{eq:etime}\\
-\mathrm{Var}[\tau]&=(2\bm{N}-\bm{I})\bm{N}\bm{1}-\E[\tau]\circ\E[\tau], \label{eq:var}\\
-\Prob(\tau\le T)&=1-\bm{1}^{\top}\bm{Q}^{T}\bm{p}_0, \label{eq:ptau}
-\end{align}
-其中 $\bm{p}_0$ 为初始状态分布（通常置于 $v=K$ 所在格点），$\circ$ 为逐元素乘。
-
-\paragraph{逐式解释。}
-式~\eqref{eq:etime}：按行求和即"从 $i$ 出发到被吸收的平均年数"，这就是\textbf{期望寿命}（韧性的一种度量）。
-式~\eqref{eq:var} 给出波动，用于说明"平均 50 年退化"与"10 年内就有 30\% 概率退化"是两件事。
-式~\eqref{eq:ptau}：$\bm{Q}^{T}\bm{p}_0$ 是"$T$ 年后仍未退化"的概率向量之和，取补即\textbf{$T$ 年内退化概率}。
-两个指标一个给"时间"、一个给"概率"，合起来才构成完整的韧性描述。
-
-\paragraph{为什么用吸收链而不是只做蒙特卡洛。}
-蒙特卡洛只能给数值与置信区间，不能解释"为什么"；吸收链给出\textbf{闭式解}，
-可以直接对 $\lambda$、$\eta$、$v_{\mathrm{crit}}$ 求导做敏感性，且没有模拟误差。
-两者并用：解析解给结构，蒙特卡洛给校验（第~\ref{sec:mc} 节）。
-
-\subsection{长期预测：把趋势放进转移矩阵}
-
-题目要求"气候变化趋势本身在改变风速与湿润指数的基准水平"。做法是让参数随时间变化：
-\begin{equation}\label{eq:trend}
-E_t=E_0(1+\alpha_E t),\qquad
-W_t=W_0(1+\alpha_W t),\qquad
-\lambda_t=\lambda_0(1+\alpha_\lambda t),
-\end{equation}
-并逐项截断到物理区间（$E_t\ge0$，$W_t\in[0,1]$，$\lambda_t\in(0,1)$）。
-此时 $Q$ 变为时变矩阵 $Q_t$，生存概率写成乘积形式
-\begin{equation}\label{eq:tv}
-\Prob(\tau>T)=\bm{1}^{\top}\Big(\prod_{t=0}^{T-1}\bm{Q}_t\Big)\bm{p}_0 ,
-\end{equation}
-注意\textbf{矩阵乘法不交换}，必须按时间顺序左乘。
-若 $\alpha_E>0$ 或 $\alpha_W<0$，$x^*_t$（式~\eqref{eq:xstar}）逐年下移，
-$\Prob(\tau\le T)$ 随 $T$ 加速上升——这就是"气候趋势放大风险"的数学表达。
-
-\subsection{蒙特卡洛校验}\label{sec:mc}
-
-独立抽 $M$ 条路径：每年先抽 $N_t\sim\mathrm{Poisson}(\lambda_t)$，再抽 $N_t$ 个 $u_q$，
-按式~\eqref{eq:t1} 递推，记录首次低于 $v_{\mathrm{crit}}$ 的年份。
-估计量
-\begin{equation}\label{eq:mc}
-\hat p_T=\frac{1}{M}\sum_{m=1}^{M}\ind{\tau_m\le T},\qquad
-\mathrm{CI}_{95\%}\approx\hat p_T\pm1.96\sqrt{\frac{\hat p_T(1-\hat p_T)}{M}} .
-\end{equation}
-\textbf{校验判据}：解析值应落在蒙特卡洛的 95\% 置信区间内；若系统性偏离，
-说明离散化（网格数 $n$、冲击分位点 $n_u$）不足，或矩阵构造有误。
-
-\begin{algorithm}[H]
-\caption{任务三：吸收链指标与蒙特卡洛校验}\label{alg:mc}
-\begin{algorithmic}[1]
-\Require 任务一参数 $\hat\theta$，$K$，$\lambda$，$F_u$，$v_{\mathrm{crit}}$，网格数 $n$，路径数 $M$，期限 $T$
-\Ensure $\E[\tau]$，$\Prob(\tau\le T)$ 的解析值与 MC 值
-\State 构造网格 $\{v_j\}$；标记吸收态 $\mathcal{S}_0$
-\State 按式~\eqref{eq:P} 填充 $P$；逐行检查行随机性与吸收性
-\State 抽出 $\bm{Q}$，计算 $\bm{N}=(\bm{I}-\bm{Q})^{-1}$
-\State 由式~\eqref{eq:etime}、\eqref{eq:ptau} 算解析指标
-\For{$m=1$ \textbf{to} $M$}
-  \State $v\gets K$
-  \For{$t=1$ \textbf{to} $T$}
-    \State 抽 $N_t$
-    \For{$q=1$ \textbf{to} $N_t$}
-      \State $v\gets v(1-u_q)$
-    \EndFor
-    \State $v\gets F(v)$
-    \If{$v<v_{\mathrm{crit}}$}
-      \State 记录 $\tau_m=t$；跳出
-    \EndIf
-  \EndFor
-\EndFor
-\State 由式~\eqref{eq:mc} 算 $\hat p_T$ 与置信区间，与解析值对照
-\end{algorithmic}
-\end{algorithm}
-
-\subsection{任务三的参数与约束}
-
-\begin{table}[H]\centering\small
-\begin{tabularx}{\textwidth}{|c|X|c|c|}
-\toprule
-参数 & 含义 & 单位 & 约束 \\
-\midrule
-$\lambda$ & 灾害事件年频率 & a$^{-1}$ & $0<\lambda<1$；由超阈频率估计 \\
-$u_{\mathrm{lo}},u_{\mathrm{hi}}$ & 单次损失比例上下界 & — & $0<u_{\mathrm{lo}}<u_{\mathrm{hi}}<1$ \\
-$v_{\mathrm{crit}}$ & 退化阈值 & \% & $v_{\mathrm{crit}}=\rho K$，$\rho\in(0,1)$ \\
-$n$ & 覆盖度网格数 & — & $n\ge100$（离散误差 $O(1/n)$） \\
-$n_u$ & 冲击分位点数 & — & $n_u\ge10$ \\
-$\alpha_E,\alpha_W,\alpha_\lambda$ & 气候趋势系数 & a$^{-1}$ & 由趋势检验给出区间 \\
-$T$ & 评估期限 & a & 30--50 年 \\
-\bottomrule
-\end{tabularx}
-\caption{任务三的参数与约束}\label{tab:t3par}
-\end{table}
-
-\paragraph{三条一致性约束。}
-(i) 任务三的 $F(\cdot)$ 必须与任务一同一个函数、同一组参数，不得另拟；
-(ii) $v_{\mathrm{crit}}<K$，否则初始状态即为吸收态，模型无意义；
-(iii) $\lambda$ 与 $u$ 的估计必须来自同一口径的日值序列（同为日最大风速超阈），
-不能一个用月均、一个用日值。
+\input{m3_correction.tex}
 
 % =============================================================================
 \section{模型检验与灵敏度的总体设计}\label{sec:check}
@@ -837,8 +680,8 @@ $T$ & 评估期限 & a & 30--50 年 \\
 & 报告条件数与参数区间；不可识别者标为情景参数 \\
 任务二 & 最优性 & 小实例穷举对照、逐批回放及资源账本；报告整数求解界与间隙 \\
 任务二 & 敏感性 & 固定绝对生态目标下的单因素情景、路径结构与净现成本 \\
-任务三 & 解析 vs 蒙特卡洛 & 解析值落在 MC 的 95\% 置信区间内 \\
-任务三 & 离散化收敛 & $n$ 加倍后 $\Prob(\tau\le T)$ 变化 $<1\%$ \\
+任务三 & 解析 vs 蒙特卡洛 & 平稳二维网格结果与MC区间对照，区分网格、积分及抽样误差 \\
+任务三 & 离散化收敛 & 分别加密覆盖/储水网格与冲击积分，报告绝对概率差 \\
 \bottomrule
 \end{tabularx}
 \caption{检验指标与判据}\label{tab:check}
@@ -848,8 +691,7 @@ $T$ & 评估期限 & a & 30--50 年 \\
 
 三问共用同一个 $F$ 与同一组 $\hat\theta$，因此可以做两个交叉检验：
 (i) 任务三应继承任务二各批次末年 $(V,M)$ 和资产状态；建设规模增加不保证单位面积退化概率下降；
-(ii) 把任务三的 $\lambda$ 调为 0，退化概率应趋于 0、期望首达时间应趋于 $\infty$——
-若数值上不是这样，说明转移矩阵或吸收态设置有误。
+(ii) 无风沙事件时仍可能因缺水退化；分别验证无灾持续供水与无灾停水，不能统一要求零风险或无穷寿命。
 
 % =============================================================================
 \appendix
@@ -926,7 +768,7 @@ $\kappa(\cdot)$ & 矩阵条件数 & — & 诊断 \\
 式~\eqref{eq:obj} & QA 后年覆盖与站点 $K$ & 缺失：按第~\ref{sec:data} 节的门槛剔除站点，不插补 \\
 式~\eqref{eq:water} & 各批次定额、面积、年/月供水上限 & 缺取水批复：仅作资源情景 \\
 式~\eqref{eq:threshold} & 全部经济参数 & 缺单价：给区间，结论写成条件结论 \\
-式~\eqref{eq:P} & $\lambda$、$u$ 分布 & 缺事件记录：用风速超阈频率作代理 \\
+式~\eqref{eq:P} & 事件频率、损伤标记及旱情 & 缺事件与损伤记录：仅设情景，不用月风速冒充事件率 \\
 式~\eqref{eq:tv} & 趋势系数 $\alpha$ & 缺趋势：令 $\alpha=0$ 作基准，另做情景 \\
 \hline
 \end{longtable}
@@ -934,6 +776,7 @@ $\kappa(\cdot)$ & 矩阵条件数 & — & 诊断 \\
 \section{参数取值域一览}\label{app:par}
 % =============================================================================
 
+\begingroup\small
 \begin{longtable}{|c|c|c|c|}
 \caption{参数取值域一览}\label{tab:parrange}\\
 \hline
@@ -956,8 +799,8 @@ $\alpha_P$ & $[0,1]$，基准 0.25 & 情景 & 是 \\
 $G$ & 基准 0 & 情景 & 待补给证据 \\
 $K$ & $1.15\times Q_{0.95}(V)$ & 观测 & 是（系数 1.0--1.3） \\
 $\rho$（退化阈值系数） & $[0.2,0.4]$ & 情景 & 是 \\
-$\lambda$ & $[0.15,0.6]$ a$^{-1}$ & 估计/情景 & 是 \\
-$\E[u]$ & $[0.2,0.55]$ & 情景 & 是（与 $\lambda$ 联合） \\
+$\lambda_t$ & $\lambda_t\ge0$ a$^{-1}$ & 未校准情景 & 是 \\
+$\E[U]$ & $[0,1)$ & 未校准情景 & 是（与 $\lambda$ 联合） \\
 $\delta$ & $[0.90,0.97]$ & 情景 & 是 \\
 $c_b$ & 见表~\ref{tab:t2par} & 情景 & 是 \\
 $c_m$ & 见表~\ref{tab:t2par} & 情景 & 是 \\
@@ -965,7 +808,7 @@ $p_e$ & 见表~\ref{tab:t2par} & 情景 & 是 \\
 $T$（规划期） & $[10,20]$ a & 题目建议 & 是 \\
 \hline
 \end{longtable}
-
+\endgroup
 
 \section{公式速查表}\label{app:cheat}
 
@@ -1013,15 +856,15 @@ $T$（规划期） & $[10,20]$ a & 题目建议 & 是 \\
 \eqref{eq:xstar2} & 逐批植被状态转移（非瞬时稳态） & 二 \\
 \eqref{eq:value} & 固定生态目标下的全期净成本最小化 & 二 \\
 \eqref{eq:threshold} & 光伏独立收支平衡电价（非系统最优充分条件） & 二 \\
-\eqref{eq:compound} & 复合泊松冲击的期望衰减（$\lambda$ 与 $\E[u]$ 不可分） & 三 \\
-\eqref{eq:P} & 一步转移矩阵＝无灾漂移＋有灾削减 & 三 \\
+\eqref{eq:compound} & 复合泊松保留率的精确均值（仅从此均值不能分离频率与幅度） & 三 \\
+\eqref{eq:P} & 含储水状态与完整泊松事件数的二维暂态转移核 & 三 \\
 \eqref{eq:N} & 基本矩阵 $\bm{N}=(\bm{I}-\bm{Q})^{-1}$ & 三 \\
 \eqref{eq:etime} & 期望首达时间（平均多少年退化） & 三 \\
 \eqref{eq:var} & 首达时间的方差 & 三 \\
 \eqref{eq:ptau} & $T$ 年内退化概率（韧性主指标） & 三 \\
-\eqref{eq:trend} & 风速、湿润、事件频率的线性气候趋势 & 三 \\
-\eqref{eq:tv} & 时变转移矩阵下的生存概率（矩阵连乘） & 三 \\
-\eqref{eq:mc} & 蒙特卡洛估计量与 95\% 置信区间 & 三 \\
+\eqref{eq:trend} & 风、雨及事件强度的情景趋势（旱年概率线性变化） & 三 \\
+\eqref{eq:tv} & 时变核的生存概率（初始行分布按时间向右连乘） & 三 \\
+\eqref{eq:mc} & 蒙特卡洛概率估计（Wilson区间，另报删失与RMST） & 三 \\
 \hline
 \end{longtable}
 
