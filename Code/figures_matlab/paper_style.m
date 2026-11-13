@@ -21,6 +21,7 @@ S.root = fullfile(here, '..', '..');
 S.out  = fullfile(S.root, 'Paper', 'Figure');
 S.res  = fullfile(S.root, 'Results', 'v7', 'model1');
 S.res2 = fullfile(S.root, 'Results', 'v7', 'model2');
+S.res3 = fullfile(S.root, 'Results', 'v7', 'model3');
 S.data = fullfile(S.root, 'Data', 'v7');
 
 S.font  = 'Times New Roman';   % embeds in the PDF; matches the TeX Gyre Termes body text

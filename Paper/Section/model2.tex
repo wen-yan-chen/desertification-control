@@ -31,7 +31,7 @@ Task~2 turns Model~1 into a 15-year dynamic decision problem: how much belt to p
 \begin{figure}[!htb]
   \centering
   \includegraphics[width=\linewidth]{m2_structure.pdf}
-  \caption{Structure of Model~2. Pre-simulated Model~1 cohort paths make all ledgers linear in block decisions.}
+  \caption{Structure of Model~2. }
   \label{fig:m2-struct}
 \end{figure}
 
@@ -57,7 +57,7 @@ One hectare at $V=K$ for one year scores $1\text{ effective ha}\cdot\text{yr}$. 
 D_t=\underbrace{c_b a_t}_{C_t^b:\ \text{build}}+\underbrace{\big(c_m A_t+c_{pm}P_t^{\mathrm{op}}+c_w Q_t\big)}_{C_t^o:\ \text{O\&M + water}}+\underbrace{c_p y_t}_{C_t^p:\ \text{PV}},\quad
 R_t=p_e\!\sum_{s<t}y_s e_0(1-d_p)^{t-s-1}.
 \end{equation}
-Here $a_t=\sum_p a_{t,p}$ is newly treated area, $(f_t^b,f_t^o,f_t^p)=(C_t^b,C_t^o,C_t^p)/D_t$ ($f_t^b+f_t^o+f_t^p=1$ when $D_t>0$) is the annual \textbf{investment allocation ratio}, $e_0$ is first-year net grid yield per kW, $d_p=0.5\%/\text{yr}$ is panel degradation \cite{EN06}, and $p_e$ is the settlement tariff \cite{CN06,EN05}.
+Here $a_t=\sum_p a_{t,p}$ is newly treated area, $(f_t^b,f_t^o,f_t^p)=(C_t^b,C_t^o,C_t^p)/D_t$ ($f_t^b+f_t^o+f_t^p=1$ when $D_t>0$) is the annual \textbf{investment allocation ratio}, $e_0$ is first-year net grid yield per kW, $d_p=0.5\%/\text{yr}$ is panel degradation \cite{EN06}, and $p_e$ is the scenario settlement tariff (Table~\ref{tab:m2-par}).
 
 \paragraph{System restrictions and explicit trade-off.} Rather than listing separate constraint equations, Figure~\ref{fig:m2-caps} maps how all four resource dimensions---funding, water, land/grid and labour---constrain both new construction flows and cumulative stocks in service. Capital is paid at the start of year $t$ and O\&M/revenue occur at year-end (real discount factor $\delta=(1+i_d)^{-1}$). Instead of inventing a subjective money price for vegetation, we formulate the ecology--cost trade-off via a two-step $\varepsilon$-constraint problem:
 \begin{equation}\label{eq:m2-eps}
@@ -139,21 +139,21 @@ $i_d;\ \varphi$ & real discount rate; baseline ecological target share & $5\%;\ 
   \label{fig:m2-sensitivity}
 \end{figure}
 
-\paragraph{PV process criterion.} A standalone $1$\,kW PV unit built in year $s<T$ pays back its capex, O\&M and washing water within the horizon if and only if the tariff exceeds the break-even threshold
-\noindent\begin{minipage}[t]{0.54\linewidth}
-\vspace{0pt}
-In the baseline, $p_e^{\mathrm{BE}}(s)=\frac{c_p+\sum_{t=s+1}^{T}\delta^{t-s+1}\,(c_{pm}+c_w w_c)}{\sum_{t=s+1}^{T}\delta^{t-s+1}\,e_0(1-d_p)^{t-s-1}}$ rises from $0.253$\,CNY/kWh in year~1 to $0.293$ in year~4 and crosses $0.30$ in year~5 ($0.312$, Figure~\ref{fig:m2-pv}a), matching the MILP's exact build window (years 1--4). This gives three field rules:
-\begin{enumerate}\setlength{\topsep}{2pt}\setlength{\itemsep}{0pt}\setlength{\parsep}{0pt}
-  \item \textbf{Two-gate PV rule:} install PV in year $s$ only if $p_e\ge p_e^{\mathrm{BE}}(s)$ \emph{and} budget slack remains after planting.
-  \item \textbf{Plant in years 1--2:} front-load belt construction so shrubs accrue cover across the full horizon.
-  \item \textbf{Ramp water by stand age:} supply $100$\,mm/yr in ages 1--3, step to $300$\,mm/yr at age~4, and $600$\,mm/yr (age $8+$) on core strips.
-\end{enumerate}
-\end{minipage}\hfill
-\begin{minipage}[t]{0.43\linewidth}
-\vspace{0pt}\raggedleft
-\includegraphics[width=0.90\linewidth]{m2_pv_screen.pdf}
-\captionof{figure}{Standalone PV entry screen by build year $s$ (excludes resource opportunity cost).}
-\label{fig:m2-pv}
-\end{minipage}
+%\paragraph{PV process criterion.} A standalone $1$\,kW PV unit built in year $s<T$ pays back its capex, O\&M and washing water within the horizon if and only if the tariff exceeds the break-even threshold
+%\noindent\begin{minipage}[t]{0.54\linewidth}
+%\vspace{0pt}
+%In the baseline, $p_e^{\mathrm{BE}}(s)=\frac{c_p+\sum_{t=s+1}^{T}\delta^{t-s+1}\,(c_{pm}+c_w w_c)}{\sum_{t=s+1}^{T}\delta^{t-s+1}\,e_0(1-d_p)^{t-s-1}}$ rises from $0.253$\,CNY/kWh in year~1 to $0.293$ in year~4 and crosses $0.30$ in year~5 ($0.312$, Figure~\ref{fig:m2-pv}a), matching the MILP's exact build window (years 1--4). This gives three field rules:
+%\begin{enumerate}\setlength{\topsep}{2pt}\setlength{\itemsep}{0pt}\setlength{\parsep}{0pt}
+%  \item \textbf{Two-gate PV rule:} install PV in year $s$ only if $p_e\ge p_e^{\mathrm{BE}}(s)$ \emph{and} budget slack remains after planting.
+%  \item \textbf{Plant in years 1--2:} front-load belt construction so shrubs accrue cover across the full horizon.
+ % \item \textbf{Ramp water by stand age:} supply $100$\,mm/yr in ages 1--3, step to $300$\,mm/yr at age~4, and $600$\,mm/yr (age $8+$) on core strips.
+%\end{enumerate}
+%\end{minipage}\hfill
+%\begin{minipage}[t]{0.43\linewidth}
+%\vspace{0pt}\raggedleft
+%\includegraphics[width=0.90\linewidth]{m2_pv_screen.pdf}
+%\captionof{figure}{Standalone PV entry screen by build year $s$ (excludes resource opportunity cost).}
+%\label{fig:m2-pv}
+%\end{minipage}
 
 \paragraph{Summary.} Cohort pre-simulation embeds Model~1's water--cover physics into a linear multi-year allocation model. Front-loading belt planting in years 1--2, stepping water up with stand age, and building PV only while $p_e\ge p_e^{\mathrm{BE}}(s)$ cuts net cost by $9\%$ and funds long-term upkeep, while identifying May water delivery and seedling survival $V_0$ as the critical vulnerabilities tested under stochastic disasters in Model~3.

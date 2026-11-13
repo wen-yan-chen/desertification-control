@@ -15,3 +15,5 @@ fig_m2_water();          % M2       annual and monthly water pressure
 fig_m2_tradeoff();       % M2       6 solved cost-ecology trade-off points
 fig_m2_sensitivity();    % M2       investment and assumption sensitivity
 fig_m2_pv_screen();      % M2       standalone PV break-even tariff and NPV
+fig_m3_resilience();     % M3       cohort paths, recovery wedge, drift & canal rationing
+fig_m3_sensitivity_val();% M3       joint 3x3 grid, mechanism contrasts & 2-D Markov check

@@ -18,7 +18,7 @@ latexmk -cd -xelatex -interaction=nonstopmode -halt-on-error Paper/main.tex
 
 LaTeX Workshop 使用 latexmk 配方时会自动调用 BibTeX。手动编译则在 Paper 内依次运行 `xelatex main`、`bibtex main`、`xelatex main`、`xelatex main`。
 
-当前 `Section/references.tex` 中启用了 `\nocite{*}`，便于检查全部 48 项。正式论文只列实际引用资料时，删除或注释这一行，正文 `\cite{...}` 引用的条目会自动保留。编号自动生成，不要手填 `[1]`。
+正式论文仅列正文实际引用的核心资料，编号自动生成，不要手填 `[1]`。完整资料库保留用于后续查阅；未引用条目不会出现在论文末尾。参考文献采用紧凑的单页排版；必要中文报道以英文译名著录并注明原文语言，DOI、来源网址与原始资料路径保留。
 
 ## 题录来源与待核验项
 

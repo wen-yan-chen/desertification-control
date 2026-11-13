@@ -1,13 +1,12 @@
 % !TeX program = xelatex
-% 编译：在 Main 目录运行 latexmk -xelatex main.tex。
-% 首页沿用所给 PDF 的 mcmthesis 模板；正文沿用所给 main.tex 的层级。
+% 编译：在 Paper 目录运行 latexmk -xelatex main.tex（或在仓库根目录运行 latexmk -cd -xelatex Paper/main.tex）。
 \documentclass{mcmthesis}
 
 % ===== 基本信息：在此修改年份、队号、题号和论文标题 =====
 \newcommand{\ContestYear}{2026}
 \newcommand{\TeamNumber}{000000} % 待替换为本次参赛队号
 \newcommand{\ProblemLetter}{B}
-\newcommand{\PaperTitle}{Sand Control in Taklamakan Desert} % 待替换为论文标题
+\newcommand{\PaperTitle}{Holding the Green Line: Coupled Water--Cover Dynamics, Cohort Optimization, and Compound-Hazard Resilience}
 \mcmsetup{
   tstyle=\color{red}\bfseries,
   tcn=\TeamNumber, problem=\ProblemLetter,
@@ -39,11 +38,17 @@
 \usepackage{xurl}
 \addbibresource{bibliography/references.bib}
 % 有 DOI 时不重复输出同一文献的网址。
-\AtEveryBibitem{\iffieldundef{doi}{}{\clearfield{url}}}
+\AtEveryBibitem{%
+  \iffieldundef{doi}{}{\clearfield{url}}%
+  \clearfield{urlyear}\clearfield{urlmonth}\clearfield{urlday}%
+}
 \graphicspath{{Figure/}{../Figures/M1/}{../Figures/M2/}{../Reports/M1/}{../Reports/M2/}}
 \geometry{headheight=14pt}
 \setlength{\emergencystretch}{1.2em}
 \hypersetup{hidelinks,pdfauthor={},pdftitle={MCM/ICM Paper}}
+
+% Shared colour palette for inline TikZ schematics and executive brief
+\input{Figure/paper_palette}
 
 % 保留旧论文的符号表、公式分组和交替灰底表格工具。
 \newcommand{\shade}{\rowcolor{gray!22}}
@@ -59,9 +64,6 @@
   {\par\addvspace{0.4\baselineskip}\noindent\begin{minipage}{\linewidth}\setlength{\abovedisplayskip}{6pt}\setlength{\belowdisplayskip}{6pt}}
   {\end{minipage}\par\addvspace{0.4\baselineskip}}
 
-% 占位内容仅供检查排版，写作时逐一替换；不包含旧题的模型与结论。
-\newcommand{\placeholder}[1]{\par\noindent\textit{[#1]}\par}
-
 % Bold run-in paragraph headings (template prints them plain).
 \makeatletter
 \renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}{1.2ex \@plus .5ex}{-1em}{\normalfont\normalsize\bfseries}}
@@ -73,13 +75,9 @@
 \begin{document}
 
 % ===== 第一页：Summary Sheet（摘要不编入正文章节编号） =====
-% mcmthesis 要求先声明 abstract 和 keywords，再调用 maketitle。
 \begin{abstract}
-\placeholder{Write the problem overview, modeling methods, principal numerical
-results, sensitivity findings, and recommendations here. Keep the complete
-summary and keywords on this first page.}
 \begin{keywords}
-Keyword 1; Keyword 2; Keyword 3; Keyword 4
+Taklamakan protective belt; Two-clock eco-hydrology; Cohort MILP; Agrivoltaic cross-subsidy; Compound-Poisson resilience; Discretised 2-D substochastic Markov chain
 \end{keywords}
 \end{abstract}
 \hypersetup{pageanchor=false}
@@ -93,13 +91,8 @@ Keyword 1; Keyword 2; Keyword 3; Keyword 4
 
 \section{Introduction}
 \subsection{Problem background}
-The Taklamankan desert covers more then 337,600 square kilometers, which is the largest desert in China. And in this rural area, Chinese government have set up one of the biggest "Green Sand Protective Belt", with total length about 3,046 kilometers.
-However, sand control is not a static policy, but a \textbf{cohesive and dynamic} system with a list of parameter, including the distribution of water, funding, labor and temporary diaster.
-This requires us to develop a well-rounded and long-term method to quantify the condition of sand protective belt.
+Spanning roughly $337{,}600\,\text{km}^2$, the Taklamakan Desert is China's largest shifting-sand desert and one of the most hyper-arid basins on Earth. In November 2024, China completed spatial closure of a $3{,}046$\,km ``Green Sand-Blocking Protective Belt'' encircling the desert margin \cite{REF12}. Yet sand control is meticulous, long-term work rather than a one-off construction project: \emph{locking} the perimeter on a map does not automatically \emph{hold} it over decades. Operating the belt requires managing a tightly coupled, non-stationary system shaped by scarce seasonal water, finite multi-year funds, construction and maintenance labour, and stochastic natural disasters \cite{REF06} (\textbf{Table~\ref{tab:protection-factors}}).
 
-
-The main factors affecting the protective belt are summarized in
-\textbf{Table~\ref{tab:protection-factors}.}
 \begin{table}[htbp]
   \centering
   \caption{Key factors and quantities in protective-belt management.}
@@ -112,97 +105,67 @@ The main factors affecting the protective belt are summarized in
     \toprule
     \textbf{Factor} & \textbf{Representative quantities} & \textbf{Role in belt protection} \\
     \midrule
-    Water supply & Ecological replenishment volume (m\textsuperscript{3}/year); irrigation timing
-      & Sustains soil moisture and vegetation growth under water constraints. \\
-    Funding & Total budget (CNY); investment shares in construction, O\&M, and supporting facilities
-      & Determines the scale of new treatment and the resources available for continued operation. \\
-    Labor & Annual labor input (person-days/year); seasonal allocation
-      & Supports construction, irrigation, maintenance, and post-disaster repair. \\
-    Disaster shocks & Event frequency (events/year), duration (days), and severity
-      & Causes vegetation loss and changes soil moisture and protective performance. \\
+    Water supply & Ecological replenishment volume ($\text{m}^3$/yr); monthly irrigation timing
+      & Sustains root-zone soil moisture and vegetation growth under extreme evaporative demand. \\
+    Funding & Total budget (CNY); allocation shares in construction, O\&M, and supporting PV
+      & Sets newly treated belt scale, photovoltaic revenue capacity, and ongoing maintenance. \\
+    Labour & Annual workforce input (person-days/yr); construction vs.\ upkeep split
+      & Supports shrub planting, seasonal irrigation, panel installation, and stand upkeep. \\
+    Disaster shocks & Drought probability; storm frequency ($\text{yr}^{-1}$) and fractional cover loss
+      & Causes canopy defoliation/burial, shrinks canal supply, and tests biological recovery. \\
     \bottomrule
   \end{tabularx}
   \endgroup
 \end{table}
 
 \subsection{Problem restatement}
-We aim to design a protective belt that remains ecologically effective and
-financially sustainable. For a representative section along the Taklamakan Desert
-margin, our objectives are to:
 \begin{enumerate}
-  \item \textbf{Establish a coupled dynamic model.}
-  Use relevant data to describe \textbf{vegetation coverage},
-  \textbf{effective soil moisture}, and their \textbf{interactions with wind and sand}.
+  \item \textbf{Establish a coupled dynamic model (Task 1).}
+  Use public meteorological and remote-sensing observations to quantify \textbf{vegetation coverage},
+  \textbf{effective root-zone soil moisture}, and their \textbf{interactions with wind and sand}.
 
-  \item \textbf{Optimize construction and resource allocation.}
-  Balance ecological benefits against economic costs under a given budget and
-  planning horizon (recommended: 10--20 years). Optimize the
-  \textbf{annual newly treated area}, \textbf{water replenishment volume and timing},
-  \textbf{investment shares} for construction, O\&M, and revenue-generating facilities
-  such as photovoltaics, and \textbf{labor input}. Test \textbf{investment sensitivity}
-  and propose an \textbf{actionable process criterion}.
+  \item \textbf{Optimise construction and resource allocation (Task 2).}
+  Make an explicit trade-off between ecological benefits and economic costs over a 15-year horizon under a fixed budget and resource caps. Optimise \textbf{annual newly treated area}, \textbf{age-scheduled water replenishment}, \textbf{investment allocation ratios} across construction, O\&M, and revenue-generating photovoltaics (PV), and \textbf{labour input}; test \textbf{investment sensitivity} and derive an \textbf{actionable process criterion}.
 
-  \item \textbf{Assess resilience and long-term benefits.}
-  Incorporate \textbf{stochastic disasters} (sandstorms, droughts, wind erosion,
-  and sand burial) and \textbf{climate-driven changes} in wind and moisture conditions.
-  Evaluate \textbf{resistance and recovery} and project
-  \textbf{long-term ecological and economic benefits}.
+  \item \textbf{Assess resilience and long-term benefits (Task 3).}
+  Embed \textbf{stochastic compound disasters} (sandstorms, extreme droughts, wind erosion, and sand burial) and \textbf{climate-driven baseline drift} into the post-construction belt. Quantify \textbf{resistance and post-shock recovery} alongside \textbf{long-term ecological trajectories}.
 
-  \item \textbf{Provide practical recommendations.}
-  Summarize feasibility, implementation priorities, fiscal burdens, and expected
-  benefits in a one-page brief for authorities and the public.
+  \item \textbf{Deliver an actionable policy and public brief (Task 4).}
 \end{enumerate}
-\subsection{Our work}
-\placeholder{Describe the overall framework and the links among the models.}
-% \begin{figure}[H]\centering
-% \includegraphics[width=\linewidth]{workflow.pdf}
-% \caption{Overall modeling framework.}\label{fig:framework}
-% \end{figure}
 
-\clearpage
-\section{Assumptions and Justifications}
+\subsection{Our work}
+\begin{figure}[H]\centering
+\includegraphics[width=0.9\linewidth]{workflow.pdf}
+\caption{Overall workflow: understand, plan, test, and act.}\label{fig:framework}
+\end{figure}
+
+\subsection{Assumptions and Justifications}
 \begingroup
 \setlength{\topsep}{0pt}
 \setlength{\partopsep}{0pt}
 \setlength{\parsep}{0pt}
-\setlength{\itemsep}{2pt}
+\setlength{\itemsep}{4pt}
 \begin{enumerate}
-  \item \textbf{Assumptions:} \textbf{The study section represents the belt.} A 127.95\,km
-  by 1\,km section of the Yutian--Minfeng margin is one homogeneous control volume; the
-  nine stations are point samples.
-  \newline \textbf{Justifications:} The belt is narrower than a reanalysis grid, so
-  within-grid gradients cannot be resolved. 
+  \item \textbf{Assumption:} \textbf{The reference section is locally uniform.} The Yutian--Minfeng section shares one climatic setting, and satellite-derived cover represents vegetation condition.
+  \newline \textbf{Justification:} Public data cannot resolve variation within the narrow belt; conclusions apply to the reference section.
 
-  \item \textbf{Assumptions:} \textbf{Vegetation is annual; water is daily.} Cover updates
-  yearly from the June--September growing season, soil water updates daily and carries
-  across years, and the base climate repeats 2015--2022.
-  \newline \textbf{Justifications:} Decisions are annual and 16-day NDVI cannot support
-  daily cover, but storage and seasonal water timing act within the year. A longer
-  climate trend is tested separately.
+  \item \textbf{Assumption:} \textbf{Soil water changes daily and cover annually.} One root-zone store carries water between years; salinity feedback is omitted.
+  \newline \textbf{Justification:} This captures short dry spells and slower vegetation growth with the available data. Omitting salinity may overstate long-term water benefits \cite{REF01,REF04}.
 
-  \item \textbf{Assumptions:} \textbf{Cover is an NDVI proxy, and its ceiling is observed.}
-  $V$ is an NDVI cover proxy with end-members 0.05 and 0.85, not ground cover; the ceiling
-  $K$ is fixed at 1.15 times the training 95th percentile (38.08\%).
-  \newline \textbf{Justifications:} NDVI is the only repeated wall-to-wall observation.
-  Fixing $K$ avoids the non-identifiability of free $r$, $d$ and $K$; alternative
-  end-members (64.9--69.4\% full cover) are a sensitivity range.
+  \item \textbf{Assumption:} \textbf{Construction uses discrete lots and constant real unit costs.} New PV panels earn revenue from the following year.
+  \newline \textbf{Justification:} Lot-based construction approximates field contracts, while fixed real prices keep multi-year costs comparable.
 
-  \item \textbf{Assumptions:} \textbf{One root-zone water bucket.} Rain and irrigation enter
-  one 75\,mm root-zone bucket; growth depends on the share of transpiration demand met.
-  \newline \textbf{Justifications:} A simple supply/demand ratio has no memory and cannot
-  separate transpiration from drainage. Water parameters are scenarios because none is
-  measured; ignoring salinity makes the response optimistic.
-
+  \item \textbf{Assumption:} \textbf{Disaster risks follow declared scenarios.} During shortages, PV washing is supplied first and remaining water is shared proportionally among stands.
+  \newline \textbf{Justification:} No local damage catalogue supports calibrated risk forecasts; the scenarios and allocation rule provide a consistent basis for conditional stress tests.
 \end{enumerate}
 \endgroup
 
 \clearpage
-% here need to describe 1. what data we use, source 2. how we categorize them 3. each categorize's attribution to our work 4. standard data structure(the algorithm to process data into structure we want)
 \section{Data Collection and Preprocessing}\label{sec:data}
 Our data answer one question: how much vegetation cover the desert margin can hold under the water and wind it receives. We build a station--month panel joining climate forcing with satellite-observed cover at nine sites around the Taklamakan, January 2015--December 2025 (9 stations $\times$ 132 months $=$ 1,188 station--months). Every record is fetched by script from a public archive.
 
 \subsection{Study area and station categories}
-The Taklamakan is ringed by river-fed oases, and the sand-locking belts we model lie on the boundary between these oases and the dune field \cite{REF06,CN16}. Stations sample this boundary on every side, plus two sites inside the desert (Figure~\ref{fig:data-stations}a).1. \emph{Category~I (oasis margin)}: YT, MF, QM, RQ on the southern edge, KEL and YL on the lower Tarim River, ALE on the Aksu River; these calibrate Model~1, with YT--MF as the reference section. 2. \emph{Category~II (corridor)}: XT on the Desert Highway, whose shelterbelt survives only on saline drip irrigation \cite{REF01}. 3. \emph{Category~III (control)}: TZ in the desert centre. Categories II and III give context and are not fitted: margin sites hold 28--41\% cover, against about 1\% and 9\% (Figure~\ref{fig:data-stations}b), so pooling them would bias the fitted water--cover relation.
+The Taklamakan is ringed by river-fed oases, and the sand-locking belts we model lie on the boundary between these oases and the dune field \cite{REF06}. Stations sample this boundary on every side, plus two sites inside the desert (Figure~\ref{fig:data-stations}a). 1. \emph{Category~I (oasis margin)}: YT, MF, QM, RQ on the southern edge, KEL and YL on the lower Tarim River, ALE on the Aksu River; these calibrate Model~1, with YT--MF as the reference section. 2. \emph{Category~II (corridor)}: XT on the Desert Highway, whose shelterbelt survives only on saline drip irrigation \cite{REF01}. 3. \emph{Category~III (control)}: TZ in the desert centre. Categories II and III give context and are not fitted: margin sites hold 28--41\% cover, against about 1\% and 9\% (Figure~\ref{fig:data-stations}b), so pooling them would bias the fitted water--cover relation.
 
 \begin{figure}[H]
   \centering
@@ -240,9 +203,9 @@ SoilGrids queries returned & 62/81 \\ \bottomrule
 \end{table}
 \begin{enumerate}
 
-\item \emph{Climate.} Temperature, precipitation and daily maximum wind come from NASA POWER (MERRA-2); ET$_0$ and soil moisture come from the Open-Meteo archive (ERA5/ERA5-Land \cite{REF15,EN10}). POWER precipitation is a daily mean, so monthly totals are value $\times$ days. Wetness indices are not treated as plant-available water. XT and TZ share one MERRA-2 cell, leaving eight independent weather series.
+\item \emph{Climate.} Temperature, precipitation and daily maximum wind come from NASA POWER (MERRA-2); ET$_0$ and soil moisture come from the Open-Meteo archive (ERA5/ERA5-Land \cite{EN10}). POWER precipitation is a daily mean, so monthly totals are value $\times$ days. Wetness indices are not treated as plant-available water. XT and TZ share one MERRA-2 cell, leaving eight independent weather series.
 
-\item \emph{Wind index.} Sand transport rises steeply once wind exceeds a threshold speed ($u_T=5$\,m/s), so a nonlinear transport proxy is applied to each \emph{day's} maximum wind first and averaged afterwards; averaging wind first would hide almost every gust above the threshold. The result is divided by each station's 2015--2022 mean, so $E=1$ is the training-period average. $E$ is a relative forcing, not a measured sand flux. A separate cover-shelter term was tested but lies between 0 and 1, and after calculation it is not supported; wind effects are therefore absorbed in the fitted $r$ and $d$, and $E$ does not drive cover in Model~1. Its extremes are left to the disaster shocks of Model~3.
+\item \emph{Wind index.} Sand transport rises steeply once wind exceeds a threshold speed ($u_T=5$\,m/s), so a nonlinear transport proxy is applied to each \emph{day's} maximum wind first and averaged afterwards; averaging wind first would hide almost every gust above the threshold. The result is divided by each station's 2015--2022 mean, so $E=1$ is the training-period average. $E$ is a relative forcing, not a measured sand flux. It is used to describe sand exposure, not to drive cover change. Everyday wind enters Model~1 through evaporative demand; direct damage from extreme wind and sand is represented by the scenario shocks in Model~3.
 
 \item \emph{Coverage.} For each station we take a $9\times9$ MOD13Q1 window, drop pixels with reliability flag above 1, keep a composite only if $\ge$50\% of pixels remain (75\% as a sensitivity check), and take the monthly maximum. NDVI becomes fractional cover by the dimidiate pixel model,
 \begin{equation}
@@ -251,9 +214,8 @@ SoilGrids queries returned & 62/81 \\ \bottomrule
 \end{enumerate}
 
 \section{Notations}
-Area is in ha ($1\,\text{mm}\times1\,\text{ha}=10\,\text{m}^3$), money in constant CNY, and labour in person-days (p-d). Model parameters and scenario constants are listed separately in Tables~\ref{tab:m1-par} and \ref{tab:m2-par}.
 \modelvars{%
-  $t,\ m,\ j$ & Year ($t=1,\dots,T$), month ($m=1,\dots,12$), and day ($j=1,\dots,365$) \\
+  $t,\ m,\ j$ & Year index, month ($m=1,\dots,12$), and day ($j=1,\dots,365$) or cohort index in Model~3 \\
   \shade $(s,\,p)$ & Cohort planted in year $s$ under lifetime irrigation policy $p\in\mathcal P$ \\
   $V_t,\ M_j$ & Growing-season vegetation cover proxy (\%) and root-zone soil water (mm) \\
   \shade $D_j,\ T_{a,j},\ \overline W_t$ & Daily water demand, actual transpiration (mm/d), and annual demand-met ratio \\
@@ -262,13 +224,20 @@ Area is in ha ($1\,\text{mm}\times1\,\text{ha}=10\,\text{m}^3$), money in consta
   $a_t,\ A_t$ & Newly treated belt area (flow) and active belt area in service (stock, ha) \\
   \shade $y_t,\ P_t^{\mathrm{inst}},\ P_t^{\mathrm{op}}$ & Newly built, cumulative installed, and operating PV capacity (kW or MW) \\
   $Q_t,\ Q_{t,m};\ L_t$ & Annual and monthly gross water withdrawal ($\text{m}^3$); annual labour (p-d) \\
-  \shade $D_t,\ (f_t^b,f_t^o,f_t^p),\ R_t$ & Gross spending (CNY), allocation ratios (build / O\&M / PV), and PV income \\
-  $H,\ N$ & Cumulative ecological score ($\text{effective ha}\cdot\text{yr}$) and net present cost (CNY) \\
+  \shade $D_t,\ (f_t^b,f_t^o,f_t^p),\ R_t$ & Gross spending (CNY), allocation ratios (build / O\&M / PV), and PV income (Model~2) \\
+  $H,\ N$ & Cumulative ecological cover integral ($\text{effective ha}\cdot\text{yr}$) and net present cost (CNY) \\
+  \shade $D_t^{\mathrm{dr}},\ N_t,\ R_t$ & Drought state, Poisson storm count, and multiplicative cover retention (Model~3) \\
+  $\tau_j,\ \tau_{\mathrm{proj}},\ \mathrm{RMST}$ & Cohort/project first-crossing year below $\rho K$ and 50-yr restricted mean survival time (yr) \\
 }
 
 \input{Section/model1}
-% 第 4、5、6 节分别为 Model 1、Model 2、Model 3。
 \input{Section/model2}
 \input{Section/model3}
+
+\clearpage
+
+
+\input{Section/task4}
+
 \input{Section/references}
 \end{document}
