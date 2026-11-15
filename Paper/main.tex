@@ -76,6 +76,16 @@
 
 % ===== 第一页：Summary Sheet（摘要不编入正文章节编号） =====
 \begin{abstract}
+Spatial closure of the Taklamakan Desert's protective belt does not guarantee persistence over decades; holding it requires coordinating seasonal water scarcity, finite budgets and labour, and compound climatic hazards. We build a unified, state-consistent modelling chain in which vegetation cover and root-zone soil moisture pass sequentially from biophysical calibration (\textbf{Model~1}), through multi-year scheduling (\textbf{Model~2}), to stochastic resilience testing (\textbf{Model~3}) and operational policy.
+
+\textbf{Coupled eco-hydrology (Model~1).} To resolve fast water pulses alongside slow vegetation dynamics without double-counting wind, Model~1 couples an inner \emph{daily} soil-water bucket to an outer \emph{annual} logistic cover equation. Daily rainfall, irrigation, and Penman--Monteith evaporative demand (through which everyday wind acts) determine an annual water-satisfaction ratio driving cover growth against decay, while updated cover resets daily demand. This feedback explains why irrigation faces diminishing returns once stands mature, and how cover loss amplifies sand exposure.
+
+\textbf{Cohort optimisation and PV cross-subsidy (Model~2).} Multi-year planning must separate young seedlings from older stands with higher water demand. Pre-simulating dated planting--irrigation \emph{cohorts} in Model~1 casts the 15-year joint allocation of planting, water, labour, and photovoltaics (PV) as an exact mixed-integer linear $\varepsilon$-constraint problem trading cumulative cover against net cost. Its solution front-loads planting to maximise the growth window, ramps irrigation with stand age---exposing spring delivery capacity rather than annual totals as the binding bottleneck---and installs early PV whenever tariff economics clear break-even to subsidise upkeep, until steep ecological targets crowd out PV capital.
+
+\textbf{Compound-hazard resilience (Model~3).} Inheriting Model~2's year-15 cohorts without resetting cover or stored moisture, Model~3 evaluates 50-year persistence under climate drift, drought switches, and compound-Poisson storm shocks with monthly canal rationing. Crossing a warning threshold serves only as a monitoring flag rather than collapse: because physical soil moisture and cover remain active, damaged stands recover substantially while irrigation holds. Cross-checked against a discretised two-dimensional Markov chain, stress tests show that storm severity and dry-summer canal bottlenecks, rather than marginal annual quota increases, govern persistence.
+
+\textbf{Operational synthesis.} Translating these structural links into a phased plan aligns spring canal checks, age-staged upkeep, ring-fenced PV financing, and post-hazard repair into a coherent strategy.
+
 \begin{keywords}
 Taklamakan protective belt; Two-clock eco-hydrology; Cohort MILP; Agrivoltaic cross-subsidy; Compound-Poisson resilience; Discretised 2-D substochastic Markov chain
 \end{keywords}
@@ -86,12 +96,17 @@ Taklamakan protective belt; Two-clock eco-hydrology; Cohort MILP; Agrivoltaic cr
 
 % ===== 第二页起：目录及正文 =====
 \pagestyle{main}
+% Keep the complete contents on one page without changing body typography.
+\begingroup
+\small
+\setlength{\parskip}{0pt}
 \tableofcontents
+\endgroup
 \clearpage
 
 \section{Introduction}
 \subsection{Problem background}
-Spanning roughly $337{,}600\,\text{km}^2$, the Taklamakan Desert is China's largest shifting-sand desert and one of the most hyper-arid basins on Earth. In November 2024, China completed spatial closure of a $3{,}046$\,km ``Green Sand-Blocking Protective Belt'' encircling the desert margin \cite{REF12}. Yet sand control is meticulous, long-term work rather than a one-off construction project: \emph{locking} the perimeter on a map does not automatically \emph{hold} it over decades. Operating the belt requires managing a tightly coupled, non-stationary system shaped by scarce seasonal water, finite multi-year funds, construction and maintenance labour, and stochastic natural disasters \cite{REF06} (\textbf{Table~\ref{tab:protection-factors}}).
+Spanning roughly $337{,}600\,\text{km}^2$, the Taklamakan Desert is China's largest shifting-sand desert and one of the most hyper-arid basins on Earth. In November 2024, China completed spatial closure of a $3{,}046$\,km ``Green Sand-Blocking Protective Belt'' encircling the desert margin \cite{REF12}. Yet sand control is an ongoing management task rather than a one-off engineering milestone: \emph{closing} the perimeter on a map does not guarantee \emph{holding} it over decades. Sustaining the belt requires balancing a coupled, non-stationary system shaped by scarce seasonal water, finite multi-year budgets, construction and maintenance labour, and stochastic natural hazards \cite{REF06} (\textbf{Table~\ref{tab:protection-factors}}).
 
 \begin{table}[htbp]
   \centering
@@ -136,7 +151,7 @@ Spanning roughly $337{,}600\,\text{km}^2$, the Taklamakan Desert is China's larg
 \subsection{Our work}
 \begin{figure}[H]\centering
 \includegraphics[width=0.9\linewidth]{workflow.pdf}
-\caption{Overall workflow: understand, plan, test, and act.}\label{fig:framework}
+\caption{Integrated modelling workflow linking eco-hydrology, multi-year planning, disaster stress testing, and operational policy.}\label{fig:framework}
 \end{figure}
 
 \subsection{Assumptions and Justifications}
@@ -146,26 +161,26 @@ Spanning roughly $337{,}600\,\text{km}^2$, the Taklamakan Desert is China's larg
 \setlength{\parsep}{0pt}
 \setlength{\itemsep}{4pt}
 \begin{enumerate}
-  \item \textbf{Assumption:} \textbf{The reference section is locally uniform.} The Yutian--Minfeng section shares one climatic setting, and satellite-derived cover represents vegetation condition.
-  \newline \textbf{Justification:} Public data cannot resolve variation within the narrow belt; conclusions apply to the reference section.
+  \item \textbf{Assumption: The reference section is locally uniform.} The Yutian--Minfeng section shares one climatic setting, and satellite-derived cover represents vegetation condition.
+  \newline \textbf{Justification:} Public observations cannot resolve fine-scale heterogeneity within the narrow belt, so conclusions apply at the section scale.
 
-  \item \textbf{Assumption:} \textbf{Soil water changes daily and cover annually.} One root-zone store carries water between years; salinity feedback is omitted.
-  \newline \textbf{Justification:} This captures short dry spells and slower vegetation growth with the available data. Omitting salinity may overstate long-term water benefits \cite{REF01,REF04}.
+  \item \textbf{Assumption: Soil water evolves daily and cover annually.} One root-zone store carries water between years; salinity feedback is omitted.
+  \newline \textbf{Justification:} This separation captures short dry spells alongside slower vegetation growth with available data, though omitting salinity may overstate long-term water benefits \cite{REF01,REF04}.
 
-  \item \textbf{Assumption:} \textbf{Construction uses discrete lots and constant real unit costs.} New PV panels earn revenue from the following year.
-  \newline \textbf{Justification:} Lot-based construction approximates field contracts, while fixed real prices keep multi-year costs comparable.
+  \item \textbf{Assumption: Construction uses discrete lots and constant real unit costs.} New PV panels begin generating revenue in the year after installation.
+  \newline \textbf{Justification:} Lot-based deployment reflects field contracting practice, while constant real prices keep multi-year cash flows directly comparable.
 
-  \item \textbf{Assumption:} \textbf{Disaster risks follow declared scenarios.} During shortages, PV washing is supplied first and remaining water is shared proportionally among stands.
-  \newline \textbf{Justification:} No local damage catalogue supports calibrated risk forecasts; the scenarios and allocation rule provide a consistent basis for conditional stress tests.
+  \item \textbf{Assumption: Disaster risks follow declared stress-test scenarios.} During shortages, PV washing is supplied first and remaining canal water is shared proportionally among stands.
+  \newline \textbf{Justification:} Because no local damage catalogue exists to calibrate hazard probabilities, declared scenarios and a transparent allocation rule provide a consistent basis for conditional stress testing.
 \end{enumerate}
 \endgroup
 
 \clearpage
-\section{Data Collection and Preprocessing}\label{sec:data}
-Our data answer one question: how much vegetation cover the desert margin can hold under the water and wind it receives. We build a station--month panel joining climate forcing with satellite-observed cover at nine sites around the Taklamakan, January 2015--December 2025 (9 stations $\times$ 132 months $=$ 1,188 station--months). Every record is fetched by script from a public archive.
+\section{Model Preparations}\label{sec:data}
+To quantify how much vegetation cover the desert margin can sustain under local water and wind regimes, we assemble a station--month panel pairing climate forcing with satellite-observed cover across nine sites around the Taklamakan from January 2015 to December 2025 (9 stations $\times$ 132 months $=$ 1,188 station--months). All records are retrieved programmatically from public archives.
 
 \subsection{Study area and station categories}
-The Taklamakan is ringed by river-fed oases, and the sand-locking belts we model lie on the boundary between these oases and the dune field \cite{REF06}. Stations sample this boundary on every side, plus two sites inside the desert (Figure~\ref{fig:data-stations}a). 1. \emph{Category~I (oasis margin)}: YT, MF, QM, RQ on the southern edge, KEL and YL on the lower Tarim River, ALE on the Aksu River; these calibrate Model~1, with YT--MF as the reference section. 2. \emph{Category~II (corridor)}: XT on the Desert Highway, whose shelterbelt survives only on saline drip irrigation \cite{REF01}. 3. \emph{Category~III (control)}: TZ in the desert centre. Categories II and III give context and are not fitted: margin sites hold 28--41\% cover, against about 1\% and 9\% (Figure~\ref{fig:data-stations}b), so pooling them would bias the fitted water--cover relation.
+The Taklamakan is ringed by river-fed oases, and the sand-blocking belts modelled here lie along the transition between these oases and the open dune field \cite{REF06}. Our monitoring network samples this perimeter alongside two interior desert sites (Figure~\ref{fig:data-stations}a). Specifically, \emph{Category~I (oasis margin)} comprises YT, MF, QM, and RQ on the southern rim, KEL and YL on the lower Tarim River, and ALE on the Aksu River; these seven sites calibrate Model~1, with YT--MF serving as the reference section. \emph{Category~II (corridor)} consists of XT along the Desert Highway, where shelterbelts survive only under saline drip irrigation \cite{REF01}, while \emph{Category~III (control)} comprises TZ in the desert interior. Categories~II and III are retained for context rather than calibration: oasis-margin sites hold 28--41\% cover compared with roughly 9\% in the highway corridor and 1\% in the desert interior (Figure~\ref{fig:data-stations}b), so pooling them would distort the fitted water--cover relationship.
 
 \begin{figure}[H]
   \centering
@@ -203,9 +218,9 @@ SoilGrids queries returned & 62/81 \\ \bottomrule
 \end{table}
 \begin{enumerate}
 
-\item \emph{Climate.} Temperature, precipitation and daily maximum wind come from NASA POWER (MERRA-2); ET$_0$ and soil moisture come from the Open-Meteo archive (ERA5/ERA5-Land \cite{EN10}). POWER precipitation is a daily mean, so monthly totals are value $\times$ days. Wetness indices are not treated as plant-available water. XT and TZ share one MERRA-2 cell, leaving eight independent weather series.
+\item \emph{Climate.} Temperature, precipitation, and daily maximum wind are sourced from NASA POWER (MERRA-2), while reference evapotranspiration $\mathrm{ET}_0$ and soil moisture come from the Open-Meteo archive (ERA5/ERA5-Land \cite{EN10}). Because NASA POWER reports precipitation as a daily rate, monthly totals are obtained by multiplying by the number of days in each month; atmospheric wetness indices are not treated as plant-available soil water. XT and TZ fall within the same MERRA-2 grid cell, yielding eight independent weather series.
 
-\item \emph{Wind index.} Sand transport rises steeply once wind exceeds a threshold speed ($u_T=5$\,m/s), so a nonlinear transport proxy is applied to each \emph{day's} maximum wind first and averaged afterwards; averaging wind first would hide almost every gust above the threshold. The result is divided by each station's 2015--2022 mean, so $E=1$ is the training-period average. $E$ is a relative forcing, not a measured sand flux. It is used to describe sand exposure, not to drive cover change. Everyday wind enters Model~1 through evaporative demand; direct damage from extreme wind and sand is represented by the scenario shocks in Model~3.
+\item \emph{Wind index.} Because sand transport rises sharply once wind exceeds a threshold speed ($u_T=5$\,m/s), a nonlinear transport proxy is applied to each \emph{day's} maximum wind prior to monthly averaging; averaging wind speeds first would obscure almost every gust above threshold. Dividing by each station's 2015--2022 mean centres the index at $E=1$ for the training period. Thus $E$ measures relative forcing rather than observed sand flux, and serves strictly as a diagnostic of sand exposure rather than a driver of cover dynamics: everyday wind enters Model~1 through evaporative demand, while acute wind-sand damage is represented via the scenario shocks in Model~3.
 
 \item \emph{Coverage.} For each station we take a $9\times9$ MOD13Q1 window, drop pixels with reliability flag above 1, keep a composite only if $\ge$50\% of pixels remain (75\% as a sensitivity check), and take the monthly maximum. NDVI becomes fractional cover by the dimidiate pixel model,
 \begin{equation}
@@ -230,12 +245,30 @@ SoilGrids queries returned & 62/81 \\ \bottomrule
   $\tau_j,\ \tau_{\mathrm{proj}},\ \mathrm{RMST}$ & Cohort/project first-crossing year below $\rho K$ and 50-yr restricted mean survival time (yr) \\
 }
 
+\clearpage
+\section{Model of Desertification Control and Construction }
 \input{Section/model1}
 \input{Section/model2}
 \input{Section/model3}
 
 \clearpage
+\section{Strengths and Weaknesses}
 
+\subsection{Strengths}
+\begin{enumerate}
+  \item \textbf{State consistency across models.} The cover and soil-water state $(V,M)$ calibrated in Model~1 is carried directly into Model~2, and Model~2's year-15 cohorts initialise Model~3, ensuring that all three stages describe the same physical belt.
+  \item \textbf{Process-matched timescales.} Pairing a daily soil-water bucket with an annual cover update preserves short dry spells while preventing wind from being double-counted outside evaporative demand.
+  \item \textbf{Verifiable optimisation.} The cohort MILP is solved to a $0.20\%$ optimality gap, and every resulting plan is replayed forward through Model~1 with a maximum water/cash discrepancy of $1.9\times10^{-9}$.
+  \item \textbf{Cross-checked resilience.} A stationary Monte Carlo benchmark agrees with the finest discretised Markov grid across all nine cohort-level checkpoints, while 27 stress scenarios isolate which findings remain robust.
+\end{enumerate}
+
+\subsection{Weaknesses}
+\begin{enumerate}
+  \item \textbf{Limited single-year predictive skill.} On hold-out years, Model~1 does not outperform persistence overall (RMSE $0.064$ vs.\ $0.054$), making it suited to comparing long-run strategies rather than forecasting annual anomalies.
+  \item \textbf{Unmeasured hydrological parameters.} Lacking public field measurements, soil-water parameters are adopted from FAO-56 and prior literature, and soil salinity feedback is omitted.
+  \item \textbf{Scenario-conditional planning.} Because Model~2's budget, resource caps, and electricity tariff reflect an assumed baseline scenario, the optimal plan ($300$\,ha, $9.5$\,MW PV) should be interpreted conditionally on those inputs.
+  \item \textbf{Uncalibrated hazard rates.} Without empirical disaster-loss records, Model~3's hazard parameters are stress-test assumptions, so $\mathrm{RMST}$ figures serve as relative comparisons rather than actuarial forecasts.
+\end{enumerate}
 
 \input{Section/task4}
 

@@ -1,7 +1,7 @@
 % Model 2 sketch: concise logic chain, 4 core formulas, visual restriction chart,
 % and results aligned with Task 2's three questions in Problem B.
 \clearpage
-\section{Model 2: Optimal Investment, Scheduling and Resource Allocation}\label{sec:model2}
+\subsection{Optimal Investment, Scheduling and Resource Allocation}\label{sec:model2}
 Task~2 turns Model~1 into a 15-year dynamic decision problem: how much belt to plant each year, how to schedule ecological water and labour, and how to split funds among construction, O\&M and photovoltaics (PV) under a fixed budget:
 
 \begin{center}
@@ -35,8 +35,8 @@ Task~2 turns Model~1 into a 15-year dynamic decision problem: how much belt to p
   \label{fig:m2-struct}
 \end{figure}
 
-\subsection{Model construction}
-\paragraph{Cohort idea and ecological benefit.} Tracking only total area $A_t$ cannot distinguish a newly planted shrub ($V_0=2\%$, low water demand) from an older stand ($>12\%$ cover, high summer demand). Instead, we bind each planting year $s\in\{1,\dots,T\}$ and lifetime watering recipe $p\in\mathcal P$ into a \textbf{cohort block} $(s,p)$ ($18$ recipes: constant $0\text{--}1{,}000$\,mm/yr, step-up or step-down after age $3$ or $5$, and a $100\to300\to600$\,mm/yr ramp; Figure~\ref{fig:m2-idea}). Because field engineering is deployed in discrete lots rather than arbitrary square metres, belt area and PV capacity are added in integer multiples of minimum step thresholds $\Delta_A$ and $\Delta_P$: $a_{s,p}=\Delta_A n_{s,p}$ and $y_s=\Delta_P z_s$, giving active belt stock $A_t=\sum_{s\le t,p}a_{s,p}$, installed PV $P_t^{\mathrm{inst}}=\sum_{s\le t}y_s$, and operating PV $P_t^{\mathrm{op}}=\sum_{s<t}y_s$ (panels built in year $s$ generate from year $s+1$).
+\subsubsection{Model construction}
+\paragraph{Cohort formulation and ecological benefit.} Tracking only total area $A_t$ cannot distinguish a newly planted shrub ($V_0=2\%$, low water demand) from an older stand ($>12\%$ cover, high summer demand). Instead, we bind each planting year $s\in\{1,\dots,T\}$ and lifetime watering recipe $p\in\mathcal P$ into a \textbf{cohort block} $(s,p)$ ($18$ recipes: constant $0\text{--}1{,}000$\,mm/yr, step-up or step-down after age $3$ or $5$, and a $100\to300\to600$\,mm/yr ramp; Figure~\ref{fig:m2-idea}). Because field engineering is deployed in discrete lots rather than arbitrary square metres, belt area and PV capacity are added in integer multiples of minimum step thresholds $\Delta_A$ and $\Delta_P$: $a_{s,p}=\Delta_A n_{s,p}$ and $y_s=\Delta_P z_s$, giving active belt stock $A_t=\sum_{s\le t,p}a_{s,p}$, installed PV $P_t^{\mathrm{inst}}=\sum_{s\le t}y_s$, and operating PV $P_t^{\mathrm{op}}=\sum_{s<t}y_s$ (panels built in year $s$ generate from year $s+1$).
 
 \begin{figure}[!htb]
   \centering
@@ -73,7 +73,7 @@ where Step~1 maximises $H$ under the same caps to find the physical ceiling $H_{
   \label{fig:m2-caps}
 \end{figure}
 
-\subsection{Solution approach}
+\subsubsection{Solution approach}
 Pre-simulating the 18 schedules in Model~1 converts Eq.~\eqref{eq:m2-eps} into an exact mixed-integer linear programme (MILP) over integer block counts $\bm x=(\bm n,\bm z)$, solved via branch-and-cut (HiGHS, MIP gap tolerance $0.20\%$; Algorithm~\ref{alg:m2-milp}). Every solved plan is independently replayed forward through Model~1 to verify water and cash closure (maximum discrepancy $1.9\times10^{-9}$). Because the problem statement gives no site budget, water quota or tariff, Table~\ref{tab:m2-par} sets an auditable 15-year planning scenario anchored to a 2024 Yutian desert-treatment trial ($52{,}500$\,CNY/ha \cite{REF20}) and literature PV degradation \cite{EN06}.
 
 \begin{algorithm}[!htb]
@@ -107,13 +107,13 @@ $i_d;\ \varphi$ & real discount rate; baseline ecological target share & $5\%;\ 
 \label{tab:m2-par}
 \end{table}
 
-\subsection{Results}
+\subsubsection{Results}
 \paragraph{Optimal 15-year trajectory.} If every yuan and cubic metre of water goes into planting, the section can reach an ecological ceiling of $H_{\max}=2{,}097\text{ effective ha}\cdot\text{yr}$ by planting $900$\,ha with no PV, at a net present cost of $64.4$\,M\,CNY. Requiring $60\%$ of that ceiling ($1{,}258\text{ effective ha}\cdot\text{yr}$) cuts the net present cost to $25.35$\,M\,CNY while delivering $1{,}265\text{ effective ha}\cdot\text{yr}$. Rather than spreading effort evenly across the 15 years, the optimiser coordinates Task~2's four decisions in distinct phases (Figure~\ref{fig:m2-plan}):
 \begin{enumerate}\setlength{\itemsep}{2pt}\setlength{\parsep}{0pt}
-  \item \textbf{Newly treated area --- plant early.} All $300$\,ha of shelterbelt are planted in years 1 and 2 at $150$\,ha/yr (Figure~\ref{fig:m2-plan}a). Desert shrubs need roughly a decade to approach their cover plateau, so planting upfront gives every stand the longest possible growing window to accumulate cover.
-  \item \textbf{Water replenishment --- ramp with stand age, and watch May.} Young seedlings have shallow roots and low demand, so the plan gives them just $100$\,mm/yr for their first three years instead of wasting water as deep drainage, then steps up to $300$\,mm/yr at age~4 and $600$\,mm/yr at age~8 on a $50$\,ha core strip. This age-matched schedule saves $6.6\%$ over fixed annual quotas. Across the whole belt, annual water rises to $1.05\text{ M m}^3\text{/yr}$, or $70\%$ of the annual cap, yet \textbf{May demand hits $95\%$ of its monthly cap} from year~8 onward (Figure~\ref{fig:m2-plan}b): spring delivery capacity, not total annual water, is what limits expansion.
-  \item \textbf{Investment allocation --- build PV early so power funds upkeep.} Years 1--4 spend almost the full $12$\,M/yr budget cap to install $9.5$\,MW of PV alongside the belt, shifting the allocation ratio from $66\%$ planting and $30\%$ PV in year~1 to about $90\%$ PV in years 3--4, and $100\%$ O\&M from year~5 onward (Figure~\ref{fig:m2-plan}c,d). Once online, PV earns $4.1\text{--}4.3$\,M\,CNY/yr---more than twice the $1.8\text{--}2.0$\,M\,CNY/yr needed for belt upkeep and water---trimming net present cost by $9\%$ compared with the best PV-free plan.
-  \item \textbf{Labour input --- surge for construction, steady for upkeep.} Workforce demand peaks at $5{,}522$ person-days in year~2 while planting and panel installation overlap, then settles at $995$ person-days/yr from year~5 onward to maintain the $300$\,ha belt and $9.5$\,MW array, well within the $12{,}000$ person-day cap (Figure~\ref{fig:m2-plan}b).
+  \item \textbf{Newly treated area --- front-loaded planting.} All $300$\,ha of shelterbelt are planted in years 1 and 2 at $150$\,ha/yr (Figure~\ref{fig:m2-plan}a). Desert shrubs need roughly a decade to approach their cover plateau, so early planting gives every stand the longest possible growth window.
+  \item \textbf{Water replenishment --- age-staged ramping and the May bottleneck.} Young seedlings have shallow roots and low demand, so the plan supplies $100$\,mm/yr for their first three years rather than losing water to deep drainage, then steps up to $300$\,mm/yr at age~4 and $600$\,mm/yr at age~8 on a $50$\,ha core strip. This age-matched schedule saves $6.6\%$ over fixed annual quotas. Across the whole belt, annual water rises to $1.05\text{ M m}^3\text{/yr}$ ($70\%$ of the annual cap), yet \textbf{May demand hits $95\%$ of its monthly cap} from year~8 onward (Figure~\ref{fig:m2-plan}b): spring delivery capacity, not total annual water, limits expansion.
+  \item \textbf{Investment allocation --- early PV cross-subsidy.} Years 1--4 deploy almost the full $12$\,M/yr budget cap to install $9.5$\,MW of PV alongside the belt, shifting the allocation ratio from $66\%$ planting and $30\%$ PV in year~1 to about $90\%$ PV in years 3--4, and $100\%$ O\&M from year~5 onward (Figure~\ref{fig:m2-plan}c,d). Once online, PV earns $4.1\text{--}4.3$\,M\,CNY/yr---more than twice the $1.8\text{--}2.0$\,M\,CNY/yr needed for belt upkeep and water---trimming net present cost by $9\%$ relative to the best PV-free plan.
+  \item \textbf{Labour input --- construction peak and steady upkeep.} Workforce demand peaks at $5{,}522$ person-days in year~2 while planting and panel installation overlap, then settles at $995$ person-days/yr from year~5 onward to maintain the $300$\,ha belt and $9.5$\,MW array, well within the $12{,}000$ person-day cap (Figure~\ref{fig:m2-plan}b).
 \end{enumerate}
 
 \begin{figure}[!htb]

@@ -1,7 +1,6 @@
 % Model 1 sketch: logic chain, formulas, algorithm, results. Figures in Paper/Figure (MATLAB: Code/figures_matlab; TikZ: *.tex there).
-\clearpage
-\section{Model 1: Coupled Vegetation--Water--Sand Dynamics}\label{sec:model1}
-Task~1 asks how cover and soil water on a desert-margin section evolve together, and what drives them. Our answer is a chain of four links:
+\subsection{Coupled Vegetation--Water--Sand Dynamics}\label{sec:model1}
+Task~1 asks how cover and soil water on a desert-margin section co-evolve and what factors govern their trajectory. We model this coupling as a four-link feedback loop:
 
 \begin{center}
 \begin{tikzpicture}[font=\normalsize,
@@ -23,7 +22,7 @@ Task~1 asks how cover and soil water on a desert-margin section evolve together,
 \end{tikzpicture}
 \end{center}
 
-\noindent \textcircled{\scriptsize a} Rain $P$ and irrigation $I$ fill a root-zone store $M_j$; \textcircled{\scriptsize b} the store decides the share $\overline W_t$ of the plants' water demand that is met; \textcircled{\scriptsize c} that share drives the change in cover $V_t$ through growth against decay; \textcircled{\scriptsize d} cover in turn sets next year's demand on the store, closing the loop. Wind has no arrow of its own: it acts inside link \textcircled{\scriptsize b}, because wind raises the evaporative demand that drains the store, and cover decides how much of the sand surface stays exposed to it. 
+\noindent \textcircled{\scriptsize a} Rain $P$ and irrigation $I$ fill a root-zone store $M_j$; \textcircled{\scriptsize b} the store determines the fraction $\overline W_t$ of plant water demand met; \textcircled{\scriptsize c} that ratio drives cover change $V_t$ through growth against decay; \textcircled{\scriptsize d} cover in turn sets next year's demand on the store, closing the loop. Wind does not enter as a separate arrow; instead, it acts inside link~\textcircled{\scriptsize b} by raising the evaporative demand that drains the store, while cover governs how much of the sand surface remains exposed.
 
 Figure~\ref{fig:m1-struct} adds the data behind each link. The reference section is the Yutian--Minfeng southern margin (Category~I in Section~\ref{sec:data}).
 
@@ -34,16 +33,16 @@ Figure~\ref{fig:m1-struct} adds the data behind each link. The reference section
   \label{fig:m1-struct}
 \end{figure}
 
-\subsection{Model construction}
-\paragraph{Two states on two clocks.} The model tracks two quantities, and each one changes at its own natural speed. We picture them as two nested clocks (Figure~\ref{fig:m1-clocks}).
+\subsubsection{Model construction}
+\paragraph{Two states on two clocks.} The model tracks two quantities evolving on their natural timescales, represented as two nested clocks (Figure~\ref{fig:m1-clocks}).
 \begin{itemize}
-  \item \textbf{Year clock (outer, slow) --- cover $V_t$ (\%).} It ticks \textbf{once per year}. Plants gain or lose cover over a season, and the satellite cover proxy is a single growing-season value, so a yearly step matches both biology and data.
-  \item \textbf{Day clock (inner, fast) --- plant-available water $M_j$ (mm).} It ticks \textbf{365 times per year}. Rain and irrigation arrive in pulses and are used up within days; a yearly average would smooth away exactly the dry spells that stress plants.
+  \item \textbf{Year clock (outer, slow) --- cover $V_t$ (\%).} It ticks \textbf{once per year}. Plants gain or lose cover over a growing season, and the satellite proxy is a single seasonal value, so an annual step matches both biology and observation.
+  \item \textbf{Day clock (inner, fast) --- plant-available water $M_j$ (mm).} It ticks \textbf{365 times per year}. Rain and irrigation arrive in pulses and deplete within days; an annual average would smooth away the dry spells that stress vegetation.
 \end{itemize}
-\noindent The two clocks talk to each other at two points only, both at the year boundary:
+\noindent The two clocks exchange state only at the annual boundary:
 \begin{itemize}
-  \item \textbf{\textcircled{\scriptsize 1} Down (year $\to$ day).} At the start of each year, cover $V_t$ is \textbf{frozen} and sets each day's water demand $D_j$: a denser stand wants more water.
-  \item \textbf{\textcircled{\scriptsize 2} Up (day $\to$ year).} At the end of each year, the 365 daily results are condensed into \textbf{one number}, the water-satisfaction ratio $\overline W_t$, which moves the outer ring from $V_t$ to $V_{t+1}$.
+  \item \textbf{\textcircled{\scriptsize 1} Down (year $\to$ day).} At the start of each year, cover $V_t$ is \textbf{held fixed} and sets daily water demand $D_j$: denser stands require more water.
+  \item \textbf{\textcircled{\scriptsize 2} Up (day $\to$ year).} At year-end, the 365 daily fluxes condense into \textbf{one index}, the water-satisfaction ratio $\overline W_t$, updating the outer state from $V_t$ to $V_{t+1}$.
 \end{itemize}
 \noindent The water store $M$ is not reset: the last day of one year is the first day of the next, so wet or dry years carry over.
 
@@ -84,15 +83,15 @@ The transpiration coefficient $c$ scales reference evapotranspiration $\mathrm{E
 \begin{equation}\label{eq:m1-wbar}
 \overline W_t=\frac{\sum_{j\in t}T_{a,j}}{\sum_{j\in t}D_j},
 \end{equation}
-the share of the plants' water demand actually met in year $t$. $\overline W_t=1$ means no water stress (as at the oases) and full growth rate $r$; $\overline W_t=0.4$ cuts growth to $0.4\,r$; $\overline W_t=0$ stops growth, leaving only decay.
+the share of plant water demand actually met in year $t$. No water stress ($\overline W_t=1$, as in oases) yields full growth rate $r$; intermediate values scale growth proportionally ($\overline W_t=0.4$ reduces growth to $0.4\,r$); and $\overline W_t=0$ halts growth, leaving only decay.
 
 \paragraph{Wind: water demand and disaster damage.} We distinguish two pathways. In Model~1, everyday wind affects growth through evaporative demand. The reference evapotranspiration $\mathrm{ET}_0$ in Eq.~\eqref{eq:m1-demand} follows FAO-56 Penman--Monteith \cite{REF11},
 \begin{equation}\label{eq:m1-pm}
 \mathrm{ET}_0=\frac{0.408\,\Delta\,(R_n-G)+\gamma\,\dfrac{900}{T+273}\,u_2\,(e_s-e_a)}{\Delta+\gamma\,(1+0.34\,u_2)},
 \end{equation}
-where $u_2$ is the wind speed at 2\,m, $R_n-G$ the available energy, $e_s-e_a$ the dryness of the air, and $\Delta$, $\gamma$ thermodynamic coefficients. On our section the wind-driven second term supplies 61\% of annual $\mathrm{ET}_0$. A windier climate therefore raises the demand $D_j$, lowers $\overline W_t$ and slows growth.
+where $u_2$ is the wind speed at 2\,m, $R_n-G$ the available energy, $e_s-e_a$ the dryness of the air, and $\Delta$, $\gamma$ thermodynamic coefficients. At baseline, the aerodynamic term accounts for 61\% of annual reference $\mathrm{ET}_0$. Wind speed enters both the numerator and the denominator, so this share differs from the response to changing wind speed. A windier climate therefore raises the demand $D_j$, lowers $\overline W_t$ and slows growth.
 
-In Model~3, extreme wind and sand cause direct cover loss through storm shocks, jointly representing sandstorms, abrasion, and burial. The available annual observations do not separately identify a background wind-damage coefficient, so Model~1 adds no such term. The index $S_t=E_t(1-V_t/K)$ only describes relative sand exposure: higher cover leaves less surface exposed. It does not feed back into the cover equation.
+In Model~1, the index $S_t=E_t(1-V_t/K)$ tracks relative sand exposure: higher cover leaves less surface exposed. We use $S_t$ only as a diagnostic because the annual observations cannot isolate direct wind damage to vegetation. Model~3 treats direct cover loss from severe storms separately.
 
 Figure~\ref{fig:m1-switch} shows the two switches that shape the daily demand. Water stress $K_s$ (a) acts only once the store falls below $(1-p)C=37.5$\,mm; at the long-run state with 300 or 600\,mm/yr the year-end store lies deep in the stressed zone. The season switch $f(T)$ (b) keeps demand off from December to February (under 1\,mm in November) and at full strength in July, so the model uses 1,191 of the 1,686\,mm/yr of reference $\mathrm{ET}_0$ (c).
 
@@ -103,7 +102,7 @@ Figure~\ref{fig:m1-switch} shows the two switches that shape the daily demand. W
   \label{fig:m1-switch}
 \end{figure}
 
-\subsection{Solution approach}
+\subsubsection{Solution approach}
 We fit growth and decay from data, step the coupled system through a year, and repeat the year to reach a long-run state or a scenario path.
 
 \paragraph{Step 1: calibration by least squares.} At the seven oasis stations water is ample ($\overline W\approx1$), so we set $\overline W=1$ there; growth and decay can then be estimated from cover alone. Fixing $K$ from each station's own record and writing $x=V/K$, Eq.~\eqref{eq:m1-veg} becomes
@@ -112,26 +111,9 @@ We fit growth and decay from data, step the coupled system through a year, and r
 \end{equation}
 where $s$ indexes stations and $\varepsilon_{s,t}$ is the one-step error. The model is linear in the unknowns $(r,d)$, so we estimate them by ordinary least squares over the set $\mathcal T$ of training pairs (target year $\le2022$, all seven stations pooled):
 \begin{equation}\label{eq:m1-ls}
-(\hat r,\hat d)=\arg\min_{r,d}\ \sum_{(s,t)\in\mathcal T}\big(y_{s,t}-r\,z_{1,s,t}+d\,z_{2,s,t}\big)^2 .
+(\hat r,\hat d)=\arg\min_{r,d}\ \sum_{(s,t)\in\mathcal T}\big(y_{s,t}-(r\,z_{1,s,t}-d\,z_{2,s,t})\big)^2 .
 \end{equation}
-Because the objective is quadratic in $(r,d)$, its minimiser has a closed form; Algorithm~\ref{alg:m1-ls} gives the procedure.
-\begin{algorithm}[!htb]
-\caption{Least-squares calibration of $r$ and $d$}\label{alg:m1-ls}
-\begin{algorithmic}[1]
-\Require training pairs $(x_{s,t},\,x_{s,t+1})$, $(s,t)\in\mathcal T$, with $N=|\mathcal T|$
-\Ensure estimates $\hat r,\hat d$ and their bootstrap spread
-\For{each pair $(s,t)\in\mathcal T$}: 
-\State $y_{s,t}\gets x_{s,t+1}-x_{s,t}$;\quad $z_{1,s,t}\gets x_{s,t}(1-x_{s,t})$;\quad $z_{2,s,t}\gets x_{s,t}$ \Comment{Eq.~\eqref{eq:m1-reg}}
-\EndFor
-\State Stack the pairs: $\bm y\in\mathbb R^{N}$ and design matrix $\bm Z=[\,\bm z_1,\ -\bm z_2\,]\in\mathbb R^{N\times2}$
-\State Solve: $(\hat r,\hat d)^\top\gets\big(\bm Z^\top\bm Z\big)^{-1}\bm Z^\top\bm y$ \Comment{the matrix solution of \textbf{Least-quare} calibration}
-\For{$b=1,\dots,B$} \Comment{residual error}
-  \State Resample \emph{whole stations} with replacement; repeat lines 1--5 $\Rightarrow(\hat r^{(b)},\hat d^{(b)})$
-\EndFor
-\State Report $(\hat r,\hat d)$ with the spread of $\{(\hat r^{(b)},\hat d^{(b)})\}$
-\State Calculate the final residual error for any $(\hat r,\hat d)$
-\end{algorithmic}
-\end{algorithm}
+We solve Eq.~\eqref{eq:m1-ls} with design matrix $\bm Z=[\,\bm z_1,-\bm z_2\,]$. To estimate uncertainty, we resample whole stations with replacement, keeping each station's time series intact, and refit $(r,d)$ for each bootstrap sample.
 
 \paragraph{Steps 2--3: one model year, then repeat.} Algorithm~\ref{alg:m1} shows the core loop. Repeating it under a typical climate year until $V$ and $M$ stop changing gives the long-run state for a given irrigation level. Because $\overline W$ depends on $V$, this fixed point is found numerically; we start from both a low and a high cover and accept the result only when both starts agree.
 
@@ -159,7 +141,7 @@ Because the objective is quadratic in $(r,d)$, its minimiser has a closed form; 
 \toprule
 Symbol & Meaning & Value & Range tested & Unit \\
 \midrule
-\multicolumn{5}{@{}l}{\textit{Fitted by least squares (Algorithm~\ref{alg:m1-ls})}}\\
+\multicolumn{5}{@{}l}{\textit{Fitted by least squares (Eq.~\eqref{eq:m1-ls})}}\\
 $r$ & intrinsic growth rate & 0.547 & 0.335--1.168$^{\dagger}$ & yr$^{-1}$ \\
 $d$ & natural decay rate & 0.107 & 0.077--0.202$^{\dagger}$ & yr$^{-1}$ \\
 \midrule
@@ -167,12 +149,12 @@ $d$ & natural decay rate & 0.107 & 0.077--0.202$^{\dagger}$ & yr$^{-1}$ \\
 $K$ & cover ceiling ($1.15\times$ 95th percentile of training cover) & 38.08 & -- & \% \\
 $V_{\mathrm{full}}$ & cover at which demand is full (oasis end-member) & 66.59 & 64.85--69.40 & \% \\
 \midrule
-\multicolumn{5}{@{}l}{\textit{Assumed (no field data to fit)}}\\
+\multicolumn{5}{@{}l}{\textit{Assumed}}\\
 $C$ & root-zone storage capacity & 75 & 30--150 & mm \\
 $p$ & stress-free share of storage (FAO-56 \cite{REF11}) & 0.5 & 0.3--0.7 & -- \\
 $c$ & transpiration coefficient & 1.0 & 0.7--1.2 & -- \\
-$\eta_w$ & share of irrigation reaching the roots & 0.75 & 0.65--0.85 & -- \\
-$\alpha_P$ & share of rain reaching the roots & 0.25 & 0--1 & -- \\
+$\eta_w$ & share of irrigation reaching the roots(FAO-56 \cite{REF11}) & 0.75 & 0.65--0.85 & -- \\
+$\alpha_P$ & share of rain reaching the roots(FAO-56 \cite{REF11}) & 0.25 & 0--1 & -- \\
 $u_T$ & wind threshold in the index $E_t$ & 5 & -- & m/s \\
 $V_0$ & initial cover of a new stand & 2 & -- & \% \\
 $M_0$ & initial store of a new stand & 37.5 & -- & mm \\
@@ -182,7 +164,7 @@ $M_0$ & initial store of a new stand & 37.5 & -- & mm \\
 \label{tab:m1-par}
 \end{table}
 
-\subsection{Results}
+\subsubsection{Results}
 
 \begin{figure}[!t]
   \centering
@@ -206,13 +188,13 @@ $M_0$ & initial store of a new stand & 37.5 & -- & mm \\
 
 \paragraph{Evolution of the state variables.} From a planted cover of 2\%, cover and soil water pass through three phases (Figure~\ref{fig:m1-scen}):
 \begin{enumerate}\setlength{\itemsep}{1pt}\setlength{\parsep}{0pt}
-  \item \textbf{Establishment: growth, not water, limits cover.} Young plants use little water, so with 300\,mm/yr or more the store stays full ($\overline W=1$) and the surplus drains. All such quotas give the same 9.9\% cover by 2030, so water above about 300\,mm/yr is wasted in this phase.
-  \item \textbf{Transition: cover drains the store.} Demand rises with cover until it exceeds supply. The store then drops from capacity within about two years and settles slowly (to about 13\,mm at 300\,mm/yr), and $\overline W$ falls below one. This is the feedback at work: more cover means less water per plant, which slows growth.
-  \item \textbf{Plateau (after 15--25 years): both settle.} Each quota gives its own steady cover and store, e.g.\ 17.9\% and 13\,mm at 300\,mm/yr, or 24.1\% and 19\,mm at 600\,mm/yr.
+  \item \textbf{Establishment: growth, not water, limits cover.} Young plants use little water. All plotted quotas of 300\,mm/yr or more meet demand ($\overline W=1$) through 2030 and reach 9.9\% cover at year-end. Extra irrigation does not increase cover in this phase.
+  \item \textbf{Transition: cover drains the store.} Demand rises with cover until it exceeds supply. The store then drops from capacity within about two years and settles slowly (to about 13.5\,mm at 300\,mm/yr), and $\overline W$ falls below one. This is the feedback at work: more cover means less water per plant, which slows growth.
+  \item \textbf{Plateau (after 15--25 years): both settle.} By 2050, cover and year-end storage are near their plateaus: 17.9\% and 13.5\,mm at 300\,mm/yr, and 24.1\% and 19.3\,mm at 600\,mm/yr. The figure rounds cover labels to whole percentages.
 \end{enumerate}
 The plateau lasts only while water is supplied. If irrigation stops after ten years, the store empties within a year, $\overline W$ falls to 0.03--0.07, and cover drops from 21.5\% to 12.7\% in five years and to 5.1\% in fifteen.
 
-\paragraph{Controlling factors: water supply.} Water supply is the main control.Specifically calculated in desert we set \textbf{Rain} alone (52\,mm/yr against about 1,700\,mm/yr of evaporative demand) holds only 1.8\% cover.
+\paragraph{Controlling factors: water supply.} Water supply is the main control. Without irrigation, annual rainfall of 52\,mm against roughly 1,700\,mm of reference evaporative demand sustains only 1.8\% long-run cover in the model.
 
 \noindent\begin{minipage}[t]{0.50\linewidth}
 \vspace{0pt}
@@ -237,7 +219,7 @@ The bucket explains this shape: at 300\,mm/yr only 37\% of demand is met (Figure
 \begin{enumerate}\setlength{\topsep}{1pt}\setlength{\itemsep}{0pt}\setlength{\parsep}{0pt}
   \item \textbf{Factors that shift long-run cover by 1--3 points:} the transpiration coefficient $c$ ($-1.7$ to $+3.4$ points at 300\,mm/yr), irrigation efficiency ($\pm1.2$) and the effective rain fraction ($-0.5$ to $+1.4$). All three act through $\overline W$, the supply-to-demand ratio.
   \item \textbf{Factors that change soil water but not long-run cover:} storage capacity and the stress threshold. Without overflow, all inflow is eventually transpired, so $\overline W$ depends only on inflow and demand; these factors change only the storage level and its timing.
-  \item \textbf{Wind, through evaporative demand.} Scaling wind speed in Eq.~\eqref{eq:m1-pm} by $+20\%$ raises demand by 8\% and lowers long-run cover at 300\,mm/yr from 17.9\% to 17.2\%; $-20\%$ raises it to 18.8\% (Figure~\ref{fig:m1-sens}c). Less cover leaves more sand exposed: $S$ moves from 0.53 to 0.55.
+  \item \textbf{Wind, through evaporative demand.} Scaling wind speed in Eq.~\eqref{eq:m1-pm} by $+20\%$ raises season-adjusted reference demand by 7.7\% and lowers long-run cover at 300\,mm/yr from 17.9\% to 17.2\%; $-20\%$ raises it to 18.8\% (Figure~\ref{fig:m1-sens}c). Less cover leaves more sand exposed: $S$ moves from 0.53 to 0.55.
 \end{enumerate}
 \end{minipage}\hfill
 \begin{minipage}[t]{0.44\linewidth}
