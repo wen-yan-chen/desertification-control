@@ -49,18 +49,26 @@ Climate drift slowly raises wind ($e^{\alpha_u t}$, acting through Model~1's $\m
 The belt is flagged when at least half of its area falls \emph{simultaneously} below $0.30K$ ($11.4\%$ cover proxy). We report \textbf{resistance} as the mean time to this first crossing within 50 years, $\mathrm{RMST}(50)=\mathbb E[\min(\tau_{\mathrm{proj}},50)]$, and \textbf{recovery} as the gap between area that has ever crossed $0.30K$ and area remaining below it. Crucially, the flag acts purely as a monitoring record: the physical state $(V,M)$ continues to evolve and can rebound whenever conditions permit.
 
 \subsubsection{Solution approach}
-We simulate $6{,}000$ Monte Carlo paths for 50 years ($3{,}000$ per sensitivity case; Table~\ref{tab:m3-par}). We use a Markov chain to cross-check cohort-level first-passage probabilities against a separate stationary Monte Carlo reference. Figure~\ref{fig:m3-matrix} explains what its matrix means physically:
-\begin{enumerate}\setlength{\itemsep}{1pt}\setlength{\parsep}{0pt}
-  \item \textbf{A state is a stand's condition.} Each cell pairs a cover level $V$ with a soil-water level $M$. Both are needed: two stands with the same cover but different stored water fare differently next year. All cells below $0.30K$ merge into one ``below warning'' state.
-  \item \textbf{A row lists next year's possibilities.} Row $i$ of $\bm P$ holds the chance that a stand now in cell $i$ ends next year in each cell $j$: a good year moves it towards denser cover, a drought towards drier and sparser cover, and a severe storm can drop it below the warning level.
-  \item \textbf{The last column and row record the warning.} The last column is this year's chance of falling below $0.30K$; the last row keeps that flag once raised, while physical recovery is followed separately in the Monte Carlo runs. Because a stand only moves to nearby cells in one year, most entries are zero, and multiplying by $\bm P$ year after year gives the chance of being flagged within any horizon.
-\end{enumerate}
+We simulate $6{,}000$ Monte Carlo paths for 50 years ($3{,}000$ per sensitivity case; Table~\ref{tab:m3-par}), carrying each cohort's cover and stored water forward even after a warning. These paths provide the project-level resistance, recovery and ecological-benefit results.
+
+For an independent numerical check, we group cohort conditions by cover and soil water, estimate their one-year movement probabilities under stationary forcing, and accumulate the probability of a first warning. This discretised Markov calculation checks cohort-level first-crossing probabilities against a separate stationary Monte Carlo reference; it does not calculate physical recovery or replace the non-stationary project simulation (Figure~\ref{fig:m3-check}).
 
 \begin{figure}[!htb]
-  \centering
-  \includegraphics[width=\linewidth]{m3_matrix_discrete.png}
-  \caption{Physical meaning of the transition matrix: (1) a stand's state (cover, soil water) and its typical one-year moves; (2) the same moves as one row of $\bm P$.}
-  \label{fig:m3-matrix}
+\centering
+\begin{tikzpicture}[font=\small,
+  box/.style={draw=pWater,fill=pWater!7,rounded corners=2pt,
+    text width=2.75cm,minimum height=0.85cm,align=center,inner sep=4pt},
+  link/.style={-{Stealth[length=5pt]},draw=pWater,line width=0.8pt}]
+\node[box] (a) {Group stands by\\cover and soil water};
+\node[box,right=0.65cm of a] (b) {Estimate next-year\\movement probabilities};
+\node[box,right=0.65cm of b] (c) {Accumulate first-\\warning probability};
+\node[box,right=0.65cm of c,draw=pPlum,fill=pPlum!7] (d) {Compare with\\stationary Monte Carlo};
+\draw[link] (a)--(b);
+\draw[link] (b)--(c);
+\draw[link] (c)--(d);
+\end{tikzpicture}
+\caption{Independent check of cohort first-warning probabilities under stationary forcing. Recovery remains part of the continuing Monte Carlo simulation.}
+\label{fig:m3-check}
 \end{figure}
 
 \begin{table}[!htb]
