@@ -19,6 +19,7 @@
 \usepackage{times}
 \usepackage{indentfirst}
 \usepackage{needspace,tikz,subcaption,float,placeins}
+\captionsetup[table]{position=top}
 \usepackage{booktabs}
 \usepackage{algorithm}
 \usepackage[noend]{algpseudocode}
@@ -135,23 +136,23 @@ Spanning roughly $337{,}600\,\text{km}^2$, the Taklamakan Desert is China's larg
 
 \subsection{Problem restatement}
 \begin{enumerate}
-  \item \textbf{Establish a coupled dynamic model (Task 1).}
+  \item Establish a coupled dynamic model (Task 1).
   Use public meteorological and remote-sensing observations to quantify \textbf{vegetation coverage},
   \textbf{effective root-zone soil moisture}, and their \textbf{interactions with wind and sand}.
 
-  \item \textbf{Optimise construction and resource allocation (Task 2).}
+  \item Optimise construction and resource allocation (Task 2).
   Make an explicit trade-off between ecological benefits and economic costs over a 15-year horizon under a fixed budget and resource caps. Optimise \textbf{annual newly treated area}, \textbf{age-scheduled water replenishment}, \textbf{investment allocation ratios} across construction, O\&M, and revenue-generating photovoltaics (PV), and \textbf{labour input}; test \textbf{investment sensitivity} and derive an \textbf{actionable process criterion}.
 
-  \item \textbf{Assess resilience and long-term benefits (Task 3).}
+  \item Assess resilience and long-term benefits (Task 3).
   Embed \textbf{stochastic compound disasters} (sandstorms, extreme droughts, wind erosion, and sand burial) and \textbf{climate-driven baseline drift} into the post-construction belt. Quantify \textbf{resistance and post-shock recovery} alongside \textbf{long-term ecological trajectories}.
 
-  \item \textbf{Deliver an actionable policy and public brief (Task 4).}
+  \item Deliver an actionable policy and public brief (Task 4).
 \end{enumerate}
 
 \subsection{Our work}
 \begin{figure}[H]\centering
 \includegraphics[width=0.85\linewidth]{workflow.pdf}
-\caption{Integrated modelling workflow linking eco-hydrology, multi-year planning, disaster stress testing, and operational policy.}\label{fig:framework}
+\caption{Integrated modelling workflow}\label{fig:framework}
 \end{figure}
 
 \subsection{Assumptions and Justifications}
@@ -161,7 +162,7 @@ Spanning roughly $337{,}600\,\text{km}^2$, the Taklamakan Desert is China's larg
 \setlength{\parsep}{0pt}
 \setlength{\itemsep}{4pt}
 \begin{enumerate}
-  \item \textbf{Assumption: The reference section is locally uniform.} Satellite cover represents the Yutian--Minfeng belt.
+  \item \textbf{Assumption: The reference section is locally uniform.} Satellite cover represents the Yutian--Minfeng belt. And the difference inner the green belt does not effect integrated model establishing.
   \newline \textbf{Justification:} Public data support section-scale analysis, not fine-scale heterogeneity.
 
   \item \textbf{Assumption: Soil water evolves daily and cover annually.} One root-zone store carries water between years; salinity feedback is omitted.
@@ -180,7 +181,7 @@ Spanning roughly $337{,}600\,\text{km}^2$, the Taklamakan Desert is China's larg
 To quantify how much vegetation cover the desert margin can sustain under local water and wind regimes, we assemble a station--month panel pairing climate forcing with satellite-observed cover across nine sites around the Taklamakan from January 2015 to December 2025 (9 stations $\times$ 132 months $=$ 1,188 station--months). All records are retrieved programmatically from public archives.
 
 \subsection{Study area and station categories}
-The Taklamakan is ringed by river-fed oases, and the sand-blocking belts modelled here lie along the transition between these oases and the open dune field \cite{REF06}. Our monitoring network samples this perimeter alongside two interior desert sites (Figure~\ref{fig:data-stations}a). Specifically, \emph{Category~I (oasis margin)} comprises YT, MF, QM, and RQ on the southern rim, KEL and YL on the lower Tarim River, and ALE on the Aksu River; these seven sites calibrate Model~1, with YT--MF serving as the reference section. \emph{Category~II (corridor)} consists of XT along the Desert Highway, where shelterbelts survive only under saline drip irrigation \cite{REF01}, while \emph{Category~III (control)} comprises TZ in the desert interior. Categories~II and III are retained for context rather than calibration: oasis-margin sites hold 28--41\% cover compared with roughly 9\% in the highway corridor and 1\% in the desert interior (Figure~\ref{fig:data-stations}b), so pooling them would distort the fitted water--cover relationship.
+The Taklamakan is ringed by river-fed oases, and the sand-blocking belts modelled here lie along the transition between these oases and the open dune field \cite{REF06}. Our monitoring network samples this perimeter alongside two interior desert sites (Figure~\ref{fig:data-stations}a). Specifically, \emph{Category~I (oasis margin)} comprises YT, MF, QM, and RQ on the southern rim, KEL and YL on the lower Tarim River, and ALE on the Aksu River; these seven sites calibrate Model~1, with YT--MF serving as the reference section. \emph{Category~II (corridor)} consists of XT along the Desert Highway, where shelterbelts survive only under saline drip irrigation \cite{REF01}, while \emph{Category~III (control)} comprises TZ in the desert interior.
 
 \begin{figure}[H]
   \centering
@@ -251,23 +252,27 @@ SoilGrids queries returned & 62/81 \\ \bottomrule
 \input{Section/model2}
 \input{Section/model3}
 
-\clearpage
+\Needspace{8\baselineskip}
 \section{Strengths and Weaknesses}
 
 \subsection{Strengths}
 \begin{enumerate}
-  \item \textbf{State consistency across models.} The cover and soil-water state $(V,M)$ calibrated in Model~1 is carried directly into Model~2, and Model~2's year-15 cohorts initialise Model~3, ensuring that all three stages describe the same physical belt.
-  \item \textbf{Process-matched timescales.} Pairing a daily soil-water bucket with an annual cover update preserves short dry spells while preventing wind from being double-counted outside evaporative demand.
-  \item \textbf{Verifiable optimisation.} The cohort MILP is solved to a $0.20\%$ optimality gap, and every resulting plan is replayed forward through Model~1 with a maximum water/cash discrepancy of $1.9\times10^{-9}$.
-  \item \textbf{Cross-checked resilience.} A stationary Monte Carlo benchmark agrees with the finest discretised Markov grid across all nine cohort-level checkpoints, while 27 stress scenarios isolate which findings remain robust.
+  \setlength{\itemsep}{2pt}
+  \setlength{\parsep}{0pt}
+  \item \textbf{State consistency across models.} Model~3 inherits each cohort's simulated year-15 cover and soil water, preserving the effects of stand age and past irrigation in the stress test.
+  \item \textbf{Timescales suited to management.} Daily water and annual cover updates capture dry spells and slow growth. Monthly delivery limits reveal the May bottleneck.
+  \item \textbf{Transparent planning trade-offs.} Model~2 compares costs across ecological targets. Replaying the chosen plan verifies its water use and cash flows.
+  \item \textbf{Resistance and recovery are tracked separately.} The simulation follows stands after a warning so it can capture regrowth. All nine stationary Markov estimates fall within the corresponding Monte Carlo $95\%$ intervals for first-warning probabilities.
 \end{enumerate}
 
 \subsection{Weaknesses}
 \begin{enumerate}
-  \item \textbf{Limited single-year predictive skill.} On hold-out years, Model~1 does not outperform persistence overall (RMSE $0.064$ vs.\ $0.054$), making it suited to comparing long-run strategies rather than forecasting annual anomalies.
-  \item \textbf{Unmeasured hydrological parameters.} Lacking public field measurements, soil-water parameters are adopted from FAO-56 and prior literature, and soil salinity feedback is omitted.
-  \item \textbf{Scenario-conditional planning.} Because Model~2's budget, resource caps, and electricity tariff reflect an assumed baseline scenario, the optimal plan ($300$\,ha, $9.5$\,MW PV) should be interpreted conditionally on those inputs.
-  \item \textbf{Uncalibrated hazard rates.} Without empirical disaster-loss records, Model~3's hazard parameters are stress-test assumptions, so $\mathrm{RMST}$ figures serve as relative comparisons rather than actuarial forecasts.
+  \setlength{\itemsep}{2pt}
+  \setlength{\parsep}{0pt}
+  \item \textbf{Limited single-year predictive skill.} In the hold-out years, overall normalised cover RMSE is $0.064$, versus $0.054$ for the previous year's cover. Model~1 is suited to comparing management options.
+  \item \textbf{Limited local soil-water data.} Water parameters lack local calibration. Omitting salt accumulation may overstate irrigation benefits where salinity limits growth.
+  \item \textbf{Conditional investment plan.} The $300$\,ha and $9.5$\,MW plan depends on the assumed budget, resource limits, and electricity tariff. The search covers 18 candidate irrigation schedules, so a wider set of schedules could change the selected plan.
+  \item \textbf{Uncalibrated hazard rates.} Without local loss records, warning probabilities are conditional on the assumed storm frequency and severity.
 \end{enumerate}
 
 \input{Section/task4}

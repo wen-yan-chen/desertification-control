@@ -33,7 +33,7 @@ Figure~\ref{fig:m1-struct} adds the data behind each link. The reference section
   \label{fig:m1-struct}
 \end{figure}
 
-\subsubsection{Model construction}
+\subsubsection[Daily Water Balance and Annual Vegetation Growth]{Model construction}
 \paragraph{Two states on two clocks.} The model tracks two quantities evolving on their natural timescales, represented as two nested clocks (Figure~\ref{fig:m1-clocks}).
 \begin{itemize}
   \item \textbf{Year clock (outer, slow) --- cover $V_t$ (\%).} It ticks \textbf{once per year}. Plants gain or lose cover over a growing season, and the satellite proxy is a single seasonal value, so an annual step matches both biology and observation.
@@ -102,7 +102,7 @@ Figure~\ref{fig:m1-switch} shows the two switches that shape the daily demand. W
   \label{fig:m1-switch}
 \end{figure}
 
-\subsubsection{Solution approach}
+\subsubsection[Least-Squares Calibration and Long-Run Simulation]{Solution approach}
 We fit growth and decay from data, step the coupled system through a year, and repeat the year to reach a long-run state or a scenario path.
 
 \paragraph{Step 1: calibration by least squares.} At the seven oasis stations water is ample ($\overline W\approx1$), so we set $\overline W=1$ there; growth and decay can then be estimated from cover alone. Fixing $K$ from each station's own record and writing $x=V/K$, Eq.~\eqref{eq:m1-veg} becomes
@@ -132,10 +132,10 @@ We solve Eq.~\eqref{eq:m1-ls} with design matrix $\bm Z=[\,\bm z_1,-\bm z_2\,]$.
 \end{algorithmic}
 \end{algorithm}
 
-\paragraph{Parameter values.} Table~\ref{tab:m1-par} lists the values used to solve the model. Only $r$ and $d$ are fitted; $K$ and $V_{\mathrm{full}}$ follow fixed rules applied to the data; the water parameters cannot be fitted without field measurements, so they are stated assumptions with the ranges tested in the sensitivity analysis.
-
 \begin{table}[H]
 \centering\small
+\caption{Parameter values for Model 1.}
+\label{tab:m1-par}
 \renewcommand{\arraystretch}{1.1}
 \begin{tabularx}{\linewidth}{@{}l X r c l@{}}
 \toprule
@@ -160,11 +160,9 @@ $V_0$ & initial cover of a new stand & 2 & -- & \% \\
 $M_0$ & initial store of a new stand & 37.5 & -- & mm \\
 \bottomrule
 \end{tabularx}
-\caption{Model 1 parameters.}
-\label{tab:m1-par}
 \end{table}
 
-\subsubsection{Results}
+\subsubsection[Vegetation Response to Irrigation and Wind]{Results}
 
 \begin{figure}[!t]
   \centering
