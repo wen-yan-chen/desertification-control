@@ -8,13 +8,17 @@ check_m3_hashes(S);
 sm = readtable(fullfile(S.res3, 'summary.csv'), 'TextType', 'string', 'VariableNamingRule', 'preserve');
 pa = readtable(fullfile(S.res3, 'project_annual.csv'), 'TextType', 'string', 'VariableNamingRule', 'preserve');
 
-fig = new_figure(S.textW, 6.2);
-tl  = tiledlayout(fig, 1, 2, 'TileSpacing', 'compact', 'Padding', 'compact');
+fig = new_figure(S.textW, 6.8);
 
-% ==================== (a) Discrete 3x3 joint hazard grid ====================
-ax = nexttile(tl); style_axes(ax, S, 'none');
-lams = [0.10, 0.25, 0.50];
-mus  = [0.15, 0.30, 0.45];
+% ==================== (a) 3D bar chart: 3x3 joint hazard grid ====================
+ax1 = axes(fig, 'Position', [0.052 0.12 0.422 0.76]);
+style_axes(ax1, S, 'xy');
+set(ax1, 'ZGrid', 'on', 'ZColor', c.axis, 'ZMinorTick', 'off', ...
+    'TickDir', 'out', 'Projection', 'orthographic', 'Box', 'off', ...
+    'TickLength', [0.015 0.015]);
+ax1.ZLabel.FontSize = S.fs.label;
+ax1.ZLabel.Color = c.ink;
+
 lamStr = ["0.1", "0.25", "0.5"];
 muStr  = ["0.15", "0.3", "0.45"];
 
@@ -22,39 +26,100 @@ muStr  = ["0.15", "0.3", "0.45"];
 anchors = [c.limit; c.accent; c.sandLight; c.vegMid; c.water];
 cmap = interp1(linspace(0, 1, size(anchors, 1)), anchors, linspace(0, 1, 64));
 
-for ir = 1:3       % row: lambda_0 (top = 0.50, bottom = 0.10)
-    for ic = 1:3   % col: E[U] (left = 0.15, right = 0.45)
+az = 28; el = 32;
+camXY = [sind(az), -cosd(az)];
+
+% Collect all 9 grid entries and sort back-to-front along camera axis
+bars = struct('x', {}, 'y', {}, 'rmst', {}, 'p50', {}, 'isBase', {}, 'depth', {});
+k = 0;
+for ir = 1:3       % lambda_0: 0.10 -> y=3 (back), 0.25 -> y=2, 0.50 -> y=1 (front)
+    for ic = 1:3   % E[U]:     0.15 -> x=1 (left), 0.30 -> x=2, 0.45 -> x=3 (right)
         cname = "joint_rate_" + lamStr(ir) + "_loss_" + muStr(ic);
         row = sm(sm.("case") == cname & sm.entity == "project", :);
-        rmst = row.restricted_mean_first_passage_years;
-        p50  = row.p_failure * 100;
-        frac = min(1, max(0, (rmst - 2.5) / (42.5 - 2.5)));
-        idx  = max(1, min(64, round(1 + frac * 63)));
-        fcol = cmap(idx, :);
-        patch(ax, ic + [-0.46 0.46 0.46 -0.46], ir + [-0.46 -0.46 0.46 0.46], fcol, ...
-            'EdgeColor', 'w', 'LineWidth', 1.4, 'HandleVisibility', 'off');
-        tcol = c.ink;
-        if frac < 0.22 || frac > 0.78, tcol = [1 1 1]; end
-        star = "";
-        if ir == 2 && ic == 2, star = "*"; end
-        text(ax, ic, ir + 0.12, sprintf('%.1f yr%s', rmst, star), ...
-            'FontName', S.font, 'FontSize', S.fs.note + 0.2, 'FontWeight', 'bold', ...
-            'Color', tcol, 'HorizontalAlignment', 'center');
-        text(ax, ic, ir - 0.19, sprintf('(%.1f%%)', p50), ...
-            'FontName', S.font, 'FontSize', S.fs.note - 0.6, ...
-            'Color', tcol, 'HorizontalAlignment', 'center');
+        k = k + 1;
+        x0 = ic;
+        y0 = 4 - ir;
+        bars(k).x      = x0;
+        bars(k).y      = y0;
+        bars(k).rmst   = row.restricted_mean_first_passage_years;
+        bars(k).p50    = row.p_failure * 100;
+        bars(k).isBase = (ir == 2 && ic == 2);
+        bars(k).depth  = x0 * camXY(1) + y0 * camXY(2);
     end
 end
-xlim(ax, [0.5 3.5]); ylim(ax, [0.5 3.5]);
-xticks(ax, 1:3); xticklabels(ax, {'0.15', '0.30', '0.45'});
-yticks(ax, 1:3); yticklabels(ax, {'0.10', '0.25', '0.50'});
-xlabel(ax, 'Mean event loss E[{\itU}]');
-ylabel(ax, 'Initial storm rate \lambda_0 (yr^{-1})');
-panel_title(ax, '(a) Joint grid: RMST(50) & ({\itp}_{50})', S);
-frame_axes(ax, S);
+[~, ord] = sort([bars.depth], 'ascend');
+bars = bars(ord);
+
+w = 0.21;
+for b = 1:numel(bars)
+    x0   = bars(b).x;
+    y0   = bars(b).y;
+    h    = bars(b).rmst;
+    frac = min(1, max(0, (h - 2.5) / (42.5 - 2.5)));
+    idx  = max(1, min(64, round(1 + frac * 63)));
+    fcol = cmap(idx, :);
+
+    colTop   = min(1, fcol * 1.04 + 0.05);
+    colFront = fcol * 0.92;
+    colSide  = fcol * 0.76;
+    ecol     = 0.55 * fcol + 0.45 * c.axis;
+    lw       = 0.42;
+    if bars(b).isBase
+        ecol = c.ink;
+        lw   = 0.65;
+    end
+
+    % Front-left face (y = y0 - w)
+    patch(ax1, [x0-w x0+w x0+w x0-w], [y0-w y0-w y0-w y0-w], [0 0 h h], colFront, ...
+        'EdgeColor', ecol, 'LineWidth', lw, 'HandleVisibility', 'off');
+    % Front-right face (x = x0 + w)
+    patch(ax1, [x0+w x0+w x0+w x0+w], [y0-w y0+w y0+w y0-w], [0 0 h h], colSide, ...
+        'EdgeColor', ecol, 'LineWidth', lw, 'HandleVisibility', 'off');
+    % Top face (z = h)
+    patch(ax1, [x0-w x0+w x0+w x0-w], [y0-w y0-w y0+w y0+w], [h h h h], colTop, ...
+        'EdgeColor', ecol, 'LineWidth', lw, 'HandleVisibility', 'off');
+end
+
+% Draw labels in a second pass so they always render crisply in front of bars
+for b = 1:numel(bars)
+    x0   = bars(b).x;
+    y0   = bars(b).y;
+    h    = bars(b).rmst;
+    p50  = bars(b).p50;
+    dx = 0; dy = 0; dz = 2.7;
+    if x0 == 1 && y0 == 2, dx = -0.14; dz = 2.7; end   % 20.7 yr: clear 41.8 bar
+    if x0 == 2 && y0 == 1, dx = -0.10; dz = 2.3; end   %  3.7 yr: clear 7.3* bar
+    if x0 == 3 && y0 == 1, dx = -0.06; dz = 2.1; end   %  2.8 yr: clear 5.2 bar
+    if x0 == 3 && y0 == 2, dx = -0.05; dz = 2.4; end   %  5.2 yr: clear 11.4 bar
+    if x0 == 2 && y0 == 2, dx =  0.05; dz = 2.4; end   %  7.3 yr*: centered in corridor
+    star = "";
+    if bars(b).isBase, star = "*"; end
+    lbl = {sprintf('\\bf%.1f yr%s', h, star), ...
+           sprintf('\\rm\\fontsize{%.1f}(%.1f%%)', S.fs.note - 1.6, p50)};
+    text(ax1, x0 + dx, y0 + dy, h + dz, lbl, ...
+        'FontName', S.font, 'FontSize', S.fs.note - 1.1, 'Color', c.ink, ...
+        'HorizontalAlignment', 'center', 'VerticalAlignment', 'bottom', ...
+        'Interpreter', 'tex');
+end
+
+xlim(ax1, [0.45 3.55]); ylim(ax1, [0.45 3.55]); zlim(ax1, [0 52]);
+xticks(ax1, 1:3); xticklabels(ax1, {'0.15', '0.30', '0.45'});
+yticks(ax1, 1:3); yticklabels(ax1, {'0.50', '0.25', '0.10'});
+zticks(ax1, 0:10:50);
+xlh = xlabel(ax1, 'Mean event loss E[{\itU}]');
+ylh = ylabel(ax1, {'Initial storm rate', '\lambda_0 (yr^{-1})'});
+zlabel(ax1, 'RMST(50) (yr)');
+pbaspect(ax1, [1.22 1.15 0.88]);
+view(ax1, az, el);
+set(xlh, 'Rotation', -17, 'VerticalAlignment', 'top', 'Position', [1.95 0.08 -4.0]);
+set(ylh, 'Rotation',  41, 'VerticalAlignment', 'top', 'HorizontalAlignment', 'center', ...
+    'Position', [4.02 2.15 -3.6]);
+t1 = panel_title(ax1, '(a) Joint grid: RMST(50) & ({\itp}_{50})', S);
+t1.Units = 'normalized';
+t1.Position(2) = 1.022;
 
 % ==================== (b) Post-construction mechanism & rationing contrasts ====================
-ax = nexttile(tl); style_axes(ax, S, 'x');
+ax = axes(fig, 'Position', [0.635 0.14 0.350 0.78]); style_axes(ax, S, 'x');
 cases = ["base_nonstationary", "stationary_reference", "water_80pct", "water_120pct", ...
          "no_drought", "no_drought_storm_association", "independent_cohort_storms", ...
          "fixed_mean_loss", "storm_at_year_start", "threshold_20pctK", "threshold_40pctK"];
