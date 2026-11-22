@@ -1,0 +1,49 @@
+% Shared macros for the layered model figures (m1_layers, m2_layers):
+% glossy spheres, a tilted mechanism plane and key-variable chain boxes.
+\input{paper_palette}
+\makeatletter
+% Lighter version of TikZ's ball shading: white highlight, no black rim.
+\pgfdeclareradialshading[tikz@ball]{glossy}{\pgfqpoint{-9bp}{10bp}}{%
+  color(0bp)=(white); color(6bp)=(tikz@ball!18!white); color(19bp)=(tikz@ball!48!white);
+  color(31bp)=(tikz@ball!78!white); color(50bp)=(tikz@ball)}
+\tikzoption{glossy color}{\pgfutil@colorlet{tikz@ball}{#1}\def\tikz@shading{glossy}\tikz@addmode{\tikz@mode@shadetrue}}
+\makeatother
+\tikzset{
+  tie/.style={draw=pAxis!75, line width=0.6pt},
+  cbox/.style={draw=#1, rounded corners=2pt, line width=0.8pt, fill=white, text=#1,
+    minimum width=1.45cm, minimum height=0.70cm, align=center, font=\normalsize},
+  lk/.style={-{Stealth[length=5.5pt]}, line width=1pt, draw=#1},
+  num/.style={circle, fill=white, draw=#1, text=#1, inner sep=0.4pt,
+    font=\scriptsize\bfseries, minimum size=11pt},
+  balltext/.style={align=center, font=\footnotesize, text=pInk, inner sep=0pt},
+  law/.style={font=\footnotesize, text=pInk, align=left},
+}
+% \ball{x}{y}{r}{colour}{text}
+\newcommand{\ball}[5]{%
+  \shade[glossy color=#4!62] (#1,#2) circle (#3);
+  \draw[#4!70, line width=0.45pt] (#1,#2) circle (#3);
+  \node[balltext, text width=1.95*#3 cm] at (#1,#2) {#5};}
+% \splitball{x}{y}{r}{left colour}{right colour}
+\newcommand{\splitball}[5]{%
+  \begin{scope}
+    \clip (#1-#3-0.1,#2-#3-0.1) rectangle (#1-0.03,#2+#3+0.1);
+    \shade[glossy color=#4!80] (#1-0.03,#2) circle (#3);
+  \end{scope}
+  \begin{scope}
+    \clip (#1+0.03,#2-#3-0.1) rectangle (#1+#3+0.1,#2+#3+0.1);
+    \shade[glossy color=#5!80] (#1+0.03,#2) circle (#3);
+  \end{scope}}
+% \plane{x0}{y0}{width}{skew}{depth}{colour}: opaque base of the tilted plane
+\newcommand{\plane}[6]{%
+  \fill[#6!30] (#1,#2) -- ++(#3,0) -- ++(#4,#5) -- ++(-#3,0) -- cycle;}
+% translucent top coat so lines passing beneath the plane stay faintly visible
+\newcommand{\replane}[6]{%
+  \shade[left color=#6!50, right color=pWater!38, opacity=0.70]
+    (#1,#2) -- ++(#3,0) -- ++(#4,#5) -- ++(-#3,0) -- cycle;
+  \draw[#6!80!black, line width=0.5pt] (#1,#2) -- ++(#3,0) -- ++(#4,#5) -- ++(-#3,0) -- cycle;}
+\newcommand{\factor}[3]{\node[font=\footnotesize\itshape, text=pInk!85] at (#1,#2) {#3};}
+\newcommand{\uparrowshape}[3]{% x, y, colour
+  \node[single arrow, shading=axis, top color=#3!20, bottom color=#3!80, draw=none,
+    rotate=90, minimum height=0.55cm, minimum width=0.50cm, single arrow head extend=0.10cm,
+    inner sep=0pt] at (#1,#2) {};}
+\newcommand{\layerlabel}[3]{\node[font=\small\bfseries\sffamily, text=#2, anchor=west] at (14.65,#1) {#3};}

@@ -1,37 +1,15 @@
 % Model 1 sketch: logic chain, formulas, algorithm, results. Figures in Paper/Figure (MATLAB: Code/figures_matlab; TikZ: *.tex there).
 \subsection{Coupled Vegetation--Water--Sand Dynamics}\label{sec:model1}
-Task~1 asks how cover and soil water on a desert-margin section co-evolve and what factors govern their trajectory. We model this coupling as a four-link feedback loop:
-
-\begin{center}
-\begin{tikzpicture}[font=\normalsize,
-  chainbox/.style={draw, rounded corners=2pt, line width=0.8pt, minimum width=1.6cm, minimum height=0.9cm},
-  wat/.style={chainbox, draw=wfdy, fill=wfdy!8, text=wfdy},
-  veg/.style={chainbox, draw=wfyr, fill=wfyr!8, text=wfyr},
-  lk/.style={-{Stealth[length=6pt]}, line width=1pt},
-  num/.style={circle, fill=white, draw, inner sep=0.5pt, font=\scriptsize\bfseries, minimum size=12pt}]
-\definecolor{wfdy}{HTML}{1E5F74}\definecolor{wfyr}{HTML}{2B633C}
-\node[wat] (a) {$P,\ I$};
-\node[wat, right=1.5cm of a] (b) {$M_j$};
-\node[wat, right=1.5cm of b] (c) {$\overline W_t$};
-\node[veg, right=1.5cm of c] (d) {$V_t$};
-\draw[lk, wfdy] (a) -- node[num, draw=wfdy, text=wfdy] {a} (b);
-\draw[lk, wfdy] (b) -- node[num, draw=wfdy, text=wfdy] {b} (c);
-\draw[lk, wfyr] (c) -- node[num, draw=wfyr, text=wfyr] {c} (d);
-\draw[lk, wfyr] (d.south) -- ++(0,-0.5) -| (b.south);
-\node[num, draw=wfyr, text=wfyr] at ($(c.south)+(0,-0.5)$) {d};
-\end{tikzpicture}
-\end{center}
-
-\noindent \textcircled{\scriptsize a} Rain $P$ and irrigation $I$ fill a root-zone store $M_j$; \textcircled{\scriptsize b} the store determines the fraction $\overline W_t$ of plant water demand met; \textcircled{\scriptsize c} that ratio drives cover change $V_t$ through growth against decay; \textcircled{\scriptsize d} cover in turn sets next year's demand on the store, closing the loop. Wind does not enter as a separate arrow; instead, it acts inside link~\textcircled{\scriptsize b} by raising the evaporative demand that drains the store, while cover governs how much of the sand surface remains exposed.
-
-Figure~\ref{fig:m1-struct} adds the data behind each link. The reference section is the Yutian--Minfeng southern margin (Category~I in Section~\ref{sec:data}).
+Task~1 asks how cover and soil water on a desert-margin section co-evolve and what factors govern their trajectory. We model this coupling as a four-link feedback loop, placed on the mechanism plane of Figure~\ref{fig:m1-struct} between its drivers below and its governing laws and outputs above.
 
 \begin{figure}[!htb]
   \centering
-  \includegraphics[width=\linewidth]{m1_structure.pdf}
-  \caption{Structure of Model 1. }
+  \includegraphics[width=\linewidth]{m1_layers.pdf}
+  \caption{Structure of Model~1.}
   \label{fig:m1-struct}
 \end{figure}
+
+\noindent \textcircled{\scriptsize a} Rain $P$ and irrigation $I$ fill a root-zone store $M_j$; \textcircled{\scriptsize b} the store determines the fraction $\overline W_t$ of plant water demand met; \textcircled{\scriptsize c} that ratio drives cover change $V_t$ through growth against decay; \textcircled{\scriptsize d} cover in turn sets next year's demand on the store, closing the loop. Wind does not enter as a separate arrow; instead, it acts inside link~\textcircled{\scriptsize b} by raising the evaporative demand that drains the store, while cover governs how much of the sand surface remains exposed. The reference section is the Yutian--Minfeng southern margin (Category~I in Section~\ref{sec:data}).
 
 \subsubsection[Daily Water Balance and Annual Vegetation Growth]{Model construction}
 \paragraph{Two states on two clocks.} The model tracks two quantities evolving on their natural timescales, represented as two nested clocks (Figure~\ref{fig:m1-clocks}).

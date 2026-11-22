@@ -1,0 +1,54 @@
+% Reproduction of template 2 (rounded outline boxes, green accents).
+% Build: pdflatex rounded_outline.tex
+\documentclass[tikz,border=2pt]{standalone}
+\usepackage{newtxtext}
+\usepackage{../mcmworkflow}
+\begin{document}
+\begin{tikzpicture}
+
+% ---------------- top left: evaluation model ----------------
+\foreach \f [count=\i] in {Economy,Society,Environment,Politics,OFI}
+  \node[wfo box, minimum width=2.4cm] (f\i) at (1.9,-1.05-\i*0.68) {\f};
+\node[wfo label, font=\bfseries\normalsize] (ahp) at (6.0,-1.75) {AHP-CRITIC};
+\node[wfo method, text width=2.6cm, minimum height=1.45cm] (cw) at (6.0,-2.95) {Combined\\Weights};
+\draw[wfo arrow] (cw.south) -- ++(0,-0.55) node[wfo label, below, font=\bfseries\normalsize] {Generalizability};
+\node[wfo container, fit={(0.4,-0.75)(8.0,-5.15)}] (C1) {};
+\node[wfo head, text width=5.8cm] at (4.6,-0.75) {Evaluation model of the impact of hosting the Olympic Games};
+
+\node[wfo big arrow] at (9.15,-2.95) {};
+
+% ---------------- top right: distinguishability ----------------
+\node[wfo box, minimum width=3.6cm] (dis) at (13.5,-1.2) {Distinguishability};
+\node[wfo method, minimum width=2.4cm, minimum height=.8cm] (km) at (13.5,-2.2) {K-means};
+\node[wfo box, minimum width=3.0cm] (types) at (13.5,-3.75) {3 types of areas};
+\draw[wfo arrow] (km.south) -- (types.north)
+  node[midway, left, wfo label] {Elbow} node[midway, right, wfo label] {Law};
+\draw[wfo arrow] (types.south) -- ++(0,-0.55) node[below, wfo label, font=\bfseries\normalsize] {\underline{Radar map}};
+\node[wfo container, fit={(10.3,-0.6)(16.6,-5.15)}] (C2) {};
+
+% ---------------- bottom left: strategies ----------------
+\node[wfo gradient, text width=7cm, align=left, anchor=north west, font=\bfseries\small] (strat) at (0.6,-6.85) {%
+  \textcolor{wfoTextDark}{Strategy 1:}\\ Selecting permanent venues for highly environmentally demanding competitions\\[2pt]
+  \textcolor{wfoTextDark}{Strategy 2:}\\ Decentralization of the host region\\[2pt]
+  \textcolor{wfoTextDark}{Strategy 3:}\\ One permanent location for the Summer and one for the Winter Olympics\\[2pt]
+  \textcolor{wfoTextDark}{Strategy 4:}\\ Holding four small-scale Olympics};
+\node[wfo box, minimum width=4.6cm, anchor=south west] (tl) at ([yshift=1pt]strat.north west) {Timeline for the next 50 years};
+\node[wfo container, fit=(strat)(tl)] (C3) {};
+\node[wfo head, rounded corners=0pt, minimum width=2.4cm, minimum height=1.1cm, font=\bfseries\large] at (8.25,-6.5) {Strategies};
+
+\node[wfo hollow arrow] at (9.35,-8.75) {};
+
+% ---------------- bottom right: scoring ----------------
+\node[wfo box, minimum width=5.6cm] (score) at (13.25,-6.35) {Score analysis of the strategies};
+\node[wfo green, font=\bfseries\normalsize] at (12.9,-7.05) {Gray Prediction Model};
+\node[wfo gradient, minimum width=6.3cm, minimum height=3.0cm, anchor=north west] (sp) at (10.0,-7.45) {};
+\foreach \s [count=\i] in {{Strategy 1: Society, OFI}, {Strategy 2: All},
+    {Strategy 3: Economy, Environment, OFI}, {Strategy 4: Society, Politics}}
+  \node[wfo box, font=\bfseries\footnotesize, minimum width=5.3cm, minimum height=.55cm] at (12.95,-7.25-\i*0.66) {\s};
+\draw[wfoGreen, line width=2.2pt, -{Triangle[length=7pt,width=7pt]}] (15.95,-10.3) -- (15.95,-7.7);
+\draw[wfo arrow] (score.east) -| ([xshift=-0.25cm]sp.north east);
+\node[wfo container, fit=(score)(sp)] (C4) {};
+
+\node[wfo frame, fit=(C1)(C2)(C3)(C4)] {};
+\end{tikzpicture}
+\end{document}

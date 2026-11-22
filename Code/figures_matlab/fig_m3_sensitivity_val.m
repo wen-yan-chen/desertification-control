@@ -128,6 +128,7 @@ labs  = ["Base (non-stationary)", "Stationary climate", "Water request 80%", ...
          "Indep. cohort storms", "Fixed loss {\itU} = 0.30", "Start-year shocks", ...
          "Threshold 0.20{\itK} (diag.)", "Threshold 0.40{\itK} (diag.)"];
 n = numel(cases);
+labs(1) = sprintf('\\color[rgb]{%.3f,%.3f,%.3f}\\bfBase (non-stationary)', c.water);
 yv = (n:-1:1)';
 baseR = sm.restricted_mean_first_passage_years(sm.("case") == "base_nonstationary" & sm.entity == "project");
 
@@ -135,6 +136,9 @@ for r = 2:2:n
     patch(ax, [1.0 20.8 20.8 1.0], r + [-0.5 -0.5 0.5 0.5], c.grid, ...
         'EdgeColor', 'none', 'FaceAlpha', 0.55, 'HandleVisibility', 'off');
 end
+% Highlight the baseline row
+patch(ax, [1.0 20.8 20.8 1.0], n + [-0.5 -0.5 0.5 0.5], c.waterLight, ...
+    'EdgeColor', 'none', 'FaceAlpha', 0.9, 'HandleVisibility', 'off');
 xline(ax, baseR, '--', 'Color', c.greyDark, 'LineWidth', 0.85, 'HandleVisibility', 'off');
 yline(ax, 2.5, ':', 'Color', c.limit, 'LineWidth', 0.8, 'HandleVisibility', 'off');
 

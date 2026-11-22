@@ -1,0 +1,65 @@
+% Model 2 layered structure (paper Fig. "Structure of Model 2").
+% Inputs and integer decisions below a tilted mechanism plane that carries the
+% cohort-ledger chain; governing formulas and outputs above it.
+% Build: cd Paper/Figure && pdflatex m2_layers.tex
+\documentclass[tikz,border=3pt]{standalone}
+\usepackage{newtxtext,newtxmath}
+\usepackage{amsmath}
+\usetikzlibrary{arrows.meta,calc,shapes.arrows}
+\input{layer_style}
+\begin{document}
+\begin{tikzpicture}
+% ---------------- mechanism plane, with decision links passing beneath it
+\plane{1.0}{2.85}{12.0}{1.45}{2.20}{pWaterMid}
+\draw[tie] (2.30,2.10) -- (3.20,3.70);
+\draw[tie] (4.70,2.10) -- (3.95,3.70);
+\draw[tie] (7.10,2.10) -- (6.40,3.70);
+\replane{1.0}{2.85}{12.0}{1.45}{2.20}{pWaterMid}
+\factor{2.85}{4.72}{integer lots $\Delta_A,\ \Delta_P$}
+\factor{6.70}{4.80}{age-based watering}
+\factor{9.55}{4.80}{budget \& labour caps}
+\factor{12.45}{4.60}{May canal cap}
+\factor{2.20}{3.12}{year-start capex}
+\factor{11.95}{3.00}{tariff $p_e$, discount $\delta$}
+\node[cbox=pVeg, minimum width=1.6cm]   (a) at (3.55,4.05) {$a_t,\ y_t$};
+\node[cbox=pWater, minimum width=2.1cm] (b) at (6.25,4.05) {$V_{s,p,t},\ M_{s,p,t}$};
+\node[cbox=pPlum, minimum width=1.9cm]  (c) at (8.95,4.05) {$Q_t,\ L_t,\ f_t$};
+\node[cbox=pPV, minimum width=1.6cm]    (d) at (11.35,4.05) {$H$ vs.\ $N$};
+\draw[lk=pVeg]   (a) -- node[num=pVeg] {a} (b);
+\draw[lk=pWater] (b) -- node[num=pWater] {b} (c);
+\draw[lk=pPlum]  (c) -- node[num=pPlum] {c} (d);
+\draw[lk=pPV]    (d.south) -- ++(0,-0.38) -| (c.south);
+\node[num=pPV] at ($(c.south)!0.5!(d.south)+(0,-0.38)$) {d};
+\node[font=\footnotesize\itshape, text=pPV!80!black, anchor=east] at ($(c.south)!0.5!(d.south)+(-0.25,-0.68)$) {PV income $R_t$};
+% ---------------- principle: the two governing formulas
+\draw[tie] (b.north) -- (5.10,5.20);
+\draw[tie] (d.north) -- (10.10,5.20);
+\ball{5.10}{5.78}{0.60}{pVeg}{Cohort\\benefit}
+\ball{10.10}{5.78}{0.60}{pPV}{Two-step\\MILP}
+\node[law, anchor=east] at (4.38,5.80) {$H=\sum_{t}\sum_{s\le t,\,p}a_{s,p}\,V_{s,p,t}/K$};
+\node[law, anchor=west] at (10.82,5.80) {$\min N\ \ \text{s.t.}\ \ H\ge\varphi H_{\max}$};
+% ---------------- aim: outputs
+\draw[tie] (5.10,6.38) -- (7.60,7.05);
+\draw[tie] (10.10,6.38) -- (7.60,7.05);
+\draw[tie] (7.60,7.30) -- (4.20,7.40);
+\draw[tie] (7.60,7.30) -- (11.00,7.40);
+\ball{4.20}{7.40}{0.58}{pVeg}{Cost--ecology\\trade-off}
+\ball{11.00}{7.40}{0.58}{pSand}{Handoff\\year-15\\cohorts}
+\ball{7.60}{7.30}{0.78}{pPlum}{\textbf{Least-cost}\\\textbf{15-year}\\\textbf{plan}}
+% ---------------- control: integer decisions
+\ball{2.30}{1.72}{0.58}{pVeg}{Planting\\lots $n_{s,p}$}
+\ball{4.70}{1.72}{0.58}{pPV}{PV\\units $z_s$}
+\ball{7.10}{1.72}{0.58}{pWater}{Watering\\recipe $p$}
+% ---------------- drivers
+\uparrowshape{10.70}{1.40}{pSand}
+\splitball{10.70}{0.48}{0.44}{pWater}{pSand}
+\node[font=\footnotesize, text=pInk, anchor=east] at (10.15,0.48) {Model~1 paths $(V,M,\overline W)$ by age};
+\node[font=\footnotesize, text=pInk, anchor=west] at (11.25,0.48) {Costs and caps};
+% ---------------- layer labels
+\layerlabel{7.35}{pPlum}{Aim}
+\layerlabel{5.78}{pVeg}{Principle}
+\layerlabel{4.05}{pWater}{Mechanism}
+\layerlabel{1.72}{pPV}{Decision}
+\layerlabel{0.48}{pSand}{Inputs}
+\end{tikzpicture}
+\end{document}

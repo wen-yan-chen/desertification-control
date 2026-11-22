@@ -107,32 +107,14 @@ Taklamakan protective belt; Two-clock eco-hydrology; Cohort MILP; Agrivoltaic cr
 
 \section{Introduction}
 \subsection{Problem background}
-Spanning roughly $337{,}600\,\text{km}^2$, the Taklamakan Desert is China's largest shifting-sand desert and one of the most hyper-arid basins on Earth. In November 2024, China completed spatial closure of a $3{,}046$\,km ``Green Sand-Blocking Protective Belt'' encircling the desert margin \cite{REF12}. Yet sand control is an ongoing management task rather than a one-off engineering milestone: \emph{closing} the perimeter on a map does not guarantee \emph{holding} it over decades. Sustaining the belt requires balancing a coupled, non-stationary system shaped by scarce seasonal water, finite multi-year budgets, construction and maintenance labour, and stochastic natural hazards \cite{REF06} (\textbf{Table~\ref{tab:protection-factors}}).
+Spanning roughly $337{,}600\,\text{km}^2$, the Taklamakan Desert is China's largest shifting-sand desert and one of the most hyper-arid basins on Earth. In November 2024, China completed spatial closure of a $3{,}046$\,km ``Green Sand-Blocking Protective Belt'' encircling the desert margin \cite{REF12}. Yet sand control is an ongoing management task rather than a one-off engineering milestone: \emph{closing} the perimeter on a map does not guarantee \emph{holding} it over decades. Sustaining the belt requires balancing a coupled, non-stationary system shaped by scarce seasonal water, finite multi-year budgets, construction and maintenance labour, and stochastic natural hazards \cite{REF06} (\textbf{Figure~\ref{fig:protection-factors}}).
 
-\begin{table}[htbp]
+\begin{figure}[htbp]
   \centering
-  \caption{Key factors and quantities in protective-belt management.}
-  \label{tab:protection-factors}
-  \begingroup\small
-  \renewcommand{\arraystretch}{1.18}
-  \begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.17\linewidth}
-    >{\raggedright\arraybackslash}p{0.37\linewidth}
-    >{\raggedright\arraybackslash}X@{}}
-    \toprule
-    \textbf{Factor} & \textbf{Representative quantities} & \textbf{Role in belt protection} \\
-    \midrule
-    Water supply & Ecological replenishment volume ($\text{m}^3$/yr); monthly irrigation timing
-      & Sustains root-zone soil moisture and vegetation growth under extreme evaporative demand. \\
-    Funding & Total budget (CNY); allocation shares in construction, O\&M, and supporting PV
-      & Sets newly treated belt scale, photovoltaic revenue capacity, and ongoing maintenance. \\
-    Labour & Annual workforce input (person-days/yr); construction vs.\ upkeep split
-      & Supports shrub planting, seasonal irrigation, panel installation, and stand upkeep. \\
-    Disaster shocks & Drought probability; storm frequency ($\text{yr}^{-1}$) and fractional cover loss
-      & Causes canopy defoliation/burial, shrinks canal supply, and tests biological recovery. \\
-    \bottomrule
-  \end{tabularx}
-  \endgroup
-\end{table}
+  \includegraphics[width=\linewidth]{intro_factors.pdf}
+  \caption{Key factors in protective-belt management around the Taklamakan. Centre: shelterbelt along the Tarim Desert Highway. Images: Y.~Canopus (CC~BY-SA~4.0), M.~Taichi (CC~BY~2.0), w0zny (CC~BY-SA~3.0), NASA MODIS (public domain).}
+  \label{fig:protection-factors}
+\end{figure}
 
 \subsection{Problem restatement}
 \begin{enumerate}
@@ -150,8 +132,9 @@ Spanning roughly $337{,}600\,\text{km}^2$, the Taklamakan Desert is China's larg
 \end{enumerate}
 
 \subsection{Our work}
+Each model takes a standard input, applies one mathematical tool and passes named state variables to the next; Task~4 turns the combined findings into a policy brief (Figure~\ref{fig:framework}).
 \begin{figure}[H]\centering
-\includegraphics[width=0.85\linewidth]{workflow.pdf}
+\includegraphics[width=\linewidth]{workflow.pdf}
 \caption{Integrated modelling workflow}\label{fig:framework}
 \end{figure}
 

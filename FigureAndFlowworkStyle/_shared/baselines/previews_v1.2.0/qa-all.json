@@ -1,0 +1,225 @@
+{
+  "style_version": "1.2.0",
+  "matplotlib": "3.11.2",
+  "figures": {
+    "p1_01_gradient_bars": {
+      "reference": "Practice1 M1P_01",
+      "spec": {
+        "pdf_width_pt": 468.0,
+        "png_px": [
+          1950,
+          975
+        ],
+        "dpi": 300,
+        "pdf_fonts": [
+          "/Type0"
+        ]
+      },
+      "issues": [],
+      "source_sha256": {
+        "Practice1/Code/M1_equilibrium/results/recommended.csv": "e1d014a3ee11452a3dd670208a821757685ef6edbfe2b562c8afab354c3ff91a"
+      }
+    },
+    "p1_01_solid_bars": {
+      "reference": "Practice1 M1P_01 / FigureTraining 11",
+      "spec": {
+        "pdf_width_pt": 468.0,
+        "png_px": [
+          1950,
+          975
+        ],
+        "dpi": 300,
+        "pdf_fonts": [
+          "/Type0"
+        ]
+      },
+      "issues": [],
+      "source_sha256": {
+        "Practice1/Code/M1_equilibrium/results/recommended.csv": "e1d014a3ee11452a3dd670208a821757685ef6edbfe2b562c8afab354c3ff91a"
+      }
+    },
+    "p1_03_pareto_cloud": {
+      "reference": "Practice1 M1P_03",
+      "spec": {
+        "pdf_width_pt": 468.0,
+        "png_px": [
+          1950,
+          1335
+        ],
+        "dpi": 300,
+        "pdf_fonts": [
+          "/Type0"
+        ]
+      },
+      "issues": [],
+      "source_sha256": {
+        "Practice1/Code/M1_equilibrium/results/pareto.csv": "459afb2e9776e569994baa10339e5c91de7848bca005cd0bfa36f3982d545253",
+        "Practice1/Code/M1_equilibrium/results/recommended.csv": "e1d014a3ee11452a3dd670208a821757685ef6edbfe2b562c8afab354c3ff91a"
+      }
+    },
+    "p1_04_gradient_area": {
+      "reference": "Practice1 M1P_04",
+      "spec": {
+        "pdf_width_pt": 468.0,
+        "png_px": [
+          1950,
+          930
+        ],
+        "dpi": 300,
+        "pdf_fonts": [
+          "/Type0"
+        ]
+      },
+      "issues": [],
+      "source_sha256": {
+        "Practice1/Code/M1_equilibrium/results/pareto.csv": "459afb2e9776e569994baa10339e5c91de7848bca005cd0bfa36f3982d545253",
+        "Practice1/Code/M1_equilibrium/results/recommended.csv": "e1d014a3ee11452a3dd670208a821757685ef6edbfe2b562c8afab354c3ff91a"
+      }
+    },
+    "p1_06_radar": {
+      "reference": "Practice1 M4P_04",
+      "spec": {
+        "pdf_width_pt": 468.0,
+        "png_px": [
+          1950,
+          1110
+        ],
+        "dpi": 300,
+        "pdf_fonts": [
+          "/Type0"
+        ]
+      },
+      "issues": [],
+      "source_sha256": {
+        "Practice1/Code/M4_migration/results/M4_policy_ranking.csv": "840731e9e360d1e1b3d6df149d6d51c181f1c5f1ddc01e59ee7a8489dad70578"
+      }
+    },
+    "p2_01_framework": {
+      "reference": "Practice2 01",
+      "spec": {
+        "pdf_width_pt": 468.0,
+        "png_px": [
+          1950,
+          900
+        ],
+        "dpi": 300,
+        "pdf_fonts": [
+          "/Type0"
+        ]
+      },
+      "issues": [],
+      "source_sha256": {}
+    },
+    "p2_02_study_map": {
+      "reference": "Practice2 02 (map panel)",
+      "spec": {
+        "pdf_width_pt": 468.0,
+        "png_px": [
+          1950,
+          1470
+        ],
+        "dpi": 300,
+        "pdf_fonts": [
+          "/Type0"
+        ]
+      },
+      "issues": [],
+      "source_sha256": {
+        "Practice2/Data/v7/raw/manifest.json": "3aa98b0f6d755479ac31bfa45675c091394239e4ee97fb8e1cb19be4fae78702",
+        "Practice2/Data/v7/m1_audited/section_definition.json": "2d20cb1abb2bc5d70dc70da3196ea1957ef6fa89e55effb46594d9b748238de6",
+        "Practice2/Data/v7/raw/basemap_tiles/7_92_47.jpg": "dbed264949025b35c15f8f0bcde873fb7b6ef081e53e534252241056c10f0c00",
+        "Practice2/Data/v7/raw/basemap_tiles/7_92_48.jpg": "dbaa6d0016635bcc97ce1d21ce5c7d6ed567f0a48e46a48deadf39566a8d1a1a",
+        "Practice2/Data/v7/raw/basemap_tiles/7_92_49.jpg": "a1ab2c3cffbca99a0446e56d84fe8a5284e6dd4f18f62d72a2b8b90c5ea08954",
+        "Practice2/Data/v7/raw/basemap_tiles/7_92_50.jpg": "5a25247830fe647da2d6cce0b32705553f8950743f33ac5fe420e6f073e4ede1",
+        "Practice2/Data/v7/raw/basemap_tiles/7_93_47.jpg": "c615e260c6612c4809dcfea1a062b7c25530741379bfb63babd3cab9425bdbff",
+        "Practice2/Data/v7/raw/basemap_tiles/7_93_48.jpg": "f815f7bb56df0a6b1e7985f4abf0eb854949305d6299b0ba71e8ddd17aa12775",
+        "Practice2/Data/v7/raw/basemap_tiles/7_93_49.jpg": "e9450ded27bc2d6784c8f91368cab87b790951be23f9447f732e22914d406d61",
+        "Practice2/Data/v7/raw/basemap_tiles/7_93_50.jpg": "82a1c75c87291602237c99186da20bd7873fe871fdb87ffec98e28a5322e8215",
+        "Practice2/Data/v7/raw/basemap_tiles/7_94_47.jpg": "264975d1cf562350b80c748891c25aac9fab0f5fab1f10c1912b66a35a4c4164",
+        "Practice2/Data/v7/raw/basemap_tiles/7_94_48.jpg": "63f39b41ccd239d1a2aa187675068a70110ff96626b4ef06b063143f9e3fda88",
+        "Practice2/Data/v7/raw/basemap_tiles/7_94_49.jpg": "8e16f754ebfe52073749455e7e94f4853b065b9f4d50eed88734185c82e3916b",
+        "Practice2/Data/v7/raw/basemap_tiles/7_94_50.jpg": "8548695dbd8537b17850b5cc04f6b23f58426a0934231fc1f4518e71d197da8c",
+        "Practice2/Data/v7/raw/basemap_tiles/7_95_47.jpg": "9497007b76283e1fc1ffca972c0cca44f89c373a228ecc6db2e8085ca4492559",
+        "Practice2/Data/v7/raw/basemap_tiles/7_95_48.jpg": "a95fbfb8bf60b9bd1280120dd29a863d626798cf9bbdad8dc83f0375a222054e",
+        "Practice2/Data/v7/raw/basemap_tiles/7_95_49.jpg": "a5ba44ec56238e54dc76d4ed18716093bc99ffee91a427c587f6fe9e5a36f27f",
+        "Practice2/Data/v7/raw/basemap_tiles/7_95_50.jpg": "61bad703ae173bfb68fa6aa503883c7fd1775914e3e0a2076af3e2c6d90231c5"
+      }
+    },
+    "p2_09_tradeoff": {
+      "reference": "Practice2 09",
+      "spec": {
+        "pdf_width_pt": 468.0,
+        "png_px": [
+          1950,
+          1440
+        ],
+        "dpi": 300,
+        "pdf_fonts": [
+          "/Type0"
+        ]
+      },
+      "issues": [],
+      "source_sha256": {
+        "Practice2/Results/v7/model2/scenario_summary.csv": "ea51552196917e612c4a26f4fd08849ed171190fcfc1f3b2bb9a853db32d3a96",
+        "Practice2/Results/v7/model2/pv_screening.csv": "150c3e9caa6077fffa715788db47943839d9452a1a09bd4d70e8993af534861a",
+        "Practice2/Data/v7/m2_inputs/scenario.json": "1c6165ea25090f6af1466b7f35c18d4b87257537599d518495c49885dbf3825e"
+      }
+    },
+    "p2_12_trends": {
+      "reference": "Practice2 12b / FigureTraining paired trends",
+      "spec": {
+        "pdf_width_pt": 468.0,
+        "png_px": [
+          1950,
+          1065
+        ],
+        "dpi": 300,
+        "pdf_fonts": [
+          "/Type0"
+        ]
+      },
+      "issues": [],
+      "source_sha256": {
+        "Practice2/Results/v7/model3/project_annual.csv": "71757ee663714a93becd3db657abf9f18b0ec907dcbc47ae884dab06d33dce59"
+      }
+    },
+    "p2_13_stress": {
+      "reference": "Practice2 13",
+      "spec": {
+        "pdf_width_pt": 468.0,
+        "png_px": [
+          1950,
+          1560
+        ],
+        "dpi": 300,
+        "pdf_fonts": [
+          "/Type0"
+        ]
+      },
+      "issues": [],
+      "source_sha256": {
+        "Practice2/Results/v7/model3/summary.csv": "9591284796051d92f1543b22b85d68ff2e64ba3cccbf4a84e81a76176c59e83e",
+        "Practice2/Results/v7/model3/scenario_configs.json": "92db34e68d26ee3acf3cea7d521115b794bd3dd5025ff849fb16eaf904aaf39f",
+        "Practice2/Results/v7/model3/resources.csv": "0da1f5dcd6cd389bbe69206d48025e675647c4e3a894bee2468d9cc343a5e4c8"
+      }
+    },
+    "p2_14_numerical_check": {
+      "reference": "Practice2 14 (stationary grid panel)",
+      "spec": {
+        "pdf_width_pt": 468.0,
+        "png_px": [
+          1950,
+          1035
+        ],
+        "dpi": 300,
+        "pdf_fonts": [
+          "/Type0"
+        ]
+      },
+      "issues": [],
+      "source_sha256": {
+        "Practice2/Results/v7/model3/markov_mc_comparison.csv": "281c68702ff237ffa19c2ce845ce7e2bffefcd921c2afbbc750a153383f1e963"
+      }
+    }
+  }
+}

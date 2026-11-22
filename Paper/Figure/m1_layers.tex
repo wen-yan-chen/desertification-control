@@ -1,0 +1,63 @@
+% Model 1 layered structure (paper Fig. "Structure of Model 1").
+% Drivers and control below a tilted mechanism plane that carries the
+% four-link water-cover loop; governing laws and outputs above it.
+% Build: cd Paper/Figure && pdflatex m1_layers.tex
+\documentclass[tikz,border=3pt]{standalone}
+\usepackage{newtxtext,newtxmath}
+\usepackage{amsmath}
+\usetikzlibrary{arrows.meta,calc,shapes.arrows}
+\input{layer_style}
+\begin{document}
+\begin{tikzpicture}
+% ---------------- mechanism plane, with control links passing beneath it
+\plane{1.0}{2.85}{12.0}{1.45}{2.20}{pWaterMid}
+\draw[tie] (3.35,2.10) -- (3.60,3.70);
+\draw[tie] (8.20,2.10) -- (8.45,3.70);
+\replane{1.0}{2.85}{12.0}{1.45}{2.20}{pWaterMid}
+\factor{2.55}{4.72}{rain pulses}
+\factor{6.95}{4.80}{capacity $C$}
+\factor{9.05}{4.80}{ceiling $K$,\ decay $d$}
+\factor{12.30}{4.60}{season $f(T)$}
+\factor{2.30}{3.12}{effective inflow}
+\factor{7.10}{3.12}{demand from ET$_0$}
+\factor{11.70}{3.12}{stress below $(1-p)C$}
+\node[cbox=pWater] (a) at (3.60,4.05) {$P,\ I$};
+\node[cbox=pWater] (b) at (6.05,4.05) {$M_j$};
+\node[cbox=pWater] (c) at (8.45,4.05) {$\overline W_t$};
+\node[cbox=pVeg]   (d) at (10.85,4.05) {$V_t$};
+\draw[lk=pWater] (a) -- node[num=pWater] {a} (b);
+\draw[lk=pWater] (b) -- node[num=pWater] {b} (c);
+\draw[lk=pVeg]   (c) -- node[num=pVeg] {c} (d);
+\draw[lk=pVeg]   (d.south) -- ++(0,-0.38) -| (b.south);
+\node[num=pVeg] at ($(c.south)+(0,-0.38)$) {d};
+% ---------------- principle: the two governing laws
+\draw[tie] (b.north) -- (5.10,5.20);
+\draw[tie] (d.north) -- (10.10,5.20);
+\ball{5.10}{5.78}{0.60}{pWater}{Daily water\\balance}
+\ball{10.10}{5.78}{0.60}{pVeg}{Annual\\growth}
+\node[law, anchor=east] at (4.38,5.80) {$\Delta M_j=\text{inflow}-T_{a,j}-Q_j$};
+\node[law, anchor=west] at (10.82,5.80) {$\Delta V_t=rV_t\big(1-\tfrac{V_t}{K}\big)\overline W_t-dV_t$};
+% ---------------- aim: outputs
+\draw[tie] (5.10,6.38) -- (7.60,7.05);
+\draw[tie] (10.10,6.38) -- (7.60,7.05);
+\draw[tie] (7.60,7.30) -- (4.20,7.40);
+\draw[tie] (7.60,7.30) -- (11.00,7.40);
+\ball{4.20}{7.40}{0.58}{pSand}{Sand\\exposure\\$S_t$}
+\ball{11.00}{7.40}{0.58}{pPlum}{Handoff\\$(V,M)$}
+\ball{7.60}{7.30}{0.78}{pTeal}{\textbf{Long-run}\\\textbf{cover}\\$V^*(I)$}
+% ---------------- control: management and scenario levers
+\ball{3.35}{1.72}{0.58}{pPlum}{Irrigation\\quota $I$}
+\ball{8.20}{1.72}{0.58}{pPlum}{Wind\\speed $u_2$}
+% ---------------- drivers
+\uparrowshape{5.80}{1.40}{pSand}
+\splitball{5.80}{0.48}{0.44}{pWater}{pVeg}
+\node[font=\footnotesize, text=pInk, anchor=east] at (5.25,0.48) {Climate: $P,\ T,\ \mathrm{ET}_0$};
+\node[font=\footnotesize, text=pInk, anchor=west] at (6.35,0.48) {MODIS cover $V$};
+% ---------------- layer labels
+\layerlabel{7.35}{pTeal}{Aim}
+\layerlabel{5.78}{pVeg}{Principle}
+\layerlabel{4.05}{pWater}{Mechanism}
+\layerlabel{1.72}{pPlum}{Control}
+\layerlabel{0.48}{pSand}{Drivers}
+\end{tikzpicture}
+\end{document}

@@ -89,7 +89,8 @@ xlabel(ax, 'Project year'); ylabel(ax, 'million CNY');
 lg = legend(ax, [bs(1) bs(2) bs(3) lr], {'Planting {\itC_t^b}', 'O&M+water {\itC_t^o}', ...
     'PV capex {\itC_t^p}', 'PV revenue {\itR_t}'}, 'Location', 'east', 'NumColumns', 2, ...
     'FontName', S.font, 'FontSize', S.fs.note - 0.5, 'Box', 'off');
-lg.ItemTokenSize = [9 5];
+lg.ItemTokenSize = [7 5];
+axC = ax; lgC = lg;
 panel_title(ax, '(c) Spending streams and PV revenue', S);
 frame_axes(ax, S);
 
@@ -110,5 +111,9 @@ xlabel(ax, 'Project year'); ylabel(ax, 'Allocation ratio (%)');
 panel_title(ax, '(d) Investment allocation ratios ({\itf_t^b}, {\itf_t^o}, {\itf_t^p})', S);
 frame_axes(ax, S);
 
+% Park the (c) legend in the open area right of year 5, between R_t and the cap
+drawnow;
+ap = axC.Position;
+lgC.Position(1:2) = ap(1:2) + [(5.0 - xl(1)) / diff(xl), 5.8 / diff(ylim(axC))] .* ap(3:4);
 save_fig(fig, 'm2_plan', S);
 end

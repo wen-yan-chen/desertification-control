@@ -3,6 +3,7 @@
 %   Output: Paper/Figure/<name>.pdf (vector, used by LaTeX) and .png (preview).
 %   The schematic figures (m1_structure, m1_two_clocks, m1_bucket) are TikZ
 %   files in Paper/Figure; build them with pdflatex there.
+fig_intro_factors();     % Sec. 1   management factors on a shelterbelt photo
 fig_data_stations();     % Sec. 3   station map + observed cover
 fig_m1_stress_season();  % Fig. 5   K_s(M), f(T) and monthly demand
 fig_m1_cover_series();   % Fig. 5a  observed cover and predictions, 7 stations

@@ -38,17 +38,22 @@ text(ax, 30.0, crit + 0.20, '0.30{\itK}', ...
     'FontName', S.font, 'FontSize', S.fs.note - 0.4, 'Color', c.limit, ...
     'HorizontalAlignment', 'left', 'VerticalAlignment', 'bottom');
 
-lB = plot(ax, t, gB.V_mean_pct, '-',  'Color', c.water, 'LineWidth', 1.45);
-lA = plot(ax, t, gA.V_mean_pct, '--', 'Color', c.sand,  'LineWidth', 1.25);
-lC = plot(ax, t, gC.V_mean_pct, '-',  'Color', c.veg,   'LineWidth', 1.30);
+plot(ax, t, gB.V_mean_pct, '-',  'Color', c.water, 'LineWidth', 1.45);
+plot(ax, t, gC.V_mean_pct, '-',  'Color', c.veg,   'LineWidth', 1.30);
+plot(ax, t, gA.V_mean_pct, ':',  'Color', c.sand,  'LineWidth', 1.30);
+
+% Direct labels instead of a legend
+text(ax, 49, 15.6, 'B: 600 mm/yr', 'FontName', S.font, 'FontSize', S.fs.note - 0.5, ...
+    'Color', c.water, 'HorizontalAlignment', 'right', 'VerticalAlignment', 'bottom');
+text(ax, 49, 7.9, [sprintf('{\\color[rgb]{%.3f,%.3f,%.3f}A (dotted)}', c.sand) ', C: 300 mm/yr'], ...
+    'FontName', S.font, 'FontSize', S.fs.note - 0.5, 'Color', c.veg, ...
+    'HorizontalAlignment', 'right', 'VerticalAlignment', 'top');
+text(ax, 8, 20.8, '5–95% paths (B, C)', 'FontName', S.font, 'FontSize', S.fs.note - 0.5, ...
+    'Color', c.greyDark, 'HorizontalAlignment', 'left', 'VerticalAlignment', 'middle');
 
 xlim(ax, xl); xticks(ax, 0:10:50);
 ylim(ax, [0 37]); yticks(ax, 0:10:30);
 ylabel(ax, 'Cover proxy {\itV} (%)');
-lg = legend(ax, [lB lC lA pBandB], {'B: 600 mm/yr', 'C: 300 mm/yr', 'A: 300 mm/yr', ...
-    '5–95% range (B, C)'}, 'Location', 'north', 'NumColumns', 2, ...
-    'FontName', S.font, 'FontSize', S.fs.note - 0.5, 'Box', 'off');
-lg.ItemTokenSize = [10 5];
 panel_title(ax, '(a) Cohort cover and uncertainty', S);
 frame_axes(ax, S);
 
@@ -63,10 +68,14 @@ plot(ax, xl, [300 300], '--', 'Color', c.limit, 'LineWidth', 0.85, 'HandleVisibi
 text(ax, 1.2, 304, 'Total belt: 300 ha', 'FontName', S.font, ...
     'FontSize', S.fs.note - 0.5, 'Color', c.limit, 'VerticalAlignment', 'bottom');
 
-wRec = fill(ax, [tp; flipud(tp)], [currA; flipud(everA)], c.vegMid, ...
+fill(ax, [tp; flipud(tp)], [currA; flipud(everA)], c.vegMid, ...
     'FaceAlpha', 0.24, 'EdgeColor', 'none');
-lEver = plot(ax, tp, everA, '-', 'Color', c.plum,   'LineWidth', 1.45);
-lCurr = plot(ax, tp, currA, '-', 'Color', c.pvDark, 'LineWidth', 1.45);
+plot(ax, tp, everA, '-', 'Color', c.plum,   'LineWidth', 1.45);
+plot(ax, tp, currA, '-', 'Color', c.pvDark, 'LineWidth', 1.45);
+text(ax, 1.2, 292, sprintf('Ever below\nwarning'), 'FontName', S.font, 'FontSize', S.fs.note - 0.5, ...
+    'Color', c.plum, 'HorizontalAlignment', 'left', 'VerticalAlignment', 'top');
+text(ax, 30, interp1(tp, currA, 30) - 14, 'Currently below', 'FontName', S.font, ...
+    'FontSize', S.fs.note - 0.5, 'Color', c.pvDark, 'HorizontalAlignment', 'left', 'VerticalAlignment', 'top');
 
 % Annotate year-50 recovery gap (299.45 vs 200.22 ha)
 plot(ax, [50 50], [currA(end) everA(end)], '-', 'Color', c.veg, 'LineWidth', 1.1, 'HandleVisibility', 'off');
@@ -77,9 +86,6 @@ text(ax, 48.5, 0.5 * (currA(end) + everA(end)), sprintf('Recovered\n99.2 ha'), .
 xlim(ax, xl); xticks(ax, 0:10:50);
 ylim(ax, [0 345]); yticks(ax, 0:100:300);
 ylabel(ax, 'Expected belt area (ha)');
-lg = legend(ax, [lEver lCurr wRec], {'Ever below warning', 'Currently below warning', 'Recovered area'}, ...
-    'Location', 'southeast', 'FontName', S.font, 'FontSize', S.fs.note - 0.5, 'Box', 'off');
-lg.ItemTokenSize = [10 5];
 panel_title(ax, '(b) Cover loss and recovery', S);
 frame_axes(ax, S);
 
@@ -92,8 +98,10 @@ yyaxis(ax, 'left');
 ax.YColor = c.plum;
 fill(ax, [tp; flipud(tp)], [pb.ci95_low; flipud(pb.ci95_high)] * 100, c.plum, ...
     'FaceAlpha', 0.18, 'EdgeColor', 'none', 'HandleVisibility', 'off');
-rBase = plot(ax, tp, pb.project_failure_probability * 100, '-',  'Color', c.plum, 'LineWidth', 1.4);
-rStat = plot(ax, ps.post_year, ps.project_failure_probability * 100, '--', 'Color', c.plum, 'LineWidth', 1.1);
+plot(ax, tp, pb.project_failure_probability * 100, '-',  'Color', c.plum, 'LineWidth', 1.4);
+plot(ax, ps.post_year, ps.project_failure_probability * 100, '--', 'Color', c.plum, 'LineWidth', 1.1);
+text(ax, 49, 104, 'First-hit: base (solid) / stationary (dashed)', 'FontName', S.font, ...
+    'FontSize', S.fs.note - 0.5, 'Color', c.plum, 'HorizontalAlignment', 'right', 'VerticalAlignment', 'bottom');
 ylim(ax, [0 150]); yticks(ax, 0:25:100);
 ylabel(ax, 'First-hit probability (%)', 'Color', c.plum);
 % Keep the left label inside the figure margin on this dual-axis panel.
@@ -104,20 +112,26 @@ yyaxis(ax, 'right');
 ax.YColor = c.veg;
 fill(ax, [tp; flipud(tp)], [pb.cumulative_cover_ha_year_p05; flipud(pb.cumulative_cover_ha_year_p95)] / 1e3, ...
     c.vegMid, 'FaceAlpha', 0.16, 'EdgeColor', 'none', 'HandleVisibility', 'off');
-hNoD  = plot(ax, pn.post_year, pn.cumulative_cover_ha_year_mean / 1e3, ':',  'Color', c.veg, 'LineWidth', 1.45);
+plot(ax, pn.post_year, pn.cumulative_cover_ha_year_mean / 1e3, ':',  'Color', c.veg, 'LineWidth', 1.45);
 % Omit the near-duplicate stationary benefit curve; retain stationary risk.
-hBase = plot(ax, tp,           pb.cumulative_cover_ha_year_mean / 1e3, '-',  'Color', c.veg, 'LineWidth', 1.45);
+plot(ax, tp,           pb.cumulative_cover_ha_year_mean / 1e3, '-',  'Color', c.veg, 'LineWidth', 1.45);
 ylim(ax, [0 11.25]); yticks(ax, 0:2:8);
+hN = pn.cumulative_cover_ha_year_mean(end) / 1e3;
+hB = pb.cumulative_cover_ha_year_mean(end) / 1e3;
+text(ax, 40, interp1(pn.post_year, pn.cumulative_cover_ha_year_mean / 1e3, 40) + 0.3, 'No shocks', ...
+    'FontName', S.font, 'FontSize', S.fs.note - 0.5, 'Color', c.veg, ...
+    'HorizontalAlignment', 'right', 'VerticalAlignment', 'bottom');
+% Year-50 share of the no-shock benefit retained under the base case
+plot(ax, [49.4 49.4], [hB hN], '-', 'Color', c.veg, 'LineWidth', 1.1, 'HandleVisibility', 'off'); % inset: right spine is also green
+text(ax, 49.3, interp1(tp, pb.cumulative_cover_ha_year_p05 / 1e3, 49) - 0.3, ...
+    {'Base', sprintf('\\bf%.1f%% retained', 100 * hB / hN)}, ...
+    'FontName', S.font, 'FontSize', S.fs.note - 0.5, 'Color', c.veg, ...
+    'HorizontalAlignment', 'right', 'VerticalAlignment', 'top');
 ylabel(ax, '{\itH}_{eco} (10^3 eff. ha\cdotyr)', 'Color', c.veg);
 
 yyaxis(ax, 'left');
 xlim(ax, xl); xticks(ax, 0:10:50);
 xlabel(ax, 'Post-construction year');
-lg = legend(ax, [rBase rStat hBase hNoD], {'First-hit (base)', ...
-    'First-hit (stationary)', '{\itH}_{eco} (base)', ...
-    '{\itH}_{eco} (no shocks)'}, 'Location', 'north', 'NumColumns', 2, ...
-    'FontName', S.font, 'FontSize', S.fs.note - 0.6, 'Box', 'off');
-lg.ItemTokenSize = [9 5];
 panel_title(ax, '(c) Risk and cumulative benefit', S);
 plot(ax, xl([1 2]), [150 150], '-', 'Color', S.c.axis, 'LineWidth', 0.6, 'HandleVisibility', 'off');
 
