@@ -1,0 +1,292 @@
+{
+  "status": "implemented; scenario-ready; NOT field-calibrated water or erosion forecast",
+  "formal_model_ready": false,
+  "station_fit": {
+    "pooled_r_d": {
+      "theta": [
+        0.5467,
+        0.1073
+      ],
+      "sd": [
+        0.1737,
+        0.0328
+      ],
+      "cond": 375.22893496268824,
+      "aic": -286.48,
+      "rmse_train": 0.0516,
+      "rmse_test": 0.0635,
+      "r2_test": 0.463
+    },
+    "baselines": {
+      "persistence_rmse_train": 0.0572,
+      "persistence_rmse_test": 0.0536,
+      "site_mean_rmse_test": 0.0737,
+      "n_train": 49,
+      "n_test": 21,
+      "eligible_sites": [
+        "ALE",
+        "KEL",
+        "MF",
+        "QM",
+        "RQ",
+        "YL",
+        "YT"
+      ]
+    },
+    "leave_one_station_out": {
+      "ALE": {
+        "r": 0.505,
+        "d": 0.104,
+        "rmse": 0.0507,
+        "persistence": 0.0499
+      },
+      "KEL": {
+        "r": 0.513,
+        "d": 0.103,
+        "rmse": 0.0432,
+        "persistence": 0.0447
+      },
+      "MF": {
+        "r": 0.474,
+        "d": 0.093,
+        "rmse": 0.057,
+        "persistence": 0.0695
+      },
+      "QM": {
+        "r": 0.53,
+        "d": 0.109,
+        "rmse": 0.0634,
+        "persistence": 0.0477
+      },
+      "RQ": {
+        "r": 0.521,
+        "d": 0.105,
+        "rmse": 0.0508,
+        "persistence": 0.0484
+      },
+      "YL": {
+        "r": 0.532,
+        "d": 0.104,
+        "rmse": 0.0378,
+        "persistence": 0.0405
+      },
+      "YT": {
+        "r": 0.958,
+        "d": 0.168,
+        "rmse": 0.1083,
+        "persistence": 0.0805
+      }
+    }
+  },
+  "uncertainty": {
+    "method": "local least-squares sd is conditional IID approximation; cluster bootstrap separately",
+    "cluster_count": 7,
+    "bootstrap_seed": 20261110,
+    "bootstrap_percentiles": {
+      "r": {
+        "0.025": 0.3354584418940065,
+        "0.5": 0.5543476855053959,
+        "0.975": 1.1679633281023247
+      },
+      "d": {
+        "0.025": 0.07712245079549197,
+        "0.5": 0.10877580697259054,
+        "0.975": 0.2021343576787787
+      }
+    }
+  },
+  "adopted_parameters": {
+    "r": 0.5466977418805843,
+    "d": 0.10730569293580192,
+    "K_section_pct": 38.07541078360937,
+    "water": {
+      "capacity_mm": 75.0,
+      "depletion_fraction": 0.5,
+      "c": 1.0,
+      "eta_w": 0.75,
+      "rain_fraction": 0.25,
+      "groundwater_mm_yr": 0.0,
+      "v_full_pct": 66.5875
+    }
+  },
+  "wind": {
+    "cover_equation": "no wind term; V[t+1] = V + r V (1 - V/K) W - d V",
+    "removed_term_test": {
+      "decision": "wind term removed from the cover equation",
+      "tests": 18,
+      "tests_with_p_below_0p05": 1,
+      "tests_that_lower_holdout_rmse": 4,
+      "old_term": {
+        "k": 0.24974080763394535,
+        "k_se": 0.43280617481505823,
+        "p_value": 0.5667346987597195,
+        "aic_change": 1.6466026187880516,
+        "k_boot_95": [
+          -0.4409396798301198,
+          0.8922970408168498
+        ],
+        "rmse_holdout": 0.06574711963706596,
+        "rmse_holdout_no_wind": 0.06345516009305528
+      },
+      "within_station_corr_wind_index_vs_next_year_cover_change": {
+        "r": 0.02969288787588467,
+        "p": 0.8072237122993758,
+        "n": 70
+      },
+      "wind_index_year_to_year_cv": 0.1305848619389251,
+      "note": "not detectable in these data is not the same as no effect; see limitations"
+    },
+    "channel_A": "wind speed -> Penman-Monteith ET0 -> daily demand -> W -> cover (wind_channel.csv)",
+    "channel_A_check": {
+      "penman_monteith_vs_provider_monthly_r": 0.9901392713168659,
+      "penman_monteith_mm_yr": 1682.8604115531748,
+      "provider_et0_mm_yr": 1685.63875,
+      "wind_driven_share_of_et0": 0.6133755606668233,
+      "et0_change_per_scale": {
+        "0.8": -0.08535856939699593,
+        "0.9": -0.04178931007135567,
+        "1.0": 0.0,
+        "1.1": 0.04011900686345671,
+        "1.2": 0.07866831467836621
+      },
+      "et0g_change_per_scale": {
+        "0.8": -0.08297413755464889,
+        "0.9": -0.04067957482845097,
+        "1.0": 0.0,
+        "1.1": 0.039156981280368486,
+        "1.2": 0.07687672414990732
+      },
+      "mean_wind_2m_ms": 2.4453125
+    },
+    "channel_B": "output S = E (1 - V/K): wind index times unsheltered share (yearly_table.sand_exposure; scenarios use E = 1, column relative_erosion_scenario)"
+  },
+  "qa75_sensitivity": {
+    "pooled_r_d": {
+      "theta": [
+        0.5098,
+        0.1031
+      ],
+      "sd": [
+        0.187,
+        0.0362
+      ],
+      "cond": 351.364546248973,
+      "aic": -243.14,
+      "rmse_train": 0.0528,
+      "rmse_test": 0.0672,
+      "r2_test": 0.482
+    },
+    "baselines": {
+      "persistence_rmse_train": 0.0579,
+      "persistence_rmse_test": 0.0584,
+      "site_mean_rmse_test": 0.0787,
+      "n_train": 42,
+      "n_test": 18,
+      "eligible_sites": [
+        "ALE",
+        "MF",
+        "QM",
+        "RQ",
+        "YL",
+        "YT"
+      ]
+    },
+    "leave_one_station_out": {
+      "ALE": {
+        "r": 0.462,
+        "d": 0.1,
+        "rmse": 0.0524,
+        "persistence": 0.0499
+      },
+      "MF": {
+        "r": 0.422,
+        "d": 0.085,
+        "rmse": 0.0583,
+        "persistence": 0.0695
+      },
+      "QM": {
+        "r": 0.504,
+        "d": 0.109,
+        "rmse": 0.0653,
+        "persistence": 0.0477
+      },
+      "RQ": {
+        "r": 0.489,
+        "d": 0.102,
+        "rmse": 0.0524,
+        "persistence": 0.0498
+      },
+      "YL": {
+        "r": 0.489,
+        "d": 0.099,
+        "rmse": 0.0384,
+        "persistence": 0.0405
+      },
+      "YT": {
+        "r": 0.911,
+        "d": 0.161,
+        "rmse": 0.1042,
+        "persistence": 0.0805
+      }
+    }
+  },
+  "cohort_transfer": {
+    "status": "retrospective selected-cohort diagnostic, NOT independent forecast validation",
+    "selection": "late-period greening and future years used to select pixels and align t0",
+    "parameter_warning": "free r,d,K structurally non-identifiable; only r-d and r/K identifiable",
+    "K_cohort": 45.65451433968797,
+    "v0": 13.91516913401851,
+    "plateau": 36.69345794312101,
+    "free_fit": {
+      "net_rate": 0.5430713460114773,
+      "plateau": 35.311506278069366,
+      "v0": 12.70246867828714
+    },
+    "calibration_CON1_3": {
+      "n": 116,
+      "transfer_r2": 0.3984906690465325,
+      "transfer_rmse": 8.120990786184093,
+      "free_r2": 0.4038971557190484,
+      "mean_baseline_r2": 0.0
+    },
+    "spatial_diagnostic_CON4": {
+      "n": 129,
+      "transfer_r2": 0.3183108678124327,
+      "transfer_rmse": 12.08416240454686,
+      "free_r2": 0.28664528919201127,
+      "mean_baseline_r2": -0.01636502635896009
+    }
+  },
+  "water": {
+    "forcing": "2015-2022 YT/MF Open-Meteo archive monthly climatology; provider model unspecified",
+    "annual_rain_mm": 52.15625,
+    "annual_ET0g_mm": 1190.845055631181,
+    "maximum_balance_residual_mm": 4.689582056016661e-13,
+    "discrete_no_water_half_life_years": 6.1064276069261645
+  },
+  "limitations": [
+    "W=1 for oasis parameter fitting is an unverified calibration assumption",
+    "annual June-September cover proxy, not measured ground cover or year-end cover",
+    "no field water-storage/irrigation pairs; bucket parameters are scenarios",
+    "selected cohort is retrospective, not independent prospective validation",
+    "site windows are not an engineering belt polygon; no verified section area",
+    "wind index from daily maximum is a proxy, not actual erosion or hazard counts",
+    "no wind term in the cover equation: 18 tests on oasis stations found no detectable annual effect; this does not rule out damage to young stands on open dunes or in single storms (Task 3)",
+    "sand exposure S = E (1 - V/K) assumes shelter proportional to cover; it is an index, not a sand flux"
+  ],
+  "input_text_sha256_lf": {
+    "Data/v7/m1_audited/panel_m1.csv": "d6ac4fce8c528cefc7176ba5b1af14777b3313b1ff97cef91a065078267deed6",
+    "Data/v7/m1_audited/replay_manifest.json": "0cc506224e3c0aa86b83356994f8024dd7b9e7450b625755ed62bcc854c7c4ef",
+    "Data/v7/section_modis/cohort_converted.csv": "91db5bc2c402178cfb3d7df1c28670c9eaf38f8db0a8493ab74c625f89c39190",
+    "Data/v7/m1_audited/section_definition.json": "4052984045df493c78e54c313b809624ae35c5a5733f22234f4ff2e675bc4311",
+    "Data/v7/section_modis/endmembers.json": "c677afe2213a41d14e2e0986cac2034fddbcc10f7f9910c076612520baf0b031",
+    "Data/v7/processed/panel_monthly_clean.csv": "024ec31de1aaf71126bc86626c088f91275508e96a92ce809831381542143b59"
+  },
+  "input_hash_convention": "Text inputs normalized to LF before SHA256, independent of Git checkout newlines; raw-response hashes remain byte-exact",
+  "runtime": {
+    "python": "3.9.6",
+    "numpy": "2.0.2",
+    "pandas": "2.3.3",
+    "scipy": "1.13.1"
+  }
+}

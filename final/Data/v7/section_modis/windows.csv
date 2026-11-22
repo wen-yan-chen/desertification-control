@@ -1,0 +1,12 @@
+window,cls,lat,lon,class_fraction,ndvi_early,ndvi_late,forcing_site,forcing_dist_km
+CON1,converted,36.82187,81.42931,1.0,0.0463,0.4022,W_yutian,48.3
+CON2,converted,36.82396,81.79589,0.605,0.0621,0.2776,W_yutian,19.6
+CON3,converted,36.81562,82.09146,0.605,0.0505,0.2663,W_yutian,19.5
+CON4,converted,37.05729,82.80643,0.679,0.0715,0.3633,E_minfeng,6.9
+ECO1,ecotone,37.03646,81.43962,1.0,0.1087,0.1097,W_yutian,46.3
+ECO2,ecotone,37.31146,82.92578,0.988,0.126,0.1349,E_minfeng,28.2
+ECO3,ecotone,37.28229,83.00884,1.0,0.1272,0.1458,E_minfeng,30.6
+DES1,desert,36.80729,82.13977,1.0,0.0425,0.0515,W_yutian,23.1
+DES2,desert,36.80729,82.20742,1.0,0.0425,0.0513,M_gap,24.8
+OAS1,oasis,36.86979,81.49858,1.0,0.5523,0.5546,W_yutian,41.0
+OAS2,oasis,36.85937,81.58642,1.0,0.556,0.4873,W_yutian,33.8

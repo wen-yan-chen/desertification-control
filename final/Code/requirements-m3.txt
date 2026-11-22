@@ -1,0 +1,4 @@
+# Validated with Python 3.13. Reuses the final M1 physics without modifying M1/M2.
+numpy==2.5.4
+pandas==3.0.6
+scipy==1.18.1

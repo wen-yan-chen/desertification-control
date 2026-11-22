@@ -1,0 +1,53 @@
+% M2 model structure. Build: pdflatex m2_structure.tex (in Reports/M2)
+\documentclass[tikz,border=2pt]{standalone}
+\usepackage{newtxtext}
+\usepackage{amsmath}
+\usepackage{../../FigureAndFlowworkStyle/WorkFlowStyle/mcmworkflow}
+\begin{document}
+\wftheme{green}
+\begin{tikzpicture}
+% ---- inputs (column 1)
+\node[wf input=B, text width=3.0cm] (m1)  at (1.85,-0.95) {Model 1: $r,d,K$ and storage bucket};
+\node[wf input=B, text width=3.0cm] (lib) at (1.85,-2.15) {18 lifetime irrigation policies};
+\node[wf input=B, text width=3.0cm] (par) at (1.85,-3.35) {Costs, PV yield and price, caps (scenario)};
+
+% ---- precompute and MILP (column 2)
+\node[wf mid=B, text width=3.4cm] (pre) at (6.35,-1.55) {Per-ha cohort paths $V,M,\omega$ by planting year};
+\node[wf model, text width=3.4cm] (milp) at (6.35,-3.15) {Cohort MILP\\50 ha / 100 kW blocks};
+
+% constraint chips
+\node[wf chip=B, minimum width=1.55cm] (k1) at (5.4,-4.35) {budget};
+\node[wf chip=B, minimum width=1.55cm] (k2) at (7.3,-4.35) {water (yr, mo)};
+\node[wf chip=B, minimum width=1.55cm] (k3) at (5.4,-4.85) {land};
+\node[wf chip=B, minimum width=1.55cm] (k4) at (7.3,-4.85) {labour};
+\node[wf group, fit=(k1)(k4)] (cons) {};
+
+% ---- two-step epsilon constraint (column 3)
+\node[wf mid=B, text width=3.2cm] (s1) at (11.0,-1.55) {Step 1: maximise $H$ $\Rightarrow H_{\max}$};
+\node[wf mid=B, text width=3.2cm] (s2) at (11.0,-3.15) {Step 2: minimise NPC s.t.\ $H\ge 0.6H_{\max}$};
+\node[wf note=B] (sweep) at (11.0,-4.5) {target swept 0--100\%};
+
+% ---- outputs (column 4)
+\node[wf key, text width=2.9cm] (plan) at (15.35,-1.0) {Build plan: 300 ha + 9.5 MW};
+\node[wf output=B, text width=2.9cm] (front) at (15.35,-2.35) {Cost--ecology points};
+\node[wf aux, text width=2.9cm] (sens) at (15.35,-3.55) {21 sensitivity cases};
+\node[wf aux, text width=2.9cm] (rule) at (15.35,-4.65) {PV break-even rule};
+
+% ---- flows
+\draw[wf arrow] (m1.east) -- ++(0.5,0) |- (pre.west);
+\draw[wf arrow] (lib.east) -- ++(0.5,0) |- (pre.west);
+\draw[wf arrow] (par.east) -- ++(0.5,0) |- (milp.west);
+\draw[wf arrow] (pre) -- (milp);
+\draw[wf link=B] (cons) -- (milp);
+\draw[wf arrow] (milp.east) -- ++(0.45,0) |- (s1.west);
+\draw[wf arrow] (milp.east) -- (s2.west);
+\draw[wf arrow] (s1) -- node[wf plain, right, font=\bfseries\itshape\scriptsize] {$H_{\max}$} (s2);
+\draw[wf soft=B] (sweep) -- (s2);
+\draw[wf arrow] (s2.east) -- ++(0.45,0) |- (plan.west);
+\draw[wf arrow] (s2.east) -- ++(0.45,0) |- (front.west);
+\draw[wf arrow] (s2.east) -- ++(0.45,0) |- (sens.west);
+\draw[wf arrow] (s2.east) -- ++(0.45,0) |- (rule.west);
+
+\wfpanelat{B}{P2}{(0,0.35)}{(17.1,-5.35)}{Model 2: cohort-based investment and scheduling}
+\end{tikzpicture}
+\end{document}

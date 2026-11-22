@@ -1,0 +1,7 @@
+cohort_id,comparison,max_absolute_probability_difference,p50_absolute_difference,below_one_percentage_point
+eco_y1_100_to_300_after_3,state_grid,0.0003804452893,3.041863854e-07,True
+eco_y1_100_to_300_after_3,shock_quadrature,0.001703179012,6.699913615e-06,True
+eco_y1_ramp_100_300_600,state_grid,0.000153018473,8.641771961e-05,True
+eco_y1_ramp_100_300_600,shock_quadrature,0.002023803902,0.00121627102,True
+eco_y2_100_to_300_after_3,state_grid,0.0002362909467,3.546416161e-07,True
+eco_y2_100_to_300_after_3,shock_quadrature,0.001260009547,6.521758384e-06,True

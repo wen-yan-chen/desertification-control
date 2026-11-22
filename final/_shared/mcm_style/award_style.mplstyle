@@ -1,0 +1,57 @@
+# O-award academic plotting style (serif / clean / white)
+# Shared canonical stylesheet. Usage:
+#   plt.style.use("<path>/award_style.mplstyle")
+# For programmatic presets prefer mcm_style.typography.configure().
+
+# ---- figure ----
+figure.figsize: 6.5, 4.0
+figure.dpi: 150
+savefig.dpi: 300
+savefig.bbox: standard
+savefig.facecolor: white
+
+# ---- font (academic serif) ----
+font.family: serif
+font.serif: Times New Roman, DejaVu Serif
+mathtext.fontset: stix
+font.size: 9
+axes.titlesize: 10
+axes.titleweight: bold
+axes.labelsize: 9
+legend.fontsize: 8.4
+xtick.labelsize: 8.5
+ytick.labelsize: 8.5
+
+# ---- axes ----
+axes.facecolor: white
+axes.edgecolor: 8B9A9F
+axes.linewidth: 0.7
+axes.grid: True
+axes.grid.axis: y
+axes.axisbelow: True
+axes.spines.top: False
+axes.spines.right: False
+axes.prop_cycle: cycler('color', ['08786F','285987','724C79','9D5526','167365','6E8CA8','C78A9E'])
+
+# ---- grid ----
+grid.color: DEE6E8
+grid.linestyle: -
+grid.linewidth: 0.65
+grid.alpha: 0.8
+
+# ---- ticks ----
+xtick.color: 22343D
+ytick.color: 22343D
+xtick.direction: out
+ytick.direction: out
+
+# ---- legend ----
+legend.frameon: False
+
+# ---- lines / markers ----
+lines.linewidth: 1.65
+lines.markersize: 4
+
+# ---- pdf text ----
+pdf.fonttype: 42
+ps.fonttype: 42

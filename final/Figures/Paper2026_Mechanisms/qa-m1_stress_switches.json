@@ -1,0 +1,16 @@
+{
+  "style_version": "1.4.0",
+  "placed_width_in": 6.5,
+  "figures": {
+    "m1_stress_switches": {
+      "files": {
+        "pdf": "m1_stress_switches.pdf",
+        "png": "m1_stress_switches.png"
+      },
+      "inputs_sha256": {
+        "Data/v7/m1_audited/panel_m1.csv": "dc914546aa8245dc3f2807bcd31441fbafeacb3747a0ca1e81735c3d559114fb"
+      },
+      "layout_issues": []
+    }
+  }
+}

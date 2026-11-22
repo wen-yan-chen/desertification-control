@@ -1,0 +1,14 @@
+{
+  "rows": 1188,
+  "expected_JunSep_months": 396,
+  "missing_JunSep_V": 1,
+  "nonseason_V_intentionally_absent": 792,
+  "raw_replay_exact_hashes": 198,
+  "raw_replay_responses": 207,
+  "unqa_replay_max_abs_difference_from_old_panel": 1.6653345369377348e-16,
+  "qa": "pixel reliability 0 or 1, >=50% valid pixels per composite; 75% sensitivity",
+  "interpolation": "none; missing targets never scored; only Jun-Sep downloaded for M1",
+  "era_source": "existing v7 Open-Meteo archive, models unspecified; do not label pure ERA5",
+  "soil_moisture_status": "reanalysis context only, not observed plantation available water",
+  "legacy_panel_sha256": "57a7c55a3237a36b8c0b4698c743e5e78e651ccf36491aa4f565e1a51d172022"
+}

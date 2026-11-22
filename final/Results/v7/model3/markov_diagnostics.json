@@ -1,0 +1,218 @@
+[
+  {
+    "cohort_id": "eco_y1_100_to_300_after_3",
+    "nv": 81,
+    "nm": 11,
+    "shock_nodes": 24,
+    "transient_states": 891,
+    "nonzeros": 63444,
+    "max_row_sum": 0.9984364463937284,
+    "min_absorption_probability": 0.0015635536062715838,
+    "expected_first_passage_years": 7.834080892427142,
+    "variance_first_passage_years2": 49.05388246015401,
+    "linear_solve_residual": 1.2434497875801753e-14,
+    "restricted_mean_first_passage_years": 7.828281941911101,
+    "compound_diagnostics": [
+      {
+        "tail_mass": 2.0942485399973623e-13,
+        "mean_error": 0.00010267785949702457
+      },
+      {
+        "tail_mass": 3.6650646493468274e-13,
+        "mean_error": 0.00015637060753115328
+      }
+    ]
+  },
+  {
+    "cohort_id": "eco_y1_ramp_100_300_600",
+    "nv": 81,
+    "nm": 11,
+    "shock_nodes": 24,
+    "transient_states": 891,
+    "nonzeros": 70473,
+    "max_row_sum": 0.9984364463937285,
+    "min_absorption_probability": 0.0015635536062714728,
+    "expected_first_passage_years": 21.337092967249195,
+    "variance_first_passage_years2": 387.80123204392623,
+    "linear_solve_residual": 2.4868995751603507e-14,
+    "restricted_mean_first_passage_years": 19.655551008215436,
+    "compound_diagnostics": [
+      {
+        "tail_mass": 2.0942485399973623e-13,
+        "mean_error": 0.00010267785949702457
+      },
+      {
+        "tail_mass": 3.6650646493468274e-13,
+        "mean_error": 0.00015637060753115328
+      }
+    ]
+  },
+  {
+    "cohort_id": "eco_y2_100_to_300_after_3",
+    "nv": 81,
+    "nm": 11,
+    "shock_nodes": 24,
+    "transient_states": 891,
+    "nonzeros": 63444,
+    "max_row_sum": 0.9984364463937284,
+    "min_absorption_probability": 0.0015635536062715838,
+    "expected_first_passage_years": 7.761604990092663,
+    "variance_first_passage_years2": 48.84238229584451,
+    "linear_solve_residual": 1.2434497875801753e-14,
+    "restricted_mean_first_passage_years": 7.755883535031875,
+    "compound_diagnostics": [
+      {
+        "tail_mass": 2.0942485399973623e-13,
+        "mean_error": 0.00010267785949702457
+      },
+      {
+        "tail_mass": 3.6650646493468274e-13,
+        "mean_error": 0.00015637060753115328
+      }
+    ]
+  },
+  {
+    "cohort_id": "eco_y1_100_to_300_after_3",
+    "nv": 161,
+    "nm": 21,
+    "shock_nodes": 48,
+    "transient_states": 3381,
+    "nonzeros": 469698,
+    "max_row_sum": 0.9951629042197297,
+    "min_absorption_probability": 0.004837095780270251,
+    "expected_first_passage_years": 7.8640753232252045,
+    "variance_first_passage_years2": 49.41873179344845,
+    "linear_solve_residual": 2.1316282072803006e-14,
+    "restricted_mean_first_passage_years": 7.858109997254949,
+    "compound_diagnostics": [
+      {
+        "tail_mass": 2.0942485399973623e-13,
+        "mean_error": 0.00011346380289656288
+      },
+      {
+        "tail_mass": 3.6650646493468274e-13,
+        "mean_error": 0.00011477897568157314
+      }
+    ]
+  },
+  {
+    "cohort_id": "eco_y1_ramp_100_300_600",
+    "nv": 161,
+    "nm": 21,
+    "shock_nodes": 48,
+    "transient_states": 3381,
+    "nonzeros": 547752,
+    "max_row_sum": 0.9951629042197297,
+    "min_absorption_probability": 0.004837095780270251,
+    "expected_first_passage_years": 21.849663284201856,
+    "variance_first_passage_years2": 402.7858950649645,
+    "linear_solve_residual": 4.618527782440651e-14,
+    "restricted_mean_first_passage_years": 20.04128538312098,
+    "compound_diagnostics": [
+      {
+        "tail_mass": 2.0942485399973623e-13,
+        "mean_error": 0.00011346380289656288
+      },
+      {
+        "tail_mass": 3.6650646493468274e-13,
+        "mean_error": 0.00011477897568157314
+      }
+    ]
+  },
+  {
+    "cohort_id": "eco_y2_100_to_300_after_3",
+    "nv": 161,
+    "nm": 21,
+    "shock_nodes": 48,
+    "transient_states": 3381,
+    "nonzeros": 469698,
+    "max_row_sum": 0.9951629042197297,
+    "min_absorption_probability": 0.004837095780270251,
+    "expected_first_passage_years": 7.793482349380427,
+    "variance_first_passage_years2": 49.196961413350685,
+    "linear_solve_residual": 2.1316282072803006e-14,
+    "restricted_mean_first_passage_years": 7.787595733864831,
+    "compound_diagnostics": [
+      {
+        "tail_mass": 2.0942485399973623e-13,
+        "mean_error": 0.00011346380289656288
+      },
+      {
+        "tail_mass": 3.6650646493468274e-13,
+        "mean_error": 0.00011477897568157314
+      }
+    ]
+  },
+  {
+    "cohort_id": "eco_y1_100_to_300_after_3",
+    "nv": 321,
+    "nm": 41,
+    "shock_nodes": 96,
+    "transient_states": 13161,
+    "nonzeros": 3902293,
+    "max_row_sum": 0.99719056370824,
+    "min_absorption_probability": 0.0028094362917600035,
+    "expected_first_passage_years": 7.851787236321343,
+    "variance_first_passage_years2": 49.323303541422995,
+    "linear_solve_residual": 3.197442310920451e-14,
+    "restricted_mean_first_passage_years": 7.845880540483904,
+    "compound_diagnostics": [
+      {
+        "tail_mass": 2.0942485399973623e-13,
+        "mean_error": 2.8489234679573983e-05
+      },
+      {
+        "tail_mass": 3.6650646493468274e-13,
+        "mean_error": 5.303446243531962e-05
+      }
+    ]
+  },
+  {
+    "cohort_id": "eco_y1_ramp_100_300_600",
+    "nv": 321,
+    "nm": 41,
+    "shock_nodes": 96,
+    "transient_states": 13161,
+    "nonzeros": 5282103,
+    "max_row_sum": 0.9971905637082401,
+    "min_absorption_probability": 0.0028094362917598925,
+    "expected_first_passage_years": 21.74710249340377,
+    "variance_first_passage_years2": 398.4771077055167,
+    "linear_solve_residual": 9.559020242022598e-14,
+    "restricted_mean_first_passage_years": 19.971368887867254,
+    "compound_diagnostics": [
+      {
+        "tail_mass": 2.0942485399973623e-13,
+        "mean_error": 2.8489234679573983e-05
+      },
+      {
+        "tail_mass": 3.6650646493468274e-13,
+        "mean_error": 5.303446243531962e-05
+      }
+    ]
+  },
+  {
+    "cohort_id": "eco_y2_100_to_300_after_3",
+    "nv": 321,
+    "nm": 41,
+    "shock_nodes": 96,
+    "transient_states": 13161,
+    "nonzeros": 3902293,
+    "max_row_sum": 0.99719056370824,
+    "min_absorption_probability": 0.0028094362917600035,
+    "expected_first_passage_years": 7.782098137863281,
+    "variance_first_passage_years2": 49.092518373278715,
+    "linear_solve_residual": 3.197442310920451e-14,
+    "restricted_mean_first_passage_years": 7.77626911667385,
+    "compound_diagnostics": [
+      {
+        "tail_mass": 2.0942485399973623e-13,
+        "mean_error": 2.8489234679573983e-05
+      },
+      {
+        "tail_mass": 3.6650646493468274e-13,
+        "mean_error": 5.303446243531962e-05
+      }
+    ]
+  }
+]

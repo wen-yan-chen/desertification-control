@@ -1,0 +1,408 @@
+% Build tables: python Reports/M3/build_tables.py (from repository root).
+% Build PDF: xelatex M3_writing_brief.tex twice in Reports/M3.
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=2.1cm]{geometry}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\usepackage{amsmath,amssymb,bm}
+\usepackage{booktabs,tabularx,array}
+\usepackage{enumitem,xcolor}
+\usepackage[hidelinks]{hyperref}
+
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\renewcommand{\arraystretch}{1.18}
+\setlist{itemsep=3pt,topsep=4pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\setlength{\emergencystretch}{2em}
+\setlength{\headheight}{14pt}
+\pagestyle{plain}
+\newcommand{\E}{\mathbb E}
+\newcommand{\Prb}{\mathbb P}
+\newcommand{\note}[1]{\par\smallskip\textcolor{teal!70!black}{\textit{Writing note:} #1}\par}
+\newcommand{\file}[1]{{\small\texttt{\detokenize{#1}}}}
+\input{m3_result_tables.tex}
+\begin{document}
+\thispagestyle{plain}
+\begin{center}
+{\LARGE\bfseries Model 3 Writing Brief}\par
+{\large Post-construction resilience under compound disasters}\par
+{\large Results, model logic and handoff to Claude}\par
+2026-11-13
+\end{center}
+
+This brief follows the M1/M2 report format. It is a writing and plotting guide, not a new model run.
+All numeric result tables are extracted from \file{Results/v7/model3/}; the extraction script verifies
+the recorded input and source-code hashes before writing them. No M1/M2 result has been changed.
+No scientific figure is produced here: Claude owns the figure design and rendering.
+
+\section{Goal and completed work}
+\begin{tabularx}{\textwidth}{@{}p{3.4cm}YY@{}}
+\toprule Task 3 need & Implementation & Delivered evidence \\\midrule
+Build on Tasks 1 and 2 & Carry each M2 cohort's final cover and storage into the unchanged M1 water--growth map & Three cohorts; interface replay error below $10^{-5}$ \\
+Random disasters & Full compound-Poisson wind/sand loss, conditional on shared drought; drought changes rain, demand and supply & Joint event simulations; no one-event approximation \\
+Changing background & Wind-to-demand response, rainfall trend, event-rate trend and drought-probability trend & Nonstationary baseline and stationary controls \\
+Long-term performance & First passage, current low-cover area and cumulative cover integral & 50-year tables; 27 scenarios \\
+Numerical verification & Daily water balance, resource caps, stationary 2-D chain, Monte Carlo and grid checks & 28 M1/M2/M3 tests passed; separate error checks \\
+Writing and figures & Equations, assumptions, numerical results and exact figure data mapping & This brief plus the Chinese handoff in this folder \\
+\bottomrule
+\end{tabularx}
+
+\paragraph{Main finding.}
+Under the declared baseline assumptions, the probability that at least half the project area has
+simultaneously crossed below the diagnostic threshold at some annual census is about 77.47\% by
+post-year 10 and 99.57\% by post-year 30. All 6,000 simulated paths trigger this event within 50 years.
+Yet the expected area currently below threshold at year 50 is only 200.22 ha, whereas 299.45 ha has
+ever crossed it. Recovery makes these different quantities. The 50-year cover integral is
+4,761.89 effective ha$\cdot$yr, versus 7,271.79 without random disasters under the same background trends.
+
+\paragraph{Interpretation.}
+These are \textbf{conditional stress-test results}, not calibrated local forecasts.
+The event parameters, future trends and degradation threshold are assumptions. The numerical work is
+complete, but \file{formal_model_ready=false} remains appropriate. A first crossing is neither permanent
+destruction nor the physical end of an engineering asset.
+
+\paragraph{Reading route.}
+Sections 2--4 explain the state, equations and algorithms; Sections 5--7 provide parameters,
+results and validation; Sections 8--9 specify figures and defensible writing claims.
+
+\clearpage
+\section{Construction and interfaces}
+\subsection*{Clock and initial state}
+Post-year 0 is the end of M2 project year 15. Post-year 1 is project year 16, not calendar year 2027.
+Use the exported final states, not $V=K$ or a reset storage bucket.
+\begin{center}\small\InitialTable\end{center}
+The cohort aliases used throughout this report are:
+\begin{itemize}
+\item A: \file{eco_y1_100_to_300_after_3}, 100 ha.
+\item B: \file{eco_y1_ramp_100_300_600}, 50 ha.
+\item C: \file{eco_y2_100_to_300_after_3}, 150 ha.
+\end{itemize}
+These quotas are applications for water, not guaranteed deliveries. Cohort area stays fixed.
+The inherited 9.5 MW PV installation requests 190 m$^3$/yr for cleaning. Continuing O\&M and cleaning
+are scenario assumptions; no 50-year PV revenue or replacement-cost forecast is claimed.
+
+\subsection*{One physical year, in execution order}
+\begin{enumerate}
+\item Apply the deterministic background trends for that post-construction year.
+\item Draw one regional drought state; it changes precipitation, evapotranspiration demand,
+water-supply caps and the conditional storm-event rate.
+\item Draw the full Poisson event count and all event-loss marks. Baseline cohorts share the storm
+realization. The independent-cohort sensitivity still shares drought.
+\item Reserve PV cleaning, then ration ecological requests against monthly and annual supply.
+Run the M1 daily bucket and yearly vegetation growth for every cohort.
+\item Apply the compound storm retention at year end. Record annual states, first crossing and
+current low-cover area. Keep evolving the physical state even after a first crossing.
+\end{enumerate}
+The start-year-shock sensitivity moves storm loss before the M1 update; the failure census is
+still at the end of the complete year. Annual observation can miss a short-lived within-year crossing.
+
+\subsection*{What changed from the old M3 draft}
+The old kernel used $1-\lambda$ and $\lambda$ while claiming a compound Poisson process.
+It omitted storage memory, initialized cover at $K$, and mixed row and column transition conventions.
+Those issues are corrected. The average retention formula is exact under iid marks, not a small-loss
+approximation. Zero storm rate does not imply zero failure if irrigation stops. The historical,
+unidentified M1 wind-loss coefficient is not restored or amplified.
+
+\note{A structure figure should show M2 terminal states $\to$ joint drought/storm inputs $\to$
+monthly allocation and M1 daily bucket $\to$ annual census $\to$ risk/benefit summaries.
+Draw a separate validation branch to the stationary 2-D chain. Do not label the MC physical state as absorbing.}
+
+\clearpage
+\section{Equations and their meaning}
+\subsection*{Disasters and background}
+For year index $t=0,\ldots,49$, let $D_t$ be the shared drought indicator:
+\begin{align}
+D_t&\sim\operatorname{Bernoulli}(p_{D,0}+b_Dt), &
+N_t\mid D_t&\sim\operatorname{Poisson}(\lambda_0 e^{\alpha_\lambda t}\gamma^{D_t}),\\
+U_{tq}&\sim\operatorname{Uniform}(u_{\rm lo},u_{\rm hi}), &
+R_t&=\prod_{q=1}^{N_t}(1-U_{tq}),\\
+\E[R_t\mid D_t]&=\exp\{-\lambda_0e^{\alpha_\lambda t}\gamma^{D_t}\E[U]\}.&&
+\end{align}
+With no event, $R_t=1$. Wind abrasion, sandstorm damage and burial are aggregated into this loss;
+they are not counted as three independent hits. The last equation alone identifies only a product
+of frequency and mean loss, not their separate values. Their full distribution can carry more information.
+
+Wind baseline scales by $e^{\alpha_ut}$ and rain by $e^{\alpha_Rt}$.
+The existing M1 Penman--Monteith response ratio converts the wind change into monthly demand.
+Drought additionally multiplies rain by 0.40, demand by 1.15 and supply caps by 0.70.
+This is a synthetic climate sequence, not a downscaled climate-model forecast.
+
+\subsection*{Water and vegetation}
+Let $\Phi$ denote the M1 annual map, including daily water updates:
+\begin{align}
+(\widetilde V_{j,t+1},M_{j,t+1})&=\Phi(V_{j,t},M_{j,t};P_t,ET_{0g,t},I_{j,t,m}),\\
+\widetilde V_{j,t+1}&=V_{j,t}+rV_{j,t}(1-V_{j,t}/K)\overline W_{j,t}-dV_{j,t},\\
+V_{j,t+1}&=R_t\widetilde V_{j,t+1},\\
+M_{\rm end}&=M_{\rm start}+P_{\rm eff}+I_{\rm net}+G-T_a-D_{\rm drain}.
+\end{align}
+Here $\overline W$ is actual/potential transpiration, not an external wetness trend.
+Gross irrigation is converted using $\eta_w$ before entering storage. One mm over one ha is 10 m$^3$.
+Supply limits apply to all maintained cohorts plus PV cleaning, including cohorts that previously crossed the threshold.
+
+\subsection*{Risk, recovery and ecological integral}
+\begin{align}
+\tau_j&=\inf\{t\ge0:V_{j,t}<\rho K\},\\
+\tau_{\rm proj}&=\inf\left\{t:\frac{\sum_j a_j\mathbf1[V_{j,t}<\rho K]}{\sum_j a_j}\ge\beta\right\},\\
+\operatorname{RMST}(H)&=\E[\min(\tau,H)]=\sum_{t=0}^{H-1}\Prb(\tau>t),\\
+H_{\rm eco}(H)&=\sum_{t=0}^{H-1}\sum_j a_jV_{j,t}/K.
+\end{align}
+Baseline $\rho=0.30$, $\beta=0.50$. Thus the threshold is \Threshold\% cover proxy, not 30\% absolute cover.
+The ecological integral uses start-of-year cover, as in M2; the start-shock sensitivity uses cover after
+that initial shock. It is a cover proxy, not measured erosion prevention. Initial failure has $\tau=0$.
+Non-failures through year 50 are right-censored; code 51 in the histogram is not an observed failure year.
+
+\clearpage
+\section{Algorithms and reproducibility}
+\subsection*{A. Direct simulation: the nonstationary main result}
+\begin{enumerate}
+\item Load the final M1 parameters and M2 cohorts. Replay every M2 cohort through current M1;
+stop if a cover/storage discrepancy exceeds $10^{-5}$.
+\item For each scenario, initialize all paths with the same three inherited states and use seed 20261113.
+Use 6,000 paths for baseline/stationary cases, 3,000 for each other case.
+\item Each year draw drought and the full compound storm retention. Calculate wet/dry monthly allocation
+ledgers. Update only the paths belonging to each drought state with the vectorized daily M1 map.
+\item At the annual census, update first-passage flags and physical states separately.
+Accumulate ecological integrals and export means, quantiles, event frequencies and sample paths.
+\item Estimate probabilities with Wilson 95\% intervals. Export RMST and its MC standard error,
+plus the explicit number of paths censored at the horizon.
+\end{enumerate}
+Common seeds across cases aid reproducibility but do not guarantee perfectly paired shocks after
+changing the draw count or array shape. The case differences are descriptive sensitivity results,
+not a paired hypothesis test.
+
+\subsection*{B. Stationary killed chain: a numerical cross-check}
+Discretize $(V,M)$ over $[\rho K,K]\times[0,C]$. Apply the same water allocation and M1 map, then test
+failure in continuous state before bilinear projection of surviving states. Average over drought
+and the full compound-loss distribution to form the substochastic matrix $Q$.
+\begin{align}
+\Prb(\tau\le H)&=1-\bm p_0Q^H\bm1,\\
+(I-Q)\bm t&=\bm1, & (I-Q)\bm s&=2\bm t-\bm1,\\
+\E[\tau]&=\bm p_0\bm t, & \operatorname{Var}(\tau)&=\bm p_0\bm s-(\bm p_0\bm t)^2.
+\end{align}
+$\bm p_0$ is a row distribution. The moment equations require finite mean absorption time;
+they are not applied indiscriminately to zero-hazard cases. The no-event atom is exact. Positive-event
+retention uses log-loss convolution and quantile compression; a Poisson tail below $10^{-12}$ is
+assigned zero retention. The main Monte Carlo does not truncate the count.
+
+\subsection*{C. Entry points}
+\begin{tabularx}{\textwidth}{@{}p{4.9cm}Y@{}}
+\toprule File / function & Purpose \\\midrule
+\file{Code/v7_m3_core.py} & \file{load_inputs}, \file{batch_year}, \file{allocation}, \file{storm_draw}, \file{simulate}, \file{stationary_chain} \\
+\file{Code/v7_model3.py} & Full 27-case export, three chain grids, provenance hashes \\
+\file{Code/v7_m3_grid_check.py} & Cross-grid check separating state and quadrature errors \\
+\file{Code/test_v7_m3.py} & Nine M3 tests; 28 when combined with M1/M2 \\
+\file{Reports/M3/build_tables.py} & Verify provenance and extract this report's tables only \\
+\bottomrule
+\end{tabularx}
+From repository root: \file{python Code/v7_model3.py}, then
+\file{python Code/v7_m3_grid_check.py}. Dependencies are in \file{Code/requirements-m3.txt}.
+Plotting needs neither command if hashes still match. Rebuild only this brief's tables with
+\file{python Reports/M3/build_tables.py}; compile this folder's TeX twice with XeLaTeX.
+
+\clearpage
+\section{Parameters, constraints and evidence}
+\begin{tabularx}{\textwidth}{@{}p{3.3cm}p{4.0cm}Y@{}}
+\toprule Quantity & Baseline & Evidence / interpretation \\\midrule
+Growth $r$, attrition $d$ & 0.546698; 0.107306 & Inherited M1 fit; uncertainty not propagated here \\
+$K$; storage capacity $C$ & 38.0754\%; 75 mm & M1 regional proxy and effective bucket assumption \\
+Water efficiency; rain fraction & 0.75; 0.25 & M1 assumptions; groundwater baseline 0 \\
+Initial states; area; quotas & Table in Section 2 & M2 output, not new measured stands \\
+Annual water cap & $1.5\times10^6$ m$^3$ & Inherited M2 resource scenario; drought factor applies \\
+Monthly caps, Jan--Dec & 50, 60, 90, 120, 180, 220, 240, 220, 150, 90, 50, 30 (thousand m$^3$) & Inherited M2 scenario; enforced monthly and annually \\
+Storm rate $\lambda_0$ & 0.25 yr$^{-1}$ & Assumed frequency; not derived from monthly mean wind \\
+Event loss $U$ & Uniform [0.10, 0.50] & Assumed fractional cover loss; not a measured local damage distribution \\
+Drought probability & $0.12+0.002t$ & 0.12--0.218 over simulated years; no serial persistence \\
+Drought modifiers & Rain 0.40; ET demand 1.15; supply 0.70 & Assumed joint stress; not fitted drought response \\
+Drought storm-rate multiplier & $\gamma=1.50$ & Assumed event association, not a correlation coefficient \\
+Trend coefficients & Wind +0.005; rain $-0.005$; storm rate +0.010 per year & Log-rate scenario changes; time starts at 0 \\
+Diagnostic thresholds & $\rho=0.30$; $\beta=0.50$ & Management diagnostics, not verified protection standards \\
+Horizon and seed & 50 years; 20261113 & Numerical choices, not fixed by the problem \\
+State / shock grids & (81,11,24), (161,21,48), (321,41,96) & Counts of cover nodes, storage nodes and positive-event quantile nodes \\
+Cross-grid and tail & (161,21,96); $10^{-12}$ & Isolate approximation errors \\
+\bottomrule
+\end{tabularx}
+
+\paragraph{Hard checks in the implementation.}
+Probabilities must remain in $[0,1]$ for every simulated year; invalid trends are rejected rather than
+silently clipped. Loss marks satisfy $0\le u_{\rm lo}\le u_{\rm hi}<1$; event rates are nonnegative and
+may exceed one event per year. States remain in $0\le V\le K$, $0\le M\le C$.
+Rationing preserves the monthly and annual caps; a 20\% higher request is not a 20\% higher guaranteed delivery.
+
+\paragraph{Evidence boundary.}
+Historical forcing and the M1 response are reused. FAO-56 supports the wind dependence of reference
+evapotranspiration, not the selected future trends or local damage rates. The event process needs a
+dated disaster catalogue and before/after cover observations for calibration. M1 background attrition
+may already contain some historical disaster loss, so overlap with the extra stress process remains unresolved.
+The full field-by-field register is \file{Data/v7/m3_inputs/README.md}.
+
+\clearpage
+\section{Results and interpretation}
+\subsection*{Baseline joint project event}
+\begin{center}\small\BaseTable\end{center}
+The first-hit column is cumulative probability. Low area is expected area currently below threshold;
+ever-hit area counts a cohort if it has crossed at any previous annual census.
+$H_{\rm eco}$ is in effective ha$\cdot$yr. All rows refer to the 6,000-path baseline.
+The 100\% sample hit rate at year 50 still has a nonzero-width Wilson interval.
+
+\subsection*{Cohort-level results at post-year 50}
+\begin{center}\small\CohortTable\end{center}
+The 50 ha cohort B retains higher mean cover and a longer restricted first-passage time under the
+baseline. This does not establish an optimal adaptation policy: areas and quotas are inherited from M2,
+not reoptimized in M3. The project event uses simultaneously low area, not a product of cohort probabilities.
+Its coincidence with cohort C's baseline summary must not be assumed for other configurations.
+
+\subsection*{Why first passage and recovery both matter}
+\begin{itemize}
+\item The first-passage flag stays true after a crossing; the physical vegetation state can recover.
+\item High cumulative crossing probability does not mean that the same area remains degraded at every later date.
+\item RMST(50) is an average of $\min(\tau,50)$ across all paths, including censored ones.
+It is not the mean among failures only, nor the unconditional physical service life of the project.
+\end{itemize}
+
+\subsection*{Stationary reference, finest grid}
+\begin{center}\small\ChainTable\end{center}
+These means and variances belong only to the stationary reference with continuing hazard and maintenance.
+They are from the 321-by-41 state grid and 96 positive-event quadrature nodes. They are not the
+nonstationary baseline's infinite-horizon life expectancy. Section 7 compares chain probabilities with
+continuous-state Monte Carlo and separates state-grid and shock-integration errors.
+
+\note{The paper should report a horizon, an event definition and the evidence class with every risk number.
+For example: ``Under the declared stress scenario, the 10-year probability of a first annual census
+with at least half of treated area below $0.30K$ is 77.47\%.''}
+
+\clearpage
+\subsection*{Mechanism, resource and threshold sensitivities}
+\begin{center}\small\SensitivityTable\end{center}
+Stationary means all four trends are zero. No random disasters retains the baseline climate trends;
+stable/no-disasters removes both. Wind-only and rain-only retain stationary random disasters.
+Water cases multiply applications before resource rationing. Threshold cases alter the diagnostic,
+not the physical vegetation map. Fixed-loss uses $U=0.30$ per event, keeping the base mean but changing
+the mark distribution. These contrasts are scenario comparisons, not causal estimates from field data.
+
+\subsection*{Joint frequency--severity experiment}
+\begin{center}\small\JointTable\end{center}
+Each cell uses uniform marks on $[0.5\mu,1.5\mu]$, where $\mu=\E[U]$; other baseline settings remain.
+The $\lambda_0=0.25,\mu=0.30$ cell therefore has range [0.15,0.45], unlike the baseline [0.10,0.50].
+It must not be presented as an exact duplicate of the baseline. Only nine cells are simulated;
+do not turn them into a finely resolved empirical surface. Show RMST or 10-year risk when 50-year
+probabilities saturate. At the low-rate/low-loss corner, the project 50-year first-hit probability
+is about 44.87\%, illustrating strong dependence on uncalibrated assumptions.
+
+\clearpage
+\section{Verification and limits of the checks}
+\begin{tabularx}{\textwidth}{@{}p{4.2cm}Y@{}}
+\toprule Check & Observed evidence \\\midrule
+Regression tests & 28 passed: 12 M1, 7 M2, 9 M3. M3 covers scalar/vector M1 agreement, allocation, Poisson moments, initial failure, censoring, invalid input and chain comparison. \\
+M1/M2 interface replay & Maximum cover/storage discrepancy $2.824\times10^{-6}$, below $10^{-5}$ tolerance. M2 tables were preserved. \\
+Monthly water mass balance & Maximum residual below $4.84\times10^{-13}$ mm. \\
+Resource and export checks & 27 scenarios, 108 entity summaries, 32,400 conditional monthly rows; all caps satisfied within rounding tolerance. Histograms reproduce counts, censoring and RMST. \\
+Finest chain vs. MC & All 9 cohort-by-horizon points inside MC 95\% intervals; maximum absolute probability difference \MCError\ percentage points. \\
+State-grid refinement & Holding 96 shock nodes fixed, 161$\times$21 to 321$\times$41: maximum probability change \StateError\ percentage points. \\
+Shock quadrature refinement & Holding 161$\times$21 fixed, 48 to 96 nodes: maximum change \ShockError\ percentage points. \\
+Provenance & 12 input/source hashes checked; report tables extracted without simulation. \\
+\bottomrule
+\end{tabularx}
+
+The medium grid has one comparison point outside the MC interval; it is retained in the export.
+The refinement differences are below the one-percentage-point numerical criterion, but do not prove
+convergence for every possible parameter set. MC intervals themselves have sampling variability.
+Do not write ``less than one percentage point error against MC'': the largest observed difference is
+\MCError\ percentage points.
+
+\subsection*{Three uncertainty objects that must remain separate}
+\begin{enumerate}
+\item \textbf{Path spread:} 5th--95th percentiles describe random outcomes conditional on the assumed parameters.
+They are not a 95\% confidence interval for the mean.
+\item \textbf{Simulation error:} Wilson probability intervals and RMST standard errors reflect finite MC sample size.
+They exclude parameter and structural uncertainty.
+\item \textbf{Model uncertainty:} M1 estimation, cover proxies, initial states, event rates/marks, climate trends,
+threshold choice, spatial dependence and serial drought dependence are not jointly propagated here.
+\end{enumerate}
+
+\paragraph{Controls are not proofs of field accuracy.}
+Zero storms with continued water can remain above threshold in these runs; zero storms with stopped
+water can fail. The latter is an explicit test against the old ``$\lambda=0$ means infinite lifetime'' rule.
+Grid agreement and water closure establish numerical consistency, not empirical local validity.
+
+\clearpage
+\section{Figure handoff to Claude}
+\textbf{Status: data ready; figures below are proposed and await rendering.}\par
+Read only \file{Results/v7/model3/} after checking the saved hashes. Use the existing paper palette and
+MATLAB conventions if suitable; layout and final figure selection are Claude's responsibility.
+
+\begingroup\small
+\begin{tabularx}{\textwidth}{@{}p{0.6cm}p{3.7cm}Y@{}}
+\toprule ID & Intended message & Exact data and plotting contract \\\midrule
+F1 & Model structure (schematic) & Section 2 execution order; show M2 states, shared drought/storm, monthly rationing, M1 bucket, annual census and the separate stationary-validation branch. No invented spatial layout. \\
+F2 & Cohort cover paths & \file{cohort_annual.csv}; base case, three cohorts, \file{V_mean_pct}, \file{V_p05_pct}, \file{V_p95_pct}; threshold \Threshold\%. Label the band as path percentiles. \\
+F3 & First passage versus current condition & Same table: \file{failure_probability} versus \file{current_below_threshold_probability}; or two area columns in \file{project_annual.csv}. Do not confuse an area expectation with a probability. \\
+F4 & Background and cumulative benefit & \file{project_annual.csv}; base, stationary, no-random-disasters. Plot project first-hit probability and \file{cumulative_cover_ha_year_mean}; optional p05/p95 benefit band. \\
+F5 & Joint hazard sensitivity & \file{summary.csv}; \file{entity=project}, nine \file{joint_rate_*} cases. Read axes from \file{scenario_configs.json}; paired grids for $p_{50}$ and RMST, or 10-year risk from annual data. \\
+F6 & Water and event assumptions & Selected Section 6 sensitivity cases; \file{summary.csv} and annual project tables. Keep threshold changes distinct from physical management changes. \\
+F7 & Supply rationing and climate & \file{resources.csv}; request versus delivery, gross/cap ratio and annual $\sum P/\sum ET_{0g}$. Wet/dry rows are alternative conditional ledgers, not additive water use. \\
+F8 & Numerical validation & \file{markov_mc_comparison.csv}, \file{grid_validation.csv}; distinguish state refinement, quadrature refinement and MC intervals. Only stationary results. \\
+\bottomrule
+\end{tabularx}
+\endgroup
+
+\paragraph{Optional path illustration.}
+\file{sample_paths.csv} contains only the first 12 paths per case. Use it to explain a recovery trajectory,
+with a declared selection rule; never recompute risk from this illustrative subset.
+
+\paragraph{Caption template.}
+``Conditional post-construction scenario, initialized at M2 year 15 end. The diagnostic threshold is
+$0.30K$ (\Threshold\% cover proxy). Baseline/stationary simulations use 6,000 paths; sensitivity cases use
+3,000. Bands represent [path percentiles / Wilson MC intervals, as appropriate]. Hazard parameters
+and future trends are assumed rather than locally calibrated.''
+
+\paragraph{Delivery check.}
+Keep post-year and project-year labels explicit; preserve percentage versus fraction units; area-weight
+project means. Do not plot censor code 51 as a failure year or turn the 100\% hit rate into a zero-width
+interval. No long-term NPV, carbon, sediment tonnes or actual protected-area claims are supported by these tables.
+
+\clearpage
+\section{Writing claims, paper outline and handoff files}
+\small
+\begin{tabularx}{\textwidth}{@{}YY@{}}
+\toprule Defensible statement & Statement to avoid \\\midrule
+The M2 plan was evaluated under specified compound hazards and background trends. & We predict the actual disaster history of this region over the next 50 years. \\
+The first-crossing risk is high under the baseline assumptions; physical recovery remains possible. & The project will certainly be permanently destroyed. \\
+RMST is the mean truncated first-passage time in a 50-year assessment window. & RMST is the engineering service life or a calibrated expected lifetime. \\
+The high-water cohort has higher cover and longer RMST in this scenario. & M3 proves that this irrigation allocation is economically optimal. \\
+Numerical cross-checks agree to the reported tolerances. & Agreement with Monte Carlo validates the model against real disasters. \\
+The ecological integral is inherited from M2's cover proxy. & The integral measures tonnes of erosion prevented or verified protected land. \\
+\bottomrule
+\end{tabularx}
+
+\subsection*{Suggested paper narrative}
+\begin{enumerate}
+\item \textbf{Question and interface.} Why a deterministic construction plan needs a resilience stress test;
+inherit the three terminal M2 states and declare the post-construction clock.
+\item \textbf{Stochastic extension.} Introduce shared drought and compound wind/sand loss, resource rationing
+and background trends, using a short structure figure and the main update equations.
+\item \textbf{Metrics.} Define cohort and project first passage, current low-cover area, RMST and cover integral.
+Explain right censoring and recovery before quoting numerical risk.
+\item \textbf{Main results.} Present baseline paths, risk and ecological integral, with a stationary and
+no-random-disaster comparison. State the assumptions beside the results.
+\item \textbf{Sensitivity and reliability.} Present joint hazard and selected water/ordering/dependence
+contrasts, then a compact numerical-validation panel. Avoid nine similar low-information figures.
+\item \textbf{Implications and limitations.} Recommend monitoring and evidence collection based on sensitive
+inputs; do not claim an optimized adaptive repair policy that was never solved.
+\end{enumerate}
+
+\subsection*{What evidence would improve the next version}
+A dated, geolocated disaster catalogue; before/after cover and survival observations; local supply
+and maintenance commitments; field evidence for a protection threshold; and a defensible climate
+projection would allow calibration rather than assumption-driven stress testing. Repeated drought,
+partial spatial correlation, subannual failures and funded repair decisions are extensions, not completed features.
+
+\subsection*{Repository handoff}
+\begin{itemize}
+\item \file{Reports/M3/README.md}: Chinese reading guide, headline findings and current figure handoff.
+\item \file{Reports/M3/M3_writing_brief.tex}: editable report; \file{m3_result_tables.tex}: generated numeric tables.
+\item \file{Docs/20261113_m3_audit_and_implementation.md}: correction history and numerical audit.
+\item \file{Docs/20261113_m3_figure_handoff.md}: detailed field-level Chinese plotting instructions.
+\item \file{Reports/model_v7/m3_correction.tex}: current formal modeling chapter; this brief complements it with results.
+\end{itemize}
+\end{document}

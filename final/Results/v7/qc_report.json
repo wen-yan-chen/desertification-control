@@ -1,0 +1,1148 @@
+{
+ "meta": {
+  "generated": "2026-11-10T14:06:30+08:00",
+  "period": "2015-01..2025-12",
+  "n_sites": 9,
+  "n_requests": 672,
+  "n_bytes": 14133646,
+  "sites": [
+   {
+    "code": "YT",
+    "name": "于田",
+    "lat": 36.85,
+    "lon": 81.67,
+    "role": 81.67
+   },
+   {
+    "code": "MF",
+    "name": "民丰",
+    "lat": 37.06,
+    "lon": 82.68,
+    "role": 82.68
+   },
+   {
+    "code": "QM",
+    "name": "且末",
+    "lat": 38.13,
+    "lon": 85.53,
+    "role": 85.53
+   },
+   {
+    "code": "RQ",
+    "name": "若羌",
+    "lat": 39.02,
+    "lon": 88.17,
+    "role": 88.17
+   },
+   {
+    "code": "KEL",
+    "name": "库尔勒",
+    "lat": 41.76,
+    "lon": 86.15,
+    "role": 86.15
+   },
+   {
+    "code": "YL",
+    "name": "尉犁",
+    "lat": 41.34,
+    "lon": 86.26,
+    "role": 86.26
+   },
+   {
+    "code": "ALE",
+    "name": "阿拉尔",
+    "lat": 40.55,
+    "lon": 81.28,
+    "role": 81.28
+   },
+   {
+    "code": "XT",
+    "name": "肖塘",
+    "lat": 38.83,
+    "lon": 84.02,
+    "role": 84.02
+   },
+   {
+    "code": "TZ",
+    "name": "塔中",
+    "lat": 38.97,
+    "lon": 83.65,
+    "role": 83.65
+   }
+  ]
+ },
+ "sources": {},
+ "checks": {
+  "aggregation": [
+   {
+    "site": "YT",
+    "P_corr_product_daysum": 1.0,
+    "P_ratio_median": 0.9936,
+    "T_corr": 1.0,
+    "T_bias": -0.0003,
+    "WS_corr": 1.0,
+    "WS_ratio_median": 1.0,
+    "GWET_corr": 0.9869,
+    "SW_ratio_median": 1.0,
+    "days_per_month_median": 31.0
+   },
+   {
+    "site": "MF",
+    "P_corr_product_daysum": 1.0,
+    "P_ratio_median": 0.995,
+    "T_corr": 1.0,
+    "T_bias": 0.0004,
+    "WS_corr": 1.0,
+    "WS_ratio_median": 1.0,
+    "GWET_corr": 0.9786,
+    "SW_ratio_median": 1.0,
+    "days_per_month_median": 31.0
+   },
+   {
+    "site": "QM",
+    "P_corr_product_daysum": 0.9998,
+    "P_ratio_median": 0.9942,
+    "T_corr": 1.0,
+    "T_bias": 0.0001,
+    "WS_corr": 1.0,
+    "WS_ratio_median": 1.0,
+    "GWET_corr": 0.9114,
+    "SW_ratio_median": 1.0,
+    "days_per_month_median": 31.0
+   },
+   {
+    "site": "RQ",
+    "P_corr_product_daysum": 0.9998,
+    "P_ratio_median": 1.0,
+    "T_corr": 1.0,
+    "T_bias": 0.0003,
+    "WS_corr": 1.0,
+    "WS_ratio_median": 0.9999,
+    "GWET_corr": 0.9162,
+    "SW_ratio_median": 1.0,
+    "days_per_month_median": 31.0
+   },
+   {
+    "site": "KEL",
+    "P_corr_product_daysum": 1.0,
+    "P_ratio_median": 1.0005,
+    "T_corr": 1.0,
+    "T_bias": 0.0003,
+    "WS_corr": 1.0,
+    "WS_ratio_median": 0.9998,
+    "GWET_corr": 0.94,
+    "SW_ratio_median": 1.0,
+    "days_per_month_median": 31.0
+   },
+   {
+    "site": "YL",
+    "P_corr_product_daysum": 1.0,
+    "P_ratio_median": 1.0,
+    "T_corr": 1.0,
+    "T_bias": 0.0,
+    "WS_corr": 1.0,
+    "WS_ratio_median": 1.0,
+    "GWET_corr": 0.9352,
+    "SW_ratio_median": 1.0,
+    "days_per_month_median": 31.0
+   },
+   {
+    "site": "ALE",
+    "P_corr_product_daysum": 1.0,
+    "P_ratio_median": 0.9992,
+    "T_corr": 1.0,
+    "T_bias": -0.0,
+    "WS_corr": 1.0,
+    "WS_ratio_median": 1.0001,
+    "GWET_corr": 0.9379,
+    "SW_ratio_median": 1.0,
+    "days_per_month_median": 31.0
+   },
+   {
+    "site": "XT",
+    "P_corr_product_daysum": 0.9999,
+    "P_ratio_median": 0.9977,
+    "T_corr": 1.0,
+    "T_bias": 0.0001,
+    "WS_corr": 1.0,
+    "WS_ratio_median": 1.0001,
+    "GWET_corr": 0.9544,
+    "SW_ratio_median": 1.0,
+    "days_per_month_median": 31.0
+   },
+   {
+    "site": "TZ",
+    "P_corr_product_daysum": 0.9999,
+    "P_ratio_median": 0.9977,
+    "T_corr": 1.0,
+    "T_bias": 0.0001,
+    "WS_corr": 1.0,
+    "WS_ratio_median": 1.0001,
+    "GWET_corr": 0.9544,
+    "SW_ratio_median": 1.0,
+    "days_per_month_median": 31.0
+   }
+  ],
+  "modis_qa": {
+   "overall": {
+    "n_composites": 2277,
+    "n_qa_gt1": 321,
+    "qa_gt1_frac": 0.141
+   },
+   "by_site": {
+    "YT": {
+     "n_composites": 253,
+     "n_qa_gt1": 26,
+     "qa_gt1_frac": 0.1028,
+     "n_all_invalid": 0
+    },
+    "MF": {
+     "n_composites": 253,
+     "n_qa_gt1": 11,
+     "qa_gt1_frac": 0.0435,
+     "n_all_invalid": 0
+    },
+    "QM": {
+     "n_composites": 253,
+     "n_qa_gt1": 33,
+     "qa_gt1_frac": 0.1304,
+     "n_all_invalid": 0
+    },
+    "RQ": {
+     "n_composites": 253,
+     "n_qa_gt1": 60,
+     "qa_gt1_frac": 0.2372,
+     "n_all_invalid": 0
+    },
+    "KEL": {
+     "n_composites": 253,
+     "n_qa_gt1": 116,
+     "qa_gt1_frac": 0.4585,
+     "n_all_invalid": 0
+    },
+    "YL": {
+     "n_composites": 253,
+     "n_qa_gt1": 22,
+     "qa_gt1_frac": 0.087,
+     "n_all_invalid": 0
+    },
+    "ALE": {
+     "n_composites": 253,
+     "n_qa_gt1": 45,
+     "qa_gt1_frac": 0.1779,
+     "n_all_invalid": 0
+    },
+    "XT": {
+     "n_composites": 253,
+     "n_qa_gt1": 3,
+     "qa_gt1_frac": 0.0119,
+     "n_all_invalid": 0
+    },
+    "TZ": {
+     "n_composites": 253,
+     "n_qa_gt1": 5,
+     "qa_gt1_frac": 0.0198,
+     "n_all_invalid": 0
+    }
+   }
+  },
+  "missing": [
+   {
+    "variable": "T2M",
+    "missing_total": 0,
+    "missing_pct": 0.0,
+    "sites_affected": 0,
+    "max_missing_run": 0
+   },
+   {
+    "variable": "T2M_MAX",
+    "missing_total": 0,
+    "missing_pct": 0.0,
+    "sites_affected": 0,
+    "max_missing_run": 0
+   },
+   {
+    "variable": "T2M_MIN",
+    "missing_total": 0,
+    "missing_pct": 0.0,
+    "sites_affected": 0,
+    "max_missing_run": 0
+   },
+   {
+    "variable": "RH2M",
+    "missing_total": 0,
+    "missing_pct": 0.0,
+    "sites_affected": 0,
+    "max_missing_run": 0
+   },
+   {
+    "variable": "QV2M",
+    "missing_total": 0,
+    "missing_pct": 0.0,
+    "sites_affected": 0,
+    "max_missing_run": 0
+   },
+   {
+    "variable": "PS",
+    "missing_total": 0,
+    "missing_pct": 0.0,
+    "sites_affected": 0,
+    "max_missing_run": 0
+   },
+   {
+    "variable": "WS10M",
+    "missing_total": 0,
+    "missing_pct": 0.0,
+    "sites_affected": 0,
+    "max_missing_run": 0
+   },
+   {
+    "variable": "WS10M_MAX",
+    "missing_total": 0,
+    "missing_pct": 0.0,
+    "sites_affected": 0,
+    "max_missing_run": 0
+   },
+   {
+    "variable": "WS2M",
+    "missing_total": 0,
+    "missing_pct": 0.0,
+    "sites_affected": 0,
+    "max_missing_run": 0
+   },
+   {
+    "variable": "ALLSKY_SFC_SW_DWN",
+    "missing_total": 0,
+    "missing_pct": 0.0,
+    "sites_affected": 0,
+    "max_missing_run": 0
+   },
+   {
+    "variable": "PRECTOTCORR",
+    "missing_total": 0,
+    "missing_pct": 0.0,
+    "sites_affected": 0,
+    "max_missing_run": 0
+   },
+   {
+    "variable": "GWETROOT",
+    "missing_total": 0,
+    "missing_pct": 0.0,
+    "sites_affected": 0,
+    "max_missing_run": 0
+   },
+   {
+    "variable": "GWETTOP",
+    "missing_total": 0,
+    "missing_pct": 0.0,
+    "sites_affected": 0,
+    "max_missing_run": 0
+   },
+   {
+    "variable": "GWETPROF",
+    "missing_total": 0,
+    "missing_pct": 0.0,
+    "sites_affected": 0,
+    "max_missing_run": 0
+   },
+   {
+    "variable": "EVLAND",
+    "missing_total": 0,
+    "missing_pct": 0.0,
+    "sites_affected": 0,
+    "max_missing_run": 0
+   },
+   {
+    "variable": "WD10M",
+    "missing_total": 0,
+    "missing_pct": 0.0,
+    "sites_affected": 0,
+    "max_missing_run": 0
+   },
+   {
+    "variable": "ndvi_mvc",
+    "missing_total": 0,
+    "missing_pct": 0.0,
+    "sites_affected": 0,
+    "max_missing_run": 0
+   },
+   {
+    "variable": "ndvi_mvc_qa",
+    "missing_total": 110,
+    "missing_pct": 9.26,
+    "sites_affected": 9,
+    "max_missing_run": 5
+   },
+   {
+    "variable": "ndvi_mean",
+    "missing_total": 0,
+    "missing_pct": 0.0,
+    "sites_affected": 0,
+    "max_missing_run": 0
+   },
+   {
+    "variable": "n_comp",
+    "missing_total": 0,
+    "missing_pct": 0.0,
+    "sites_affected": 0,
+    "max_missing_run": 0
+   },
+   {
+    "variable": "qa_med",
+    "missing_total": 0,
+    "missing_pct": 0.0,
+    "sites_affected": 0,
+    "max_missing_run": 0
+   },
+   {
+    "variable": "qa_bad_frac",
+    "missing_total": 0,
+    "missing_pct": 0.0,
+    "sites_affected": 0,
+    "max_missing_run": 0
+   },
+   {
+    "variable": "era_sm_root",
+    "missing_total": 0,
+    "missing_pct": 0.0,
+    "sites_affected": 0,
+    "max_missing_run": 0
+   },
+   {
+    "variable": "era_et0_mm",
+    "missing_total": 0,
+    "missing_pct": 0.0,
+    "sites_affected": 0,
+    "max_missing_run": 0
+   },
+   {
+    "variable": "era_P_mm",
+    "missing_total": 0,
+    "missing_pct": 0.0,
+    "sites_affected": 0,
+    "max_missing_run": 0
+   },
+   {
+    "variable": "era_T",
+    "missing_total": 0,
+    "missing_pct": 0.0,
+    "sites_affected": 0,
+    "max_missing_run": 0
+   },
+   {
+    "variable": "era_ws_max",
+    "missing_total": 0,
+    "missing_pct": 0.0,
+    "sites_affected": 0,
+    "max_missing_run": 0
+   },
+   {
+    "variable": "era_sw_MJ",
+    "missing_total": 0,
+    "missing_pct": 0.0,
+    "sites_affected": 0,
+    "max_missing_run": 0
+   },
+   {
+    "variable": "era_rh",
+    "missing_total": 0,
+    "missing_pct": 0.0,
+    "sites_affected": 0,
+    "max_missing_run": 0
+   }
+  ],
+  "duplicates": {
+   "duplicate_site_month_rows": 0,
+   "duplicate_full_rows": 0,
+   "monthly_annual_overlap_rows": 0,
+   "modis_duplicate_dates": 0,
+   "era5_duplicate_dates": 0,
+   "power_annual_rows_dropped": 99
+  },
+  "physical_violations": {
+   "Tmin_gt_Tmean": 0,
+   "Tmean_gt_Tmax": 0,
+   "RH_out_0_100": 0,
+   "GWET_out_0_1": 0,
+   "NDVI_out_range": 0,
+   "P_negative": 0,
+   "P_zero_fraction": 0.205,
+   "WS_negative": 0
+  },
+  "outliers": [
+   {
+    "variable": "T2M",
+    "n_absz_gt_3.5": 0,
+    "pct": 0.0,
+    "median": 14.575,
+    "p01": -8.003,
+    "p99": 31.09,
+    "skew": -0.215,
+    "kurt": -1.337
+   },
+   {
+    "variable": "T2M_MAX",
+    "n_absz_gt_3.5": 0,
+    "pct": 0.0,
+    "median": 29.6,
+    "p01": 1.7905,
+    "p99": 42.94,
+    "skew": -0.55,
+    "kurt": -0.952
+   },
+   {
+    "variable": "T2M_MIN",
+    "n_absz_gt_3.5": 0,
+    "pct": 0.0,
+    "median": 2.21,
+    "p01": -16.7156,
+    "p99": 20.43,
+    "skew": -0.008,
+    "kurt": -1.298
+   },
+   {
+    "variable": "RH2M",
+    "n_absz_gt_3.5": 35,
+    "pct": 2.95,
+    "median": 27.38,
+    "p01": 15.22,
+    "p99": 67.2821,
+    "skew": 1.119,
+    "kurt": 0.617
+   },
+   {
+    "variable": "WS10M",
+    "n_absz_gt_3.5": 0,
+    "pct": 0.0,
+    "median": 3.29,
+    "p01": 1.7,
+    "p99": 5.0126,
+    "skew": -0.049,
+    "kurt": -0.603
+   },
+   {
+    "variable": "WS10M_MAX",
+    "n_absz_gt_3.5": 0,
+    "pct": 0.0,
+    "median": 10.065,
+    "p01": 5.2161,
+    "p99": 16.89,
+    "skew": 0.34,
+    "kurt": -0.076
+   },
+   {
+    "variable": "PRECTOTCORR",
+    "n_absz_gt_3.5": 190,
+    "pct": 15.99,
+    "median": 0.06,
+    "p01": 0.0,
+    "p99": 1.35,
+    "skew": 3.036,
+    "kurt": 12.845
+   },
+   {
+    "variable": "GWETROOT",
+    "n_absz_gt_3.5": 0,
+    "pct": 0.0,
+    "median": 0.3,
+    "p01": 0.09,
+    "p99": 0.52,
+    "skew": -0.004,
+    "kurt": -1.057
+   },
+   {
+    "variable": "ndvi_mvc",
+    "n_absz_gt_3.5": 0,
+    "pct": 0.0,
+    "median": 0.1805,
+    "p01": 0.0545,
+    "p99": 0.3936,
+    "skew": 0.236,
+    "kurt": -1.149
+   },
+   {
+    "variable": "era_sm_root",
+    "n_absz_gt_3.5": 0,
+    "pct": 0.0,
+    "median": 0.1136,
+    "p01": 0.0,
+    "p99": 0.2649,
+    "skew": 0.166,
+    "kurt": -0.771
+   },
+   {
+    "variable": "era_et0_mm",
+    "n_absz_gt_3.5": 0,
+    "pct": 0.0,
+    "median": 137.26,
+    "p01": 20.0361,
+    "p99": 286.2183,
+    "skew": 0.058,
+    "kurt": -1.291
+   }
+  ],
+  "temporal": {
+   "months_per_site": {
+    "ALE": 132,
+    "KEL": 132,
+    "MF": 132,
+    "QM": 132,
+    "RQ": 132,
+    "TZ": 132,
+    "XT": 132,
+    "YL": 132,
+    "YT": 132
+   },
+   "expected_months": 132,
+   "sites_with_missing_months": [],
+   "month_gaps": [
+    {
+     "site": "YT",
+     "median_gap_days": 31.0,
+     "max_gap_days": 31.0,
+     "irregular_gaps": 0
+    },
+    {
+     "site": "MF",
+     "median_gap_days": 31.0,
+     "max_gap_days": 31.0,
+     "irregular_gaps": 0
+    },
+    {
+     "site": "QM",
+     "median_gap_days": 31.0,
+     "max_gap_days": 31.0,
+     "irregular_gaps": 0
+    },
+    {
+     "site": "RQ",
+     "median_gap_days": 31.0,
+     "max_gap_days": 31.0,
+     "irregular_gaps": 0
+    },
+    {
+     "site": "KEL",
+     "median_gap_days": 31.0,
+     "max_gap_days": 31.0,
+     "irregular_gaps": 0
+    },
+    {
+     "site": "YL",
+     "median_gap_days": 31.0,
+     "max_gap_days": 31.0,
+     "irregular_gaps": 0
+    },
+    {
+     "site": "ALE",
+     "median_gap_days": 31.0,
+     "max_gap_days": 31.0,
+     "irregular_gaps": 0
+    },
+    {
+     "site": "XT",
+     "median_gap_days": 31.0,
+     "max_gap_days": 31.0,
+     "irregular_gaps": 0
+    },
+    {
+     "site": "TZ",
+     "median_gap_days": 31.0,
+     "max_gap_days": 31.0,
+     "irregular_gaps": 0
+    }
+   ],
+   "modis_composites_per_year": {
+    "YT": {
+     "2015": 230,
+     "2016": 230,
+     "2017": 220,
+     "2018": 230,
+     "2019": 230,
+     "2020": 230,
+     "2021": 230,
+     "2022": 230,
+     "2023": 230,
+     "2024": 230,
+     "2025": 230
+    },
+    "MF": {
+     "2015": 230,
+     "2016": 230,
+     "2017": 220,
+     "2018": 230,
+     "2019": 230,
+     "2020": 230,
+     "2021": 230,
+     "2022": 230,
+     "2023": 230,
+     "2024": 230,
+     "2025": 230
+    },
+    "QM": {
+     "2015": 230,
+     "2016": 230,
+     "2017": 220,
+     "2018": 230,
+     "2019": 230,
+     "2020": 230,
+     "2021": 230,
+     "2022": 230,
+     "2023": 230,
+     "2024": 230,
+     "2025": 230
+    },
+    "RQ": {
+     "2015": 230,
+     "2016": 230,
+     "2017": 220,
+     "2018": 230,
+     "2019": 230,
+     "2020": 230,
+     "2021": 230,
+     "2022": 230,
+     "2023": 230,
+     "2024": 230,
+     "2025": 230
+    },
+    "KEL": {
+     "2015": 230,
+     "2016": 230,
+     "2017": 230,
+     "2018": 230,
+     "2019": 230,
+     "2020": 230,
+     "2021": 230,
+     "2022": 230,
+     "2023": 230,
+     "2024": 230,
+     "2025": 230
+    },
+    "YL": {
+     "2015": 230,
+     "2016": 230,
+     "2017": 230,
+     "2018": 230,
+     "2019": 230,
+     "2020": 230,
+     "2021": 230,
+     "2022": 230,
+     "2023": 230,
+     "2024": 230,
+     "2025": 230
+    },
+    "ALE": {
+     "2015": 230,
+     "2016": 230,
+     "2017": 230,
+     "2018": 230,
+     "2019": 230,
+     "2020": 230,
+     "2021": 230,
+     "2022": 230,
+     "2023": 230,
+     "2024": 230,
+     "2025": 230
+    },
+    "XT": {
+     "2015": 230,
+     "2016": 230,
+     "2017": 220,
+     "2018": 230,
+     "2019": 230,
+     "2020": 230,
+     "2021": 230,
+     "2022": 230,
+     "2023": 230,
+     "2024": 230,
+     "2025": 230
+    },
+    "TZ": {
+     "2015": 230,
+     "2016": 230,
+     "2017": 230,
+     "2018": 230,
+     "2019": 230,
+     "2020": 230,
+     "2021": 230,
+     "2022": 230,
+     "2023": 230,
+     "2024": 230,
+     "2025": 230
+    }
+   },
+   "modis_doy_interval_median": 16.0
+  },
+  "imbalance": {
+   "site_month_counts": {
+    "ALE": 132,
+    "KEL": 132,
+    "MF": 132,
+    "QM": 132,
+    "RQ": 132,
+    "TZ": 132,
+    "XT": 132,
+    "YL": 132,
+    "YT": 132
+   },
+   "invalid_ndvi_months_by_site": {
+    "YT": 0,
+    "MF": 0,
+    "QM": 0,
+    "RQ": 0,
+    "KEL": 0,
+    "YL": 0,
+    "ALE": 0,
+    "XT": 0,
+    "TZ": 0
+   },
+   "dust_event_day_fraction": {
+    ">=8m/s": {
+     "YT": 0.1279,
+     "MF": 0.1501,
+     "QM": 0.1294,
+     "RQ": 0.1419,
+     "KEL": 0.0697,
+     "YL": 0.1401,
+     "ALE": 0.1329,
+     "XT": 0.1712,
+     "TZ": 0.1712
+    },
+    ">=10m/s": {
+     "YT": 0.0264,
+     "MF": 0.0398,
+     "QM": 0.0329,
+     "RQ": 0.0453,
+     "KEL": 0.0107,
+     "YL": 0.0411,
+     "ALE": 0.0528,
+     "XT": 0.0704,
+     "TZ": 0.0704
+    },
+    ">=12m/s": {
+     "YT": 0.0042,
+     "MF": 0.0114,
+     "QM": 0.0072,
+     "RQ": 0.0139,
+     "KEL": 0.0012,
+     "YL": 0.008,
+     "ALE": 0.0164,
+     "XT": 0.0274,
+     "TZ": 0.0274
+    },
+    ">=15m/s": {
+     "YT": 0.0002,
+     "MF": 0.0017,
+     "QM": 0.0015,
+     "RQ": 0.0027,
+     "KEL": 0.0,
+     "YL": 0.0007,
+     "ALE": 0.0022,
+     "XT": 0.0035,
+     "TZ": 0.0035
+    }
+   }
+  },
+  "qa_effect": {
+   "mean_abs_diff_pp": 1.734,
+   "max_abs_diff_pp": 22.572,
+   "p95_abs_diff_pp": 5.789,
+   "corr": 0.9737
+  },
+  "cross_source": [
+   {
+    "site": "YT",
+    "T_corr_POWER_ERA5": 0.998,
+    "T_bias_POWER_ERA5": 0.375,
+    "P_corr_POWER_ERA5": 0.466,
+    "P_ratio_sum": 1.174,
+    "WS_corr_POWER_ERA5": 0.894,
+    "SM_corr_GWET_ERA5": -0.124,
+    "ET0_corr_Harg_ERA5": 0.976,
+    "ET0_ratio": 1.06,
+    "SW_ratio": 0.999
+   },
+   {
+    "site": "MF",
+    "T_corr_POWER_ERA5": 0.997,
+    "T_bias_POWER_ERA5": -0.03,
+    "P_corr_POWER_ERA5": 0.382,
+    "P_ratio_sum": 2.067,
+    "WS_corr_POWER_ERA5": 0.896,
+    "SM_corr_GWET_ERA5": -0.228,
+    "ET0_corr_Harg_ERA5": 0.98,
+    "ET0_ratio": 0.989,
+    "SW_ratio": 1.042
+   },
+   {
+    "site": "QM",
+    "T_corr_POWER_ERA5": 0.997,
+    "T_bias_POWER_ERA5": 0.229,
+    "P_corr_POWER_ERA5": 0.377,
+    "P_ratio_sum": 1.185,
+    "WS_corr_POWER_ERA5": 0.943,
+    "SM_corr_GWET_ERA5": -0.011,
+    "ET0_corr_Harg_ERA5": 0.977,
+    "ET0_ratio": 0.986,
+    "SW_ratio": 1.096
+   },
+   {
+    "site": "RQ",
+    "T_corr_POWER_ERA5": 0.997,
+    "T_bias_POWER_ERA5": 0.316,
+    "P_corr_POWER_ERA5": 0.611,
+    "P_ratio_sum": 0.793,
+    "WS_corr_POWER_ERA5": 0.847,
+    "SM_corr_GWET_ERA5": -0.049,
+    "ET0_corr_Harg_ERA5": 0.987,
+    "ET0_ratio": 0.962,
+    "SW_ratio": 1.12
+   },
+   {
+    "site": "KEL",
+    "T_corr_POWER_ERA5": 0.997,
+    "T_bias_POWER_ERA5": -1.729,
+    "P_corr_POWER_ERA5": 0.567,
+    "P_ratio_sum": 1.433,
+    "WS_corr_POWER_ERA5": 0.898,
+    "SM_corr_GWET_ERA5": -0.035,
+    "ET0_corr_Harg_ERA5": 0.983,
+    "ET0_ratio": 1.085,
+    "SW_ratio": 1.019
+   },
+   {
+    "site": "YL",
+    "T_corr_POWER_ERA5": 0.996,
+    "T_bias_POWER_ERA5": -0.148,
+    "P_corr_POWER_ERA5": 0.636,
+    "P_ratio_sum": 1.531,
+    "WS_corr_POWER_ERA5": 0.909,
+    "SM_corr_GWET_ERA5": 0.033,
+    "ET0_corr_Harg_ERA5": 0.986,
+    "ET0_ratio": 1.147,
+    "SW_ratio": 1.019
+   },
+   {
+    "site": "ALE",
+    "T_corr_POWER_ERA5": 0.997,
+    "T_bias_POWER_ERA5": 0.894,
+    "P_corr_POWER_ERA5": 0.837,
+    "P_ratio_sum": 1.18,
+    "WS_corr_POWER_ERA5": 0.829,
+    "SM_corr_GWET_ERA5": 0.328,
+    "ET0_corr_Harg_ERA5": 0.973,
+    "ET0_ratio": 1.25,
+    "SW_ratio": 1.076
+   },
+   {
+    "site": "XT",
+    "T_corr_POWER_ERA5": 0.995,
+    "T_bias_POWER_ERA5": 0.179,
+    "P_corr_POWER_ERA5": 0.552,
+    "P_ratio_sum": 2.89,
+    "WS_corr_POWER_ERA5": 0.869,
+    "SM_corr_GWET_ERA5": -0.099,
+    "ET0_corr_Harg_ERA5": 0.983,
+    "ET0_ratio": 0.978,
+    "SW_ratio": 1.093
+   },
+   {
+    "site": "TZ",
+    "T_corr_POWER_ERA5": 0.995,
+    "T_bias_POWER_ERA5": 0.142,
+    "P_corr_POWER_ERA5": 0.676,
+    "P_ratio_sum": 2.494,
+    "WS_corr_POWER_ERA5": 0.864,
+    "SM_corr_GWET_ERA5": -0.041,
+    "ET0_corr_Harg_ERA5": 0.982,
+    "ET0_ratio": 0.986,
+    "SW_ratio": 1.089
+   }
+  ]
+ },
+ "tables": {},
+ "derived": {
+  "V_pct": "V = clip((NDVI-0.05)/(0.85-0.05),0,1)*100（像元二分，固定端元）",
+  "E": "Lettau 单位宽度通量 q，站内按训练期均值归一",
+  "ET0_hargreaves": "0.0023*Ra*(T+17.8)*sqrt(Tmax-Tmin)*days"
+ },
+ "imputation": {
+  "method": "站内线性插值(limit=2月) → 训练期(2015-2022)同月气候态",
+  "detail": [
+   {
+    "site": "YT",
+    "variable": "V_pct",
+    "missing_before": 9,
+    "missing_after": 0,
+    "filled": 9
+   },
+   {
+    "site": "MF",
+    "variable": "V_pct",
+    "missing_before": 1,
+    "missing_after": 0,
+    "filled": 1
+   },
+   {
+    "site": "QM",
+    "variable": "V_pct",
+    "missing_before": 11,
+    "missing_after": 0,
+    "filled": 11
+   },
+   {
+    "site": "RQ",
+    "variable": "V_pct",
+    "missing_before": 19,
+    "missing_after": 0,
+    "filled": 19
+   },
+   {
+    "site": "KEL",
+    "variable": "V_pct",
+    "missing_before": 41,
+    "missing_after": 0,
+    "filled": 41
+   },
+   {
+    "site": "YL",
+    "variable": "V_pct",
+    "missing_before": 8,
+    "missing_after": 0,
+    "filled": 8
+   },
+   {
+    "site": "ALE",
+    "variable": "V_pct",
+    "missing_before": 19,
+    "missing_after": 0,
+    "filled": 19
+   },
+   {
+    "site": "XT",
+    "variable": "V_pct",
+    "missing_before": 1,
+    "missing_after": 0,
+    "filled": 1
+   },
+   {
+    "site": "TZ",
+    "variable": "V_pct",
+    "missing_before": 1,
+    "missing_after": 0,
+    "filled": 1
+   }
+  ],
+  "total_filled_by_variable": {
+   "V_pct": 110
+  },
+  "masking_test": {
+   "mask_fraction": 0.1,
+   "seed": 20261110,
+   "results": [
+    {
+     "strategy": "linear",
+     "n_masked": 117,
+     "RMSE_pp": 3.91,
+     "MAE_pp": 2.552,
+     "bias_pp": 0.157
+    },
+    {
+     "strategy": "clim",
+     "n_masked": 117,
+     "RMSE_pp": 3.471,
+     "MAE_pp": 2.456,
+     "bias_pp": -0.598
+    },
+    {
+     "strategy": "persistence",
+     "n_masked": 117,
+     "RMSE_pp": 3.425,
+     "MAE_pp": 2.226,
+     "bias_pp": 0.099
+    }
+   ]
+  }
+ },
+ "normalization": {
+  "GWETROOT": {
+   "p05": 0.09,
+   "p95": 0.51
+  },
+  "era_sm_root": {
+   "p05": 0.0003208483870967743,
+   "p95": 0.20089693440860207
+  },
+  "E": {
+   "p05": 0.05841109525140151,
+   "p95": 3.2155104441554765
+  },
+  "V_pct": {
+   "p05": 1.0804629629629625,
+   "p95": 37.187476851851834
+  },
+  "zscore": {
+   "T2M": {
+    "mean": 13.063657407407407,
+    "sd": 12.122342407683524
+   },
+   "P_mm": {
+    "mean": 5.938553240740741,
+    "sd": 9.78102454376755
+   },
+   "WS10M": {
+    "mean": 3.2611458333333334,
+    "sd": 0.7723479766376179
+   },
+   "RH2M": {
+    "mean": 31.316400462962967,
+    "sd": 12.216983302060584
+   },
+   "SW_MJ": {
+    "mean": 532.6377314814815,
+    "sd": 177.36766163776267
+   },
+   "ET0_hargreaves": {
+    "mean": 138.81797056394555,
+    "sd": 87.28141491829889
+   },
+   "AI": {
+    "mean": 0.03973310861501897,
+    "sd": 0.0558859620577313
+   }
+  },
+  "clip_frac": {
+   "W_at_0_pct": 8.92,
+   "W_at_1_pct": 8.92,
+   "E_at_0_pct": 0.51
+  }
+ },
+ "soil": [
+  {
+   "site": "MF",
+   "sand": NaN,
+   "silt": NaN,
+   "clay": NaN,
+   "soc": NaN,
+   "bdod": NaN,
+   "om_pct": NaN
+  }
+ ],
+ "shapes": {
+  "raw": [
+   1188,
+   45
+  ],
+  "clean": [
+   1188,
+   50
+  ],
+  "train": [
+   864,
+   50
+  ],
+  "test": [
+   324,
+   50
+  ]
+ }
+}
