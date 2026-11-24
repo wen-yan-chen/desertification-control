@@ -1,0 +1,41 @@
+% Report on Use of AI: one page, not counted in the paper's page total.
+\AImatter
+\begingroup
+\small
+\setlength{\parskip}{3pt}
+\centerline{\underline{\large\sffamily\bfseries Report on Use of AI}}
+\vspace{6pt}
+
+\noindent\textbf{Tool and scope.} Devin (Cognition AI), an AI coding agent running Claude Opus 5.5, used in our repository on 20--22 November 2026. We used it only to write and revise figure code (MATLAB and TikZ) and to place the new figures in LaTeX.
+
+\noindent\fbox{\parbox{\dimexpr\linewidth-2\fboxsep-2\fboxrule}{\textbf{Our own work.} The problem analysis, assumptions, all three models (structure, equations and algorithms), parameter values, data collection and preprocessing, simulations, results, interpretation, policy advice and the chain of reasoning in this paper are entirely our team's work. The AI did not propose or change any model, parameter, data value or result; every plotted number is read from our own result tables. AI-written text is limited to the caption of Figure~\ref{fig:protection-factors} and one sentence each in Sections~1.3, 4.1 and 4.2 that point to the new figures, all checked by us.}}
+
+\vspace{4pt}
+\noindent\textbf{Files we gave to the AI.}\par
+\noindent\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.47\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{File or folder} & \textbf{Role} \\ \midrule
+\texttt{Paper/main.tex}, \texttt{Paper/Section/*.tex} & page layout and figure placement \\
+\texttt{Code/figures\_matlab/*.m} & our plotting code, palette and fonts \\
+\texttt{Results/v7/model2/}, \texttt{Results/v7/model3/} & our model outputs (read only) \\
+\texttt{Paper/Figure/*.tex}, \texttt{paper\_palette.tex} & our TikZ diagrams and colours \\
+\texttt{final/Figures/} & a teammate's figure-revision suggestions \\
+\texttt{FigureAndFlowworkStyle/\_shared/}\newline\texttt{ImproveReadability.md}, \texttt{examples/} & our readability guide and example figures \\
+Two screenshots & Table~1 on page~2; a layered reference diagram \\ \bottomrule
+\end{tabularx}
+
+\vspace{6pt}
+\noindent\textbf{How the AI drew the figures.}\par
+\noindent\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.12\linewidth}>{\raggedright\arraybackslash}p{0.36\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Figure} & \textbf{Our instruction} & \textbf{What the AI did} \\ \midrule
+\ref{fig:protection-factors} & Replace Table~1 with a Taklamakan scene showing the four factors as titles, at the same size & Combined five openly licensed Wikimedia Commons images (credited in the caption) with title bars (\texttt{fig\_intro\_factors.m}) \\
+\ref{fig:framework} & Make the overall flow tool-centred with standard inputs and outputs & Redrew \texttt{workflow.tex} as one input--tool--output row per model, with handoff variables on the arrows \\
+\ref{fig:m1-struct}, \ref{fig:m2-struct} & Layered diagram in the style of the reference, merged with our key-variable chains & Drew spheres and a tilted plane carrying our chains (\texttt{m1\_layers.tex}, \texttt{m2\_layers.tex}) \\
+\ref{fig:m3-sens}(a) & Show RMST(50) on the $3\times3$ storm grid as 3-D bar heights & Built 3-D bars from MATLAB patches with RMST and $p_{50}$ labels \\
+\ref{fig:m2-plan}, \ref{fig:m3-res}, \ref{fig:m3-sens}(b) & Adopt the useful suggestions in \texttt{final/} & Direct line labels, the 65.5\% retained mark, a highlighted baseline row and a moved legend \\ \bottomrule
+\end{tabularx}
+
+\vspace{6pt}
+\noindent\textbf{Our checks.} We compared every revised figure with our result tables and confirmed that the paper's layout and page count were unchanged.
+\endgroup

@@ -1,0 +1,133 @@
+﻿# v7 代码入口
+
+## M1 计算
+
+Python 要求为 3.11 及以上，依赖版本见 `requirements-m1.txt`。在仓库根目录运行。
+
+```sh
+python -m pip install -r Code/requirements-m1.txt
+python Code/v7_model1.py
+python -m unittest discover -s Code -p test_v7_m1.py -v
+```
+
+| 文件 | 用途 |
+|---|---|
+| `v7_model1.py` | 条件合并标定、模型比较与空间诊断 |
+| `v7_m1_water.py` | 有效储水动态、植被更新与情景计算 |
+| `v7_m1_run.py` | 统一导出当前 M1 数表 |
+| `test_v7_m1.py` | QA、时间隔离、可识别性、守恒与状态边界测试 |
+
+输入见 [m1_audited](../Data/v7/m1_audited/README.md)，数值输出见
+[结果说明](../Results/v7/model1/README.md)，模型依据见
+[M1 审计与实现](../Docs/20261110_m1_audit_and_implementation.md)。
+
+## 重建 M1 输入
+
+```sh
+python Code/v7_replay_m1.py
+python Code/v7_prepare_m1.py
+```
+
+前者重放来源请求并记录原、新哈希，后者执行逐像元 QA 和当前 M1 数据整理。
+日常计算可直接使用已提交的输入表。
+
+## M2 计算（不生成图片）
+
+使用同一份 `requirements-m1.txt` 的 NumPy、Pandas、SciPy 环境，无需联网。
+
+```sh
+python Code/v7_model2.py
+python -m unittest discover -s Code -p test_v7_m2.py -v
+```
+
+`v7_m2_core.py` 按建植批次调用 M1 的 `(V,M)` 轨迹，将有限灌溉路径、面积块及PV资产
+组成混合整数优化；`v7_model2.py` 导出基准、成本生态前沿、投资结构与资源敏感性，
+并逐批回放检查；`test_v7_m2.py` 包括水量/现金流/预算/劳动及穷举对照测试。
+
+输入和假设见 [m2_inputs](../Data/v7/m2_inputs/README.md)，
+数表见 [model2](../Results/v7/model2/README.md)，
+图交接见 [说明](../Docs/20261111_m2_figure_handoff.md)。
+快速检查可运行 `python Code/v7_model2.py --base-only --output tmp/m2_smoke`。
+`formal_model_ready=false`，最优界只适用于给定网格与策略库。
+
+## M3 计算（图片交给 Claude）
+
+在仓库根目录运行；本轮用Python 3.13及下列固定版本验证，无需重跑M1/M2。
+
+```sh
+python -m pip install -r Code/requirements-m3.txt
+python -m unittest discover -s Code -p test_v7_m3.py -v
+python Code/v7_model3.py
+python Code/v7_m3_grid_check.py
+```
+
+`v7_m3_core.py`复现M1逐日水量更新并添加完整复合Poisson事件、共同旱情、月供水配给、
+年度首达与物理恢复；`v7_model3.py`导出27情景及平稳二维链数表；`v7_m3_grid_check.py`
+在确认主结果哈希后，以交叉网格分开检验状态离散和冲击积分误差。9项M3测试与M1/M2共28项通过。
+全套计算包括较大的稀疏线性系统；快速检查可运行
+`python Code/v7_model3.py --base-only --output tmp/m3_smoke`，不能用该子集覆盖完整成果目录。
+
+[输入与证据](../Data/v7/m3_inputs/README.md) · [模型复核](../Docs/20261113_m3_audit_and_implementation.md) ·
+[输出字段](../Results/v7/model3/README.md) · [制图字段与口径](../Docs/20261113_m3_figure_handoff.md)。
+`formal_model_ready=false`；首达、当前低覆盖、删失和RMST口径不得混用。
+
+## M1/M2 出图
+
+```sh
+python Code/v7_m1_figures.py
+python Code/v7_m2_figures.py
+```
+
+两个脚本只读 `Results/v7/model1/`、`Results/v7/model2/` 的数表，不重跑模型，分别写入
+`Figures/M1/`、`Figures/M2/`（PDF 与 PNG）。需要 Matplotlib（未列入 `requirements-m1.txt`）。
+`v7_m2_figures.py` 复用 M1 脚本的字体与配色设置，并在出图前核对 `model2_results.json`
+记录的输入哈希；改动 M2 输入或源码后须先重跑 `v7_model2.py`。这两个输出目录已不随包保存，
+终稿的图见[绘图包](../_shared/README.md)。
+
+### 论文图（MATLAB）
+
+```sh
+cd Code/figures_matlab && matlab -batch make_paper_figures
+cd Paper/Figure && for f in m1_structure m1_two_clocks m1_bucket m2_structure m2_cohort_idea m2_restrictions; do pdflatex $f.tex; done
+```
+
+`Code/figures_matlab/` 只读 `Data/v7/`、`Results/v7/model1/` 与 `Results/v7/model2/`，把论文用数据图（`data_stations`、
+`m1_stress_season`、`m1_cover_series`、`m1_scenarios`、`m1_water_curve`、`m1_sensitivity`、
+`m2_plan`、`m2_cohorts`、`m2_water`、`m2_tradeoff`、`m2_sensitivity`、`m2_pv_screen`）写入 `Paper/Figure/`（矢量 PDF + 400 dpi PNG）。
+配色取自 mycolor.space（基色 #1E5F74），坐标轴按知乎专栏“阿昆的科研日常”的 MATLAB 模板，见 `paper_style.m`。
+TikZ 示意图共用 `Paper/Figure/paper_palette.tex`，颜色角色与 `paper_style.m` 相同：水＝青蓝，植被＝绿，运维/成本＝紫，风沙＝棕，光伏/突出＝橙，界限＝红色虚线。
+
+## 预处理与对比工具
+
+下列程序支撑 v7 面板预处理、诊断和方法对比。窗口 QA、ET0 温差口径及插值方式的适用限制
+记录在 M1 审计说明中，运行时应按研究用途核对。
+
+| 文件 | 用途 | 主要产物 |
+|---|---|---|
+| `v7_fetch.py` | 获取 POWER、MODIS、Open-Meteo、SoilGrids 响应 | `Data/v7/raw/` |
+| `v7_finalize_fetch.py` | 合并 MODIS 分块、生成响应清单 | `Data/v7/raw/manifest.json` |
+| `v7_clean.py` | 预处理、派生和训练期归一化 | `Data/v7/processed/` |
+| `v7_missing.py` | 缺失检查与插补对比 | `Results/v7/missing.json` 等 |
+| `v7_ablation.py` | 预处理方案消融比较 | `Results/v7/ablation.json` 等 |
+| `v7_figures.py`、`v7_fig_pre.py` | 预处理与对比出图 | `Figures/v7_init_test/` |
+| `preprocess_v7.py` | Python 逐步预处理和校验 | CSV、XLSX、JSON |
+| `preprocess_v7.m` | MATLAB 预处理实现 | MATLAB 面板 CSV |
+
+## 模型检验（2026-11-12）
+
+| 文件 | 用途 | 主要产物 |
+|---|---|---|
+| `validate_m1m2.py` | **模型检验**：只读 `Results/v7/model1|model2` 的结果表，重算指标/约束/目标/有效面积，并检查 MIP 对偶界、水量闭合、留站泛化、风蚀项统计依据；含 M3 四项设计检验 | `Results/v7_validation/*.json,csv`、`Figures/v7_validation/v1—v8*.png` |
+
+```sh
+python Code/validate_m1m2.py     # 约 20 s；固定种子 20261112
+```
+
+不改动 M1/M2 的任何代码或结果表；结论与判据见 [检验报告](../Reports/model_validation_m1m2.tex)。
+
+这些工具使用 NumPy、Pandas、SciPy、Matplotlib、OpenPyXL。
+`v7_ablation.py` 内历史 `task2_npv` 不是当前 M2 求解器，存在水量单位和静态收益口径问题；
+只保留作旧消融对照，不应用其 Task2 数值出论文图或结论。
+MATLAB 程序面向 R2020b 及以上，执行结果仍需在 MATLAB 环境验证。
+原始响应与缓存通过请求清单重建，数据范围见 [Data/v7](../Data/v7/README.md)。
+
