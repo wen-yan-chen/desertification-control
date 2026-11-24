@@ -11,40 +11,64 @@ names = kit_palette(); n = numel(names);
 txt = @(ax, x, y, s, varargin) text(ax, x, y, s, 'FontName', S.font, 'Interpreter', 'none', varargin{:});
 
 % ---------------------------------------------------------- palette sheet
-W = S.textW; rh = 1.55; top = 0.9; H = top + n * rh + 0.1;
+W = 18.5; rh = 2.35; top = 0.85; H = top + n * rh + 0.15;
 [fig, ax] = canvas(W, H);
-roles = {'1 main', '2 accent', '3 green', '4 purple', '5 earth', '6 extra'};
-x0 = 5.3; sw = 1.22; gap = 0.1;
+roles = {'1 Main', '2 Accent', '3 Green/Mid', '4 Secondary', '5 Warm/Earth', '6 Extra'};
+xSw = 4.35; sw = 1.22; gap = 0.10;
 for j = 1:6
-    txt(ax, x0 + (j - 1) * (sw + gap) + sw / 2, 0.55, roles{j}, 'FontSize', 6.5, 'Color', c.greyDark, ...
-        'HorizontalAlignment', 'center');
+    txt(ax, xSw + (j - 1) * (sw + gap) + sw / 2, 0.52, roles{j}, 'FontSize', 6.3, ...
+        'Color', c.greyDark, 'HorizontalAlignment', 'center');
 end
-txt(ax, 14.95, 0.55, 'in use', 'FontSize', 6.5, 'Color', c.greyDark, 'HorizontalAlignment', 'center');
-t = linspace(0, 1, 30);
+txt(ax, 13.58, 0.52, 'Lines + band', 'FontSize', 6.3, 'Color', c.greyDark, 'HorizontalAlignment', 'center');
+txt(ax, 16.70, 0.52, 'Stacked + bars', 'FontSize', 6.3, 'Color', c.greyDark, 'HorizontalAlignment', 'center');
+t = linspace(0, 1, 40);
 for i = 1:n
-    P = kit_palette(names{i}); y = top + (i - 1) * rh;
-    plot(ax, [0.2 W - 0.2], [y y] - 0.1, '-', 'Color', c.grid, 'LineWidth', 0.5);
-    txt(ax, 0.25, y + 0.38, P.title, 'FontSize', 9, 'FontWeight', 'bold', 'Color', c.ink);
-    txt(ax, 0.25, y + 0.80, ['''' P.name ''''], 'FontName', 'Courier New', 'FontSize', 6.5, 'Color', c.axis);
-    src = P.source; if P.safe, src = [src ' | colour-blind safe']; end
-    txt(ax, 0.25, y + 1.14, src, 'FontSize', 6, 'Color', c.greyDark);
+    P = kit_palette(names{i}); cols = P.cycle; y = top + (i - 1) * rh;
+    plot(ax, [0.30 W - 0.30], [y y], '-', 'Color', c.grid, 'LineWidth', 0.6);
+    txt(ax, 0.35, y + 0.48, P.title, 'FontSize', 9.2, 'FontWeight', 'bold', 'Color', c.ink);
+    txt(ax, 0.35, y + 0.92, ['''' P.name ''''], 'FontName', 'Courier New', 'FontSize', 6.8, 'Color', c.axis);
+    txt(ax, 0.35, y + 1.30, P.source, 'FontSize', 6.1, 'Color', c.greyDark);
+    if P.safe
+        patch(ax, 0.35 + [0 2.05 2.05 0], y + 1.54 + [0 0 0.38 0.38], [0.91 0.96 0.93], ...
+            'EdgeColor', [0.35 0.62 0.48], 'LineWidth', 0.45);
+        txt(ax, 0.35 + 1.025, y + 1.73, 'colorblind-safe', 'FontSize', 5.8, ...
+            'Color', [0.16 0.42 0.28], 'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle');
+    end
     for j = 1:6
-        xs = x0 + (j - 1) * (sw + gap);
-        patch(ax, xs + [0 sw sw 0], y + 0.12 + [0 0 0.8 0.8], P.cycle(j, :), 'EdgeColor', 'none');
-        txt(ax, xs + sw / 2, y + 1.14, ['#' P.hex{j}], 'FontSize', 5.8, 'Color', c.axis, 'HorizontalAlignment', 'center');
+        xs = xSw + (j - 1) * (sw + gap);
+        patch(ax, xs + [0 sw sw 0], y + 0.32 + [0 0 1.28 1.28], cols(j, :), 'EdgeColor', 'none');
+        txt(ax, xs + sw / 2, y + 1.85, ['#' P.hex{j}], 'FontName', 'Courier New', ...
+            'FontSize', 5.8, 'Color', c.axis, 'HorizontalAlignment', 'center');
     end
-    xa = 13.6; wa = 2.7;                                   % three lines and three bars
-    for j = 1:3
-        yy = y + 0.95 - 0.75 * (0.25 * j + 0.3 * sin(2 * pi * (t + 0.21 * j)) .* (1 - 0.5 * t) + 0.3) / 1.3;
-        plot(ax, xa + 0.55 * wa * t, yy, '-', 'Color', P.cycle(j, :), 'LineWidth', 1.3);
+    xl = 12.35; wl = 2.45; yb = y + 1.69; ht = 1.32;
+    patch(ax, xl + [0 wl wl 0], yb - [0 0 ht ht], [0.985 0.988 0.99], 'EdgeColor', c.grid, 'LineWidth', 0.45);
+    y1 = 0.25 + 0.62 * exp(-2.2 * t); y2 = 0.16 + 0.45 * exp(-1.7 * t); y3 = 0.08 + 0.28 * exp(-2.8 * t);
+    b1 = 0.09 * (1 + 0.4 * t);
+    patch(ax, xl + wl * [t fliplr(t)], yb - ht * [min(0.96, y1 + b1), fliplr(max(0.04, y1 - b1))], ...
+        cols(1, :), 'FaceAlpha', 0.16, 'EdgeColor', 'none');
+    plot(ax, xl + wl * t, yb - ht * y1, '-', 'Color', cols(1, :), 'LineWidth', 1.35);
+    plot(ax, xl + wl * t, yb - ht * y2, '-', 'Color', cols(3, :), 'LineWidth', 1.25);
+    plot(ax, xl + wl * t, yb - ht * y3, '-', 'Color', cols(2, :), 'LineWidth', 1.25);
+    xb = 15.20; wb = 3.00;
+    patch(ax, xb + [0 wb wb 0], yb - [0 0 ht ht], [0.985 0.988 0.99], 'EdgeColor', c.grid, 'LineWidth', 0.45);
+    s1 = [0.28 0.34 0.38]; s2 = [0.42 0.26 0.32]; sx = xb + 0.12; swb = 1.30;
+    for rowb = 1:2
+        if rowb == 1, sh = s1; idxC = [1 4 2]; yy = yb - 0.92; else, sh = s2; idxC = [3 5 6]; yy = yb - 0.42; end
+        cur = 0;
+        for q = 1:3
+            patch(ax, sx + swb * [cur cur + sh(q) cur + sh(q) cur], yy + [0 0 0.30 0.30], ...
+                cols(idxC(q), :), 'EdgeColor', 'w', 'LineWidth', 0.4);
+            cur = cur + sh(q);
+        end
     end
-    hb = [0.55 0.8 0.4];
-    for j = 1:3
-        xb = xa + 0.64 * wa + (j - 1) * 0.33;
-        patch(ax, xb + [0 0.27 0.27 0], y + 0.98 - [0 0 hb(j) hb(j)], P.cycle(j + 3, :), 'EdgeColor', 'none');
+    gx = xb + 1.62; bh = [0.78 0.96 0.62 0.84];
+    for q = 1:4
+        bx = gx + (q - 1) * 0.31;
+        patch(ax, bx + [0 0.23 0.23 0], yb - 0.08 - [0 0 bh(q) * 1.12 bh(q) * 1.12], cols(q, :), 'EdgeColor', 'none');
     end
 end
 save_fig(fig, 'palettes', S);
+W = S.textW;
 
 % -------------------------------------------------------- colour-map sheet
 M = {'seq',     'one-sided quantity (follows the palette)'; ...

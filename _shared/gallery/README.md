@@ -12,45 +12,33 @@
 
 ![oasis](palettes/oasis.png)
 
-### `okabe`
+### `economist`
 
-![okabe](palettes/okabe.png)
+![economist](palettes/economist.png)
 
-### `tol_bright`
+### `nejm`
 
-![tol_bright](palettes/tol_bright.png)
+![nejm](palettes/nejm.png)
+
+### `hiroshige`
+
+![hiroshige](palettes/hiroshige.png)
+
+### `nord`
+
+![nord](palettes/nord.png)
+
+### `sailboat`
+
+![sailboat](palettes/sailboat.png)
 
 ### `tol_muted`
 
 ![tol_muted](palettes/tol_muted.png)
 
-### `tol_vibrant`
+### `vangogh`
 
-![tol_vibrant](palettes/tol_vibrant.png)
-
-### `npg`
-
-![npg](palettes/npg.png)
-
-### `tableau`
-
-![tableau](palettes/tableau.png)
-
-### `dark2`
-
-![dark2](palettes/dark2.png)
-
-### `morandi`
-
-![morandi](palettes/morandi.png)
-
-### `ink`
-
-![ink](palettes/ink.png)
-
-### `dune`
-
-![dune](palettes/dune.png)
+![vangogh](palettes/vangogh.png)
 
 ## 通用图型
 

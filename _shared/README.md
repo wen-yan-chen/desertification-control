@@ -17,7 +17,7 @@
 ```matlab
 addpath('<包路径>/matlab', '<包路径>/matlab/charts');
 S = paper_style('out', 'Paper/Figure');     % 色板 S.c、字号 S.fs、版宽 S.textW
-% S = paper_style('out', 'Paper/Figure', 'palette', 'okabe');   % 换一套配色
+% S = paper_style('out', 'Paper/Figure', 'palette', 'economist');   % 换一套配色
 fig = new_figure(S.textW, 6.2);             % 按印刷尺寸（cm）建画布
 tl = tiledlayout(fig, 1, 2, 'TileSpacing', 'compact', 'Padding', 'compact');
 ax = nexttile(tl); style_axes(ax, S, 'y');  % 外向刻度、浅色网格
@@ -27,41 +27,40 @@ frame_axes(ax, S);                          % 细边框，放在定好坐标范�
 save_fig(fig, 'my_figure', S);              % 矢量 PDF + 400 dpi PNG
 ```
 
-`matlab -batch demo_charts`（在 `matlab/` 下）用合成数据把 25 个图型各画一张，输出到 `gallery/charts/`。`demo_charts(输出目录, 'npg')` 可以换配色重画一遍。
+`matlab -batch demo_charts`（在 `matlab/` 下）用合成数据把 25 个图型各画一张，输出到 `gallery/charts/`。`demo_charts(输出目录, 'hiroshige')` 可以换配色重画一遍。
 
 | 函数 | 作用 |
 |---|---|
 | `paper_style` | 色板、字体、字号、版宽，以及输出目录和数据目录 |
-| `kit_palette` / `export_tikz_palette` | 11 套配色；把当前配色导出成 TikZ 色板文件 |
+| `kit_palette` / `export_tikz_palette` | 8 套配色；把当前配色导出成 TikZ 色板文件 |
 | `new_figure` / `save_fig` | 按厘米建画布；导出 PDF 和 PNG |
 | `style_axes` / `frame_axes` / `panel_title` | 坐标轴样式、闭合细框、左对齐加粗分图标题 |
 | `add_overbar` | 给文字末尾的 W 加上划线（MATLAB 的 TeX 模式没有 `\overline`） |
 
 ## 配色
 
-![11 套配色](gallery/palettes.png)
+![8 套配色](gallery/palettes.png)
 
 ```matlab
-S = paper_style('palette', 'npg');                    % 之后所有图型函数和终稿模板都按这套颜色画
+S = paper_style('palette', 'economist');              % 之后所有图型函数和终稿模板都按这套颜色画
 export_tikz_palette(S, 'Paper/Figure/paper_palette.tex');   % TikZ 示意图同步换色
 kit_palette()                                          % 列出全部名称
 ```
 
-每套配色都是 6 个颜色，按角色排好：1 主色、2 强调、3 绿、4 紫、5 土色、6 备用。换配色时角色不变，所以同一段出图代码不用改；上限和阈值在任何配色下都是红色虚线。每套配色的实际效果见 [gallery/palettes/](gallery/README.md#配色)，各有一张“轨迹 + 构成条 + 相关矩阵”的样图。
+每套配色都是 6 个颜色，按角色排好：1 主色、2 强调、3 绿/中色、4 辅色、5 暖/土色、6 备用。换配色时角色不变，所以同一段出图代码不用改；上限和阈值在任何配色下都是红色虚线。每套配色的实际效果见 [gallery/palettes/](gallery/README.md#配色)，各有一张“轨迹 + 构成条 + 相关矩阵”的样图。
 
 | 名称 | 来源 | 什么时候用 |
 |---|---|---|
-| `oasis` | 终稿，[mycolor.space](https://mycolor.space) 以 #1E5F74 为基色 | 默认；水、植被、风沙题材 |
-| `okabe` | Okabe & Ito 的 [Color Universal Design](https://jfly.uni-koeln.de/color/)，Wong 2011 在 Nature Methods 推荐 | 色盲友好，拿不准时选它 |
-| `tol_bright` / `tol_muted` / `tol_vibrant` | [Paul Tol 的配色方案](https://tol-colors.readthedocs.io/en/latest/colorsets.html) | 色盲友好；bright 通用，muted 适合大面积填充，vibrant 适合细线和小点 |
-| `npg` | [ggsci](https://github.com/nanxstats/ggsci) 的 npg，仿 Nature Reviews Cancer | 冷暖对比强，适合对照两三个方案 |
-| `tableau` | [Tableau 10](https://www.tableau.com/blog/colors-upgrade-tableau-10-56782)（Stone & Miller 2016） | 柔和，类别多的柱条图 |
-| `dark2` | [ColorBrewer](https://colorbrewer2.org) Dark2 | 深色，细线和文字标注清楚 |
-| `morandi` | 队内 Practice1 的低饱和配色 | 大面积色块，政策或社会类题目 |
-| `ink` | 队内 Practice2 的 Python 版配色 | 深色学术风，接近旧图 |
-| `dune` | 自拟暖色组合 | 沙漠、能源、气候题材 |
+| `oasis` | 终稿，[mycolor.space](https://mycolor.space) 以 #1E5F74 为基色 | 默认；水、植被、风沙等生态与环境题材 |
+| `economist` | [The Economist Visual Style Guide 2017](https://sa.ipaa.org.au/wp-content/uploads/2026/02/Economist-CHARTstyleguide_20170505.pdf) | 社科、经济、政策对比，清爽克制 |
+| `nejm` | [ggsci](https://github.com/nanxstats/ggsci) 的 nejm，仿 New England Journal of Medicine | 医学、公共卫生、严谨对照实验 |
+| `hiroshige` | [MetBrewer](https://github.com/BlakeRMills/MetBrewer) Hiroshige（浮世绘） | 色盲友好；冷暖层次分明，适合轨迹和热力/柱图 |
+| `nord` | [Nord](https://www.nordtheme.com/)（Frost + Aurora） | 北欧低饱和清冷风，适合多子图和面积填充 |
+| `sailboat` | [PNWColors](https://github.com/jakelawlor/PNWColors) Sailboat | 柔和海岸色调，适合构成占比和轻盈版面 |
+| `tol_muted` | [Paul Tol](https://tol-colors.readthedocs.io/en/latest/colorsets.html) Muted | 色盲友好；深浅平衡，大面积填充不刺眼 |
+| `vangogh` | [MetBrewer](https://github.com/BlakeRMills/MetBrewer) VanGogh1 | 蓝绿植物系，适合自然、能源与多曲线图 |
 
-npg、tableau、dark2 和三套队内配色没有经过色盲安全验证，用它们时让线型或标记形状也跟着系列变。
+除 `hiroshige` 和 `tol_muted` 外，其余配色未标注色盲安全；多系列折线图建议同时用线型或标记形状区分。
 
 ![色带](gallery/colormaps.png)
 
@@ -150,4 +149,4 @@ cd tikz && for f in workflow m1_layers m2_layers m1_two_clocks m1_bucket m2_coho
 
 - 数据图读项目里的 `Results/v7/` 和 `Data/v7/`。项目目录默认取本包上方含 `Results/v7` 的最高一层，也可以用 `paper_style('root', ...)` 指定。
 - `fig_intro_factors` 和 `fig_data_stations` 还需要仓库根目录的 `Data/v7/raw/photos/` 和 `Data/v7/raw/basemap_tiles/`，`final/Data` 里没有这两个文件夹。
-- 2026-11-24 在 MATLAB R2024b 和 TeX Live 2025 下重跑：15 张数据图的 PNG 与 `Paper/Figure/` 逐像素一致，6 张 TikZ 图与终稿所用 PDF 渲染一致。通用图型和 10 套新增配色只用合成数据试过，还没有用在论文里；`oasis` 配色导出的 TikZ 色板与 `tikz/paper_palette.tex` 逐项相同。
+- 2026-11-24 在 MATLAB R2024b 和 TeX Live 2025 下重跑：15 张数据图的 PNG 与 `Paper/Figure/` 逐像素一致，6 张 TikZ 图与终稿所用 PDF 渲染一致。通用图型和 7 套新增配色只用合成数据试过，还没有用在论文里；`oasis` 配色导出的 TikZ 色板与 `tikz/paper_palette.tex` 逐项相同。
